@@ -1,27 +1,25 @@
 package org.sitenv.contentvalidator.service;
 
 import org.apache.log4j.Logger;
-import org.sitenv.contentvalidator.configuration.ScenarioManager;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.model.CCDARefModel;
 import org.sitenv.contentvalidator.parsers.CCDAParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Component
 public class ContentValidatorService {
-	
 	private static Logger log = Logger.getLogger(ContentValidatorService.class.getName());
-
 	@Autowired
 	private CCDAParser parser;
-	@Autowired
-	private ScenarioManager scenarioManager;
+	@Resource
+	HashMap<String, CCDARefModel> refModelHashMap;
 
-	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName,
-														   String ccdaFile) {
+	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName, String ccdaFile) {
 		log.info(" ***** CAME INTO THE REFERENCE VALIDATOR *****");
 		
 		if(!isObjectiveValidForContentValidation(validationObjective)) {
@@ -38,7 +36,7 @@ public class ContentValidatorService {
 		if( (referenceFileName != null) 
 			&& (!referenceFileName.isEmpty()) 
 			&& (!(referenceFileName.trim()).isEmpty())) {
-				ref = scenarioManager.getRefModel(referenceFileName);
+				ref = refModelHashMap.get(referenceFileName);
 		}
 		
 		if((ref != null) && (submittedCCDA != null)) {
@@ -53,8 +51,7 @@ public class ContentValidatorService {
 		}
 	}
 	
-	private Boolean isObjectiveValidForContentValidation(String valObj) 
-	{
+	private Boolean isObjectiveValidForContentValidation(String valObj) {
 		if(valObj.equalsIgnoreCase("170.315_b1_ToC_Amb") || 
 		   valObj.equalsIgnoreCase("170.315_b1_ToC_Inp") ||
 		   valObj.equalsIgnoreCase("170.315_b2_CIRI_Amb") ||

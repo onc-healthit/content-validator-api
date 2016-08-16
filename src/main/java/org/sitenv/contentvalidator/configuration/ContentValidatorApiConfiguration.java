@@ -1,5 +1,6 @@
 package org.sitenv.contentvalidator.configuration;
 
+import org.sitenv.contentvalidator.model.CCDARefModel;
 import org.sitenv.contentvalidator.parsers.CCDAParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,9 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import java.util.HashMap;
 
 /**
  * Created by Brian on 2/5/2016.
@@ -25,21 +24,20 @@ public class ContentValidatorApiConfiguration {
         return propertySourcesPlaceholderConfigurer;
     }
 
+    @Autowired
     @Bean
-    public DocumentBuilder documentBuilder() throws ParserConfigurationException {
-        DocumentBuilderFactory domFactory =  DocumentBuilderFactory.newInstance();
-        domFactory.setNamespaceAware(true);
-        return domFactory.newDocumentBuilder();
+    public ScenarioLoader scenarioLoader(final Environment environment, CCDAParser ccdaParser){
+        ScenarioLoader scenarioLoader;
+        String scenarioDir = environment.getProperty("content.scenariosDir");
+        scenarioLoader = new ScenarioLoader();
+        scenarioLoader.setScenarioFilePath(scenarioDir);
+        scenarioLoader.setCcdaParser(ccdaParser);
+        return scenarioLoader;
     }
 
     @Autowired
     @Bean
-    public ScenarioManager scenarioManager(final Environment environment, CCDAParser ccdaParser){
-        ScenarioManager scenarioManager;
-        String scenarioDir = environment.getProperty("content.scenariosDir");
-        scenarioManager = new ScenarioManager();
-        scenarioManager.setScenarioFilePath(scenarioDir);
-        scenarioManager.setCcdaParser(ccdaParser);
-        return scenarioManager;
+    public HashMap<String, CCDARefModel> refModelHashMap(ScenarioLoader scenarioLoader){
+        return scenarioLoader.getRefModelHashMap();
     }
 }

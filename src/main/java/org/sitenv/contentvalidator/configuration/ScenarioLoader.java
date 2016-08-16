@@ -14,7 +14,7 @@ import java.util.HashMap;
 /**
  * Created by Brian on 8/15/2016.
  */
-public class ScenarioManager implements InitializingBean {
+public class ScenarioLoader implements InitializingBean {
     private String scenarioFilePath;
     private CCDAParser ccdaParser;
     private HashMap<String, CCDARefModel> refModelHashMap = new HashMap<>();
