@@ -21,34 +21,33 @@ public class ContentValidatorService {
 
 	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName, String ccdaFile) {
 		log.info(" ***** CAME INTO THE REFERENCE VALIDATOR *****");
-		
+		ArrayList<ContentValidationResult> results = new ArrayList<>();
 		if(!isObjectiveValidForContentValidation(validationObjective)) {
 			log.warn("Content Validation not performed for objective " + validationObjective);
-			return null;
-		}
+		}else{
+			log.info(" Val Obj " + validationObjective + " Ref File " + referenceFileName);
 
-		log.info(" Val Obj " + validationObjective + " Ref File " + referenceFileName);
-		
-		// Parse passed in File
-		CCDARefModel submittedCCDA = parser.parse(ccdaFile);
+			// Parse passed in File
+			CCDARefModel submittedCCDA = parser.parse(ccdaFile);
 
-		CCDARefModel ref = null;
-		if( (referenceFileName != null) 
-			&& (!referenceFileName.isEmpty()) 
-			&& (!(referenceFileName.trim()).isEmpty())) {
+			CCDARefModel ref = null;
+			if( (referenceFileName != null)
+					&& (!referenceFileName.isEmpty())
+					&& (!(referenceFileName.trim()).isEmpty())) {
 				ref = refModelHashMap.get(referenceFileName);
+			}
+
+			if((ref != null) && (submittedCCDA != null)) {
+				log.info("Comparing the Ref Model to the Submitted Model ");
+				results = ref.compare(validationObjective, submittedCCDA );
+			}
+			else {
+				log.error(" Submitted Model = " + ((submittedCCDA==null)?" Model is null":submittedCCDA.toString()));
+				log.error(" Reference Model = " + ((ref==null)?" Model is null":ref.toString()));
+				log.error("Something is wrong, not able to find ref model for " + referenceFileName);
+			}
 		}
-		
-		if((ref != null) && (submittedCCDA != null)) {
-			log.info("Comparing the Ref Model to the Submitted Model ");
-			return ref.compare(validationObjective, submittedCCDA );
-		}
-		else {
-			log.error(" Submitted Model = " + ((submittedCCDA==null)?" Model is null":submittedCCDA.toString()));
-			log.error(" Reference Model = " + ((ref==null)?" Model is null":ref.toString()));
-			log.error("Something is wrong, not able to find ref model for " + referenceFileName);
-			return null;
-		}
+		return results;
 	}
 	
 	private Boolean isObjectiveValidForContentValidation(String valObj) {
