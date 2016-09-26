@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 @Component
 public class ContentValidatorService {
@@ -34,7 +36,7 @@ public class ContentValidatorService {
 			if( (referenceFileName != null)
 					&& (!referenceFileName.isEmpty())
 					&& (!(referenceFileName.trim()).isEmpty())) {
-				ref = refModelHashMap.get(referenceFileName);
+				ref = getCCDARefModel(referenceFileName);
 			}
 
 			if((ref != null) && (submittedCCDA != null)) {
@@ -68,6 +70,22 @@ public class ContentValidatorService {
 			return true;
 		else
 			return false;
+	}
+	
+	public CCDARefModel getCCDARefModel(String scenarioName)
+	{
+		Set<String> keys = refModelHashMap.keySet();
+		
+		for (String s : keys) {
+		    
+			log.info("Comparing " + scenarioName + " to " + s);
+			if(scenarioName.contains(s)) {
+				log.info("Returning Content Model for Comparison " + s );
+				return refModelHashMap.get(s);
+			}
+		}
+		
+		return null;
 	}
 
 }
