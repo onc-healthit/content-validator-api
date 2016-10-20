@@ -90,6 +90,33 @@ public class ParserUtilities {
 		}
 	}
 	
+	public static Boolean templateIdsAreFound(ArrayList<CCDAII> refList, ArrayList<CCDAII> submittedList) {
+		
+		log.info("Checking Template Ids lists ");
+		
+		if ((refList != null) && (submittedList != null)) {
+
+			// Check to see if each of the templates in the reflist are part of
+			// the submitted list.
+			for (CCDAII r : refList) {
+
+				if (!r.isPartOf(submittedList)) {
+					return false;
+				}
+			}
+			return true;
+		} 
+		else if ((refList == null) && (submittedList != null)) {
+			return false;
+		} 
+		else if ((refList != null) && (submittedList == null)) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
 	public static void compareTemplateIds(ArrayList<CCDAII> refList, ArrayList<CCDAII> submittedList,
 										  ArrayList<ContentValidationResult> results, String elementName) {
 		

@@ -1,6 +1,8 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
 
@@ -13,6 +15,26 @@ public class CCDAAllergyConcern {
 	private CCDADataElement  			statusCode;
 	private CCDAEffTime      			effTime;
 	private ArrayList<CCDAAllergyObs>  	allergyObs;
+	
+	public void compare(CCDAAllergyConcern subConc, String allergyObsContext, ArrayList<ContentValidationResult> results ) {
+		
+		log.info(" Comparing Concern data for Allergy " + allergyObsContext);
+		
+		String elementName = "Allergy Concern for " + allergyObsContext;
+		
+		// Compare template Ids 
+		ParserUtilities.compareTemplateIds(templateId, subConc.getTemplateId(), results, elementName);
+		
+		// Compare Status Codes 
+		String elementNameStatus = "Allergy Concern Status code for " + allergyObsContext;
+		ParserUtilities.compareDataElement(statusCode, subConc.getStatusCode(), results, elementNameStatus);
+				
+		// Compare Effective Times
+		String elementNameTime = "Allergy Concern Effective Time for " + allergyObsContext;
+		ParserUtilities.compareEffectiveTime(effTime, subConc.getEffTime(), results, elementNameTime);
+		
+		
+	}
 	
 	public void log() {
 		

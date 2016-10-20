@@ -22,6 +22,7 @@ public class CCDAEffTime {
 		
 		String refTime;
 		String submittedtime;
+		log.info(" Comparing Effective Times for " + elementName);
 		
 		// Compare low time values
 		if(lowPresent && subTime.getLowPresent() ) {
@@ -39,6 +40,12 @@ public class CCDAEffTime {
 			if(refTime.equalsIgnoreCase(submittedtime) ) {
 				log.info("Low Time element matches");
 			}
+			else {
+				String error = "The " + elementName + " (Effective Time: low time value) is " + low.getValue() + " , but submitted CCDA (Effective Time: low time value) is " + subTime.getLow().getValue() + " which does not match ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+			
 						
 		}
 		else if(lowPresent && !subTime.getLowPresent()) {
@@ -73,6 +80,11 @@ public class CCDAEffTime {
 			if(refTime.equalsIgnoreCase(submittedtime) ) {
 				log.info("High Time element matches");
 			}
+			else {
+				String error = "The " + elementName + " (Effective Time: High time value) is " + high.getValue() + " , but submitted CCDA (Effective Time: High time value) is " + subTime.getHigh().getValue() + " which does not match ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
 						
 		}
 		else if(highPresent && !subTime.getHighPresent()) {
@@ -106,6 +118,11 @@ public class CCDAEffTime {
 
 			if(refTime.equalsIgnoreCase(submittedtime) ) {
 				log.info("Value Time element matches");
+			}
+			else {
+				String error = "The " + elementName + " (Effective Time: Value ) is " + value.getValue() + " , but submitted CCDA (Effective Time: Value ) is " + subTime.getValue().getValue() + " which does not match ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
 			}
 
 		}

@@ -33,6 +33,17 @@ public class CCDACode extends CCDADataElement {
 		
 	}
 	
+	public Boolean codeEquals(CCDACode cd) {
+		
+		if( (code != null) && (cd.getCode() != null) &&
+			(codeSystem != null) && (cd.getCodeSystem() != null) &&
+			(code.equalsIgnoreCase(cd.getCode())) && 
+			(codeSystem.equalsIgnoreCase(cd.getCodeSystem()))) {
+			return true;
+		}
+		return false;
+	}
+	
 	public String getCode() {
 		return code;
 	}

@@ -1,6 +1,9 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
 
@@ -13,8 +16,63 @@ public class CCDAAllergyObs {
 	private CCDACode             			allergySubstance;
 	private CCDAEffTime          			effTime;
 	private ArrayList<CCDAAllergyReaction>  reactions;
-	private CCDAAllergySeverity				severity;
 	private Boolean							negationInd;
+	
+	public void compare(CCDAAllergyObs subObs, String allergyObsContext, ArrayList<ContentValidationResult> results) {
+		
+		log.info(" Comparing data for Allergy observation Value element/code attribute: " + allergyObsContext);
+
+		String elementName = "Allergy Observation for Value element/code attribute: " + allergyObsContext;
+
+		// Compare template Ids 
+		ParserUtilities.compareTemplateIds(templateId, subObs.getTemplateId(), results, elementName);
+
+		// Compare Effective Times
+		String elementNameTime = "Allergy Observation Effective Time for Value element/code attribute: " + allergyObsContext;
+		ParserUtilities.compareEffectiveTime(effTime, subObs.getEffTime(), results, elementNameTime);
+		
+		// Compare Allergy Codes 
+		String elementNameVal = "Allergy Observation Value element/code attribute: " + allergyObsContext;
+		ParserUtilities.compareCode(allergySubstance, subObs.getAllergySubstance(), results, elementNameVal);
+		
+		// Compare Allergy Codes 
+		String elementNameType = "Allergy Observation Type element : " + allergyObsContext;
+		//ParserUtilities.compareCode(allergyIntoleranceType, subObs.getAllergyIntoleranceType(), results, elementNameType);
+		
+		// Add negation indicator
+		
+		// Reaction comparison.
+		for( int i = 0; i < reactions.size(); i++) {
+			
+			CCDAAllergyReaction reactionFound = subObs.getReaction(reactions.get(i), allergyObsContext, results);
+			if(reactionFound == null) {
+				String error = "The scenario contains Allergy Reaction for " + allergyObsContext +
+						" , however there is no matching Allergy Reaction (Entry Template Ids + Code) in the submitted CCDA. ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+			else {
+				
+				log.info("Reaction was found, let us check Severity now ");
+				
+				// Check Severity since the reaction was found.
+				reactionFound.validateSeverity(reactions.get(i).getSeverity(),allergyObsContext, results);
+			}
+		}
+	}
+	
+	public CCDAAllergyReaction getReaction(CCDAAllergyReaction refReact,String allergyObsContext, ArrayList<ContentValidationResult> results) {
+		
+		// run thru the reactions in the submitted model and verify if the Ref Reaction is present.
+		for (int i = 0; i < reactions.size(); i++) {
+			
+			if(reactions.get(i).isSameAs(refReact))
+				return reactions.get(i);
+		}
+		
+		// No reaction found
+		return null;
+	}
 	
 	public void log() {
 		
@@ -33,9 +91,6 @@ public class CCDAAllergyObs {
 		
 		if(effTime != null) 
 			effTime.log();
-		
-		if(severity != null) 
-			severity.log();
 		
 		for(int k = 0; k < reactions.size(); k++) {
 			reactions.get(k).log();
@@ -94,16 +149,6 @@ public class CCDAAllergyObs {
 		
 		if(rs != null)
 			this.reactions = rs;
-	}
-
-
-	public CCDAAllergySeverity getSeverity() {
-		return severity;
-	}
-
-
-	public void setSeverity(CCDAAllergySeverity severity) {
-		this.severity = severity;
 	}
 
 

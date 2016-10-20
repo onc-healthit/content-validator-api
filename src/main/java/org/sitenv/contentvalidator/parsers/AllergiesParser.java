@@ -8,6 +8,7 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
+
 import java.util.ArrayList;
 
 public class AllergiesParser {
@@ -43,13 +44,9 @@ public class AllergiesParser {
 	
 	public static ArrayList<CCDAAllergyConcern> readAllergyConcern(NodeList allergyConcernNodeList) throws XPathExpressionException
 	{
-		ArrayList<CCDAAllergyConcern> allergyConcernList = null;
-		if(!ParserUtilities.isNodeListEmpty(allergyConcernNodeList))
-		{
-			allergyConcernList = new ArrayList<>();
-		}
-		
+		ArrayList<CCDAAllergyConcern> allergyConcernList = new ArrayList<>();;
 		CCDAAllergyConcern allergyConcern;
+		
 		for (int i = 0; i < allergyConcernNodeList.getLength(); i++) {
 			
 			log.info("Adding Allergy Concern ");
@@ -70,7 +67,9 @@ public class AllergiesParser {
 			NodeList allergyObservationNodeList = (NodeList) CCDAConstants.REL_ENTRY_RELSHIP_OBS_EXP.
 								evaluate(allergyConcernElement, XPathConstants.NODESET);
 			
-			allergyConcern.setAllergyObs(readAllergyObservation(allergyObservationNodeList));
+			allergyConcern.setAllergyObs(readAllergyObservation((NodeList) CCDAConstants.REL_ENTRY_RELSHIP_OBS_EXP.
+					evaluate(allergyConcernElement, XPathConstants.NODESET)));
+			
 			allergyConcernList.add(allergyConcern);
 		}
 		return allergyConcernList;
@@ -79,12 +78,9 @@ public class AllergiesParser {
 	
 	public static ArrayList<CCDAAllergyObs> readAllergyObservation(NodeList allergyObservationNodeList) throws XPathExpressionException
 	{
-		ArrayList<CCDAAllergyObs> allergyObservationList = null;
-		if(!ParserUtilities.isNodeListEmpty(allergyObservationNodeList))
-		{
-			allergyObservationList = new ArrayList<>();
-		}
+		ArrayList<CCDAAllergyObs> allergyObservationList = new ArrayList<>();;
 		CCDAAllergyObs allergyObservation;
+		
 		for (int i = 0; i < allergyObservationNodeList.getLength(); i++) {
 			
 			log.info("Adding Allergy Observation ");
@@ -102,50 +98,60 @@ public class AllergiesParser {
 			allergyObservation.setEffTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
 					evaluate(allergyObservationElement, XPathConstants.NODE)));
 			
-			NodeList allergyReactionsNodeList = (NodeList) CCDAConstants.REL_ALLERGY_REACTION_EXPRESSION.
-																evaluate(allergyObservationElement, XPathConstants.NODESET);
-			
+			allergyObservation.setReactions(readAllergyReaction((NodeList) CCDAConstants.REL_ALLERGY_REACTION_EXPRESSION.
+																evaluate(allergyObservationElement, XPathConstants.NODESET)));
+		
+			allergyObservationList.add(allergyObservation);
+		}
+	    return allergyObservationList;
+	}
+	
+	
+	public static ArrayList<CCDAAllergyReaction> readAllergyReaction(NodeList allergyReactionNodeList) throws XPathExpressionException 
+	{
 			CCDAAllergyReaction allergyReaction = null;
 			Element allergyReactionElement = null;
-			ArrayList<CCDAAllergyReaction> allergyReactionList = null;
-			if(!ParserUtilities.isNodeListEmpty(allergyReactionsNodeList))
-			{
-				allergyReactionList = new ArrayList<>();
-			}
-			for (int j = 0; j < allergyReactionsNodeList.getLength(); j++) {
+			ArrayList<CCDAAllergyReaction> allergyReactionList = new ArrayList<>();
+			
+			for (int j = 0; j < allergyReactionNodeList.getLength(); j++) {
 				
 				log.info("Adding Allergy Reaction ");
 				allergyReaction = new CCDAAllergyReaction();
-				allergyReactionElement = (Element) allergyReactionsNodeList.item(j);
+				allergyReactionElement = (Element) allergyReactionNodeList.item(j);
+				
 				allergyReaction.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 													evaluate(allergyReactionElement, XPathConstants.NODESET)));
 				
 				allergyReaction.setReactionCode(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_EXP.
 						evaluate(allergyReactionElement, XPathConstants.NODE)));
-				
+			
+				allergyReaction.setSeverity(readAllergySeverity((Element) CCDAConstants.REL_ALLERGY_SEVERITY_EXPRESSION.
+																evaluate(allergyReactionElement, XPathConstants.NODE)));
 				allergyReactionList.add(allergyReaction);
 			}
+			return allergyReactionList;		
+	}
+	
+	public static CCDAAllergySeverity readAllergySeverity(Element allergySeverityElement) throws XPathExpressionException
+	{
+		if (allergySeverityElement != null) {
+			log.info("Adding Allergy Severity ");
 			
-			allergyObservation.setReactions(allergyReactionList);
-			
-			Element allergySeverityElement = (Element) CCDAConstants.REL_ALLERGY_SEVERITY_EXPRESSION.
-					evaluate(allergyObservationElement, XPathConstants.NODE);
-			
-			if(allergySeverityElement != null)
-			{
-				log.info("Adding Allergy Severity ");;
-				CCDAAllergySeverity allergySeverity = new CCDAAllergySeverity();
-				allergySeverity.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
-						evaluate(allergySeverityElement, XPathConstants.NODESET)));
-				allergySeverity.setSeverity(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_EXP.
-						evaluate(allergySeverityElement, XPathConstants.NODE)));
-				
-				allergyObservation.setSeverity(allergySeverity);
-			}
-			
-			allergyObservationList.add(allergyObservation);
+			CCDAAllergySeverity allergySeverity = new CCDAAllergySeverity();
+			allergySeverity
+					.setTemplateIds(ParserUtilities
+							.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP
+									.evaluate(allergySeverityElement,
+											XPathConstants.NODESET)));
+
+			allergySeverity.setSeverity(ParserUtilities
+					.readCode((Element) CCDAConstants.REL_VAL_EXP.evaluate(
+							allergySeverityElement, XPathConstants.NODE)));
+
+			return allergySeverity;
 		}
-		return allergyObservationList;
+			
+		return null;
 	}
 
 }

@@ -56,7 +56,12 @@ public class CCDARefModel {
 		log.info("Validating Birth Sex ");
 		validateBirthSex(submittedCCDA, results);
 		
+		log.info("Comparing Problems ");
 		compareProblems(validationObjective, submittedCCDA, results);
+		
+		log.info("Comparing Allergies ");
+		compareAllergies(validationObjective, submittedCCDA, results);
+		
 		log.info("Finished comparison , returning results");
 		
 	}
@@ -79,6 +84,32 @@ public class CCDARefModel {
 			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's problems, but the submitted C-CDA does contain problem data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info("Model does not have problems for comparison ");
+		}
+		else {
+			
+			log.info("Model and Submitted CCDA do not have problems for comparison ");
+		}
+		
+	}
+	
+	private void compareAllergies(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
+		
+		if((this.getAllergy() != null) && (submittedCCDA.getAllergy() != null) ) {
+			log.info("Start Allergy Comparison ");
+			this.allergy.compare(submittedCCDA.getAllergy(), results);
+		}
+		else if ( (this.getAllergy() != null) && (submittedCCDA.getAllergy() == null) ) 
+		{
+			// handle the case where the allergy section does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's allergies, but the submitted C-CDA does not contain allergy data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires allergies but submitted document does not contain allergies section");
+		}
+		else if ( (this.getAllergy() == null) && (submittedCCDA.getAllergy() != null) ){
+			
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's allergies, but the submitted C-CDA does contain allergy data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info("Model does not have allergies for comparison ");
 		}
 		else {
 			
