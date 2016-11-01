@@ -15,6 +15,7 @@ public class CCDARefModel {
 	private CCDAEncounter      encounter;
 	private CCDAAllergy        allergy;
 	private CCDAMedication     medication;
+	private CCDADischargeMedication dischargeMedication;
 	private CCDAImmunization   immunization;
 	private CCDALabResult      labResults;
 	private CCDALabResult  	   labTests;
@@ -61,6 +62,9 @@ public class CCDARefModel {
 		
 		log.info("Comparing Allergies ");
 		compareAllergies(validationObjective, submittedCCDA, results);
+		
+		log.info("Comparing Medications ");
+		// compareMedications(validationObjective, submittedCCDA, results);
 		
 		log.info("Finished comparison , returning results");
 		
@@ -113,7 +117,33 @@ public class CCDARefModel {
 		}
 		else {
 			
-			log.info("Model and Submitted CCDA do not have problems for comparison ");
+			log.info("Model and Submitted CCDA do not have allergies for comparison ");
+		}
+		
+	}
+	
+	private void compareMedications(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
+		
+		if((this.getMedication() != null) && (submittedCCDA.getMedication() != null) ) {
+			log.info("Start Medication Comparison ");
+			this.medication.compare(submittedCCDA.getMedication(), results);
+		}
+		else if ( (this.getMedication() != null) && (submittedCCDA.getMedication() == null) ) 
+		{
+			// handle the case where the allergy section does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's medications, but the submitted C-CDA does not contain medication data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires medications but submitted document does not contain medication data");
+		}
+		else if ( (this.getMedication() == null) && (submittedCCDA.getMedication() != null) ){
+			
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's medications, but the submitted C-CDA does contain medication data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info("Model does not have medications for comparison ");
+		}
+		else {
+			
+			log.info("Model and Submitted CCDA do not have medications for comparison ");
 		}
 		
 	}

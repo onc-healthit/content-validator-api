@@ -18,6 +18,14 @@ public class CCDAEffTime {
 	private Boolean         valuePresent;
 	private String 			singleAdministration;
 	
+	public Boolean hasValidData() {
+		
+		if( (lowPresent || highPresent || valuePresent) )
+			return true;
+		else
+			return false;
+	}
+	
 	public void compare(CCDAEffTime subTime, ArrayList<ContentValidationResult> results, String elementName) {
 		
 		String refTime;

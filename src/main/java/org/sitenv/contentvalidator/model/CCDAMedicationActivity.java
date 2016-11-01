@@ -1,6 +1,8 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
 
@@ -17,6 +19,39 @@ public class CCDAMedicationActivity {
 	private CCDAPQ								rateQuantity;
 	private CCDACode							adminUnitCode;
 	private CCDAConsumable						consumable;
+	
+	public void compare(CCDAMedicationActivity refMedActivity, ArrayList<ContentValidationResult> results , String context) {
+		
+		log.info("Comparing Medication Activity ");
+		
+		// Handle Template Ids
+		ParserUtilities.compareTemplateIds(refMedActivity.getTemplateIds(), templateIds, results, context);
+		
+		// Compare Effective Times
+		String elementNameTime = "Medication Duration for " + context;
+		ParserUtilities.compareEffectiveTime(refMedActivity.getDuration(), duration, results, elementNameTime);
+		
+		// Compare template Ids 
+		String consumableElement = "Consumable TemplateIds for " + context;
+		ParserUtilities.compareTemplateIds(refMedActivity.getConsumable().getTemplateIds(), 
+				consumable.getTemplateIds(), results, consumableElement);
+
+		// Compare Med Codes 
+		String elementNameVal = "Consumable code element: " + context;
+		ParserUtilities.compareCode(refMedActivity.getConsumable().getMedcode(), consumable.getMedcode(), results, elementNameVal);
+	}
+	
+	public Boolean hasSameMedication(CCDAConsumable refConsumable) {
+		
+		if(consumable != null &&
+		   refConsumable != null) {
+			
+			return consumable.hasSameMedCode(refConsumable);
+			
+		}
+		
+		return false;
+	}
 	
 	public void log() {
 		
