@@ -50,11 +50,11 @@ public class ParserUtilities {
 			refTime.compare(submittedTime, results, elementName);
 
 		}
-		else if ((refTime == null) && (submittedTime != null)) {
+		else if ((refTime == null) && (submittedTime != null) && submittedTime.hasValidData() ) {
 			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
-		else if((refTime != null) && (submittedTime == null)){
+		else if((refTime != null) && refTime.hasValidData() && (submittedTime == null)){
 			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 		} 
@@ -128,7 +128,7 @@ public class ParserUtilities {
 				if(!r.isPartOf(submittedList)) {
 					String error = "The " + elementName + " template id, Root Value = " 
 							+ ((r.getRootValue() != null)?r.getRootValue():"None specified") + " and Extension Value = " 
-					        + ((r.getExtValue() != null)?r.getExtValue():"No Extension value") + " is not present in the submitted CCDA's " + elementName;
+					        + ((r.getExtValue() != null)?r.getExtValue():"No Extension value") + " is not present in the submitted CCDA's ";
 					ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 					results.add(rs);
 				}
@@ -266,7 +266,8 @@ public class ParserUtilities {
 				log.info("Reading Value for node: " + nodeElement.getNodeName() + " = " + nodeElement.getAttribute("value"));
 				dataElement.setValue(nodeElement.getAttribute("value"));
 			}
-			else if(nodeElement.getFirstChild() != null) {
+			else if(nodeElement.getFirstChild() != null && 
+					!(nodeElement.getFirstChild().getNodeValue().isEmpty())) {
 				log.info("Reading Value for node: " + nodeElement.getNodeName() + " = " + nodeElement.getFirstChild().getNodeValue());
 				dataElement.setValue(nodeElement.getFirstChild().getNodeValue());
 			}

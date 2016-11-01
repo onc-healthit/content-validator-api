@@ -14,6 +14,15 @@ public class CCDAConsumable {
 	CCDADataElement				lotNumberText;
 	CCDADataElement				manufacturingOrg;
 	
+	public Boolean hasSameMedCode(CCDAConsumable refConsumable) {
+		
+		if(medcode != null && 
+		   refConsumable.getMedcode() != null )
+			 return medcode.codeEquals(refConsumable.getMedcode());
+		
+		return false;
+	}
+	
 	public void log() {
 	
 		if(medcode != null)

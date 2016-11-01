@@ -65,6 +65,8 @@ public class CCDAConstants {
 	
 	//Medication stuff
 	static public XPathExpression MEDICATION_EXPRESSION;
+	static public XPathExpression ADM_MEDICATION_EXPRESSION;
+	static public XPathExpression DM_MEDICATION_EXPRESSION;
 	static public XPathExpression REL_MED_ENTRY_EXP;
 	static public XPathExpression REL_ROUTE_CODE_EXP;
 	static public XPathExpression REL_DOSE_EXP;
@@ -179,6 +181,8 @@ public class CCDAConstants {
 			PROBLEM_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='11450-4']]");
 			REL_PROBLEM_OBS_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entryRelationship/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.4']]");
 			MEDICATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='10160-0']]");
+			ADM_MEDICATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='42346-7']]");
+			DM_MEDICATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='10183-2']]");
 			REL_MED_ENTRY_EXP = CCDAConstants.CCDAXPATH.compile("./entry/substanceAdministration[not(@nullFlavor)]");
 			REL_ROUTE_CODE_EXP = CCDAConstants.CCDAXPATH.compile("./routeCode[not(@nullFlavor)]");
 			REL_DOSE_EXP = CCDAConstants.CCDAXPATH.compile("./doseQuantity[not(@nullFlavor)]");

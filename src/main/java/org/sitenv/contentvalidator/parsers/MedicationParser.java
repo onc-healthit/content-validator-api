@@ -40,14 +40,53 @@ public class MedicationParser {
 		return medications;
 	}
 	
+	public static CCDAMedication retrieveAdmissionMedicationDetails(Document doc) throws XPathExpressionException
+	{
+		CCDAMedication medications = null;
+		Element sectionElement = (Element) CCDAConstants.MEDICATION_EXPRESSION.evaluate(doc, XPathConstants.NODE);
+		
+		if(sectionElement != null)
+		{
+			log.info("Creating Medication ");
+			medications = new CCDAMedication();
+			medications.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+						evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			medications.setSectionCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+			
+			medications.setMedActivities(readMedication((NodeList) CCDAConstants.REL_MED_ENTRY_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET)));
+		}
+		return medications;
+	}
+	
+	public static CCDADischargeMedication retrieveDischargeMedicationDetails(Document doc) throws XPathExpressionException
+	{
+		CCDADischargeMedication medications = null;
+		Element sectionElement = (Element) CCDAConstants.DM_MEDICATION_EXPRESSION.evaluate(doc, XPathConstants.NODE);
+		
+		if(sectionElement != null)
+		{
+			log.info("Creating Discharge Medication ");
+			medications = new CCDADischargeMedication();
+			medications.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+						evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			medications.setSectionCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+			
+			medications.setMedActivities(readMedication((NodeList) CCDAConstants.REL_MED_ENTRY_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET)));
+		}
+		return medications;
+	}
+	
 	public static ArrayList<CCDAMedicationActivity> readMedication(NodeList entryNodeList) throws XPathExpressionException
 	{
-		ArrayList<CCDAMedicationActivity> medicationList = null;
-		if(!ParserUtilities.isNodeListEmpty(entryNodeList))
-		{
-			medicationList = new ArrayList<>();
-		}
+		ArrayList<CCDAMedicationActivity> medicationList = new ArrayList<>();
 		CCDAMedicationActivity medicationActivity;
+		
 		for (int i = 0; i < entryNodeList.getLength(); i++) {
 			
 			log.info("Creating Medication Activity ");
@@ -61,11 +100,16 @@ public class MedicationParser {
 			NodeList effectiveTime = (NodeList) CCDAConstants.REL_EFF_TIME_EXP.evaluate(entryElement, XPathConstants.NODESET);
 			
 			for (int j = 0; j < effectiveTime.getLength(); j++) {
+				
 				Element effectiveTimeElement = (Element) effectiveTime.item(j);
 				if(effectiveTimeElement.getAttribute("xsi:type").equalsIgnoreCase("IVL_TS"))
 				{
 					medicationActivity.setDuration(readDuration(effectiveTimeElement));
-				}else
+				} else if(effectiveTimeElement.getAttribute("xsi:type").equalsIgnoreCase("PIVL_TS") && 
+						  effectiveTimeElement.hasAttribute("institutionSpecified") && 
+						  effectiveTimeElement.getAttribute("institutionSpecified").equalsIgnoreCase("true") && 
+						  effectiveTimeElement.hasAttribute("operator") && 
+						  effectiveTimeElement.getAttribute("operator").equalsIgnoreCase("A") )
 				{
 					medicationActivity.setFrequency(ParserUtilities.readFrequency(effectiveTimeElement));
 				}
@@ -95,15 +139,12 @@ public class MedicationParser {
 	
 	public static CCDAEffTime readDuration(Element duration)throws XPathExpressionException
 	{
-		CCDAEffTime medicationDuration = null;
-		if(duration != null)
-		{
-			medicationDuration = new CCDAEffTime();
-		}
-		
+		CCDAEffTime medicationDuration = null; 
+				
 		if (!ParserUtilities.isEmpty(duration.getAttribute("value")))
 		{
-			medicationDuration.setSingleAdministration(duration.getAttribute("value"));
+			medicationDuration = new CCDAEffTime();
+			medicationDuration.setValue(ParserUtilities.readDataElement(duration));
 		}else
 		{
 			medicationDuration = ParserUtilities.readEffectiveTime(duration);
@@ -112,28 +153,28 @@ public class MedicationParser {
 		
 	}
 	
-	public static CCDAConsumable readMedicationInformation(Element medicationInforamtionElement) throws XPathExpressionException
+	public static CCDAConsumable readMedicationInformation(Element medicationInformationElement) throws XPathExpressionException
 	{
 		
 		CCDAConsumable consumable = null;
 		
-		if(medicationInforamtionElement != null)
+		if(medicationInformationElement != null)
 		{
 			consumable = new CCDAConsumable();
 			consumable.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
-							evaluate(medicationInforamtionElement, XPathConstants.NODESET)));
+							evaluate(medicationInformationElement, XPathConstants.NODESET)));
 			
 			consumable.setMedcode(ParserUtilities.readCode((Element) CCDAConstants.REL_MMAT_CODE_EXP.
-					evaluate(medicationInforamtionElement, XPathConstants.NODE)));
+					evaluate(medicationInformationElement, XPathConstants.NODE)));
 			
 			consumable.setTranslations(ParserUtilities.readCodeList((NodeList) CCDAConstants.REL_MMAT_CODE_TRANS_EXP.
-						evaluate(medicationInforamtionElement, XPathConstants.NODESET)));
+						evaluate(medicationInformationElement, XPathConstants.NODESET)));
 			
 			consumable.setManufacturingOrg(ParserUtilities.readTextContext((Element) CCDAConstants.REL_MANU_ORG_NAME_EXP.
-						evaluate(medicationInforamtionElement, XPathConstants.NODE)));
+						evaluate(medicationInformationElement, XPathConstants.NODE)));
 			
 			consumable.setLotNumberText(ParserUtilities.readTextContext((Element) CCDAConstants.REL_MMAT_LOT_EXP.
-						evaluate(medicationInforamtionElement, XPathConstants.NODE)));
+						evaluate(medicationInformationElement, XPathConstants.NODE)));
 		}
 		
 		return consumable;
