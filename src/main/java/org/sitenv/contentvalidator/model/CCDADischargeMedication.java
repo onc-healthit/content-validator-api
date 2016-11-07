@@ -34,39 +34,11 @@ public class CCDADischargeMedication {
 
 		HashMap<String, CCDAMedicationActivity> refActivities = getMedActivitiesMap();
 		HashMap<String, CCDAMedicationActivity> subActivities = subMedication.getMedActivitiesMap();
-
-		// For each medication Activity in the Ref Model, check if it is present in the subCCDA Med.
-		for(Map.Entry<String, CCDAMedicationActivity> ent: refActivities.entrySet()) {
-
-			if(subActivities.containsKey(ent.getKey())) {
-
-				log.info("Comparing Medication Activities ");
-				String context = "Medication Activity Entry corresponding to the code " + ent.getKey();
-				subActivities.get(ent.getKey()).compare(ent.getValue(), results, context);
-
-
-			} else {
-				// Error
-				String error = "The scenario contains Medication Activity data for Medication with code " + ent.getKey() +
-						" , however there is no matching data in the submitted CCDA. ";
-				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-				results.add(rs);
-			}
-		}
-
-		// Handle the case where the medication data is not present in the reference, 
-		if( (refActivities.size() == 0) && (subActivities.size() > 0) ) {
-
-			// Error
-			String error = "The scenario does not require Medication Activity data " + 
-					" , however there is medication activity data in the submitted CCDA. ";
-			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-			results.add(rs);
-		}
-
+		
+		CCDAMedicationActivity.compareMedicationActivityData(refActivities,subActivities,results);
 	}
-
-	private HashMap<String, CCDAMedicationActivity> getMedActivitiesMap() {
+	
+	public HashMap<String, CCDAMedicationActivity> getMedActivitiesMap() {
 
 		HashMap<String, CCDAMedicationActivity> acts = new HashMap<String, CCDAMedicationActivity>();
 		for(int k = 0; k < medActivities.size(); k++) {
