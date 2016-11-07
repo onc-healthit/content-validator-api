@@ -5,6 +5,8 @@ import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CCDARefModel {
 	
@@ -64,7 +66,7 @@ public class CCDARefModel {
 		compareAllergies(validationObjective, submittedCCDA, results);
 		
 		log.info("Comparing Medications ");
-		// compareMedications(validationObjective, submittedCCDA, results);
+		compareMedications(validationObjective, submittedCCDA, results);
 		
 		log.info("Finished comparison , returning results");
 		
@@ -122,30 +124,69 @@ public class CCDARefModel {
 		
 	}
 	
-	private void compareMedications(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
+	public HashMap<String, CCDAMedicationActivity> getAllMedActivities() {
 		
-		if((this.getMedication() != null) && (submittedCCDA.getMedication() != null) ) {
-			log.info("Start Medication Comparison ");
-			this.medication.compare(submittedCCDA.getMedication(), results);
+		HashMap<String,CCDAMedicationActivity> activities = new HashMap<String,CCDAMedicationActivity>();
+		
+		if(medication != null) {
+			
+			/*
+			for(Map.Entry<String, CCDAMedicationActivity> ent: medication.getMedActivitiesMap().entrySet()) {
+				log.info("Adding " + ent.getKey());
+				activities.put(ent.getKey(), ent.getValue());		
+			}*/
+			
+			activities.putAll(medication.getMedActivitiesMap());
+			log.info(" Activities Size = " + activities.size());
 		}
-		else if ( (this.getMedication() != null) && (submittedCCDA.getMedication() == null) ) 
-		{
+		
+		if(dischargeMedication != null) {
+			
+			/*
+			for(Map.Entry<String, CCDAMedicationActivity> ent: dischargeMedication.getMedActivitiesMap().entrySet()) {
+				log.info("Adding " + ent.getKey());
+				activities.put(ent.getKey(), ent.getValue());			
+			}*/
+			
+			activities.putAll(dischargeMedication.getMedActivitiesMap());
+			log.info("Activities Size = " + activities.size());
+		}
+		
+		log.info("Final Med Activities Size = " + activities.size());
+		return activities;
+	}
+	
+	public void compareMedications(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
+		
+		log.info("Retrieving Medication Activities for comparison ");
+		HashMap<String, CCDAMedicationActivity> refActivities = this.getAllMedActivities();
+		HashMap<String, CCDAMedicationActivity> subActivities = submittedCCDA.getAllMedActivities();
+		
+		if( (refActivities != null && refActivities.size() > 0) &&  
+			(subActivities != null && subActivities.size() > 0)  ) {
+			
+			log.info("Medication Activities in both models ");
+			CCDAMedicationActivity.compareMedicationActivityData(refActivities, subActivities, results);
+			
+		} else if ( (refActivities != null && refActivities.size() > 0) && 
+				(subActivities == null || subActivities.size() == 0) ) {
+			
 			// handle the case where the allergy section does not exist in the submitted CCDA
 			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's medications, but the submitted C-CDA does not contain medication data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info(" Scenario requires medications but submitted document does not contain medication data");
-		}
-		else if ( (this.getMedication() == null) && (submittedCCDA.getMedication() != null) ){
 			
+		}else if ((refActivities == null || refActivities.size() == 0) && 
+				(subActivities != null && subActivities.size() > 0) ) {
+		
 			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's medications, but the submitted C-CDA does contain medication data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info("Model does not have medications for comparison ");
-		}
-		else {
+			
+		} else {
 			
 			log.info("Model and Submitted CCDA do not have medications for comparison ");
 		}
-		
 	}
 	
 	private void validateBirthSex(CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
@@ -231,6 +272,11 @@ public class CCDARefModel {
 			medication.log();
 		else
 			log.info("No Medication data in the model");
+		
+		if(dischargeMedication != null)
+			dischargeMedication.log();
+		else
+			log.info("No Discharge Medication data in the model");
 		
 		if(allergy != null)
 			allergy.log();
@@ -393,6 +439,9 @@ public class CCDARefModel {
 		if(udis != null)
 			this.udi = udis;
 	}
+	
+	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -514,6 +563,14 @@ public class CCDARefModel {
 		} else if (!vitalSigns.equals(other.vitalSigns))
 			return false;
 		return true;
+	}
+
+	public CCDADischargeMedication getDischargeMedication() {
+		return dischargeMedication;
+	}
+
+	public void setDischargeMedication(CCDADischargeMedication dischargeMedication) {
+		this.dischargeMedication = dischargeMedication;
 	}
 
 		

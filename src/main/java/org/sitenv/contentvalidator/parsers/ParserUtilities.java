@@ -50,11 +50,11 @@ public class ParserUtilities {
 			refTime.compare(submittedTime, results, elementName);
 
 		}
-		else if ((refTime == null) && (submittedTime != null) && submittedTime.hasValidData() ) {
+		else if ((refTime == null) && (submittedTime != null && submittedTime.hasValidData()) ) {
 			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
-		else if((refTime != null) && refTime.hasValidData() && (submittedTime == null)){
+		else if((refTime != null && refTime.hasValidData()) && (submittedTime == null)){
 			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 		} 
@@ -267,6 +267,7 @@ public class ParserUtilities {
 				dataElement.setValue(nodeElement.getAttribute("value"));
 			}
 			else if(nodeElement.getFirstChild() != null && 
+					nodeElement.getFirstChild().getNodeValue() != null &&
 					!(nodeElement.getFirstChild().getNodeValue().isEmpty())) {
 				log.info("Reading Value for node: " + nodeElement.getNodeName() + " = " + nodeElement.getFirstChild().getNodeValue());
 				dataElement.setValue(nodeElement.getFirstChild().getNodeValue());

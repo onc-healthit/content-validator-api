@@ -2,9 +2,12 @@ package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CCDAMedicationActivity {
 
@@ -19,6 +22,42 @@ public class CCDAMedicationActivity {
 	private CCDAPQ								rateQuantity;
 	private CCDACode							adminUnitCode;
 	private CCDAConsumable						consumable;
+	
+	public static void compareMedicationActivityData(HashMap<String, CCDAMedicationActivity> refActivities, 
+			HashMap<String, CCDAMedicationActivity> subActivities, 	ArrayList<ContentValidationResult> results) {
+
+		log.info(" Start Comparing Medication Activities ");
+		// For each medication Activity in the Ref Model, check if it is present in the subCCDA Med.
+		for(Map.Entry<String, CCDAMedicationActivity> ent: refActivities.entrySet()) {
+
+			if(subActivities.containsKey(ent.getKey())) {
+
+				log.info("Comparing Medication Activities ");
+				String context = "Medication Activity Entry corresponding to the code " + ent.getKey();
+				subActivities.get(ent.getKey()).compare(ent.getValue(), results, context);
+
+
+			} else {
+				// Error
+				String error = "The scenario contains Medication Activity data for Medication with code " + ent.getKey() +
+						" , however there is no matching data in the submitted CCDA. ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+		}
+
+		// Handle the case where the medication data is not present in the reference, 
+		if( (refActivities == null || refActivities.size() == 0) && (subActivities != null && subActivities.size() > 0) ) {
+
+			// Error
+			String error = "The scenario does not require Medication Activity data " + 
+					" , however there is medication activity data in the submitted CCDA. ";
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		
+	}
+	
 	
 	public void compare(CCDAMedicationActivity refMedActivity, ArrayList<ContentValidationResult> results , String context) {
 		
