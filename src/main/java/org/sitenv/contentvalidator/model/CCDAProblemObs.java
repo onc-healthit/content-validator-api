@@ -27,7 +27,7 @@ public class CCDAProblemObs {
 
 		// Compare Effective Times
 		String elementNameTime = "Problem Observation Effective Time for Value element/code attribute: " + probObsContext;
-		ParserUtilities.compareEffectiveTime(effTime, subObs.getEffTime(), results, elementNameTime);
+		//ParserUtilities.compareEffectiveTime(effTime, subObs.getEffTime(), results, elementNameTime);
 		
 		// Compare PRoblem Codes 
 		String elementNameVal = "Problem Observation Value element/code attribute: " + probObsContext;

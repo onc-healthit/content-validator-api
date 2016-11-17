@@ -98,7 +98,7 @@ public class CCDAAllergy {
 		else {
 			
 			String error = "The scenario contains Allergy observation for " + 
-							((refAl.getAllergySubstance() != null)?(refAl.getAllergySubstance().getDisplayName()):" No Known Allergies ") +
+							((refAl.getAllergySubstance() != null)?((refAl.getAllergySubstance().getDisplayName()) + " Code: " + refAl.getAllergySubstance().getCode()):" No Known Allergies ") +
 							" , however there is no matching data in the submitted CCDA. ";
 			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);

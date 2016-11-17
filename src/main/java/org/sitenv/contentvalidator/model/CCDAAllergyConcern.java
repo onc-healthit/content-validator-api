@@ -31,7 +31,7 @@ public class CCDAAllergyConcern {
 				
 		// Compare Effective Times
 		String elementNameTime = "Allergy Concern Effective Time for " + allergyObsContext;
-		ParserUtilities.compareEffectiveTime(effTime, subConc.getEffTime(), results, elementNameTime);
+		//ParserUtilities.compareEffectiveTime(effTime, subConc.getEffTime(), results, elementNameTime);
 		
 		
 	}

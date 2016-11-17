@@ -31,7 +31,7 @@ public class CCDAProblemConcern {
 				
 		// Compare Effective Times
 		String elementNameTime = "Problem Concern Effective Time for " + problemObsContext;
-		ParserUtilities.compareEffectiveTime(effTime, subConc.getEffTime(), results, elementNameTime);
+		//ParserUtilities.compareEffectiveTime(effTime, subConc.getEffTime(), results, elementNameTime);
 		
 		
 	}

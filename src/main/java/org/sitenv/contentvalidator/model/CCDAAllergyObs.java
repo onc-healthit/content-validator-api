@@ -29,7 +29,7 @@ public class CCDAAllergyObs {
 
 		// Compare Effective Times
 		String elementNameTime = "Allergy Observation Effective Time for Value element/code attribute: " + allergyObsContext;
-		ParserUtilities.compareEffectiveTime(effTime, subObs.getEffTime(), results, elementNameTime);
+		//ParserUtilities.compareEffectiveTime(effTime, subObs.getEffTime(), results, elementNameTime);
 		
 		// Compare Allergy Codes 
 		String elementNameVal = "Allergy Observation Value element/code attribute: " + allergyObsContext;
