@@ -142,10 +142,18 @@ public class LabResultParser {
 				if(referenceRangeElement != null)
 				{
 					log.info("Processing Range");
-					referenceValueList.add(ParserUtilities.readQuantity((Element) CCDAConstants.REL_LOW_EXP.
-		    				evaluate(referenceRangeElement, XPathConstants.NODE)));
-					referenceValueList.add(ParserUtilities.readQuantity((Element) CCDAConstants.REL_HIGH_EXP.
-		    				evaluate(referenceRangeElement, XPathConstants.NODE)));
+					
+					CCDAPQ lowQuantity = ParserUtilities.readQuantity((Element) CCDAConstants.REL_LOW_EXP.
+		    				evaluate(referenceRangeElement, XPathConstants.NODE));
+					if(lowQuantity != null) {
+						referenceValueList.add(lowQuantity);
+					}
+					
+					CCDAPQ highQuantity = ParserUtilities.readQuantity((Element) CCDAConstants.REL_HIGH_EXP.
+		    				evaluate(referenceRangeElement, XPathConstants.NODE));
+					if(highQuantity != null) {
+						referenceValueList.add(highQuantity);
+					}
 				}
 			}
 			resultObservation.setReferenceRange(referenceValueList);
