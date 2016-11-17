@@ -68,7 +68,7 @@ public class CCDAMedicationActivity {
 		
 		// Compare Effective Times
 		String elementNameTime = "Medication Duration for " + context;
-		ParserUtilities.compareEffectiveTime(refMedActivity.getDuration(), duration, results, elementNameTime);
+		//ParserUtilities.compareEffectiveTime(refMedActivity.getDuration(), duration, results, elementNameTime);
 		
 		// Compare template Ids 
 		String consumableElement = "Consumable TemplateIds for " + context;

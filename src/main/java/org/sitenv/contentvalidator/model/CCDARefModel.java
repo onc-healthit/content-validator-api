@@ -48,6 +48,7 @@ public class CCDARefModel {
 			log.info(" Not performing CCDS checks ");
 		}
 		
+		log.info(" Total Number of Content Validation Issues " + results.size());
 		return results;
 	}
 	

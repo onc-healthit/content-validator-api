@@ -72,7 +72,7 @@ public class CCDAProblem {
 		}
 		else {
 			String error = "The scenario contains problem observation for " + 
-							((refPo.getProblemCode() != null)?(refPo.getProblemCode().getDisplayName()):" Unknown Observation ") +
+							((refPo.getProblemCode() != null)?((refPo.getProblemCode().getDisplayName()) + " Code: " + refPo.getProblemCode().getCode()) :" Unknown Observation ") +
 							" , however there is no matching observation in the submitted CCDA. ";
 			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
