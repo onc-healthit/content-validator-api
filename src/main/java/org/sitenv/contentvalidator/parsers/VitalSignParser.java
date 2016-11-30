@@ -8,6 +8,7 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
+
 import java.util.ArrayList;
 
 public class VitalSignParser {
@@ -108,9 +109,7 @@ public class VitalSignParser {
 					String xsiType = vsResult.getAttribute("xsi:type");
 					if (xsiType.equalsIgnoreCase("ST") && (vsResult.getFirstChild() != null))
 					{
-						log.info("Vital Value is ST ");
-						String value = vsResult.getFirstChild().getNodeValue();
-						vitalObservation.setVsResult(new CCDAPQ(value,"ST"));
+						log.info("Vital Value is ST  which is not allowed ");
 					}else if(xsiType.equalsIgnoreCase("PQ"))
 					{
 						vitalObservation.setVsResult(ParserUtilities.readQuantity(vsResult));
@@ -132,10 +131,17 @@ public class VitalSignParser {
 				
 				if(referenceRangeElement != null)
 				{
-					referenceValueList.add(ParserUtilities.readQuantity((Element) CCDAConstants.REL_LOW_EXP.
-		    				evaluate(referenceRangeElement, XPathConstants.NODE)));
-					referenceValueList.add(ParserUtilities.readQuantity((Element) CCDAConstants.REL_HIGH_EXP.
-		    				evaluate(referenceRangeElement, XPathConstants.NODE)));
+					CCDAPQ lowQuantity = ParserUtilities.readQuantity((Element) CCDAConstants.REL_LOW_EXP.
+		    				evaluate(referenceRangeElement, XPathConstants.NODE));
+					if(lowQuantity != null) {
+						referenceValueList.add(lowQuantity);
+					}
+					
+					CCDAPQ highQuantity = ParserUtilities.readQuantity((Element) CCDAConstants.REL_HIGH_EXP.
+		    				evaluate(referenceRangeElement, XPathConstants.NODE));
+					if(highQuantity != null) {
+						referenceValueList.add(highQuantity);
+					}
 				}
 			}
 			vitalObservation.setReferenceValue(referenceValueList);

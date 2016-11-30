@@ -69,6 +69,18 @@ public class CCDARefModel {
 		log.info("Comparing Medications ");
 		compareMedications(validationObjective, submittedCCDA, results);
 		
+		log.info("Comparing Lab Results ");
+		compareLabResults(validationObjective, submittedCCDA, results);
+		
+		log.info("Comparing Vital Signs ");
+		compareVitalObs(validationObjective, submittedCCDA, results);
+		
+		log.info("Comparing Procedures ");
+		compareProcedures(validationObjective, submittedCCDA, results);
+		
+		log.info("Comparing Immunizations ");
+		compareImmunizations(validationObjective, submittedCCDA, results);
+		
 		log.info("Finished comparison , returning results");
 		
 	}
@@ -157,6 +169,19 @@ public class CCDARefModel {
 		return activities;
 	}
 	
+	public HashMap<String, CCDAImmunizationActivity> getAllImmunizations() {
+		
+		HashMap<String,CCDAImmunizationActivity> activities = new HashMap<String,CCDAImmunizationActivity>();
+		
+		if(immunization != null) {
+			
+			activities.putAll(immunization.getImmunizationActivitiesMap());
+			log.info(" Activities Size = " + activities.size());
+		}
+		
+		return activities;
+	}
+	
 	public void compareMedications(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
 		
 		log.info("Retrieving Medication Activities for comparison ");
@@ -188,6 +213,183 @@ public class CCDARefModel {
 			
 			log.info("Model and Submitted CCDA do not have medications for comparison ");
 		}
+	}
+	
+	public void compareImmunizations(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
+		
+		log.info("Retrieving Immunization Activities for comparison ");
+		HashMap<String, CCDAImmunizationActivity> refActivities = this.getAllImmunizations();
+		HashMap<String, CCDAImmunizationActivity> subActivities = submittedCCDA.getAllImmunizations();
+		
+		if( (refActivities != null && refActivities.size() > 0) &&  
+			(subActivities != null && subActivities.size() > 0)  ) {
+			
+			log.info("Immunization Activities in both models ");
+			CCDAImmunizationActivity.compareImmunizationActivityData(refActivities, subActivities, results);
+			
+		} else if ( (refActivities != null && refActivities.size() > 0) && 
+				(subActivities == null || subActivities.size() == 0) ) {
+			
+			// handle the case where the allergy section does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's immunizations, but the submitted C-CDA does not contain immunization data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires immunizations but submitted document does not contain immunization data");
+			
+		}else if ((refActivities == null || refActivities.size() == 0) && 
+				(subActivities != null && subActivities.size() > 0) ) {
+		
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's immunizations, but the submitted C-CDA does contain immunization data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info("Model does not have immunization for comparison ");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have immunization for comparison ");
+		}
+	}
+	
+	
+	public void compareLabResults(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
+		
+		log.info("Retrieving Lab Results for comparison ");
+		HashMap<String, CCDALabResultObs> refResults = this.getAllLabResultObs();
+		HashMap<String, CCDALabResultObs> subResults = submittedCCDA.getAllLabResultObs();
+		
+		if( (refResults != null && refResults.size() > 0) &&  
+			(subResults != null && subResults.size() > 0)  ) {
+			
+			log.info("Lab Results present in both models ");
+			CCDALabResultObs.compareLabResultData(refResults, subResults, results);
+			
+		} else if ( (refResults != null && refResults.size() > 0) && 
+				(subResults == null || subResults.size() == 0) ) {
+			
+			// handle the case where the allergy section does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's lab results, but the submitted C-CDA does not contain lab result data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires lab results but submitted document does not contain lab results data");
+			
+		}else if ((refResults == null || refResults.size() == 0) && 
+				(subResults != null && subResults.size() > 0) ) {
+		
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's lab results, but the submitted C-CDA does contain lab result data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info("Model does not have lab results for comparison ");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have lab results for comparison ");
+		}
+	}
+	
+	public void compareVitalObs(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
+		
+		log.info("Retrieving Vital Observations for comparison ");
+		HashMap<String, CCDAVitalObs> refVitals = this.getAllVitalObs();
+		HashMap<String, CCDAVitalObs> subVitals = submittedCCDA.getAllVitalObs();
+		
+		if( (refVitals != null && refVitals.size() > 0) &&  
+			(subVitals != null && subVitals.size() > 0)  ) {
+			
+			log.info("Vital Signs present in both models ");
+			CCDAVitalObs.compareVitalObsData(refVitals, subVitals, results);
+			
+		} else if ( (refVitals != null && refVitals.size() > 0) && 
+				(subVitals == null || subVitals.size() == 0) ) {
+			
+			// handle the case where the Vitals Section does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Vital Signs, but the submitted C-CDA does not contain Vital Signs data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Vital Signs but submitted document does not contain Vital Signs data");
+			
+		}else if ((refVitals == null || refVitals.size() == 0) && 
+				(subVitals != null && subVitals.size() > 0) ) {
+		
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Vital Signs, but the submitted C-CDA does contain Vital Sign data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info("Model does not have Vital Signs for comparison ");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Vital Signs for comparison ");
+		}
+	}
+	
+	public void compareProcedures(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
+		
+		log.info("Retrieving Procedure Acts for comparison ");
+		HashMap<String, CCDAProcActProc> refProcs = this.getAllProcedures();
+		HashMap<String, CCDAProcActProc> subProcs = submittedCCDA.getAllProcedures();
+		
+		if( (refProcs != null && refProcs.size() > 0) &&  
+			(subProcs != null && subProcs.size() > 0)  ) {
+			
+			log.info("Vital Signs present in both models ");
+			CCDAProcActProc.compareProcedures(refProcs, subProcs, results);
+			
+		} else if ( (refProcs != null && refProcs.size() > 0) && 
+				(subProcs == null || subProcs.size() == 0) ) {
+			
+			// handle the case where the Vitals Section does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Procedures, but the submitted C-CDA does not contain Procedure data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Vital Signs but submitted document does not contain Procedures data");
+			
+		}else if ((refProcs == null || refProcs.size() == 0) && 
+				(subProcs != null && subProcs.size() > 0) ) {
+		
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Procedures, but the submitted C-CDA does contain Procedure data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info("Model does not have Procedures for comparison ");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Procedures for comparison ");
+		}
+	}
+	
+	private HashMap<String, CCDALabResultObs> getAllLabResultObs() 
+	{
+		HashMap<String,CCDALabResultObs> results = new HashMap<String,CCDALabResultObs>();
+		
+		if(labResults != null) {
+			
+			/*
+			for(Map.Entry<String, CCDALabResultObs> ent: labResults.getLabResultsMap().entrySet()) {
+				log.info("Adding " + ent.getKey());
+				results.put(ent.getKey(), ent.getValue());			
+			}*/
+			results.putAll(labResults.getLabResultsMap());
+			log.info(" Results Size = " + results.size());
+		}
+		
+		return results;
+	}
+	
+	private HashMap<String, CCDAVitalObs> getAllVitalObs() 
+	{
+		HashMap<String,CCDAVitalObs> results = new HashMap<String,CCDAVitalObs>();
+		
+		if(vitalSigns != null) {
+			
+			results.putAll(vitalSigns.getVitalObsMap());
+			log.info(" Vitals Size = " + results.size());
+		}
+		
+		return results;
+	}
+	
+	private HashMap<String, CCDAProcActProc> getAllProcedures() 
+	{
+		HashMap<String,CCDAProcActProc> results = new HashMap<String,CCDAProcActProc>();
+		
+		if(procedure != null) {
+			
+			results.putAll(procedure.getProcedureMap());
+			log.info(" Procedure Size = " + results.size());
+		}
+		
+		return results;
 	}
 	
 	private void validateBirthSex(CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {

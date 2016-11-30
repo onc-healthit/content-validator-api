@@ -90,6 +90,89 @@ public class ParserUtilities {
 		}
 	}
 	
+	public static void justCompareCode(CCDACode refCode, CCDACode submittedCode,
+			   ArrayList<ContentValidationResult> results, String elementName) {
+
+		// handle section code.
+		if((refCode != null) && (submittedCode != null) ) {
+
+			if(refCode.codeMatches(submittedCode, results, elementName)) {
+				// 	do nothing since both match.
+				log.info(" Both Submitted and Ref codes match for " + elementName);
+			}
+
+		}
+		else if ((refCode == null) && (submittedCode != null)) {
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else if((refCode != null) && (submittedCode == null)){
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		} 
+		else {
+			// do nothing since both are null.
+			log.info(" Both Submitted and Ref codes are null for " + elementName);
+		}
+	}
+	
+	public static void compareQuantity(CCDAPQ refQuantity, CCDAPQ subQuantity,
+			   ArrayList<ContentValidationResult> results, String elementName) {
+
+		// handle section code.
+		if((refQuantity != null) && (subQuantity != null) ) {
+
+			if(refQuantity.compare(subQuantity, results, elementName)) {
+				// 	do nothing since both match.
+				log.info(" Both Submitted and Ref quantities match for " + elementName);
+			}
+
+		}
+		else if ((refQuantity == null) && (subQuantity != null)) {
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else if((refQuantity != null) && (subQuantity == null)){
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		} 
+		else {
+			// do nothing since both are null.
+			log.info(" Both Submitted and Ref quantity are null for " + elementName);
+		}
+	}
+	
+	public static void compareString(String refString, String subString,
+			   ArrayList<ContentValidationResult> results, String elementName) {
+
+		// handle section code.
+		if((refString != null) && (subString != null) ) {
+
+			if(refString.equalsIgnoreCase(subString)) {
+				// 	do nothing since both match.
+				log.info(" Both Submitted and Ref strings match for " + elementName);
+			}
+			else {
+				ContentValidationResult rs = new ContentValidationResult("The String value (" + refString + ") does not match the string value (" + subString + ") in submitted C-CDA for: " + elementName, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+				
+
+		}
+		else if ((refString == null) && (subString != null)) {
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else if((refString != null) && (subString == null)){
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		} 
+		else {
+			// do nothing since both are null.
+			log.info(" Both Submitted and Ref strings are null for " + elementName);
+		}
+	}
+	
 	public static Boolean templateIdsAreFound(ArrayList<CCDAII> refList, ArrayList<CCDAII> submittedList) {
 		
 		log.info("Checking Template Ids lists ");

@@ -3,6 +3,7 @@ package org.sitenv.contentvalidator.model;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CCDALabResult {
 
@@ -12,6 +13,30 @@ public class CCDALabResult {
 	private CCDACode					sectionCode;
 	private ArrayList<CCDALabResultOrg>	resultOrg;
 	private Boolean						isLabTestInsteadOfResult;
+	
+	public HashMap<String, CCDALabResultObs> getLabResultsMap() {
+		
+		HashMap<String, CCDALabResultObs> results = new HashMap<String, CCDALabResultObs>();
+		// log.info(" Iterating through Organizers ");
+		for(int k = 0; k < resultOrg.size(); k++) {
+			
+			ArrayList<CCDALabResultObs> observations = resultOrg.get(k).getResultObs();
+			
+			for(int j = 0; j < observations.size(); j++) {
+				
+				//log.info(" Iterating through Observations ");
+				if(observations.get(j).getLabCode() != null && 
+			       observations.get(j).getLabCode().getCode() != null) {
+				
+					String code = observations.get(j).getLabCode().getCode();
+					//log.info("Adding lab code = " + code);
+					results.put(code, observations.get(j));
+				}
+			}// for	
+		}// for
+		
+		return results;
+	}
 	
 	public Boolean getIsLabTestInsteadOfResult() {
 		return isLabTestInsteadOfResult;

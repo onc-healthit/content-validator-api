@@ -3,6 +3,7 @@ package org.sitenv.contentvalidator.model;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CCDAProcedure {
 	
@@ -11,6 +12,27 @@ public class CCDAProcedure {
 	private ArrayList<CCDAII>       		sectionTemplateId;
 	private CCDACode                 		sectionCode;
 	private ArrayList<CCDAProcActProc>		procActsProcs;
+	
+	public HashMap<String, CCDAProcActProc> getProcedureMap() {
+		
+		HashMap<String, CCDAProcActProc> results = new HashMap<String, CCDAProcActProc>();
+		
+		for(int k = 0; k < procActsProcs.size(); k++) {
+			
+			log.info(" Iterating through procedures ");
+			if(procActsProcs.get(k).getProcCode() != null && 
+					procActsProcs.get(k).getProcCode().getCode() != null) {
+
+				String code = procActsProcs.get(k).getProcCode().getCode();
+				log.info("Adding procedure code = " + code);
+				results.put(code, procActsProcs.get(k));
+			}	
+		}// for
+		
+		return results;
+	}
+
+	
 	
 	public void log() {
 		

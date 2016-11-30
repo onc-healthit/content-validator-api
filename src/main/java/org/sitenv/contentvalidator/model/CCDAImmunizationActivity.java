@@ -1,8 +1,13 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CCDAImmunizationActivity {
 	
@@ -16,6 +21,77 @@ public class CCDAImmunizationActivity {
 	private CCDACode							adminUnitCode;
 	private CCDAConsumable						consumable;
 	private CCDAOrganization					organization;
+	
+	public static void compareImmunizationActivityData(HashMap<String, CCDAImmunizationActivity> refActivities, 
+			HashMap<String, CCDAImmunizationActivity> subActivities, 	ArrayList<ContentValidationResult> results) {
+
+		log.info(" Start Comparing Medication Activities ");
+		// For each immunization Activity in the Ref Model, check if it is present in the subCCDA Med.
+		for(Map.Entry<String, CCDAImmunizationActivity> ent: refActivities.entrySet()) {
+
+			if(subActivities.containsKey(ent.getKey())) {
+
+				log.info("Comparing Immunization Activities ");
+				String context = "Immunization Activity Entry corresponding to the code " + ent.getKey();
+				subActivities.get(ent.getKey()).compare(ent.getValue(), results, context);
+
+
+			} else {
+				// Error
+				String error = "The scenario contains Immunization Activity data for Immunization with code " + ent.getKey() +
+						" , however there is no matching data in the submitted CCDA. ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+		}
+
+		// Handle the case where the immunization data is not present in the reference, 
+		if( (refActivities == null || refActivities.size() == 0) && (subActivities != null && subActivities.size() > 0) ) {
+
+			// Error
+			String error = "The scenario does not require Immunization Activity data " + 
+					" , however there is Immunization activity data in the submitted CCDA. ";
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		
+	}
+	
+	
+	public void compare(CCDAImmunizationActivity refActivity, ArrayList<ContentValidationResult> results , String context) {
+		
+		log.info("Comparing Immunization Activity ");
+		
+		// Handle Template Ids
+		ParserUtilities.compareTemplateIds(refActivity.getTemplateIds(), templateIds, results, context);
+		
+		// Compare Effective Times
+		String elementNameTime = "Medication Duration for " + context;
+		//ParserUtilities.compareEffectiveTime(refMedActivity.getDuration(), duration, results, elementNameTime);
+		
+		// Compare template Ids 
+		String consumableElement = "Consumable TemplateIds for " + context;
+		ParserUtilities.compareTemplateIds(refActivity.getConsumable().getTemplateIds(), 
+				consumable.getTemplateIds(), results, consumableElement);
+
+		// Compare Med Codes 
+		String elementNameVal = "Consumable code element: " + context;
+		ParserUtilities.compareCode(refActivity.getConsumable().getMedcode(), consumable.getMedcode(), results, elementNameVal);
+	}
+	
+	public Boolean hasSameMedication(CCDAConsumable refConsumable) {
+		
+		if(consumable != null &&
+		   refConsumable != null) {
+			
+			return consumable.hasSameMedCode(refConsumable);
+			
+		}
+		
+		return false;
+	}
+
+	
 	
 	public void log() {
 		
