@@ -3,6 +3,7 @@ package org.sitenv.contentvalidator.model;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CCDAImmunization {
 	
@@ -11,6 +12,24 @@ public class CCDAImmunization {
 	private ArrayList<CCDAII>     				templateIds;
 	private CCDACode                 			sectionCode;
 	private ArrayList<CCDAImmunizationActivity> immActivity;
+	
+	public HashMap<String, CCDAImmunizationActivity> getImmunizationActivitiesMap() {
+		
+		HashMap<String, CCDAImmunizationActivity> acts = new HashMap<String, CCDAImmunizationActivity>();
+		for(int k = 0; k < immActivity.size(); k++) {
+			
+			if(immActivity.get(k).getConsumable() != null &&
+			   immActivity.get(k).getConsumable().getMedcode() != null &&
+     		   immActivity.get(k).getConsumable().getMedcode().getCode() != null) {
+				
+				acts.put(immActivity.get(k).getConsumable().getMedcode().getCode(), immActivity.get(k));
+			}
+					
+		}// for
+		
+		return acts;
+	}
+	
 	
 	public void log() {
 		

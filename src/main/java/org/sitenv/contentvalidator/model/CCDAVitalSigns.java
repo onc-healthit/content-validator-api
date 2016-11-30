@@ -3,6 +3,7 @@ package org.sitenv.contentvalidator.model;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CCDAVitalSigns {
 	
@@ -11,6 +12,30 @@ public class CCDAVitalSigns {
 	private ArrayList<CCDAII>			templateIds;
 	private CCDACode					sectionCode;
 	private ArrayList<CCDAVitalOrg>		vitalsOrg;
+	
+	public HashMap<String, CCDAVitalObs> getVitalObsMap() {
+		
+		HashMap<String, CCDAVitalObs> results = new HashMap<String, CCDAVitalObs>();
+		log.info(" Iterating through Organizers ");
+		for(int k = 0; k < vitalsOrg.size(); k++) {
+			
+			ArrayList<CCDAVitalObs> observations = vitalsOrg.get(k).getVitalObs();
+			
+			for(int j = 0; j < observations.size(); j++) {
+				
+				log.info(" Iterating through Observations ");
+				if(observations.get(j).getVsCode() != null && 
+			       observations.get(j).getVsCode().getCode() != null) {
+				
+					String code = observations.get(j).getVsCode().getCode();
+					log.info("Adding vital code = " + code);
+					results.put(code, observations.get(j));
+				}
+			}// for	
+		}// for
+		
+		return results;
+	}
 
 	public void log() {
 		

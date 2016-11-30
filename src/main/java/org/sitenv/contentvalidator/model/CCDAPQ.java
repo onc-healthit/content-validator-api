@@ -1,6 +1,10 @@
 package org.sitenv.contentvalidator.model;
 
+import java.util.ArrayList;
+
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 
 public class CCDAPQ extends CCDADataElement {
 	
@@ -9,6 +13,28 @@ public class CCDAPQ extends CCDADataElement {
 	private String  value;
 	private String  units;
 	private String  xsiType;
+	
+	public Boolean compare(CCDAPQ subValue, ArrayList<ContentValidationResult> results, String elementName) {
+		
+		if( (value != null) && (subValue.getValue() != null) &&
+			(units != null) && (subValue.getUnits() != null) &&
+			(value.equalsIgnoreCase(subValue.getValue())) && 
+			(units.equalsIgnoreCase(subValue.getUnits()))) {
+			return true;
+		}
+		else
+		{
+			String error = "The " + elementName + " : Value PQ - value = " + ((value != null)?value:"None Specified") 
+				       + " and Units = " + ((units != null)?units:"None Specified")
+				       + "  , do not match the submitted CCDA : Value PQ - value = " + ((subValue.getValue() != null)?subValue.getValue():"None Specified") 
+				       + " , and Units = " + ((subValue.getUnits() != null)?subValue.getUnits():"None Specified") + ".";
+
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			return false;
+		}
+		
+	}
 	
 	public void log() {
 		
@@ -41,13 +67,16 @@ public class CCDAPQ extends CCDADataElement {
 
 	public CCDAPQ(String value)
 	{
-	  this.value = value;
+		this.value = value;
+		this.xsiType = "";
+		this.units = "";
 	}
 	
 	public CCDAPQ(String value, String xsiType)
 	{
 	  this.value = value;
 	  this.xsiType = xsiType;
+	  this.units = "";
 	}
 	
 	public String getXsiType() {
@@ -64,6 +93,9 @@ public class CCDAPQ extends CCDADataElement {
 
 	public CCDAPQ()
 	{
+		value = "";
+		units = "";
+		xsiType = "";
 	}
 
 

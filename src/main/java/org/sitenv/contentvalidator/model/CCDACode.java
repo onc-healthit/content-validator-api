@@ -21,16 +21,34 @@ public class CCDACode extends CCDADataElement {
 		}
 		else
 		{
-			String error = "The " + elementName + " Code " + ((code != null)?code:"None Specified") 
-				       + " , CodeSystem " + ((codeSystem != null)?codeSystem:"None Specified")
-				       + " do not match the submitted CCDA " + elementName + " code " + ((cd.getCode() != null)?cd.getCode():"None Specified") 
-				       + " , and CodeSystem " + ((cd.getCodeSystem() != null)?cd.getCodeSystem():"None Specified");
+			String error = "The " + elementName + " : Code = " + ((code != null)?code:"None Specified") 
+				       + " , CodeSystem = " + ((codeSystem != null)?codeSystem:"None Specified")
+				       + " do not match the submitted CCDA : code = " + ((cd.getCode() != null)?cd.getCode():"None Specified") 
+				       + " , and CodeSystem = " + ((cd.getCodeSystem() != null)?cd.getCodeSystem():"None Specified");
 
 			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 			return false;
 		}
 		
+	}
+	
+	public Boolean codeMatches(CCDACode cd, ArrayList<ContentValidationResult> results, String elementName) {
+		
+		if( (code != null) && (cd.getCode() != null) && 
+			(code.equalsIgnoreCase(cd.getCode())) ) {
+			return true;
+		}
+		else 
+		{
+			String error = "The " + elementName + " : Code = " + ((code != null)?code:"None Specified") 
+				       + " does not match the submitted CCDA : code = " + ((cd.getCode() != null)?cd.getCode():"None Specified"); 
+				       
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			return false;
+			
+		}
 	}
 	
 	public Boolean codeEquals(CCDACode cd) {
