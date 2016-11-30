@@ -24,6 +24,7 @@ public class LabResultParser {
 	{
 		CCDALabResult labResults = null;
 		Element sectionElement = (Element) CCDAConstants.RESULTS_EXPRESSION.evaluate(doc, XPathConstants.NODE);
+		
 		if(sectionElement != null)
 		{
 			log.info("Adding Lab Result ");
@@ -47,6 +48,7 @@ public class LabResultParser {
 	{
 		ArrayList<CCDALabResultOrg> labResultOrgList = new ArrayList<>();
 		CCDALabResultOrg labResultOrg;
+		
 		for (int i = 0; i < resultOrganizerNodeList.getLength(); i++) {
 			
 			log.info("Adding Organizer ");
@@ -87,7 +89,7 @@ public class LabResultParser {
 			resultObservation.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 					evaluate(resultObservationElement, XPathConstants.NODESET)));
 			
-			resultObservation.setResultCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+			resultObservation.setLabCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
 					evaluate(resultObservationElement, XPathConstants.NODE)));
 			
 			resultObservation.setStatusCode(ParserUtilities.readCode((Element) CCDAConstants.REL_STATUS_CODE_EXP.
@@ -111,11 +113,16 @@ public class LabResultParser {
 					{
 						log.info("Lab Value is ST ");
 						String value = resultValue.getFirstChild().getNodeValue();
-						resultObservation.setResults(new CCDAPQ(value,"ST"));
+						resultObservation.setResultString(value);
 					}else if(xsiType.equalsIgnoreCase("PQ"))
 					{
-						log.info("Lab Value is ST ");
+						log.info("Lab Value is PQ ");
 						resultObservation.setResults(ParserUtilities.readQuantity(resultValue));
+					}
+					else if(xsiType.equalsIgnoreCase("CO"))
+					{
+						log.info("Lab Value is CO ");
+						resultObservation.setResultCode(ParserUtilities.readCode(resultValue));
 					}
 					else
 					{
