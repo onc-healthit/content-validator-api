@@ -80,11 +80,42 @@ public class CCDALabResultObs {
 		ParserUtilities.compareQuantity(refResult.getResults(), this.getResults(), results, valPQ);
 		
 		String valCode = "Lab Test Value (Code Type - CD/CO) Comparison for " + context;
-		ParserUtilities.compareCode(refResult.getResultCode(), resultCode, results, valCode);
+		
+		String refCode = "";
+		String subCode = "";
+		if(refResult.getResultCode() != null && resultCode != null) {
+			log.info(" Comparing Lab codes for value elements ");
+			ParserUtilities.compareCode(refResult.getResultCode(), resultCode, results, valCode);	
+		}
+		else if(refResult.getResultCode() != null) {
+			log.info(" Setting Reference code for Value ");
+			refCode = refResult.getResultCode().getDisplayName();
+		}
+		else if(resultCode != null) {
+			log.info(" Setting Submitted code for Value ");
+			subCode = resultCode.getDisplayName();
+		}
 		
 		String valString = "Value (String Type) Comparison associated with " + context;
-		ParserUtilities.compareString(refResult.getResultString(), resultString, results, valString);
 		
+		if((refResult.getResultString() != null) && (resultString != null)) {
+			log.info(" Comparing String code for Value ");
+			ParserUtilities.compareString(refResult.getResultString(), resultString, results, valString);
+		}
+		else if(refResult.getResultString() != null) {
+			log.info(" Setting Reference code for Value with string ");
+			refCode = refResult.getResultString();
+		}
+		else if(resultString != null) {
+			log.info(" Setting submitted code for Value with string ");
+			subCode = resultString;
+		}
+		
+		valString = "Comparing CD/CO/String value with " + context;
+		if(!refCode.equalsIgnoreCase("") && !subCode.equalsIgnoreCase("")) {
+			log.info("Comparing strings with codes ");
+			ParserUtilities.compareString(refCode, subCode, results, valString);
+		}
 	}
 
 	
