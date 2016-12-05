@@ -16,6 +16,63 @@ public class CCDAPQ extends CCDADataElement {
 	
 	public Boolean compare(CCDAPQ subValue, ArrayList<ContentValidationResult> results, String elementName) {
 		
+		Boolean exception = false;
+		
+		Boolean valueComp = false;
+		Boolean unitComp = false;
+		
+		//Compare Values by converting to doubles.
+		if( (value != null) && (subValue.getValue() != null) ){
+			
+			try {
+				Double refval = Double.parseDouble(value);
+				Double subval = Double.parseDouble(subValue.getValue());
+				
+				if(refval == subval)
+					valueComp = true;
+				
+			}
+			catch(NumberFormatException e) {
+				exception = true;
+			}
+			
+		}
+		else if ( (value == null) && (subValue.getValue() == null)) {
+			valueComp = true;
+		}
+		
+		// Compare units accounting for "unity"
+		if( (units != null) && (subValue.getUnits() != null) ){
+			
+			if(units.equalsIgnoreCase(subValue.getUnits())) {
+				unitComp = true;
+			}
+			else if( (units.equalsIgnoreCase("1") || units.equalsIgnoreCase("")) &&
+					 (subValue.getUnits().equalsIgnoreCase("1") || subValue.getUnits().equalsIgnoreCase("")) )
+			{
+				unitComp = true;
+			}
+			
+		}
+		else if( (units == null) && (subValue.getUnits() == null) ) {
+			unitComp = true;
+		}
+		
+		if(!valueComp && !unitComp) {
+			String error = "The " + elementName + " : Value PQ - value = " + ((value != null)?value:"None Specified") 
+				       + " and Units = " + ((units != null)?units:"None Specified")
+				       + "  , do not match the submitted CCDA : Value PQ - value = " + ((subValue.getValue() != null)?subValue.getValue():"None Specified") 
+				       + " , and Units = " + ((subValue.getUnits() != null)?subValue.getUnits():"None Specified") + ".";
+
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			return false;
+			
+		}
+		
+		return true;
+		
+		/*
 		if( (value != null) && (subValue.getValue() != null) &&
 			(units != null) && (subValue.getUnits() != null) &&
 			(value.equalsIgnoreCase(subValue.getValue())) && 
@@ -32,7 +89,7 @@ public class CCDAPQ extends CCDADataElement {
 			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 			return false;
-		}
+		}*/
 		
 	}
 	
