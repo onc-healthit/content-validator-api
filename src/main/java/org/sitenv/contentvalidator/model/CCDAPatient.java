@@ -318,7 +318,7 @@ public class CCDAPatient {
 				else
 					langPart = lang.getLanguageCode().getCode();
 				
-				if(l.getLanguageCode().getCode().contains(langPart)) {
+				if(l.getLanguageCode().getCode().toLowerCase().contains(langPart.toLowerCase())) {
 					// Happy Path , Normal Case
 					return true;
 				}
@@ -571,7 +571,9 @@ public class CCDAPatient {
 			results.add(rs);
 		}
 		else if( (previousName != null) && (patient.getPreviousName() == null)){
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires patient previous name, but submitted file does not have patient previous name", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			
+			// MAKE THIS A WARNING Since it is a best practice and cannot be enforced.
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires patient previous name, but submitted file does not have patient previous name", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
 		else {
