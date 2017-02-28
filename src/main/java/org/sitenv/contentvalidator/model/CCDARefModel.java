@@ -412,7 +412,9 @@ public class CCDARefModel {
 			
 		}
 		else {
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires patient's birth sex to be captured as part of social history data, but submitted file does have birth sex information", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			
+			// MAKE THIS A WARNING SINCE IT IS A BEST PRACTICE
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires patient's birth sex to be captured as part of social history data, but submitted file does have birth sex information", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
 	}

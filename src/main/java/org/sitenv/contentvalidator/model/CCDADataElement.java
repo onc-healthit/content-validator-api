@@ -28,6 +28,10 @@ public class CCDADataElement {
 		
 	}
 	
+	public void removeSpecialCharacters(String regex, String repl) {
+		value = value.replaceAll(regex, repl);
+	}
+	
 	public String getUse() {
 		return use;
 	}

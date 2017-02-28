@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.parsers;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.model.CCDADataElement;
 import org.sitenv.contentvalidator.model.CCDAPatient;
 import org.sitenv.contentvalidator.model.CCDAPreferredLanguage;
 import org.w3c.dom.Document;
@@ -9,6 +10,7 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
+
 import java.util.ArrayList;
 
 public class CCDAHeaderParser {
@@ -102,27 +104,6 @@ public class CCDAHeaderParser {
 		log.info(" Reading Name ");
 		if(nameElement != null)
 		{
-			/*
-			NodeList giveNameNodeList = (NodeList) CCDAConstants.REL_GIVEN_NAME_EXP.
-					evaluate(nameElement, XPathConstants.NODESET);
-			
-			for (int i = 0; i < giveNameNodeList.getLength(); i++) {
-				
-				Element givenNameElement = (Element) giveNameNodeList.item(i);
-				
-				if(!ParserUtilities.isEmpty(givenNameElement.getAttribute("qualifier")))
-				{
-					log.info("Setting previous name ");
-					patient.setPreviousName(ParserUtilities.readTextContext(givenNameElement));
-				}else if (i == 0) {
-					log.info("Setting first name ");
-					patient.setFirstName(ParserUtilities.readTextContext(givenNameElement));
-				}else {
-					log.info("Setting Middle name ");
-					patient.setMiddleName(ParserUtilities.readTextContext(givenNameElement));
-				}
-			}
-			*/
 			patient.setFirstName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_GIVEN_NAME_EXP.
 					evaluate(nameElement, XPathConstants.NODE)));
 			patient.setMiddleName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_MIDDLE_NAME_EXP.
@@ -131,6 +112,12 @@ public class CCDAHeaderParser {
 					evaluate(nameElement, XPathConstants.NODE)));
 			patient.setSuffix(ParserUtilities.readTextContext((Element) CCDAConstants.REL_SUFFIX_EXP.
 					evaluate(nameElement, XPathConstants.NODE)));
+			
+			if(patient.getSuffix() != null && 
+			   patient.getSuffix().getValue() != null) {
+				log.info("Removing Special Characters in Suffix");
+				patient.getSuffix().removeSpecialCharacters(".", "");
+			}
 		}
 	}
 	

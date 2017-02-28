@@ -33,6 +33,7 @@ public class CCDAParser {
 	
 	public CCDARefModel parse(String ccdaFile) {
 		try {
+			//log.info(" Parsing File " + ccdaFile);
 			initDoc(ccdaFile);
 			CCDAConstants.getInstance();
 		
