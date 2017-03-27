@@ -83,4 +83,13 @@ public class CCDAProcedure {
 			this.procActsProcs = paps;
 	}
 	
+	public void addProcActsProcs(ArrayList<CCDAProcActProc> paps) {
+		
+		if(paps != null) {
+			for(int i = 0; i < paps.size(); i++) {
+				this.procActsProcs.add(paps.get(i));
+			}
+		}
+	}
+	
 }
