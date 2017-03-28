@@ -34,8 +34,16 @@ public class ProcedureParser {
 			procedures.setSectionCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
 					evaluate(sectionElement, XPathConstants.NODE)));
 			
+			log.info("Adding Procedures Activity Procedures ");
+			// Account for Procedures
 			procedures.setProcActsProcs(readProcedures((NodeList) CCDAConstants.REL_PROC_ACT_PROC_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			log.info("Adding Procedure Activity Acts ");
+			// Account for Acts
+			procedures.addProcActsProcs(readProcedures((NodeList) CCDAConstants.REL_PROC_ACT_ACT_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET)));
+			
 		}
 		return procedures;
 	}
@@ -43,10 +51,13 @@ public class ProcedureParser {
 	public static ArrayList<CCDAProcActProc> readProcedures(NodeList proceduresNodeList ) throws XPathExpressionException
 	{
 		ArrayList<CCDAProcActProc> proceduresList = null;
+		
 		if(!ParserUtilities.isNodeListEmpty(proceduresNodeList))
 		{
+			log.info(" Procedure Entry nodes exist ");
 			proceduresList = new ArrayList<>();
 		}
+		
 		CCDAProcActProc procedure;
 		for (int i = 0; i < proceduresNodeList.getLength(); i++) {
 			
