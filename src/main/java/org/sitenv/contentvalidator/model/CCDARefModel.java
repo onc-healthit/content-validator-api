@@ -43,9 +43,24 @@ public class CCDARefModel {
 			log.info(" Performing CCDS checks ");
 			compareCCDS(validationObjective, submittedCCDA, results);
 		}
+		else if(doesObjectiveRequireCIRI(validationObjective))
+		{
+			log.info(" Performing CIRI checks ");
+			performCIRIValidation(validationObjective, submittedCCDA, results);
+		}
+		else if(doesObjectiveRequireCarePlan(validationObjective))
+		{
+			log.info(" Performing Care Plan checks ");
+			performCarePlanValidation(validationObjective, submittedCCDA, results);
+		}
+		else if(doesObjectiveRequireDS4P(validationObjective))
+		{
+			log.info(" Performing DS4P checks ");
+			performDS4PValidation(validationObjective, submittedCCDA, results);
+		}
 		else 
 		{
-			log.info(" Not performing CCDS checks ");
+			log.info(" Not Performing any content validation checks ");
 		}
 		
 		log.info(" Total Number of Content Validation Issues " + results.size());
@@ -455,6 +470,32 @@ public class CCDARefModel {
 			return false;
 	}
 	
+	public Boolean doesObjectiveRequireCIRI(String valObj) {
+		
+		if(valObj.equalsIgnoreCase("170.315_b2_CIRI_Amb") || 
+			valObj.equalsIgnoreCase("170.315_b2_CIRI_Inp") )
+				return true;
+		else
+			return false;
+	}
+	
+	public Boolean doesObjectiveRequireCarePlan(String valObj) {
+		
+		if(valObj.equalsIgnoreCase("170.315_b9_CP_Amb") || 
+			valObj.equalsIgnoreCase("170.315_b9_CP_Inp") )
+				return true;
+		else
+			return false;
+	}
+	
+	public Boolean doesObjectiveRequireDS4P(String valObj) {
+		
+		if(valObj.equalsIgnoreCase("170.315_b7_DS4P_Amb") || 
+			valObj.equalsIgnoreCase("170.315_b7_DS4P_Inp") )
+				return true;
+		else
+			return false;
+	}
 	
 	public void log() {
 		
@@ -778,6 +819,40 @@ public class CCDARefModel {
 		this.dischargeMedication = dischargeMedication;
 	}
 
+	public void performCIRIValidation(String validationObjective, CCDARefModel submittedCCDA,ArrayList<ContentValidationResult> results) 
+	{
+		log.info("Comparing Patient Data ");
+		comparePatients(submittedCCDA, results);
 		
+		log.info("Comparing Problems ");
+		compareProblems(validationObjective, submittedCCDA, results);
+		
+		log.info("Comparing Allergies ");
+		compareAllergies(validationObjective, submittedCCDA, results);
+		
+		log.info("Comparing Medications ");
+		compareMedications(validationObjective, submittedCCDA, results);
+		
+		log.info("Finished comparison , returning results");
+		
+	}
+
+	public void performCarePlanValidation(String validationObjective, CCDARefModel submittedCCDA,ArrayList<ContentValidationResult> results) 
+	{
+		log.info("Comparing Patient Data ");
+		comparePatients(submittedCCDA, results);
+		
+		log.info("Finished comparison , returning results");
+		
+	}
+
+	public void performDS4PValidation(String validationObjective, CCDARefModel submittedCCDA,ArrayList<ContentValidationResult> results) 
+	{
+		log.info("Comparing Patient Data ");
+		comparePatients(submittedCCDA, results);
+		
+		log.info("Finished comparison , returning results");
+		
+	}
 
 }
