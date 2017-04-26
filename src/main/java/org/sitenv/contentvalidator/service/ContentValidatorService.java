@@ -61,6 +61,8 @@ public class ContentValidatorService {
 		   valObj.equalsIgnoreCase("170.315_b4_CCDS_Inp") ||
 		   valObj.equalsIgnoreCase("170.315_b6_DE_Amb") ||
 		   valObj.equalsIgnoreCase("170.315_b6_DE_Inp") ||
+		   valObj.equalsIgnoreCase("170.315_b7_DS4P_Amb") ||
+		   valObj.equalsIgnoreCase("170.315_b7_DS4P_Inp") ||
 		   valObj.equalsIgnoreCase("170.315_b9_CP_Amb") ||
 		   valObj.equalsIgnoreCase("170.315_b9_CP_Inp") ||
 		   valObj.equalsIgnoreCase("170.315_e1_VDT_Amb") ||
