@@ -58,20 +58,20 @@ public class CCDAAllergyReaction {
 		    else {
 		    	String error = "The scenario contains Allergy Reaction and Severity for " + allergyObsContext +
 				" , however there is no matching Allergy Severity within the Reaction entry's entryRelationship in the submitted CCDA. ";
-		    	ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+		    	ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 		    	results.add(rs);
 		    }
 		}
 		else if(refSeverity != null && severity == null) {
 			String error = "The scenario contains Allergy Reaction and Severity for " + allergyObsContext +
 					" , however there is no matching Allergy Severity within the Reaction entry's entryRelationship in the submitted CCDA. ";
-			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
 		else if(refSeverity == null && severity != null) {
 			String error = "The scenario does not contain Severity within the Allergy Reaction " + allergyObsContext +
 					" , however there is an Allergy Severity within the Reaction entry's entryRelationship in the submitted CCDA. ";
-			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
 		else {

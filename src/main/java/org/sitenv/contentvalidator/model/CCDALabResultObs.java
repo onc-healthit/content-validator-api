@@ -76,13 +76,36 @@ public class CCDALabResultObs {
 		String statusCodeElem = "Lab Test Status code element for " + context;
 		ParserUtilities.justCompareCode(refResult.getStatusCode(), statusCode, results, statusCodeElem);
 		
+		
 		String valPQ = "Lab Test Value (Quantity - PQ) Comparison for " + context;
-		ParserUtilities.compareQuantity(refResult.getResults(), this.getResults(), results, valPQ);
+		if( (refResult.getResults() != null) && (getResults() != null)) {
+			log.info(" Comparing PQ ");
+			ParserUtilities.compareQuantity(refResult.getResults(), this.getResults(), results, valPQ);
+		}
+		else if( (refResult.getResults() != null) && 
+				  this.getResultString() != null){
+			
+			// Reference is PQ and Submitted is a String, compare the two.
+			log.info(" Comparing PQ with String ");
+			Boolean refPQ = true;
+			ParserUtilities.compareQuantityWithString(refResult.getResults(), this.getResultString(), results, valPQ, refPQ );
+			
+		}
+		else if( (this.getResults() != null) && 
+				  refResult.getResultString() != null) {
+			
+			// Submitted is PQ and Reference is a String, compare the two.
+			log.info(" Comparing PQ with String ");
+			Boolean refPQ = false;
+			ParserUtilities.compareQuantityWithString(this.getResults(), refResult.getResultString(), results, valPQ, refPQ);
+						
+		}
 		
 		String valCode = "Lab Test Value (Code Type - CD/CO) Comparison for " + context;
-		
+		// Compare Values.
 		String refCode = "";
 		String subCode = "";
+					
 		if(refResult.getResultCode() != null && resultCode != null) {
 			log.info(" Comparing Lab codes for value elements ");
 			ParserUtilities.compareCode(refResult.getResultCode(), resultCode, results, valCode);	

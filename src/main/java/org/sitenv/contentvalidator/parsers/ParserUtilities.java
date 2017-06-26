@@ -9,6 +9,7 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
+
 import java.util.ArrayList;
 
 public class ParserUtilities {
@@ -141,6 +142,55 @@ public class ParserUtilities {
 			log.info(" Both Submitted and Ref quantity are null for " + elementName);
 		}
 	}
+	
+	public static void compareQuantityWithString(CCDAPQ quantity, String val,
+			   ArrayList<ContentValidationResult> results, String elementName, Boolean refPQ) {
+
+		if((quantity != null) && (quantity.getValue() != null) && (quantity.getUnits() != null) &&
+			(quantity.getUnits().equalsIgnoreCase("1") || quantity.getUnits().equalsIgnoreCase("")) &&
+			(val != null) ) {
+				
+			log.info(" Quantity Val = " + quantity.getValue());
+			log.info(" String Val = " + val);
+				
+			if(quantity.getValue().equalsIgnoreCase(val)) {
+				// Do nothing since it is all good.
+				log.info("Everything is equal and good");
+			}
+			else {
+				
+				String error = "";
+				
+				if(refPQ) {
+					error += "The " + elementName + " : Value PQ - value = " + ((quantity.getValue() != null)?quantity.getValue():"None Specified")
+							+ "  , does not match the submitted CCDA : ST - value = " + val; 
+				}
+				else {
+					error += "The " + elementName + " : Value PQ - value = " + ((quantity.getValue() != null)?quantity.getValue():"None Specified")
+							+ "  , does not match the test data provided : ST - value = " + val; 
+				
+				}
+				
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+
+			}
+		
+		}
+		else if ((quantity == null) && (val != null)) {
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else if((quantity != null) && (val == null)){
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		} 
+		else {
+			// do nothing since both are null.
+			log.info(" Both Submitted and Ref quantity are null for " + elementName);
+		}
+	}
+
 	
 	public static void compareString(String refString, String subString,
 			   ArrayList<ContentValidationResult> results, String elementName) {
