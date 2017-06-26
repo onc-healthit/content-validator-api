@@ -48,7 +48,9 @@ public class CCDAAllergyReaction {
 		if( refSeverity != null &&
 		    severity != null)
 		{
-		    if(severity.getSeverity().codeEquals(refSeverity.getSeverity()) && 
+		    if(severity.getSeverity() != null && 
+		       refSeverity.getSeverity() != null &&
+		       severity.getSeverity().codeEquals(refSeverity.getSeverity()) && 
 		       templateIdsAreFound(severity.getTemplateIds(), refSeverity.getTemplateIds()))
 		    {
 		    	// Do nothing.
