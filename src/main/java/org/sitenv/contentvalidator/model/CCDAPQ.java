@@ -9,6 +9,7 @@ import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 public class CCDAPQ extends CCDADataElement {
 	
 	private static Logger log = Logger.getLogger(CCDAPQ.class.getName());
+	private static final double delta = 0.0001;
 	
 	private String  value;
 	private String  units;
@@ -27,9 +28,13 @@ public class CCDAPQ extends CCDADataElement {
 			try {
 				Double refval = Double.parseDouble(value);
 				Double subval = Double.parseDouble(subValue.getValue());
+				log.info(" Ref Val = " + refval);
+				log.info(" Sub Val = " + subval);
 				
-				if(refval == subval)
+				if(Math.abs(refval-subval) < delta) {
+					log.info(" Values Match with actual values");
 					valueComp = true;
+				}
 				
 			}
 			catch(NumberFormatException e) {
@@ -38,27 +43,34 @@ public class CCDAPQ extends CCDADataElement {
 			
 		}
 		else if ( (value == null) && (subValue.getValue() == null)) {
+			log.info(" Values are null and match ");
 			valueComp = true;
 		}
 		
 		// Compare units accounting for "unity"
 		if( (units != null) && (subValue.getUnits() != null) ){
 			
+			log.info(" Units = " + units);
+			log.info(" Sub Units = " + units);
 			if(units.equalsIgnoreCase(subValue.getUnits())) {
+				log.info(" Units Match with actual units ");
 				unitComp = true;
 			}
 			else if( (units.equalsIgnoreCase("1") || units.equalsIgnoreCase("")) &&
 					 (subValue.getUnits().equalsIgnoreCase("1") || subValue.getUnits().equalsIgnoreCase("")) )
 			{
+				log.info(" Units Match with default units ");
 				unitComp = true;
 			}
 			
 		}
 		else if( (units == null) && (subValue.getUnits() == null) ) {
+			log.info(" Units are null and match ");
 			unitComp = true;
 		}
 		
-		if(!valueComp && !unitComp) {
+		if(!valueComp || !unitComp) {
+			log.info(" Value and/or Units did not match ");
 			String error = "The " + elementName + " : Value PQ - value = " + ((value != null)?value:"None Specified") 
 				       + " and Units = " + ((units != null)?units:"None Specified")
 				       + "  , do not match the submitted CCDA : Value PQ - value = " + ((subValue.getValue() != null)?subValue.getValue():"None Specified") 
@@ -69,7 +81,7 @@ public class CCDAPQ extends CCDADataElement {
 			return false;
 			
 		}
-		
+				
 		return true;
 		
 		/*

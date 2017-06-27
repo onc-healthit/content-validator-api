@@ -48,7 +48,7 @@ public class CCDAAllergyObs {
 			if(reactionFound == null) {
 				String error = "The scenario contains Allergy Reaction for " + allergyObsContext +
 						" , however there is no matching Allergy Reaction (Entry Template Ids + Code) in the submitted CCDA. ";
-				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 				results.add(rs);
 			}
 			else {

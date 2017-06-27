@@ -25,7 +25,7 @@ public class CCDAImmunizationActivity {
 	public static void compareImmunizationActivityData(HashMap<String, CCDAImmunizationActivity> refActivities, 
 			HashMap<String, CCDAImmunizationActivity> subActivities, 	ArrayList<ContentValidationResult> results) {
 
-		log.info(" Start Comparing Medication Activities ");
+		log.info(" Start Comparing Immunization Activities ");
 		// For each immunization Activity in the Ref Model, check if it is present in the subCCDA Med.
 		for(Map.Entry<String, CCDAImmunizationActivity> ent: refActivities.entrySet()) {
 
@@ -66,7 +66,7 @@ public class CCDAImmunizationActivity {
 		ParserUtilities.compareTemplateIds(refActivity.getTemplateIds(), templateIds, results, context);
 		
 		// Compare Effective Times
-		String elementNameTime = "Medication Duration for " + context;
+		String elementNameTime = "Immunization Time for " + context;
 		//ParserUtilities.compareEffectiveTime(refMedActivity.getDuration(), duration, results, elementNameTime);
 		
 		// Compare template Ids 
@@ -74,7 +74,7 @@ public class CCDAImmunizationActivity {
 		ParserUtilities.compareTemplateIds(refActivity.getConsumable().getTemplateIds(), 
 				consumable.getTemplateIds(), results, consumableElement);
 
-		// Compare Med Codes 
+		// Compare immunization Codes 
 		String elementNameVal = "Consumable code element: " + context;
 		ParserUtilities.compareCode(refActivity.getConsumable().getMedcode(), consumable.getMedcode(), results, elementNameVal);
 	}
