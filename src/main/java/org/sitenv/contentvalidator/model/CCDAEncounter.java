@@ -34,7 +34,7 @@ public class CCDAEncounter {
 						diagnoses.put(prob.getProblemCode().getCode(), prob);
 						
 					}
-					else if(prob.getProblemCode().isProperNFForTranslation()){
+					else if(prob.getProblemCode() != null && prob.getProblemCode().isProperNFForTranslation()){
 						log.info("Adding Diagnosis from Problem Obs: " + prob.getProblemCode().getNullFlavor());
 						diagnoses.put(prob.getProblemCode().getNullFlavor(), prob);
 
