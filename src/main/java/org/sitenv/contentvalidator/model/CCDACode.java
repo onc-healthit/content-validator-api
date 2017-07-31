@@ -10,6 +10,9 @@ public class CCDACode extends CCDADataElement {
 	private String  codeSystem;
 	private String  codeSystemName;
 	private String  displayName;
+	private String valueSetOid;
+	private ArrayList<CCDACode> translations;
+	private String nullFlavor;
 	
 	public Boolean matches(CCDACode cd, ArrayList<ContentValidationResult> results, String elementName) {
 		
@@ -49,6 +52,30 @@ public class CCDACode extends CCDADataElement {
 			return false;
 			
 		}
+	}
+	
+	public Boolean isCodePresent(CCDACode cd) {
+		
+		// Check if the code is present in this element's code
+		if( (code != null) && (cd.getCode() != null) &&
+			(codeSystem != null) && (cd.getCodeSystem() != null) &&
+			(code.equalsIgnoreCase(cd.getCode())) && 
+			(codeSystem.equalsIgnoreCase(cd.getCodeSystem()))) {
+				return true;
+		}
+		
+		// Check if the code is present in this element's translation
+		for(CCDACode trans : translations) {
+			
+			if( (trans.getCode() != null) && (cd.getCode() != null) &&
+				(trans.getCodeSystem() != null) && (cd.getCodeSystem() != null) &&
+				(trans.getCode().equalsIgnoreCase(cd.getCode())) && 
+				(trans.getCodeSystem().equalsIgnoreCase(cd.getCodeSystem()))) {
+					return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public Boolean codeEquals(CCDACode cd) {
@@ -97,5 +124,62 @@ public class CCDACode extends CCDADataElement {
 	public CCDACode()
 	{
 		super();
+		translations = new ArrayList<CCDACode>();
+	}
+
+	public String getValueSetOid() {
+		return valueSetOid;
+	}
+
+	public void setValueSetOid(String valueSetOid) {
+		this.valueSetOid = valueSetOid;
+	}
+
+	public ArrayList<CCDACode> getTranslations() {
+		return translations;
+	}
+
+	public void setTranslations(ArrayList<CCDACode> translations) {
+		this.translations = translations;
+	}
+
+	public String getNullFlavor() {
+		return nullFlavor;
+	}
+
+	public void setNullFlavor(String nullFlavor) {
+		this.nullFlavor = nullFlavor;
+	}
+	
+	public void addTranslation(CCDACode transCode) {	
+		this.translations.add(transCode);
+		
+	}
+	
+	public String getDebugCodeString() {
+		
+		String s = "";
+		
+		if(code != null && code.length() > 0)
+			s += "Code : " + code;
+		
+		for(CCDACode trans: translations) {
+			
+			if(trans.getCode() != null && trans.getCode().length() > 0 )
+				s += " , Translation: " + trans.getCode();
+		}
+		
+		return s;
+		
+	}
+	
+	public Boolean isProperNFForTranslation() {
+		
+		if( code == null && 
+			nullFlavor != null &&
+			nullFlavor.equalsIgnoreCase("OTH"))
+			return true;
+		else 
+			return false;
 	}
 }

@@ -179,7 +179,7 @@ public class EncounterDiagnosesParser {
 			problemObservation.setEffTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
 										evaluate(problemObservationElement, XPathConstants.NODE)));
 			
-			problemObservation.setProblemCode(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_EXP.
+			problemObservation.setProblemCode(ParserUtilities.readCodeWithTranslation((Element) CCDAConstants.REL_VAL__WITH_TRANS_EXP.
 					evaluate(problemObservationElement, XPathConstants.NODE)));
 			
 			problemObservationList.add(problemObservation);

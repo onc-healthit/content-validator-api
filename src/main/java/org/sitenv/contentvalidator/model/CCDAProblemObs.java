@@ -2,9 +2,12 @@ package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CCDAProblemObs {
 
@@ -15,6 +18,43 @@ public class CCDAProblemObs {
 	private ArrayList<CCDACode>  translationProblemType;
 	private CCDAEffTime          effTime;
 	private CCDACode             problemCode;
+	
+	public static void compareProblemObservationData(HashMap<String, CCDAProblemObs> refProblems, 
+			HashMap<String, CCDAProblemObs> subProblems, 	ArrayList<ContentValidationResult> results, String context) {
+
+		log.info(" Start Comparing Problem Observations for " + context);
+		
+		// For each problem Observation in the Ref Model, check if it is present in the subCCDA Model.
+		for(Map.Entry<String, CCDAProblemObs> ent: refProblems.entrySet()) {
+
+			if(subProblems.containsKey(ent.getKey())) {
+
+				log.info("Comparing Problem Observation ");
+				String compContext = "Problem Observation Entry associated with " + context + " for code " + ent.getKey();
+				ent.getValue().compare(subProblems.get(ent.getKey()), compContext, results);
+
+
+			} 
+			// Handle the cases where the codes are present in translation elements in either submitted or reference ccda.
+			else if(!checkCodeAndTrans(ent.getValue(),subProblems)) {
+				// Error
+				
+				String error = "The scenario contains Encounter Diagnosis data with code(s) " + 
+				        ((ent.getValue().getProblemCode() != null)?ent.getValue().getProblemCode().getDebugCodeString():"") +
+						" , however there is no matching data in the submitted CCDA. ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+		/*	else {
+				// Error
+				String error = "The scenario contains Encounter Diagnosis data with code " + ent.getKey() +
+						" , however there is no matching data in the submitted CCDA. ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}*/
+		}
+		
+	}
 	
 	public void compare(CCDAProblemObs subObs, String probObsContext, ArrayList<ContentValidationResult> results) {
 		
@@ -109,5 +149,32 @@ public class CCDAProblemObs {
 		translationProblemType = new ArrayList<CCDACode>();
 	}
 
+	static Boolean checkCodeAndTrans(CCDAProblemObs refObs, HashMap<String, CCDAProblemObs> subProblems) {
+		
+		/*
+		 * Need to check the following conditions
+		 * Code is present in the submitted Problem's code element - Already checked earlier , so not needed again.
+		 * Code is present in the submitted Problem's Translation element
+		 * Code is not present, but translation of code is present in the submitted code element
+		 * Code is not present, but translation of code is present in the submitted code translation element
+		 */
+		
+		CCDACode refCode = refObs.getProblemCode();
+		
+		for(Map.Entry<String,CCDAProblemObs> ent : subProblems.entrySet()) {
+			
+			Boolean retVal = ent.getValue().compareCodesAndTranslations(refCode);
+			
+			if(retVal)
+				return true;
+			
+		}
+		
+		return false;
+	}
 	
+	public Boolean compareCodesAndTranslations(CCDACode refCode) {
+		
+		return ParserUtilities.compareCodesAndTranlations(refCode, this.getProblemCode()); 
+	}
 }

@@ -5,6 +5,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+
 import java.util.Iterator;
 
 public class CCDAConstants {
@@ -43,8 +44,11 @@ public class CCDAConstants {
 
 	static public XPathExpression REL_TEMPLATE_ID_EXP;
 	static public XPathExpression REL_CODE_EXP;
+	static public XPathExpression REL_CODE_WITH_TRANS_EXP;
 	static public XPathExpression REL_CODE_TRANS_EXP;
+	static public XPathExpression REL_TRANS_EXP;
 	static public XPathExpression REL_VAL_EXP;
+	static public XPathExpression REL_VAL__WITH_TRANS_EXP;
 	static public XPathExpression REL_STATUS_CODE_EXP;
 	static public XPathExpression REL_INT_CODE_EXP;
 	static public XPathExpression REL_REF_RANGE_EXP;
@@ -234,8 +238,11 @@ public class CCDAConstants {
 		    
 			REL_TEMPLATE_ID_EXP = CCDAConstants.CCDAXPATH.compile("./templateId[not(@nullFlavor)]");
 			REL_CODE_EXP = CCDAConstants.CCDAXPATH.compile("./code[not(@nullFlavor)]");
+			REL_CODE_WITH_TRANS_EXP = CCDAConstants.CCDAXPATH.compile("./code[not(@nullFlavor) or @nullFlavor='OTH']");
 			REL_CODE_TRANS_EXP = CCDAConstants.CCDAXPATH.compile("./code/translation[not(@nullFlavor)]");
+			REL_TRANS_EXP = CCDAConstants.CCDAXPATH.compile("./translation[not(@nullFlavor)]");
 			REL_VAL_EXP = CCDAConstants.CCDAXPATH.compile("./value[not(@nullFlavor)]");
+			REL_VAL__WITH_TRANS_EXP = CCDAConstants.CCDAXPATH.compile("./value[not(@nullFlavor) or @nullFlavor='OTH']");
 			REL_STATUS_CODE_EXP = CCDAConstants.CCDAXPATH.compile("./statusCode[not(@nullFlavor)]");
 			REL_INT_CODE_EXP = CCDAConstants.CCDAXPATH.compile("./interpretationCode[not(@nullFlavor)]");
 			REL_REF_RANGE_EXP = CCDAConstants.CCDAXPATH.compile("./referenceRange/observationRange/value[@type='IVL_PQ']");

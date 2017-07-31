@@ -64,6 +64,36 @@ public class ParserUtilities {
 			log.info(" Both Submitted and Ref times are null for " + elementName);
 		}
 	}
+	
+	public static Boolean compareCodesAndTranlations(CCDACode refCode, CCDACode submittedCode) {
+		
+		/*
+		 * Need to check the following conditions
+		 * Ref Code is present in the submitted code element 
+		 * Ref Code is present in the submitted Problem's Translation element
+		 * Ref Code is not present, but translation of code is present in the submitted code element
+		 * Ref Code is not present, but translation of code is present in the submitted code translation element
+		 */
+		
+		if(refCode != null && submittedCode != null &&
+		   submittedCode.isCodePresent(refCode) ) {
+			
+			// Code is present in the submitted code element or its translations (First 2 conditions)
+			return true;
+		}
+		
+		// Check for the 3rd and 4th conditions.
+		if(refCode != null) {
+			for(CCDACode trans : refCode.getTranslations()) {
+				
+				if(submittedCode != null && 
+				   submittedCode.isCodePresent(trans) ) 
+					 return true;
+			}
+		}
+		
+		return false;
+	}
 
 	public static void compareCode(CCDACode refCode, CCDACode submittedCode,
 								   ArrayList<ContentValidationResult> results, String elementName) {
@@ -312,9 +342,48 @@ public class ParserUtilities {
 			{
 				code.setXpath(codeElement.getAttribute("xsi:type"));
 			}
+			if(!isEmpty(codeElement.getAttribute("nullFlavor"))) 
+			{
+				code.setNullFlavor(codeElement.getAttribute("nullFlavor"));
+			}
 		}
 		return code;
 	}
+	
+	public static CCDACode readCodeWithTranslation(Element codeElement) throws XPathExpressionException {
+		
+		CCDACode cd = readCode(codeElement);
+		
+		if(cd != null) {
+			
+			NodeList transList = (NodeList) CCDAConstants.REL_TRANS_EXP.
+					evaluate(codeElement, XPathConstants.NODESET);	
+			
+			if(transList != null) {
+				
+				for (int i = 0; i < transList.getLength(); i++) {
+					
+					log.info("Reading Translation Code ");
+					
+					Element node = (Element) transList.item(i);
+					
+					CCDACode transCode = readCode(node);
+					
+					if(transCode != null) {
+						
+						cd.addTranslation(transCode);
+					}
+					
+				}
+			}
+			
+			
+		}
+		
+		return cd;
+		
+	}
+
 	
 	public static CCDAII readTemplateID(Element templateElement)
 	{
