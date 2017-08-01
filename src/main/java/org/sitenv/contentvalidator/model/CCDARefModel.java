@@ -450,6 +450,59 @@ public class CCDARefModel {
 			log.info(" Encounter Diagnoses Size = " + diagnoses.size());
 		}
 		
+		if(admissionDiagnosis != null) {
+			
+			log.info(" Encounter Diagnoses Size = " + diagnoses.size());
+			
+			for(CCDAProblemObs prob : admissionDiagnosis.getDiagnosis()) {
+			
+				if(prob.getProblemCode() != null && 
+				   prob.getProblemCode().getCode() != null && 
+				   prob.getProblemCode().getCode().length() > 0) {
+			
+					log.info(" Adding Problem Obs for Code " + prob.getProblemCode().getCode() );
+					diagnoses.put(prob.getProblemCode().getCode(), prob);
+				}
+				else if(prob.getProblemCode() != null && 
+						prob.getProblemCode().isProperNFForTranslation() ) {
+					
+					log.info(" Adding Problem Obs for Code " + prob.getProblemCode().getNullFlavor() );
+					diagnoses.put(prob.getProblemCode().getNullFlavor(), prob);
+				}
+			
+				
+			} // for
+			
+			
+		}// if Adm Diag
+		
+		if(dischargeDiagnosis != null) {
+			
+			log.info(" Encounter Diagnoses Size = " + diagnoses.size());
+			
+			for(CCDAProblemObs prob : dischargeDiagnosis.getDiagnosis()) {
+			
+				if(prob.getProblemCode() != null && 
+				   prob.getProblemCode().getCode() != null && 
+				   prob.getProblemCode().getCode().length() > 0) {
+			
+					log.info(" Adding Problem Obs for Code " + prob.getProblemCode().getCode() );
+					diagnoses.put(prob.getProblemCode().getCode(), prob);
+				}
+				else if(prob.getProblemCode() != null && 
+						prob.getProblemCode().isProperNFForTranslation() ) {
+					
+					log.info(" Adding Problem Obs for Code " + prob.getProblemCode().getNullFlavor() );
+					diagnoses.put(prob.getProblemCode().getNullFlavor(), prob);
+				}
+			
+				
+			} // for
+			
+			
+		}// if Discharge Diag
+		
+		
 		log.info("Final Enc Diagnosis Size = " + diagnoses.size());
 		return diagnoses;
 	}
