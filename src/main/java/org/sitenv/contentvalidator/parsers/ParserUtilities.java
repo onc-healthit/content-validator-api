@@ -78,6 +78,7 @@ public class ParserUtilities {
 		if(refCode != null && submittedCode != null &&
 		   submittedCode.isCodePresent(refCode) ) {
 			
+			log.info(" Ref code is present in Submitted Code ");
 			// Code is present in the submitted code element or its translations (First 2 conditions)
 			return true;
 		}
@@ -87,11 +88,15 @@ public class ParserUtilities {
 			for(CCDACode trans : refCode.getTranslations()) {
 				
 				if(submittedCode != null && 
-				   submittedCode.isCodePresent(trans) ) 
-					 return true;
+				   submittedCode.isCodePresent(trans) ) {
+					log.info(" Translation code in reference file is present in submitted code ");
+					return true;
+				}
+					 
 			}
 		}
 		
+		log.info(" Could not find the Ref Code or Translation code in the Submitted codes ");
 		return false;
 	}
 

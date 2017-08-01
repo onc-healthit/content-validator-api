@@ -15,6 +15,8 @@ public class CCDARefModel {
 	private CCDAPatient        patient;
 	private CCDACareTeamMember members;
 	private CCDAEncounter      encounter;
+	private CCDAAdmissionDiagnosis admissionDiagnosis;
+	private CCDADischargeDiagnosis dischargeDiagnosis;
 	private CCDAAllergy        allergy;
 	private CCDAMedication     medication;
 	private CCDADischargeMedication dischargeMedication;
@@ -639,9 +641,22 @@ public class CCDARefModel {
 			udi.get(j).log();
 			
 		}
+		
+		if(admissionDiagnosis != null) 
+			admissionDiagnosis.log();
+		
+		if(dischargeDiagnosis != null)
+			dischargeDiagnosis.log();
 	}
 	
-	
+	public CCDAAdmissionDiagnosis getAdmissionDiagnosis() {
+		return admissionDiagnosis;
+	}
+
+	public void setAdmissionDiagnosis(CCDAAdmissionDiagnosis admissionDiagnosis) {
+		this.admissionDiagnosis = admissionDiagnosis;
+	}
+
 	public CCDAPatient getPatient() {
 		return patient;
 	}
@@ -916,4 +931,13 @@ public class CCDARefModel {
 		compareEncounterDiagnosis(validationObjective, submittedCCDA, results);
 	}
 
+	public CCDADischargeDiagnosis getDischargeDiagnosis() {
+		return dischargeDiagnosis;
+	}
+
+	public void setDischargeDiagnosis(CCDADischargeDiagnosis dischargeDiagnosis) {
+		this.dischargeDiagnosis = dischargeDiagnosis;
+	}
+
+	
 }

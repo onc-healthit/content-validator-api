@@ -62,6 +62,10 @@ public class CCDAConstants {
 	//Encounter stuff
 	static public XPathExpression REL_ENC_ENTRY_EXP;
 	static public XPathExpression ENCOUNTER_EXPRESSION;
+	static public XPathExpression ADMISSION_DIAG_EXP;
+	static public XPathExpression DISCHARGE_DIAG_EXP;
+	static public XPathExpression REL_HOSPITAL_ADMISSION_DIAG_EXP;
+	static public XPathExpression REL_HOSPITAL_DISCHARGE_DIAG_EXP;
 	
 	//Problem Stuff
 	static public XPathExpression PROBLEM_EXPRESSION; 
@@ -184,6 +188,10 @@ public class CCDAConstants {
 			REL_TELECOM_EXP = CCDAConstants.CCDAXPATH.compile("./telecom[not(@nullFlavor)]");
 			
 			ENCOUNTER_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='46240-8']]");
+			ADMISSION_DIAG_EXP = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='46241-6']]");
+			DISCHARGE_DIAG_EXP = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='11535-2']]");
+			REL_HOSPITAL_ADMISSION_DIAG_EXP = CCDAConstants.CCDAXPATH.compile("./entry/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.34']]");
+			REL_HOSPITAL_DISCHARGE_DIAG_EXP = CCDAConstants.CCDAXPATH.compile("./entry/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.33']]");
 			REL_ENC_ENTRY_EXP = CCDAConstants.CCDAXPATH.compile("./entry/encounter[not(@nullFlavor)]");
 			PROBLEM_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='11450-4']]");
 			REL_PROBLEM_OBS_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entryRelationship/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.4']]");

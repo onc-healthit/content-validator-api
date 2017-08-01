@@ -1,11 +1,15 @@
 package org.sitenv.contentvalidator.model;
 
+import org.apache.log4j.Logger;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 
 import java.util.ArrayList;
 
 public class CCDACode extends CCDADataElement {
+	
+	private static Logger log = Logger.getLogger(CCDAProblemObs.class.getName());
+	
 	private String  code;
 	private String  codeSystem;
 	private String  codeSystemName;
@@ -13,6 +17,8 @@ public class CCDACode extends CCDADataElement {
 	private String valueSetOid;
 	private ArrayList<CCDACode> translations;
 	private String nullFlavor;
+	
+	
 	
 	public Boolean matches(CCDACode cd, ArrayList<ContentValidationResult> results, String elementName) {
 		
@@ -61,7 +67,9 @@ public class CCDACode extends CCDADataElement {
 			(codeSystem != null) && (cd.getCodeSystem() != null) &&
 			(code.equalsIgnoreCase(cd.getCode())) && 
 			(codeSystem.equalsIgnoreCase(cd.getCodeSystem()))) {
-				return true;
+			
+			log.info(" Code : " + code + " is same as passed in code. ");
+			return true;
 		}
 		
 		// Check if the code is present in this element's translation
@@ -71,10 +79,13 @@ public class CCDACode extends CCDADataElement {
 				(trans.getCodeSystem() != null) && (cd.getCodeSystem() != null) &&
 				(trans.getCode().equalsIgnoreCase(cd.getCode())) && 
 				(trans.getCodeSystem().equalsIgnoreCase(cd.getCodeSystem()))) {
-					return true;
+				
+				log.info(" Translation Code : " + trans.getCode() + " is same as passed in code.");
+				return true;
 			}
 		}
 		
+		log.info(" Passed in Code : " + ((cd.getCode() != null)?cd.getCode():"Null") + " is not present ");
 		return false;
 	}
 	
