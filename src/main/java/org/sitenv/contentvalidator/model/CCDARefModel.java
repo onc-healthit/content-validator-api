@@ -978,10 +978,22 @@ public class CCDARefModel {
 		
 	}
 	
-	public void compareNonCCDSStructuredData(String validationObjective, CCDARefModel submittedCCDA,ArrayList<ContentValidationResult> results)
+	public void compareNonCCDSStructuredData(String valObj, CCDARefModel submittedCCDA,ArrayList<ContentValidationResult> results)
 	{
 		// validate encounter diagnosis.
-		compareEncounterDiagnosis(validationObjective, submittedCCDA, results);
+		if(valObj.equalsIgnoreCase("170.315_b1_ToC_Amb") || 
+				valObj.equalsIgnoreCase("170.315_b1_ToC_Inp") ||
+				valObj.equalsIgnoreCase("170.315_b4_CCDS_Amb") ||
+				valObj.equalsIgnoreCase("170.315_b4_CCDS_Inp") ||
+				valObj.equalsIgnoreCase("170.315_b6_DE_Amb") ||
+				valObj.equalsIgnoreCase("170.315_b6_DE_Inp") ||
+				valObj.equalsIgnoreCase("170.315_e1_VDT_Amb") ||
+				valObj.equalsIgnoreCase("170.315_e1_VDT_Inp") ) {
+			
+			log.info("Comparing Encounter Diagnosis for b1, b4, b6, and e1 ");
+			compareEncounterDiagnosis(valObj, submittedCCDA, results);	
+		}
+		
 	}
 
 	public CCDADischargeDiagnosis getDischargeDiagnosis() {
