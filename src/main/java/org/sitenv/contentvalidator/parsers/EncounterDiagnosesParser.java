@@ -17,7 +17,106 @@ public class EncounterDiagnosesParser {
     public static void parse(Document doc, CCDARefModel model) throws XPathExpressionException {
     	
     	model.setEncounter(retrieveEncounterDetails(doc));	
+    	
+    	model.setAdmissionDiagnosis(retrieveAdmissionDiagnosisDetails(doc));
+    	
+    	model.setDischargeDiagnosis(retrieveDischargeDiagnosisDetails(doc));
 	}
+    
+    public static CCDAAdmissionDiagnosis retrieveAdmissionDiagnosisDetails(Document doc) throws XPathExpressionException
+	{
+		Element sectionElement = (Element) CCDAConstants.ADMISSION_DIAG_EXP.evaluate(doc, XPathConstants.NODE);
+		CCDAAdmissionDiagnosis admDiag = null;
+		
+		if(sectionElement != null)
+		{
+			log.info(" Adding Admission Diagnosis ");
+			admDiag = new CCDAAdmissionDiagnosis();
+			
+			//Get Template Ids
+			admDiag.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			// Get Section Code
+			admDiag.setSectionCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+			
+			// Get Entries
+			admDiag.setDiagnosis(readHospitalAdmissionDiagnosis((NodeList) CCDAConstants.REL_HOSPITAL_ADMISSION_DIAG_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET)));
+		}
+		
+		return admDiag;
+	}
+    
+    public static ArrayList<CCDAProblemObs> readHospitalAdmissionDiagnosis(NodeList hospitalAdmDiag) throws XPathExpressionException 
+    {
+    	ArrayList<CCDAProblemObs> encDiagList = new ArrayList<CCDAProblemObs>();
+
+		for (int i = 0; i < hospitalAdmDiag.getLength(); i++) {
+			
+			log.info("Found Hospital Admission Diagnosis");
+			Element hosAdmDiag = (Element) hospitalAdmDiag.item(i);
+			
+			NodeList problemObservationNodeList = (NodeList) CCDAConstants.REL_ENTRY_RELSHIP_OBS_EXP.
+					evaluate(hosAdmDiag, XPathConstants.NODESET);
+
+			log.info("Read Problem Observations ");
+			encDiagList.addAll(readProblemObservation(problemObservationNodeList));
+			
+		}
+		
+		log.info(" Size of Admission Diagnosis Problem Observations : " + encDiagList.size());
+		return encDiagList;
+    }
+
+    public static CCDADischargeDiagnosis retrieveDischargeDiagnosisDetails(Document doc) throws XPathExpressionException
+	{
+		Element sectionElement = (Element) CCDAConstants.DISCHARGE_DIAG_EXP.evaluate(doc, XPathConstants.NODE);
+		CCDADischargeDiagnosis dischargeDiag = null;
+		
+		if(sectionElement != null)
+		{
+			log.info(" Adding Discharge Diagnosis ");
+			dischargeDiag = new CCDADischargeDiagnosis();
+			
+			//Get Template Ids
+			dischargeDiag.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			// Get Section Code
+			dischargeDiag.setSectionCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+			
+			// Get Entries
+			dischargeDiag.setDiagnosis(readHospitalDischargeDiagnosis((NodeList) CCDAConstants.REL_HOSPITAL_DISCHARGE_DIAG_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET)));
+		}
+		
+		return dischargeDiag;
+	}
+    
+    public static ArrayList<CCDAProblemObs> readHospitalDischargeDiagnosis(NodeList hospitalDischargeDiag) throws XPathExpressionException 
+    {
+    	ArrayList<CCDAProblemObs> encDiagList = new ArrayList<CCDAProblemObs>();
+
+		for (int i = 0; i < hospitalDischargeDiag.getLength(); i++) {
+			
+			log.info("Found Hospital Discharge Diagnosis");
+			Element hosAdmDiag = (Element) hospitalDischargeDiag.item(i);
+			
+			NodeList problemObservationNodeList = (NodeList) CCDAConstants.REL_ENTRY_RELSHIP_OBS_EXP.
+					evaluate(hosAdmDiag, XPathConstants.NODESET);
+
+			log.info("Read Problem Observations ");
+			encDiagList.addAll(readProblemObservation(problemObservationNodeList));
+			
+		}
+		
+		log.info(" Size of Discharge Diagnosis Problem Observations : " + encDiagList.size());
+		return encDiagList;
+    }
+
 	
 	public static CCDAEncounter retrieveEncounterDetails(Document doc) throws XPathExpressionException
 	{
@@ -179,7 +278,7 @@ public class EncounterDiagnosesParser {
 			problemObservation.setEffTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
 										evaluate(problemObservationElement, XPathConstants.NODE)));
 			
-			problemObservation.setProblemCode(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_EXP.
+			problemObservation.setProblemCode(ParserUtilities.readCodeWithTranslation((Element) CCDAConstants.REL_VAL__WITH_TRANS_EXP.
 					evaluate(problemObservationElement, XPathConstants.NODE)));
 			
 			problemObservationList.add(problemObservation);

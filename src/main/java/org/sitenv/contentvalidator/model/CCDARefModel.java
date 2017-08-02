@@ -15,6 +15,8 @@ public class CCDARefModel {
 	private CCDAPatient        patient;
 	private CCDACareTeamMember members;
 	private CCDAEncounter      encounter;
+	private CCDAAdmissionDiagnosis admissionDiagnosis;
+	private CCDADischargeDiagnosis dischargeDiagnosis;
 	private CCDAAllergy        allergy;
 	private CCDAMedication     medication;
 	private CCDADischargeMedication dischargeMedication;
@@ -62,6 +64,9 @@ public class CCDARefModel {
 		{
 			log.info(" Not Performing any content validation checks ");
 		}
+		
+		log.info(" Compare non CCDS Structured Data ");
+		compareNonCCDSStructuredData(validationObjective, submittedCCDA, results);
 		
 		log.info(" Total Number of Content Validation Issues " + results.size());
 		return results;
@@ -434,6 +439,111 @@ public class CCDARefModel {
 		}
 	}
 	
+	public HashMap<String, CCDAProblemObs> getAllEncounterDiagnoses(Boolean includeTrans) {
+		
+		HashMap<String,CCDAProblemObs> diagnoses = new HashMap<String,CCDAProblemObs>();
+		
+		if(encounter != null) {
+			
+			diagnoses.putAll(encounter.getAllDiagnosisObservations(includeTrans));
+			
+			log.info(" Encounter Diagnoses Size = " + diagnoses.size());
+		}
+		
+		if(admissionDiagnosis != null) {
+			
+			log.info(" Encounter Diagnoses Size = " + diagnoses.size());
+			
+			for(CCDAProblemObs prob : admissionDiagnosis.getDiagnosis()) {
+			
+				if(prob.getProblemCode() != null && 
+				   prob.getProblemCode().getCode() != null && 
+				   prob.getProblemCode().getCode().length() > 0) {
+			
+					log.info(" Adding Problem Obs for Code " + prob.getProblemCode().getCode() );
+					diagnoses.put(prob.getProblemCode().getCode(), prob);
+				}
+				else if(prob.getProblemCode() != null && 
+						prob.getProblemCode().isProperNFForTranslation() ) {
+					
+					log.info(" Adding Problem Obs for Code " + prob.getProblemCode().getNullFlavor() );
+					diagnoses.put(prob.getProblemCode().getNullFlavor(), prob);
+				}
+			
+				
+			} // for
+			
+			
+		}// if Adm Diag
+		
+		if(dischargeDiagnosis != null) {
+			
+			log.info(" Encounter Diagnoses Size = " + diagnoses.size());
+			
+			for(CCDAProblemObs prob : dischargeDiagnosis.getDiagnosis()) {
+			
+				if(prob.getProblemCode() != null && 
+				   prob.getProblemCode().getCode() != null && 
+				   prob.getProblemCode().getCode().length() > 0) {
+			
+					log.info(" Adding Problem Obs for Code " + prob.getProblemCode().getCode() );
+					diagnoses.put(prob.getProblemCode().getCode(), prob);
+				}
+				else if(prob.getProblemCode() != null && 
+						prob.getProblemCode().isProperNFForTranslation() ) {
+					
+					log.info(" Adding Problem Obs for Code " + prob.getProblemCode().getNullFlavor() );
+					diagnoses.put(prob.getProblemCode().getNullFlavor(), prob);
+				}
+			
+				
+			} // for
+			
+			
+		}// if Discharge Diag
+		
+		
+		log.info("Final Enc Diagnosis Size = " + diagnoses.size());
+		return diagnoses;
+	}
+	
+	private void compareEncounterDiagnosis(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
+		
+		log.info("Retrieving Procedure Acts for comparison ");
+		HashMap<String, CCDAProblemObs> refDiags = this.getAllEncounterDiagnoses(false);
+		HashMap<String, CCDAProblemObs> subDiags = submittedCCDA.getAllEncounterDiagnoses(false);
+		
+		if( (refDiags != null && refDiags.size() > 0) &&  
+				(subDiags != null && subDiags.size() > 0)  ) {
+
+			log.info("Encounter Diagnosis present in both models ");
+			
+			String context = "Enounter Diagnosis Entry ";
+			// Iterate and verify that all reference diagnosis is present in submitted diagnosis
+			CCDAProblemObs.compareProblemObservationData(refDiags, subDiags, results, context);
+
+
+		} else if ( (refDiags != null && refDiags.size() > 0) && 
+				(subDiags == null || subDiags.size() == 0) ) {
+
+			// handle the case where the Encounter Diagnossi Section does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to Encounter Diagnosis, but the submitted C-CDA does not contain Encounter Diagnosis data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Encounter Diagnosis but submitted document does not contain Encounter Diagnosis data");
+
+		}else if ((refDiags == null || refDiags.size() == 0) && 
+				(subDiags != null && subDiags.size() > 0) ) {
+
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to Encounter Diagnosis, but the submitted C-CDA does contain Encounter Diagnosis data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info("Model does not have Encounter Diagnosis for comparison ");
+
+		} else {
+
+			log.info("Model and Submitted CCDA do not have Encounter Diagnosis for comparison ");
+		}
+	}
+	
 	
 	private void comparePatients(CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
 		
@@ -584,9 +694,22 @@ public class CCDARefModel {
 			udi.get(j).log();
 			
 		}
+		
+		if(admissionDiagnosis != null) 
+			admissionDiagnosis.log();
+		
+		if(dischargeDiagnosis != null)
+			dischargeDiagnosis.log();
 	}
 	
-	
+	public CCDAAdmissionDiagnosis getAdmissionDiagnosis() {
+		return admissionDiagnosis;
+	}
+
+	public void setAdmissionDiagnosis(CCDAAdmissionDiagnosis admissionDiagnosis) {
+		this.admissionDiagnosis = admissionDiagnosis;
+	}
+
 	public CCDAPatient getPatient() {
 		return patient;
 	}
@@ -854,5 +977,32 @@ public class CCDARefModel {
 		log.info("Finished comparison , returning results");
 		
 	}
+	
+	public void compareNonCCDSStructuredData(String valObj, CCDARefModel submittedCCDA,ArrayList<ContentValidationResult> results)
+	{
+		// validate encounter diagnosis.
+		if(valObj.equalsIgnoreCase("170.315_b1_ToC_Amb") || 
+				valObj.equalsIgnoreCase("170.315_b1_ToC_Inp") ||
+				valObj.equalsIgnoreCase("170.315_b4_CCDS_Amb") ||
+				valObj.equalsIgnoreCase("170.315_b4_CCDS_Inp") ||
+				valObj.equalsIgnoreCase("170.315_b6_DE_Amb") ||
+				valObj.equalsIgnoreCase("170.315_b6_DE_Inp") ||
+				valObj.equalsIgnoreCase("170.315_e1_VDT_Amb") ||
+				valObj.equalsIgnoreCase("170.315_e1_VDT_Inp") ) {
+			
+			log.info("Comparing Encounter Diagnosis for b1, b4, b6, and e1 ");
+			compareEncounterDiagnosis(valObj, submittedCCDA, results);	
+		}
+		
+	}
 
+	public CCDADischargeDiagnosis getDischargeDiagnosis() {
+		return dischargeDiagnosis;
+	}
+
+	public void setDischargeDiagnosis(CCDADischargeDiagnosis dischargeDiagnosis) {
+		this.dischargeDiagnosis = dischargeDiagnosis;
+	}
+
+	
 }

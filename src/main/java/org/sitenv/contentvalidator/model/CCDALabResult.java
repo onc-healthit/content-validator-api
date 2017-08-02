@@ -24,12 +24,12 @@ public class CCDALabResult {
 			
 			for(int j = 0; j < observations.size(); j++) {
 				
-				//log.info(" Iterating through Observations ");
+				log.info(" Iterating through Observations ");
 				if(observations.get(j).getLabCode() != null && 
 			       observations.get(j).getLabCode().getCode() != null) {
 				
 					String code = observations.get(j).getLabCode().getCode();
-					//log.info("Adding lab code = " + code);
+					log.info("Adding lab code = " + code);
 					results.put(code, observations.get(j));
 				}
 			}// for	
