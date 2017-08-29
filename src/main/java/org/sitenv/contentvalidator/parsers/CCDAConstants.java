@@ -98,7 +98,10 @@ public class CCDAConstants {
     public static XPathExpression VITALSIGNS_EXPRESSION;
     public static XPathExpression REL_VITAL_ORG_EXPRESSION;
     
-    // Procedure
+    // Procedure and Med Equipments
+    public static XPathExpression MEDICAL_EQUIPMENT_EXPRESSION;
+    public static XPathExpression MEDICAL_EQUIPMENT_ORG_EXPRESSION;
+    public static XPathExpression MEDICAL_EQUIPMENT_ORG_PAP_EXPRESSION;
     public static XPathExpression PROCEDURE_EXPRESSION;
     public static XPathExpression REL_PROCEDURE_UDI_EXPRESSION; 
     public static XPathExpression REL_PROCEDURE_SDL_EXPRESSION; 
@@ -227,7 +230,10 @@ public class CCDAConstants {
 		    IMMUNIZATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='11369-6']]");
 		    VITALSIGNS_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='8716-3']]");
 		    REL_VITAL_ORG_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/organizer[not(@nullFlavor)]");
-		    
+		   
+		    MEDICAL_EQUIPMENT_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='46264-8']]");
+		    MEDICAL_EQUIPMENT_ORG_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/organizer[not(@nullFlavor) and not(@negationInd='true')]");
+		    MEDICAL_EQUIPMENT_ORG_PAP_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./component/procedure[not(@nullFlavor) and not(@negationInd='true')]");
 		    PROCEDURE_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='47519-4']]");
 		    REL_PROCEDURE_UDI_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./participant[not(@nullFlavor) and @typeCode='DEV']/participantRole[not(@nullFlavor)]");
 		    REL_PROCEDURE_SDL_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./participant[not(@nullFlavor) and @typeCode='LOC']/participantRole[not(@nullFlavor)]");

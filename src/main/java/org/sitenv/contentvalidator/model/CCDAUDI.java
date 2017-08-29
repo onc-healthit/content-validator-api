@@ -1,6 +1,8 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 
 import java.util.ArrayList;
 
@@ -19,7 +21,68 @@ public class CCDAUDI {
 		scopingEntityId = new ArrayList<CCDAII>();
 	}
 	
+	public static void compareUdis(ArrayList<CCDAUDI> refUdis, ArrayList<CCDAUDI> subUdis, ArrayList<ContentValidationResult> results) {
+		
+		log.info(" Comparing Udi values ");
+		
+		for(int i = 0; i < refUdis.size(); i++) {
+			
+			//for each Udi in the Reference Model, it should be present in the Submitted model.
+			if(CCDAUDI.isPresent(refUdis.get(i), subUdis, results)) {
+				
+				// We have to compare each UDI and verify it is present.
+				log.info(" Found UDI at index " + i + " in submitted model ");
+			}
+			else {
+				log.info(" Did not find the UDI at index " + i + " in submitted model ");
+			}
+		}
+	}
+	
+	public static Boolean isPresent(CCDAUDI refUdi, ArrayList<CCDAUDI> subUdis, ArrayList<ContentValidationResult> results) {
+		
+		for(int i = 0; i < subUdis.size();i++) {
+			
+			CCDAUDI subUdi = subUdis.get(i);
+			
+			if(subUdi.contains(refUdi, results)) {
+				log.info(" Ref Udi is present in the Sub Udis ");
+				return true;
+			}
+		}
+			
+		return false;
+	}
+	
+	public Boolean contains(CCDAUDI refUdi, ArrayList<ContentValidationResult> results) {
+		
+		ArrayList<CCDAII> udiVals = refUdi.getUDIValue();
+		
+		Boolean found = false;
+		for(int i = 0; i < udiVals.size(); i++) {
+			
+			CCDAII refii = udiVals.get(i);
+			if(this.getUDIValue() != null && 
+				refii.isPartOf(this.getUDIValue())) {
+				
+				log.info(" Found one of the Udis in the list " + refii.getRootValue() + refii.getExtValue());
+				found = true; // Make it true as long as we keep hitting this condition.
+			}
+			else {
+				log.info(" Did not find the UDI " + refii.getRootValue() + refii.getExtValue());
+				ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's UDI: Root = " + refii.getRootValue() + " Extension = " + refii.getExtValue() + ", but the submitted C-CDA does not contain UDI data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+				return false; // If we dont find even one of them..then the data is not matching.
+			}
+			
+		}
+		
+		return found;
+	}
+	
 	public void log() { 
+		
+		log.info(" *** UDI *** ");
 		
 		for(int j = 0; j < templateIds.size(); j++) {
 			log.info(" Tempalte Id [" + j + "] = " + templateIds.get(j).getRootValue());
