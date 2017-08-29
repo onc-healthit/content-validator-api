@@ -4,7 +4,7 @@
 
     <groupId>org.sitenv</groupId>
     <artifactId>contentvalidator-api</artifactId>
-    <version>1.0.12-SNAPSHOT</version>
+    <version>1.0.13-SNAPSHOT</version>
     <name>C-CDA Content Validator API</name>
     <url>http://www.sitenv.org</url>
 
