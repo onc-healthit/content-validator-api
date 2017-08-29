@@ -30,6 +30,7 @@ public class CCDARefModel {
 	private CCDAPlanOfTreatment planOfTreatment;
 	private CCDAGoals          goals;
 	private CCDAHealthConcerns hcs;
+	private CCDAMedicalEquipment medEquipments;
 	private ArrayList<CCDAUDI> udi;
 	
 	public CCDARefModel() {
@@ -89,7 +90,7 @@ public class CCDARefModel {
 		log.info("Comparing Medications ");
 		compareMedications(validationObjective, submittedCCDA, results);
 		
-		log.info("Comparing Lab Results ");
+		log.info("Comparing Lab Results "); 
 		compareLabResults(validationObjective, submittedCCDA, results);
 		
 		log.info("Comparing Vital Signs ");
@@ -97,6 +98,9 @@ public class CCDARefModel {
 		
 		log.info("Comparing Procedures ");
 		compareProcedures(validationObjective, submittedCCDA, results);
+		
+		log.info("Comparing Udis ");
+		compareUdis(validationObjective, submittedCCDA, results);
 		
 		log.info("Comparing Immunizations ");
 		compareImmunizations(validationObjective, submittedCCDA, results);
@@ -335,6 +339,39 @@ public class CCDARefModel {
 		}
 	}
 	
+	public void compareUdis(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
+		
+		log.info("Retrieving Udis for comparison ");
+		ArrayList<CCDAUDI> refUdis = this.getAllUDIs();
+		ArrayList<CCDAUDI> subUdis = submittedCCDA.getAllUDIs();
+		
+		if( (refUdis != null && refUdis.size() > 0) &&  
+			(subUdis != null && subUdis.size() > 0)  ) {
+			
+			log.info("Udis present in both models ");
+			CCDAUDI.compareUdis(refUdis, subUdis, results);
+			
+		} else if ( (refUdis != null && refUdis.size() > 0) && 
+				(subUdis == null || subUdis.size() == 0) ) {
+			
+			// handle the case where the Udisdoes not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's UDIs, but the submitted C-CDA does not contain UDI data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires UDIs but submitted document does not contain UDI data");
+			
+		}else if ((refUdis == null || refUdis.size() == 0) && 
+				(subUdis != null && subUdis.size() > 0) ) {
+		
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Udis, but the submitted C-CDA does contain UDI data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info("Model does not have UDIs for comparison ");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have UDIs for comparison ");
+		}
+	}
+	
 	public void compareProcedures(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
 		
 		log.info("Retrieving Procedure Acts for comparison ");
@@ -344,7 +381,7 @@ public class CCDARefModel {
 		if( (refProcs != null && refProcs.size() > 0) &&  
 			(subProcs != null && subProcs.size() > 0)  ) {
 			
-			log.info("Vital Signs present in both models ");
+			log.info("Procedures present in both models ");
 			CCDAProcActProc.compareProcedures(refProcs, subProcs, results);
 			
 		} else if ( (refProcs != null && refProcs.size() > 0) && 
@@ -353,7 +390,7 @@ public class CCDARefModel {
 			// handle the case where the Vitals Section does not exist in the submitted CCDA
 			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Procedures, but the submitted C-CDA does not contain Procedure data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
-			log.info(" Scenario requires Vital Signs but submitted document does not contain Procedures data");
+			log.info(" Scenario requires Procedures but submitted document does not contain Procedures data");
 			
 		}else if ((refProcs == null || refProcs.size() == 0) && 
 				(subProcs != null && subProcs.size() > 0) ) {
@@ -410,6 +447,42 @@ public class CCDARefModel {
 		}
 		
 		return results;
+	}
+	
+	private ArrayList<CCDAUDI> getAllUDIs() 
+	{
+		ArrayList<CCDAUDI> udis = new ArrayList<CCDAUDI>();
+		
+		if(medEquipments != null) {
+			log.info(" Retrieving UDIs from Med Eq ");
+			ArrayList<CCDAUDI> mudi = medEquipments.getUdis();
+			
+			if(mudi != null) {
+				
+				log.info(" Size of Udi in Med Eq = " + mudi.size());
+				udis.addAll(mudi);
+			}
+		}
+		
+		if(this.udi != null) {
+			log.info(" Size of Udi in Ref Model = " + udi.size());
+			udis.addAll(udi);
+		}
+		
+		if(procedure != null) {
+			log.info(" Retrieving UDIs from Procedures ");
+			ArrayList<CCDAUDI> pudi = procedure.getAllUdis();
+			
+			if(pudi != null) {
+				
+				log.info(" Size of Udi in Procedures = " + pudi.size());
+				udis.addAll(pudi);
+			}
+		}
+		
+		log.info(" Total Size of UDIs " + udis.size());
+				
+		return udis;
 	}
 	
 	private void validateBirthSex(CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
@@ -694,6 +767,12 @@ public class CCDARefModel {
 			udi.get(j).log();
 			
 		}
+		
+		if(medEquipments != null)
+			medEquipments.log();
+		else 
+			log.info(" Medical Equipment Data is null ");
+			
 		
 		if(admissionDiagnosis != null) 
 			admissionDiagnosis.log();
@@ -1002,6 +1081,14 @@ public class CCDARefModel {
 
 	public void setDischargeDiagnosis(CCDADischargeDiagnosis dischargeDiagnosis) {
 		this.dischargeDiagnosis = dischargeDiagnosis;
+	}
+
+	public CCDAMedicalEquipment getMedEquipments() {
+		return medEquipments;
+	}
+
+	public void setMedEquipments(CCDAMedicalEquipment medEquipments) {
+		this.medEquipments = medEquipments;
 	}
 
 	

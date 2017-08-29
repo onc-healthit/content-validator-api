@@ -1,4 +1,4 @@
-package org.sitenv.contentvalidator.model;
+package org.sitenv.contentvalidator.model;  
 
 import org.apache.log4j.Logger;
 
@@ -12,6 +12,24 @@ public class CCDAProcedure {
 	private ArrayList<CCDAII>       		sectionTemplateId;
 	private CCDACode                 		sectionCode;
 	private ArrayList<CCDAProcActProc>		procActsProcs;
+	
+	public ArrayList<CCDAUDI> getAllUdis() {
+		
+		ArrayList<CCDAUDI> udis = new ArrayList<CCDAUDI>();
+		for(int i = 0; i < procActsProcs.size(); i++) {
+			
+			ArrayList<CCDAUDI> actUdi = procActsProcs.get(i).getUdi();
+			
+			if(actUdi != null) {
+				
+				log.info("Size of UDIs in Proc Act Proc in Procedures " + actUdi.size());
+				udis.addAll(actUdi);
+			}
+			
+		}
+		
+		return udis;
+	}
 	
 	public HashMap<String, CCDAProcActProc> getProcedureMap() {
 		
