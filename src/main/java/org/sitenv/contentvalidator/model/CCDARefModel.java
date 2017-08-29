@@ -90,7 +90,7 @@ public class CCDARefModel {
 		log.info("Comparing Medications ");
 		compareMedications(validationObjective, submittedCCDA, results);
 		
-		log.info("Comparing Lab Results ");
+		log.info("Comparing Lab Results "); 
 		compareLabResults(validationObjective, submittedCCDA, results);
 		
 		log.info("Comparing Vital Signs ");

@@ -1,4 +1,4 @@
-package org.sitenv.contentvalidator.model;
+package org.sitenv.contentvalidator.model; 
 
 import org.apache.log4j.Logger;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;

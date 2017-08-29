@@ -36,7 +36,7 @@ public class CCDABodyParser {
 		log.info("Parsing Vitals ");
 		VitalSignParser.parse(doc, model);
 		
-		log.info("Parsing Procedures ");
+		log.info("Parsing Procedures "); 
 		ProcedureParser.parse(doc, model);
 		
 		log.info("Parsing Care Team Members ");
