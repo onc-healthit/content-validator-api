@@ -24,7 +24,7 @@ public class CCDARefModel {
 	private CCDALabResult      labResults;
 	private CCDALabResult  	   labTests;
 	private CCDAProcedure      procedure;
-	private CCDASocialHistory  smokingStatus;
+	private CCDASocialHistory  socialHistory;
 	private CCDAVitalSigns     vitalSigns;
 	private CCDAProblem        problem;
 	private CCDAPlanOfTreatment planOfTreatment;
@@ -78,7 +78,10 @@ public class CCDARefModel {
 		log.info("Comparing Patient Data ");
 		comparePatients(submittedCCDA, results);
 		
-		log.info("Validating Birth Sex ");
+		log.info("Comparing Social History Smoking Status ");
+		validateSmokingStatus(submittedCCDA, results);
+		
+		log.info("Validating Social History Birth Sex ");
 		validateBirthSex(submittedCCDA, results);
 		
 		log.info("Comparing Problems ");
@@ -436,6 +439,33 @@ public class CCDARefModel {
 		return results;
 	}
 	
+	private HashMap<String, CCDASmokingStatus> getAllSmokingStatuses() 
+	{
+		HashMap<String,CCDASmokingStatus> results = new HashMap<String,CCDASmokingStatus>();
+		
+		if(socialHistory != null && 
+		   socialHistory.getSmokingStatus() != null) {
+			
+			ArrayList<CCDASmokingStatus> ss = socialHistory.getSmokingStatus();
+			
+			for(CCDASmokingStatus stat : ss) {
+				
+				if(stat.getSmokingStatusCode() != null &&
+				   stat.getSmokingStatusCode().getCode() != null &&
+				   stat.getSmokingStatusCode().getCode().length() > 0 ) {
+					
+				   // Adding Smoking Status code.
+				   log.info(" Adding Smoking Status for " + stat.getSmokingStatusCode().getCode());
+				   results.put(stat.getSmokingStatusCode().getCode(), stat);
+				}
+						
+			}
+		
+		}
+		log.info(" Smoking Status Results Size = " + results.size());
+		return results;
+	}
+	
 	private HashMap<String, CCDAProcActProc> getAllProcedures() 
 	{
 		HashMap<String,CCDAProcActProc> results = new HashMap<String,CCDAProcActProc>();
@@ -487,13 +517,13 @@ public class CCDARefModel {
 	
 	private void validateBirthSex(CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
 		
-		if( (submittedCCDA.getSmokingStatus() != null) &&
-			 (submittedCCDA.getSmokingStatus().getBirthSex() != null)) {
+		if( (submittedCCDA.getSocialHistory() != null) &&
+			 (submittedCCDA.getSocialHistory().getBirthSex() != null)) {
 			
 			// Validate that the code is M or F.
-			if( (submittedCCDA.getSmokingStatus().getBirthSex().getSexCode() != null)  && 
-				((submittedCCDA.getSmokingStatus().getBirthSex().getSexCode().getCode().equalsIgnoreCase("M")) || 
-				(submittedCCDA.getSmokingStatus().getBirthSex().getSexCode().getCode().equalsIgnoreCase("F"))) )
+			if( (submittedCCDA.getSocialHistory().getBirthSex().getSexCode() != null)  && 
+				((submittedCCDA.getSocialHistory().getBirthSex().getSexCode().getCode().equalsIgnoreCase("M")) || 
+				(submittedCCDA.getSocialHistory().getBirthSex().getSexCode().getCode().equalsIgnoreCase("F"))) )
 			{
 				//do nothing.
 				return;
@@ -510,6 +540,40 @@ public class CCDARefModel {
 			ContentValidationResult rs = new ContentValidationResult("The scenario requires patient's birth sex to be captured as part of social history data, but submitted file does have birth sex information", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
+	}
+	
+	private void validateSmokingStatus(CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
+		
+		log.info("Retrieving Smoking Status for comparison ");
+		HashMap<String, CCDASmokingStatus> refStatus = this.getAllSmokingStatuses();
+		HashMap<String, CCDASmokingStatus> subStatus = submittedCCDA.getAllSmokingStatuses();
+		
+		if( (refStatus != null && refStatus.size() > 0) &&  
+			(subStatus != null && subStatus.size() > 0)  ) {
+			
+			log.info("Smoking Status present in both models ");
+			CCDASmokingStatus.compareSmokingStatus(refStatus, subStatus, results);
+			
+		} else if ( (refStatus != null && refStatus.size() > 0) && 
+				(subStatus == null || subStatus.size() == 0) ) {
+			
+			// handle the case where the Vitals Section does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Smoking Status, but the submitted C-CDA does not contain Smoking Status data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Smoking Status but submitted document does not contain Smoking Status data");
+			
+		}else if ((refStatus == null || refStatus.size() == 0) && 
+				(subStatus != null && subStatus.size() > 0) ) {
+		
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Smoking Status, but the submitted C-CDA does contain Smoking Status data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info("Model does not have Smoking Status for comparison ");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Smoking Statuss for comparison ");
+		}
+		
 	}
 	
 	public HashMap<String, CCDAProblemObs> getAllEncounterDiagnoses(Boolean includeTrans) {
@@ -732,8 +796,8 @@ public class CCDARefModel {
 		else
 			log.info("No Procedure data in the model");
 		
-		if(smokingStatus != null)
-			smokingStatus.log();
+		if(socialHistory != null)
+			socialHistory.log();
 		else
 			log.info("No Smoking Status in the model");
 		
@@ -843,11 +907,11 @@ public class CCDARefModel {
 	public void setProcedure(CCDAProcedure procedure) {
 		this.procedure = procedure;
 	}
-	public CCDASocialHistory getSmokingStatus() {
-		return smokingStatus;
+	public CCDASocialHistory getSocialHistory() {
+		return socialHistory;
 	}
-	public void setSmokingStatus(CCDASocialHistory smokingStatus) {
-		this.smokingStatus = smokingStatus;
+	public void setSmokingStatus(CCDASocialHistory sh) {
+		this.socialHistory = sh;
 	}
 	public CCDAVitalSigns getVitalSigns() {
 		return vitalSigns;
@@ -915,7 +979,7 @@ public class CCDARefModel {
 		result = prime * result
 				+ ((procedure == null) ? 0 : procedure.hashCode());
 		result = prime * result
-				+ ((smokingStatus == null) ? 0 : smokingStatus.hashCode());
+				+ ((socialHistory == null) ? 0 : socialHistory.hashCode());
 		result = prime * result + ((udi == null) ? 0 : udi.hashCode());
 		result = prime * result
 				+ ((vitalSigns == null) ? 0 : vitalSigns.hashCode());
@@ -995,10 +1059,10 @@ public class CCDARefModel {
 				return false;
 		} else if (!procedure.equals(other.procedure))
 			return false;
-		if (smokingStatus == null) {
-			if (other.smokingStatus != null)
+		if (socialHistory == null) {
+			if (other.socialHistory != null)
 				return false;
-		} else if (!smokingStatus.equals(other.smokingStatus))
+		} else if (!socialHistory.equals(other.socialHistory))
 			return false;
 		if (udi == null) {
 			if (other.udi != null)
