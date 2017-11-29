@@ -69,7 +69,7 @@ public class CCDAUDI {
 				found = true; // Make it true as long as we keep hitting this condition.
 			}
 			else {
-				log.info(" Did not find the UDI " + refii.getRootValue() + refii.getExtValue());
+				log.info(" Did not find the UDI " + refii.getRootValue() + " : " + refii.getExtValue());
 				ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's UDI: Root = " + refii.getRootValue() + " Extension = " + refii.getExtValue() + ", but the submitted C-CDA does not contain UDI data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 				results.add(rs);
 				return false; // If we dont find even one of them..then the data is not matching.

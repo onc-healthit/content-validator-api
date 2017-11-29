@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.parsers;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.model.CCDACode;
 import org.sitenv.contentvalidator.model.CCDADataElement;
 import org.sitenv.contentvalidator.model.CCDAPatient;
 import org.sitenv.contentvalidator.model.CCDAPreferredLanguage;
@@ -81,20 +82,43 @@ public class CCDAHeaderParser {
 		return patient;
 	}
 	
-	public static void readRaceCodes(NodeList raceCodeList, CCDAPatient patient)
+	public static void readRaceCodes(NodeList raceCodeList, CCDAPatient patient) throws XPathExpressionException
 	{
 		Element raceCodeElement= null;
+		CCDACode translation = null;
+		Boolean foundTrans = false;
 		for (int i = 0; i < raceCodeList.getLength(); i++) {
 			
 			raceCodeElement = (Element) raceCodeList.item(i);
 			if(raceCodeElement.getTagName().equals(CCDAConstants.RACE_EL_NAME))
 			{
-				patient.addRaceCode(ParserUtilities.readCode(raceCodeElement));
+				
+				CCDACode rc = ParserUtilities.readCodeWithTranslation(raceCodeElement);
+				
+				if(rc != null && 
+				   !rc.isTranslationPresent() ) {
+					patient.addRaceCode(rc);
+				}
+				else {
+					
+					patient.addRaceCode(rc);
+					
+					// Get the first one, since it is present, the size is > 0
+					translation = rc.getTranslations().get(0);
+				}
+						
+				// patient.addRaceCode(ParserUtilities.readCode(raceCodeElement));
 			}else
 			{
 				patient.addRaceCodeExt(ParserUtilities.readCode(raceCodeElement));
+				foundTrans = true;
 			}
 		}
+		
+		if(!foundTrans && translation != null) {
+			patient.addRaceCodeExt(translation);
+		}
+			
 		
 	}
 	

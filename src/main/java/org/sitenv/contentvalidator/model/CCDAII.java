@@ -2,13 +2,21 @@ package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 public class CCDAII extends CCDADataElement{
+	
+	private static Logger log = Logger.getLogger(CCDAII.class.getName());
+	
 	private String  rootValue;
 	private String  extValue;
 	
 	public Boolean isPartOf(ArrayList<CCDAII> list) {
 		
 		for( CCDAII item : list) {
+			
+			//this.log();
+			//item.log();
 			
 			// Both Root and Extensions are present.
 			if( (rootValue != null) && (item.getRootValue() != null) && 
@@ -29,6 +37,15 @@ public class CCDAII extends CCDADataElement{
 		
 		//if we never hit the postive case
 		return false;
+	}
+	
+	public void log() { 
+		
+		log.info(" *** Intance Identifier *** ");
+		
+		log.info(" Root : " + rootValue);
+		log.info(" Extension : " + extValue);
+		
 	}
 	
 	public String getRootValue() {

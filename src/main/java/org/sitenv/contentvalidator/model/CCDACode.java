@@ -193,4 +193,13 @@ public class CCDACode extends CCDADataElement {
 		else 
 			return false;
 	}
+	
+	public Boolean isTranslationPresent() {
+		
+		if(translations != null &&
+		   translations.size() > 0 )
+			return true;
+		else
+			return false;
+	}
 }
