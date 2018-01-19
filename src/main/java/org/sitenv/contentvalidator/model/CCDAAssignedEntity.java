@@ -8,14 +8,14 @@ public class CCDAAssignedEntity {
 	
 	private static Logger log = Logger.getLogger(CCDAAssignedEntity.class.getName());
 
-	private ArrayList<CCDADataElement>			telecom;
+	private ArrayList<CCDATelecom>			telecom;
 	private ArrayList<CCDAAddress>			addresses;
-	private CCDAOrganization					organization;
+	private CCDAOrganization				organization;
 	
 	public void log() {
 		
 		for(int j = 0; j < telecom.size(); j++) {
-			log.info(" Telecom [" + j + "] = " + telecom.get(j).getValue());
+			telecom.get(j).log(j);
 		}
 		
 		for(int k = 0; k < addresses.size(); k++) {
@@ -26,11 +26,11 @@ public class CCDAAssignedEntity {
 			organization.log();
 	}
 	
-	public ArrayList<CCDADataElement> getTelecom() {
+	public ArrayList<CCDATelecom> getTelecom() {
 		return telecom;
 	}
 
-	public void setTelecom(ArrayList<CCDADataElement> tels) {
+	public void setTelecom(ArrayList<CCDATelecom> tels) {
 		
 		if(tels != null)
 			this.telecom = tels;
@@ -56,7 +56,7 @@ public class CCDAAssignedEntity {
 
 	public CCDAAssignedEntity()
 	{
-		telecom = new ArrayList<CCDADataElement>();
+		telecom = new ArrayList<CCDATelecom>();
 		addresses = new ArrayList<CCDAAddress>();
 		
 	}

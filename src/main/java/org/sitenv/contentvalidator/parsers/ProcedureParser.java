@@ -118,7 +118,7 @@ public class ProcedureParser {
 				assignedEntity.setAddresses(ParserUtilities.readAddressList((NodeList) CCDAConstants.REL_ADDR_EXP.
 													evaluate(performerEntityElement, XPathConstants.NODESET)));
 				
-				assignedEntity.setTelecom(ParserUtilities.readDataElementList((NodeList) CCDAConstants.REL_TELECOM_EXP.
+				assignedEntity.setTelecom(ParserUtilities.readTelecomList((NodeList) CCDAConstants.REL_TELECOM_EXP.
 													evaluate(performerEntityElement, XPathConstants.NODESET)));
 					
 				Element represntOrgElement = (Element) CCDAConstants.REL_REP_ORG_EXP.
@@ -130,7 +130,7 @@ public class ProcedureParser {
 					representedOrg.setAddress(ParserUtilities.readAddressList((NodeList) CCDAConstants.REL_ADDR_EXP.
 								evaluate(represntOrgElement, XPathConstants.NODESET)));
 						
-					representedOrg.setTelecom(ParserUtilities.readDataElementList((NodeList) CCDAConstants.REL_TELECOM_EXP.
+					representedOrg.setTelecom(ParserUtilities.readTelecomList((NodeList) CCDAConstants.REL_TELECOM_EXP.
 								evaluate(represntOrgElement, XPathConstants.NODESET)));
 						
 					representedOrg.setNames( ParserUtilities.readTextContentList((NodeList) CCDAConstants.REL_NAME_EXP.
@@ -203,7 +203,7 @@ public class ProcedureParser {
 			serviceDeliveryLoc.setName(ParserUtilities.readCode((Element) CCDAConstants.REL_PLAY_ENTITY_NAME_EXP.
 					evaluate(serviceDeliveryLocElement, XPathConstants.NODE)));
 			
-			serviceDeliveryLoc.setTelecom(ParserUtilities.readDataElementList((NodeList) CCDAConstants.REL_TELECOM_EXP.
+			serviceDeliveryLoc.setTelecom(ParserUtilities.readTelecomList((NodeList) CCDAConstants.REL_TELECOM_EXP.
 					evaluate(serviceDeliveryLocElement, XPathConstants.NODESET)));
 			serviceDeliveryLoc.setAddress(ParserUtilities.readAddressList((NodeList) CCDAConstants.REL_ADDR_EXP.
 					evaluate(serviceDeliveryLocElement, XPathConstants.NODESET)));

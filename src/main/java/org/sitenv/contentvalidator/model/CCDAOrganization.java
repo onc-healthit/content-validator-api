@@ -9,14 +9,14 @@ public class CCDAOrganization {
 	private static Logger log = Logger.getLogger(CCDAOrganization.class.getName());
 
 	private ArrayList<CCDADataElement> 				names;
-	private ArrayList<CCDADataElement>							telecom;
-	private ArrayList<CCDAAddress>								address;
+	private ArrayList<CCDATelecom>					telecom;
+	private ArrayList<CCDAAddress>					address;
 	
 	public void log() {
 		
 		for(int j = 0; j < telecom.size(); j++) {
-			log.info(" Telecom [" + j + "] = " + telecom.get(j).getValue());
-		}
+			telecom.get(j).log(j);
+		}		
 		
 		for(int j = 0; j < names.size(); j++) {
 			log.info(" Name [" + j + "] = " + names.get(j).getValue());
@@ -26,14 +26,13 @@ public class CCDAOrganization {
 			address.get(k).log();
 		}
 		
-		
 	}
 	
 	public CCDAOrganization()
 	{
 		names = new ArrayList<CCDADataElement>();
 		address = new ArrayList<CCDAAddress>();
-		telecom = new ArrayList<CCDADataElement>();
+		telecom = new ArrayList<CCDATelecom>();
 	}
 
 	public ArrayList<CCDADataElement> getNames() {
@@ -46,11 +45,11 @@ public class CCDAOrganization {
 			this.names = n;
 	}
 
-	public ArrayList<CCDADataElement> getTelecom() {
+	public ArrayList<CCDATelecom> getTelecom() {
 		return telecom;
 	}
 
-	public void setTelecom(ArrayList<CCDADataElement> tels) {
+	public void setTelecom(ArrayList<CCDATelecom> tels) {
 		
 		if(tels != null)
 			this.telecom = tels;

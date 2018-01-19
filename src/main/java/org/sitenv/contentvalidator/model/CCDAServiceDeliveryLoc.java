@@ -11,7 +11,7 @@ public class CCDAServiceDeliveryLoc {
 	private ArrayList<CCDAII>           templateId;
 	private CCDACode                    locationCode;
 	private ArrayList<CCDAAddress>      address;
-	private ArrayList<CCDADataElement>  telecom;
+	private ArrayList<CCDATelecom>  telecom;
 	private CCDADataElement             name;
 	
 	public void log() {
@@ -31,7 +31,7 @@ public class CCDAServiceDeliveryLoc {
 		}
 		
 		for(int l = 0; l < telecom.size(); l++) {
-			log.info(" Telecom [" + l + "] = " + telecom.get(l).getValue());
+			telecom.get(l).log(l);
 		}
 		
 		if(name != null)
@@ -67,11 +67,11 @@ public class CCDAServiceDeliveryLoc {
 			this.address = addr;
 	}
 
-	public ArrayList<CCDADataElement> getTelecom() {
+	public ArrayList<CCDATelecom> getTelecom() {
 		return telecom;
 	}
 
-	public void setTelecom(ArrayList<CCDADataElement> tels) {
+	public void setTelecom(ArrayList<CCDATelecom> tels) {
 		
 		if( tels != null)
 			this.telecom = tels;
@@ -88,7 +88,7 @@ public class CCDAServiceDeliveryLoc {
 	public CCDAServiceDeliveryLoc()
 	{
 		templateId = new ArrayList<CCDAII>();
-		telecom = new ArrayList<CCDADataElement>();
+		telecom = new ArrayList<CCDATelecom>();
 		address = new ArrayList<CCDAAddress>();
 	}
 }

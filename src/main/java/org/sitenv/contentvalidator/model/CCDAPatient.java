@@ -22,7 +22,7 @@ public class CCDAPatient {
 	private ArrayList<CCDACode> raceCodeExt;
 	private CCDACode ethnicity;
 	private CCDACode sex;
-	private ArrayList<CCDADataElement> telecom;
+	private ArrayList<CCDATelecom> telecom;
 	private CCDACode                   adminGender;
 	private CCDACode                   maritalStatus;
 	private CCDACode                   religiousAffiliation;
@@ -69,7 +69,7 @@ public class CCDAPatient {
 		}
 		
 		for(int l = 0; l < telecom.size(); l++) {
-			log.info(" Telecom [" + l + "] = " + telecom.get(l).getValue());
+			telecom.get(l).log(l);
 		}
 		
 		if(adminGender != null) {
@@ -106,11 +106,11 @@ public class CCDAPatient {
 		this.maritalStatus = maritalStatus;
 	}
 
-	public ArrayList<CCDADataElement> getTelecom() {
+	public ArrayList<CCDATelecom> getTelecom() {
 		return telecom;
 	}
 
-	public void setTelecom(ArrayList<CCDADataElement> tels) {
+	public void setTelecom(ArrayList<CCDATelecom> tels) {
 		if(tels != null)
 			this.telecom = tels;
 	}
@@ -237,7 +237,7 @@ public class CCDAPatient {
 		addresses = new ArrayList<CCDAAddress>();
 		raceCodes = new ArrayList<CCDACode>();
 		raceCodeExt = new ArrayList<CCDACode>();
-		telecom = new ArrayList<CCDADataElement>();
+		telecom = new ArrayList<CCDATelecom>();
 		languageCommunication = new ArrayList<CCDAPreferredLanguage>();
 	}
 
@@ -359,12 +359,35 @@ public class CCDAPatient {
 		
 		
 	}
+	
+	public Boolean containsTelecomUseAndValue(CCDATelecom subTelecom) {
+		for(CCDATelecom t : telecom) {
+			//equals is overridden in CCDATelecom
+			if(t.equals(subTelecom)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Boolean containsTelecomValue(CCDATelecom subTelecom) {				
+		if(telecom == null) {
+			return false;
+		}
+		for(CCDATelecom t : telecom) {			
+			if(t.getValueAttribute().equalsIgnoreCase(subTelecom.getValueAttribute())) {
+				return true;
+			}
+		}
+		return false;
+	}	
 
 	public void compare(CCDAPatient patient, ArrayList<ContentValidationResult> results) {
 	
 		compareNames(patient, results);
 		compareMiscellaneous(patient, results);
 		compareRaceAndEthnicity(patient, results);
+		compareTelecoms(patient, results);
 	}
 	
 	private void compareRaceAndEthnicity(CCDAPatient patient, ArrayList<ContentValidationResult> results) {
@@ -604,4 +627,21 @@ public class CCDAPatient {
 			log.info("Submitted and Reference CCDA models have null patient suffix information ");
 		}
 	}
+	
+	private void compareTelecoms(CCDAPatient patient, ArrayList<ContentValidationResult> results) {
+		log.info("Comparing Patient's telecom/@use and telecom/@value");
+		// Compare telecom/@use and telecom/@value
+		for(CCDATelecom tel : telecom) {
+			if(!patient.containsTelecomUseAndValue(tel)) {
+				String errorMessage = "Patient Telecom in the submitted file does not match the expected Telecom. "
+						+ "The following values are expected: "
+						+ "telecom/@use = " + tel.getUseAttribute() 
+						+ " and telecom/@value = " + tel.getValueAttribute();
+				ContentValidationResult rs = new ContentValidationResult(errorMessage, ContentValidationResultLevel.ERROR,
+						"/ClinicalDocument", "0");
+				results.add(rs);
+			}
+		}
+	}	
+	
 }
