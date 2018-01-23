@@ -633,11 +633,11 @@ public class CCDAPatient {
 		// Compare telecom/@use and telecom/@value
 		for(CCDATelecom tel : telecom) {
 			if(!patient.containsTelecomUseAndValue(tel)) {
-				String errorMessage = "Patient Telecom in the submitted file does not match the expected Telecom. "
+				String warningMessage = "Patient Telecom in the submitted file does not match the expected Telecom. "
 						+ "The following values are expected: "
 						+ "telecom/@use = " + tel.getUseAttribute() 
 						+ " and telecom/@value = " + tel.getValueAttribute();
-				ContentValidationResult rs = new ContentValidationResult(errorMessage, ContentValidationResultLevel.ERROR,
+				ContentValidationResult rs = new ContentValidationResult(warningMessage, ContentValidationResultLevel.WARNING,
 						"/ClinicalDocument", "0");
 				results.add(rs);
 			}

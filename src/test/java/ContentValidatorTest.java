@@ -14,6 +14,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.sitenv.contentvalidator.configuration.ScenarioLoader;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.model.CCDARefModel;
 import org.sitenv.contentvalidator.parsers.CCDAParser;
 import org.sitenv.contentvalidator.service.ContentValidatorService;
@@ -156,10 +157,18 @@ public class ContentValidatorTest {
     			resultIndex++;
     	}
     }
-    
+
     private static boolean resultsContainMessage(String searchString, List<ContentValidationResult> results) {
+    	return resultsContainMessage(searchString, results, null);
+    }
+    
+    private static boolean resultsContainMessage(String searchString, List<ContentValidationResult> results, 
+    		ContentValidationResultLevel expectedSeverity) {
     	for(ContentValidationResult curResult: results) {
     		if(curResult.getMessage().contains(searchString)) {
+    			if(expectedSeverity != null && curResult.getContentValidationResultLevel() == expectedSeverity) {
+	        		return true;
+    			}
     			return true;
     		}
     	}
@@ -192,10 +201,9 @@ public class ContentValidatorTest {
 		
 		final String telecomMessage = "Patient Telecom in the submitted file does not match the expected Telecom";
 		assertTrue("The results do not contain the expected message of: " + telecomMessage, 
-				resultsContainMessage(telecomMessage, results));
+				resultsContainMessage(telecomMessage, results, ContentValidationResultLevel.WARNING));
 		
 		printResults(results);
 	}
-			
 	
 }
