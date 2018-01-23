@@ -19,6 +19,7 @@ import org.sitenv.contentvalidator.model.CCDARefModel;
 import org.sitenv.contentvalidator.parsers.CCDAParser;
 import org.sitenv.contentvalidator.service.ContentValidatorService;
 
+@Ignore
 public class ContentValidatorTest {
 
 	private static final boolean LOG_RESULTS_TO_CONSOLE = true;
@@ -175,7 +176,6 @@ public class ContentValidatorTest {
     	return false;
     }
     
-    @Ignore
 	@Test
 	public void stringConversionAndResultsSizeTest() {
 		String ccdaFileAsString = convertCCDAFileToString(DEFAULT_SUBMITTED_CCDA);
@@ -191,7 +191,6 @@ public class ContentValidatorTest {
 						+ System.lineSeparator() + System.lineSeparator());
 	}
 	
-    @Ignore
 	@Test
 	public void TelecomTest() {
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResults(DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA);
