@@ -20,8 +20,8 @@ public class CCDAParticipant {
 		
 		if(address != null)
 			address.log();
-		
-		telecom.log();		
+		if(telecom != null)
+			telecom.log();
 	}
 	
 	public CCDAParticipant()
