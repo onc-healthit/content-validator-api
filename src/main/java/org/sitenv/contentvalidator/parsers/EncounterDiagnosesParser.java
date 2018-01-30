@@ -240,7 +240,7 @@ public class EncounterDiagnosesParser {
 			serviceDeliveryLoc.setName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_PLAY_ENTITY_NAME_EXP.
 					evaluate(serviceDeliveryLocElement, XPathConstants.NODE)));
 			
-			serviceDeliveryLoc.setTelecom(ParserUtilities.readDataElementList((NodeList) CCDAConstants.REL_TELECOM_EXP.
+			serviceDeliveryLoc.setTelecom(ParserUtilities.readTelecomList((NodeList) CCDAConstants.REL_TELECOM_EXP.
 											evaluate(serviceDeliveryLocElement, XPathConstants.NODESET)));
 			
 			serviceDeliveryLoc.setAddress(ParserUtilities.readAddressList((NodeList) CCDAConstants.REL_ADDR_EXP.

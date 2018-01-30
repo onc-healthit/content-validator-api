@@ -10,7 +10,7 @@ public class CCDAParticipant {
 	private CCDADataElement lastName;
 	private CCDADataElement middleName;
 	private CCDAAddress     address;
-	private CCDADataElement telecom;
+	private CCDATelecom 	telecom;
 	
 	public void log()
 	{
@@ -20,9 +20,8 @@ public class CCDAParticipant {
 		
 		if(address != null)
 			address.log();
-		
-		log.info(" Telecom = " + ((telecom==null)?"No Data":telecom.getValue()));
-		
+		if(telecom != null)
+			telecom.log();
 	}
 	
 	public CCDAParticipant()
@@ -62,11 +61,11 @@ public class CCDAParticipant {
 		this.address = address;
 	}
 
-	public CCDADataElement getTelecom() {
+	public CCDATelecom getTelecom() {
 		return telecom;
 	}
 
-	public void setTelecom(CCDADataElement telecom) {
+	public void setTelecom(CCDATelecom telecom) {
 		this.telecom = telecom;
 	}
 

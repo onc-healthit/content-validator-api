@@ -14,13 +14,22 @@ import java.util.HashMap;
 import java.util.Set;
 
 @Component
-public class ContentValidatorService {
+public class ContentValidatorService {		
 	private static Logger log = Logger.getLogger(ContentValidatorService.class.getName());
+	
 	@Autowired
 	private CCDAParser parser;
 	@Resource
 	HashMap<String, CCDARefModel> refModelHashMap;
-
+	
+	public ContentValidatorService() {
+	}
+	
+	public ContentValidatorService(final HashMap<String, CCDARefModel> refModelHashMap) {
+		this.refModelHashMap = refModelHashMap;
+		parser = new CCDAParser();
+	}
+	
 	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName, String ccdaFile) {
 		log.info(" ***** CAME INTO THE REFERENCE VALIDATOR *****");
 		ArrayList<ContentValidationResult> results = new ArrayList<>();

@@ -40,7 +40,7 @@ public class CareTeamMemberParser {
 			readName((Element) CCDAConstants.REL_ASSN_ENTITY_PERSON_NAME.
 	    				evaluate(performerElement, XPathConstants.NODE), participant);
 			
-			participant.setTelecom(ParserUtilities.readDataElement((Element) CCDAConstants.REL_ASSN_ENTITY_TEL_EXP.
+			participant.setTelecom(ParserUtilities.readTelecom((Element) CCDAConstants.REL_ASSN_ENTITY_TEL_EXP.
 					evaluate(performerElement, XPathConstants.NODE)));
 			participantList.add(participant);
 		}

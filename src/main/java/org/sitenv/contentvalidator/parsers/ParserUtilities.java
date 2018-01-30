@@ -658,4 +658,34 @@ public class ParserUtilities {
 		}
 		return address;
 	}
+	
+	public static CCDATelecom readTelecom(Element telecomElement) {
+		CCDATelecom telecom = null;
+		if(telecomElement != null) {
+			telecom = new CCDATelecom();
+			final String useVal = telecomElement.getAttribute("use"); 
+			if(!isEmpty(useVal)) {
+				telecom.setUseAttribute(useVal);
+			}
+			final String valueVal = telecomElement.getAttribute("value");
+			if(!isEmpty(valueVal)) {
+				telecom.setValueAttribute(valueVal);
+			}
+		}
+		return telecom;
+	}
+	
+	public static ArrayList<CCDATelecom> readTelecomList(NodeList telecomNodeList) {
+		ArrayList<CCDATelecom> telecoms = null;
+		if(!isNodeListEmpty(telecomNodeList)) {
+			telecoms = new ArrayList<CCDATelecom>();
+		}
+		Element telecomElement;
+		for(int i = 0; i < telecomNodeList.getLength(); i++) {
+			telecomElement = (Element) telecomNodeList.item(i);
+			telecoms.add(readTelecom(telecomElement));
+		}
+		return telecoms;
+	}	
+	
 }

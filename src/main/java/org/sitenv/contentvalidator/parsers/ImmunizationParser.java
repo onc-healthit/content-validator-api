@@ -92,7 +92,7 @@ public class ImmunizationParser {
 					representedOrg.setAddress(ParserUtilities.readAddressList((NodeList) CCDAConstants.REL_ADDR_EXP.
 							evaluate(represntOrgElement, XPathConstants.NODESET)));
 					
-					representedOrg.setTelecom(ParserUtilities.readDataElementList((NodeList) CCDAConstants.REL_TELECOM_EXP.
+					representedOrg.setTelecom(ParserUtilities.readTelecomList((NodeList) CCDAConstants.REL_TELECOM_EXP.
 							evaluate(represntOrgElement, XPathConstants.NODESET)));
 					
 					representedOrg.setNames( ParserUtilities.readTextContentList((NodeList) CCDAConstants.REL_NAME_EXP.

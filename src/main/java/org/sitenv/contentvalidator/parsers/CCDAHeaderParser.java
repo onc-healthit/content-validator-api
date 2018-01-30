@@ -72,10 +72,10 @@ public class CCDAHeaderParser {
 	    				evaluate(patientRoleElement, XPathConstants.NODE)));
 	            
 	        patient.setLanguageCommunication(readPreferredLanguage((NodeList) CCDAConstants.REL_PATIENT_LANGUAGE_EXP.
-	    				evaluate(patientRoleElement, XPathConstants.NODESET)));	
-	            
-	        patient.setTelecom(ParserUtilities.readDataElementList((NodeList) CCDAConstants.REL_TELECOM_EXP.
-	            					evaluate(patientRoleElement, XPathConstants.NODESET)));
+	    				evaluate(patientRoleElement, XPathConstants.NODESET)));
+	        
+	        patient.setTelecom(ParserUtilities.readTelecomList((NodeList) CCDAConstants.REL_TELECOM_EXP.
+	            		evaluate(patientRoleElement, XPathConstants.NODESET)));
 	   }
 		
 		
