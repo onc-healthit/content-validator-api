@@ -14,6 +14,7 @@ public class CCDARefModel {
 	
 	private CCDAPatient        patient;
 	private CCDACareTeamMember members;
+	private CCDACarePlanSections carePlanSections;
 	private CCDAEncounter      encounter;
 	private CCDAAdmissionDiagnosis admissionDiagnosis;
 	private CCDADischargeDiagnosis dischargeDiagnosis;
@@ -699,6 +700,16 @@ public class CCDARefModel {
 			log.info("Both the Ref Model and the Submitted Patient Data are null ");
 		}
 	}
+	
+	private void compareCarePlanSections(CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {		
+		if(carePlanSections != null && submittedCCDA.getCarePlanSections() != null) {
+			this.carePlanSections.compare(submittedCCDA.getCarePlanSections(), results);
+		} else {
+			log.error("An unexpected programmatic error has occurred where either "
+					+ "carePlanSections is null or submittedCCDA.getCarePlanSections() is null, "
+					+ "when both should have been initialized by CarePlanSectionsParser");
+		}
+	}	
 
 	public Boolean doesObjectiveRequireCCDS(String valObj) {
 		
@@ -827,6 +838,12 @@ public class CCDARefModel {
 		else
 			log.info("No Care Team Members data in the model");
 		
+		if(carePlanSections != null)
+			carePlanSections.log();
+		else
+			log.info("No Care Plan Sections data (" + CCDACarePlanSections.REQUIRED_SECTIONS + ")"
+					+ " available");
+		
 		for(int j = 0; j < udi.size(); j++) {
 			udi.get(j).log();
 			
@@ -864,6 +881,12 @@ public class CCDARefModel {
 	}
 	public void setMembers(CCDACareTeamMember members) {
 		this.members = members;
+	}
+	public CCDACarePlanSections getCarePlanSections() {
+		return carePlanSections;
+	}
+	public void setCarePlanSections(CCDACarePlanSections carePlanSections) {
+		this.carePlanSections = carePlanSections;
 	}
 	public CCDAEncounter getEncounter() {
 		return encounter;
@@ -983,6 +1006,8 @@ public class CCDARefModel {
 		result = prime * result + ((udi == null) ? 0 : udi.hashCode());
 		result = prime * result
 				+ ((vitalSigns == null) ? 0 : vitalSigns.hashCode());
+		result = prime * result
+				+ ((carePlanSections == null) ? 0 : carePlanSections.hashCode()); 
 		return result;
 	}
 	@Override
@@ -1074,6 +1099,12 @@ public class CCDARefModel {
 				return false;
 		} else if (!vitalSigns.equals(other.vitalSigns))
 			return false;
+		if (carePlanSections == null) {
+			if (other.carePlanSections != null)
+				return false;
+		} else if (!carePlanSections.equals(other.carePlanSections))
+			return false;
+		
 		return true;
 	}
 
@@ -1107,6 +1138,9 @@ public class CCDARefModel {
 	{
 		log.info("Comparing Patient Data ");
 		comparePatients(submittedCCDA, results);
+		
+		log.info("Comparing CarePlan Sections");
+		compareCarePlanSections(submittedCCDA, results);
 		
 		log.info("Finished comparison , returning results");
 		
