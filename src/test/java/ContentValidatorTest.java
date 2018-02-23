@@ -21,10 +21,22 @@ import org.sitenv.contentvalidator.service.ContentValidatorService;
 
 @Ignore
 public class ContentValidatorTest {
-
+	
+	private static HashMap<String, CCDARefModel> refModelHashMap = loadAndParseScenariosAndGetRefModelHashMap();	
+	private static ContentValidatorService validator = new ContentValidatorService(refModelHashMap);
+	{
+		println();
+		println("Keys: " + refModelHashMap.keySet());
+		println("Values: " + refModelHashMap.values());
+	}
+	
 	private static final boolean LOG_RESULTS_TO_CONSOLE = true;
 	
 	private static final String DEFAULT_VALIDATION_OBJECTIVE = "170.315_b1_ToC_Amb";
+	private static final String VO_TOC_AMBULATORY = DEFAULT_VALIDATION_OBJECTIVE;
+	private static final String VO_CAREPLAN_AMBULATORY = "170.315_b9_CP_Amb";
+	private static final String VO_CAREPLAN_INPATIENT = "170.315_b9_CP_Inp";
+	
 	/*
 	 * List of scenarios aka reference files
 	 * Note that the key in the map only needs to <i>contain</i> these strings in part of its name. 
@@ -38,8 +50,14 @@ public class ContentValidatorTest {
 	 * 170.315_e1_vdt_amb_sample2, 170.315_b2_ciri__r21_sample1_ds, 170.315_b4_ccds_create_inp_sample2, 170.315_g9_api_access_amb_sample2, 
 	 * 170.315_b2_ciri__r21_sample1_ccd, 170.315_g9_api_access_amb_sample1
 	*/
-	private static final String DEFAULT_REFERENCE_FILENAME = "170.315_b1_toc_amb_sample1_v13.pdf";
 	private static final String LOCAL_SCENARIO_DIRECTORY = "C:/Programming/SITE/scenarios/";
+	private static final String DEFAULT_REFERENCE_FILENAME = "170.315_b1_toc_amb_sample1_v13.pdf";
+	private static final String REF_TOC_AMBULATORY = DEFAULT_REFERENCE_FILENAME;
+	private static final String REF_CAREPLAN_AMBULATORY = "170.315_b9_cp_amb_sample1.xml";
+	private static final String REF_CAREPLAN_INPATIENT = "170.315_b9_cp_inp_sample1.xml";
+	private static final String REF_CAREPLAN_NO_INTERVENTION_OR_HEALTH_STATUS = REF_TOC_AMBULATORY;
+	private static final String REF_CAREPLAN_NO_INTERVENTION_HAS_HEALTH_STATUS = "cp_NoInterventionsHasHealthStatus.xml";
+	private static final String REF_CAREPLAN_NO_HEALTH_STATUS_HAS_INTERVENTION = "cp_NoHealthStatusHasIntervention.xml";
 	
 	/**
 	 * One example of many related issues:
@@ -50,20 +68,26 @@ public class ContentValidatorTest {
 	 * 	<telecom value="tel:+1(555)-111-1234" use="HP"/> <!-- use is HP instead of MC -dbTest -->
 	 * 	<telecom value="tel:+1(555)-112-1544" use="HP"/> <!-- value is 964-4466 instead of 112-1544 -dbTest -->
 	*/
-	private static final int HAS_TELECOM_MISMATCHES = 0;
+	private static final int SUB_HAS_TELECOM_MISMATCHES = 0;
+	private static final int SUB_HAS_INTERVENTIONS_AND_HEALTH_STATUS_AND_IS_CP_AMB = 1;
+	private static final int SUB_MISSING_INTERVENTIONS_AND_HAS_HEALTH_STATUS_AND_IS_CP_AMB = 2;
+	private static final int SUB_MISSING_HEALTH_STATUS_AND_HAS_INTERVENTIONS_AND_IS_CP_AMB = 3;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
 		try {
 			SUBMITTED_CCDA = new URI[] {
 					ContentValidatorTest.class.getResource("/170.315_b1_toc_amb_sample1_Submitted_T1.xml").toURI(),
+					ContentValidatorTest.class.getResource("/170.315_b9_cp_amb_sample1_v5.xml").toURI(),
+					ContentValidatorTest.class.getResource("/170.315_b9_cp_amb_sample1_v5_Remove_Interventions.xml").toURI(),
+					ContentValidatorTest.class.getResource("/170.315_b9_cp_amb_sample1_v5_Remove_HealthStatus.xml").toURI()					
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
 		}
 	}
 	
-	private static final URI DEFAULT_SUBMITTED_CCDA = SUBMITTED_CCDA[HAS_TELECOM_MISMATCHES];
+	private static final URI DEFAULT_SUBMITTED_CCDA = SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES];
 	
 	private static void println() {
 		if (LOG_RESULTS_TO_CONSOLE) System.out.println();		
@@ -76,7 +100,14 @@ public class ContentValidatorTest {
 	
 	private static void print(String message) {
 		if (LOG_RESULTS_TO_CONSOLE) System.out.print(message);		
-	}	
+	}
+	
+	private static void printHeader(String title) {
+		println();
+		println("------------------------RUNNING TEST-------------------------");
+		println("********************" + title + "********************");
+		println();
+	}
 	
 	private static String convertCCDAFileToString(URI ccdaFileURI) {
 		StringBuilder sb = new StringBuilder();
@@ -105,12 +136,6 @@ public class ContentValidatorTest {
 	
 	private static ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String validationObjective, 
 			String referenceFileName, String ccdaFileAsString) {
-		
-		HashMap<String, CCDARefModel> refModelHashMap = loadAndParseScenariosAndGetRefModelHashMap();
-		println("Keys: " + refModelHashMap.keySet());
-		println("Values: " + refModelHashMap.values());
-		
-		ContentValidatorService validator = new ContentValidatorService(refModelHashMap);
 		return validator.validate(validationObjective, referenceFileName, ccdaFileAsString);
 	}
 
@@ -178,6 +203,8 @@ public class ContentValidatorTest {
     
 	@Test
 	public void stringConversionAndResultsSizeTest() {
+		printHeader("stringConversionAndResultsSizeTest");
+		
 		String ccdaFileAsString = convertCCDAFileToString(DEFAULT_SUBMITTED_CCDA);
 		println("submitted ccdaFileAsString: " + ccdaFileAsString);
 		assertFalse(
@@ -187,12 +214,16 @@ public class ContentValidatorTest {
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResults(DEFAULT_REFERENCE_FILENAME, ccdaFileAsString);
 		assertFalse("No results were returned", results.isEmpty());
 		
+		printResults(results);
+		
 		println("***************** No Exceptions were thrown during the test******************"
 						+ System.lineSeparator() + System.lineSeparator());
 	}
 	
 	@Test
 	public void TelecomTest() {
+		printHeader("TelecomTest");
+		
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResults(DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA);
 		assertFalse("No results were returned", results.isEmpty());
 		println("FINAL RESULTS");
@@ -203,6 +234,151 @@ public class ContentValidatorTest {
 				resultsContainMessage(telecomMessage, results, ContentValidationResultLevel.WARNING));
 		
 		printResults(results);
+	}
+	
+	@Test
+	public void CarePlanSectionsTest() {
+		final String healthStatusWarning = "A Care Plan section is missing: The scenario contains the Health Status Evaluations and Outcomes Section 2.16.840.1.113883.10.20.22.2.61, "
+				+ "but it was not found in the submitted document";
+		final String interventionsWarning = "A Care Plan section is missing: The scenario contains the Interventions Section (V3) 2.16.840.1.113883.10.20.21.2.3:2015-08-01, "
+				+ "but it was not found in the submitted document";
+		String carePlanMessage = "A Care Plan section is missing";
+		
+		ArrayList<ContentValidationResult> results;
+		
+		// basic and altered sub tests
+		
+		printHeader("unrelated objective, and, ref is missing sections so not required in sub, "
+				+ "expect no related warnings for missing cp sections");
+		results = validateDocumentAndReturnResults(DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA);		
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		
+		printHeader("cp amb, has both in ref and sub, expect no related warnings for missing cp sections");
+		results = validateDocumentAndReturnResults(VO_CAREPLAN_AMBULATORY, REF_CAREPLAN_AMBULATORY,
+				SUBMITTED_CCDA[SUB_HAS_INTERVENTIONS_AND_HEALTH_STATUS_AND_IS_CP_AMB]);
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+
+		printHeader("cp inp, has both in ref and sub, expect no related warnings for missing cp sections");
+		results = validateDocumentAndReturnResults(VO_CAREPLAN_INPATIENT, REF_CAREPLAN_INPATIENT,
+				SUBMITTED_CCDA[SUB_HAS_INTERVENTIONS_AND_HEALTH_STATUS_AND_IS_CP_AMB]);
+		printResults(results);
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		
+		printHeader("cp amb, missing interventions, has health status, expect a related warning for missing interventions section");
+		results = validateDocumentAndReturnResults(VO_CAREPLAN_AMBULATORY, REF_CAREPLAN_AMBULATORY,
+				SUBMITTED_CCDA[SUB_MISSING_INTERVENTIONS_AND_HAS_HEALTH_STATUS_AND_IS_CP_AMB]);
+		printResults(results);
+		carePlanMessage = interventionsWarning;
+		assertTrue("The results do not contain the expected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		carePlanMessage = healthStatusWarning;
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));		
+		
+		printHeader("unrelated objective, missing interventions, has health status, HOWEVER, due to objective expect no related warning");
+		results = validateDocumentAndReturnResults(VO_TOC_AMBULATORY, REF_CAREPLAN_AMBULATORY,
+				SUBMITTED_CCDA[SUB_MISSING_INTERVENTIONS_AND_HAS_HEALTH_STATUS_AND_IS_CP_AMB]);
+		printResults(results);
+		carePlanMessage = interventionsWarning;
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		carePlanMessage = healthStatusWarning;
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		
+		
+		printHeader("cp amb, missing interventions, has health status, expect a related warning for missing interventions section");
+		results = validateDocumentAndReturnResults(VO_CAREPLAN_INPATIENT, REF_CAREPLAN_AMBULATORY,
+				SUBMITTED_CCDA[SUB_MISSING_HEALTH_STATUS_AND_HAS_INTERVENTIONS_AND_IS_CP_AMB]);
+		printResults(results);
+		carePlanMessage = healthStatusWarning;
+		assertTrue("The results do not contain the expected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		carePlanMessage = interventionsWarning;
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));				
+		 
+		printHeader("cp amb, has both interventions and health status in ref, neither in submitted "
+				+ "expect a related warning for missing both sections");
+		results = validateDocumentAndReturnResults(VO_CAREPLAN_AMBULATORY, REF_CAREPLAN_AMBULATORY,
+				SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES]);
+		printResults(results);
+		carePlanMessage = interventionsWarning;
+		assertTrue("The results do not contain the expected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		carePlanMessage = healthStatusWarning;
+		assertTrue("The results do not contain the expected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));		
+		
+		// altered reference tests
+		
+		printHeader("cp amb, Ref does NOT have interventions or health status, both are in submitted "
+				+ "expect no related warnings for missing both sections - "
+				+ "The scenario (ref) does not have any suggested Care Plan sections thus no requirment is enforced");
+		results = validateDocumentAndReturnResults(VO_CAREPLAN_AMBULATORY, REF_CAREPLAN_NO_INTERVENTION_OR_HEALTH_STATUS,
+				SUBMITTED_CCDA[SUB_HAS_INTERVENTIONS_AND_HEALTH_STATUS_AND_IS_CP_AMB]);
+		printResults(results);
+		carePlanMessage = interventionsWarning;
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		carePlanMessage = healthStatusWarning;
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		
+		printHeader("cp amb, Neither the Ref Nor the Submitted file have interventions or health status "
+				+ "expect no related warnings for missing both sections - "
+				+ "The data for Both the Ref Model and the Submitted Care Plan Sections is null. No requirment needs to be enforced");
+		results = validateDocumentAndReturnResults(VO_CAREPLAN_AMBULATORY, REF_CAREPLAN_NO_INTERVENTION_OR_HEALTH_STATUS,
+				SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES]);
+		printResults(results);
+		carePlanMessage = interventionsWarning;
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		carePlanMessage = healthStatusWarning;
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		
+		printHeader("ref is missing interventions but has health status / "
+				+ "submitted is missing interventions and is missing health status - " +
+				"since ref has no interventions, we only enforce the missing health status");
+		results = validateDocumentAndReturnResults(VO_CAREPLAN_INPATIENT, REF_CAREPLAN_NO_INTERVENTION_HAS_HEALTH_STATUS,
+				SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES]);
+		printResults(results);
+		carePlanMessage = healthStatusWarning;
+		assertTrue("The results do not contain the expected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		carePlanMessage = interventionsWarning;
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		
+		printHeader("ref is missing health status but has interventions / "
+				+ "submitted is missing health status and is missing interventions - " +
+				"since ref has no health status, we only enforce the missing interventions");
+		results = validateDocumentAndReturnResults(VO_CAREPLAN_INPATIENT, REF_CAREPLAN_NO_HEALTH_STATUS_HAS_INTERVENTION,
+				SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES]);
+		printResults(results);
+		carePlanMessage = interventionsWarning;
+		assertTrue("The results do not contain the expected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		carePlanMessage = healthStatusWarning;
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		
+		printHeader("ref is missing both health status and interventions / "
+				+ "submitted has health status only. " +
+				" Since ref has no neither section, interventions is not enforced for being missing");
+		results = validateDocumentAndReturnResults(VO_CAREPLAN_AMBULATORY, REF_CAREPLAN_NO_INTERVENTION_OR_HEALTH_STATUS,
+				SUBMITTED_CCDA[SUB_MISSING_INTERVENTIONS_AND_HAS_HEALTH_STATUS_AND_IS_CP_AMB]);
+		printResults(results);
+		carePlanMessage = interventionsWarning;
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+		carePlanMessage = healthStatusWarning;
+		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));		
 	}
 	
 }

@@ -130,6 +130,10 @@ public class CCDAConstants {
 	static public XPathExpression REL_TOBACCO_USE_EXP;
 	static public XPathExpression REL_BIRTHSEX_OBS_EXP;
 	
+	// Care Plan
+	static public XPathExpression INTERVENTIONS_SECTION_V3_EXP;
+	static public XPathExpression HEALTH_STATUS_EVALUATIONS_AND_OUTCOMES_SECTION_EXP;
+	
 	//Generic
 	static public XPathExpression REL_ENTRY_RELSHIP_ACT_EXP;
 	static public XPathExpression REL_ENTRY_EXP;
@@ -144,6 +148,8 @@ public class CCDAConstants {
 	
 	static public String RACE_EL_NAME = "raceCode"; 
 	
+	public static final String DEFAULT_XPATH = "/ClinicalDocument";
+	public static final String DEFAULT_LINE_NUMBER = "0";
 	
 	private CCDAConstants()
 	{
@@ -263,7 +269,10 @@ public class CCDAConstants {
 			REL_LOW_EXP = CCDAConstants.CCDAXPATH.compile("./low[not(@nullFlavor)]");
 			REL_HIGH_EXP = CCDAConstants.CCDAXPATH.compile("./high[not(@nullFlavor)]");
 			
-			
+			INTERVENTIONS_SECTION_V3_EXP = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component"
+					+ "/section[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.21.2.3' and @extension='2015-08-01']]");			
+			HEALTH_STATUS_EVALUATIONS_AND_OUTCOMES_SECTION_EXP = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component"
+					+ "/section[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.2.61']]");			
 			
 			REL_ACT_ENTRY_EXP = CCDAConstants.CCDAXPATH.compile("./entry/act[not(@nullFlavor)]");
 			REL_ENTRY_EXP = CCDAConstants.CCDAXPATH.compile("./entry[not(@nullFlavor)]");

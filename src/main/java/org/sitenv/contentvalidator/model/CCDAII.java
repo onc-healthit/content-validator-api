@@ -11,6 +11,19 @@ public class CCDAII extends CCDADataElement{
 	private String  rootValue;
 	private String  extValue;
 	
+	public CCDAII() {
+		
+	}
+	
+	public CCDAII(String rootValue) {
+		this.rootValue = rootValue;
+	}
+	
+	public CCDAII(String rootValue, String extValue) {
+		this(rootValue);
+		this.extValue = extValue;
+	}
+	
 	public Boolean isPartOf(ArrayList<CCDAII> list) {
 		
 		for( CCDAII item : list) {
@@ -64,7 +77,4 @@ public class CCDAII extends CCDADataElement{
 		this.extValue = extValue;
 	}
 
-	public CCDAII()
-	{
-	}
 }
