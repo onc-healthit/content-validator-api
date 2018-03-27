@@ -36,6 +36,8 @@ public class ContentValidatorTest {
 	private static final String VO_TOC_AMBULATORY = DEFAULT_VALIDATION_OBJECTIVE;
 	private static final String VO_CAREPLAN_AMBULATORY = "170.315_b9_CP_Amb";
 	private static final String VO_CAREPLAN_INPATIENT = "170.315_b9_CP_Inp";
+	private static final String VO_E1_VDT_AMBULATORY = "170.315_e1_VDT_Amb";
+	private static final String VO_E1_VDT_INPATIENT = "170.315_e1_VDT_Inp";	
 	
 	/*
 	 * List of scenarios aka reference files
@@ -58,6 +60,8 @@ public class ContentValidatorTest {
 	private static final String REF_CAREPLAN_NO_INTERVENTION_OR_HEALTH_STATUS = REF_TOC_AMBULATORY;
 	private static final String REF_CAREPLAN_NO_INTERVENTION_HAS_HEALTH_STATUS = "cp_NoInterventionsHasHealthStatus.xml";
 	private static final String REF_CAREPLAN_NO_HEALTH_STATUS_HAS_INTERVENTION = "cp_NoHealthStatusHasIntervention.xml";
+	private static final String REF_E1_VDT_AMBULATORY = "170.315_e1_vdt_amb_sample1.xml";
+	private static final String REF_E1_VDT_INPATIENT = "170.315_e1_vdt_inp_sample2.xml";	
 	
 	/**
 	 * One example of many related issues:
@@ -72,6 +76,7 @@ public class ContentValidatorTest {
 	private static final int SUB_HAS_INTERVENTIONS_AND_HEALTH_STATUS_AND_IS_CP_AMB = 1;
 	private static final int SUB_MISSING_INTERVENTIONS_AND_HAS_HEALTH_STATUS_AND_IS_CP_AMB = 2;
 	private static final int SUB_MISSING_HEALTH_STATUS_AND_HAS_INTERVENTIONS_AND_IS_CP_AMB = 3;
+	private static final int SUB_NT_CCDS_SAMPLE1_R21_HAS_ENCOUNTER_DIAGNOSIS = 4;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -80,7 +85,8 @@ public class ContentValidatorTest {
 					ContentValidatorTest.class.getResource("/170.315_b1_toc_amb_sample1_Submitted_T1.xml").toURI(),
 					ContentValidatorTest.class.getResource("/170.315_b9_cp_amb_sample1_v5.xml").toURI(),
 					ContentValidatorTest.class.getResource("/170.315_b9_cp_amb_sample1_v5_Remove_Interventions.xml").toURI(),
-					ContentValidatorTest.class.getResource("/170.315_b9_cp_amb_sample1_v5_Remove_HealthStatus.xml").toURI()					
+					ContentValidatorTest.class.getResource("/170.315_b9_cp_amb_sample1_v5_Remove_HealthStatus.xml").toURI(),
+					ContentValidatorTest.class.getResource("/NT_CCDS_Sample1_r21_v4.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -221,8 +227,8 @@ public class ContentValidatorTest {
 	}
 	
 	@Test
-	public void TelecomTest() {
-		printHeader("TelecomTest");
+	public void telecomTest() {
+		printHeader("telecomTest");
 		
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResults(DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA);
 		assertFalse("No results were returned", results.isEmpty());
@@ -237,7 +243,9 @@ public class ContentValidatorTest {
 	}
 	
 	@Test
-	public void CarePlanSectionsTest() {
+	public void carePlanSectionsTest() {
+		printHeader("carePlanSectionsTest");
+		
 		final String healthStatusWarning = "A Care Plan section is missing: The scenario contains the Health Status Evaluations and Outcomes Section 2.16.840.1.113883.10.20.22.2.61, "
 				+ "but it was not found in the submitted document";
 		final String interventionsWarning = "A Care Plan section is missing: The scenario contains the Interventions Section (V3) 2.16.840.1.113883.10.20.21.2.3:2015-08-01, "
@@ -379,6 +387,51 @@ public class ContentValidatorTest {
 		carePlanMessage = healthStatusWarning;
 		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
 				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));		
+	}
+
+	@Test
+	public void encounterDiagnosisTest() {
+		printHeader("encounterDiagnosisTest");
+		
+		// has an objective which should NOT validate encounter diagnosis in ANY case, expect NO related error(s)
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResults(VO_E1_VDT_AMBULATORY, REF_E1_VDT_AMBULATORY ,
+				SUBMITTED_CCDA[SUB_NT_CCDS_SAMPLE1_R21_HAS_ENCOUNTER_DIAGNOSIS]);
+		assertFalse("No results were returned", results.isEmpty());
+		println("FINAL RESULTS");
+		println("No of Entries = " + results.size());
+	
+		final String encounterDiagnosisMessage = "Encounter Diagnosis data";
+		assertFalse("The results contain the UNexpected message of: " + encounterDiagnosisMessage, 
+				resultsContainMessage(encounterDiagnosisMessage, results));
+		printResults(results);
+		
+		results = validateDocumentAndReturnResults(VO_E1_VDT_INPATIENT, REF_E1_VDT_INPATIENT ,
+				SUBMITTED_CCDA[SUB_NT_CCDS_SAMPLE1_R21_HAS_ENCOUNTER_DIAGNOSIS]);
+		assertFalse("The results contain the UNexpected message of: " + encounterDiagnosisMessage, 
+				resultsContainMessage(encounterDiagnosisMessage, results));
+		printResults(results);
+		
+		// has an objective which validates encounter diagnosis, expect related error(s)
+		results = validateDocumentAndReturnResults(VO_TOC_AMBULATORY, REF_E1_VDT_AMBULATORY ,
+				SUBMITTED_CCDA[SUB_NT_CCDS_SAMPLE1_R21_HAS_ENCOUNTER_DIAGNOSIS]);
+		assertTrue("The results do not contain the expected message of: " + encounterDiagnosisMessage, 
+				resultsContainMessage(encounterDiagnosisMessage, results));
+		printResults(results);
+		
+		results = validateDocumentAndReturnResults(VO_TOC_AMBULATORY, REF_E1_VDT_AMBULATORY ,
+				SUBMITTED_CCDA[SUB_NT_CCDS_SAMPLE1_R21_HAS_ENCOUNTER_DIAGNOSIS]);
+		assertTrue("The results do not contain the expected message of: " + encounterDiagnosisMessage, 
+				resultsContainMessage(encounterDiagnosisMessage, results));
+		printResults(results);
+		
+		// has an objective which can validate encounter diagnosis in instructed cases (CarePlan), expect related error(s)
+		// e.g. 170.315_b1_ToC_Amb, 170.315_b1_ToC_Inp, 170.315_b4_CCDS_Amb, 
+		//		170.315_b4_CCDS_Inp, 170.315_b6_DE_Amb, 170.315_b6_DE_Inp
+		results = validateDocumentAndReturnResults(VO_CAREPLAN_INPATIENT, REF_E1_VDT_AMBULATORY ,
+				SUBMITTED_CCDA[SUB_NT_CCDS_SAMPLE1_R21_HAS_ENCOUNTER_DIAGNOSIS]);
+		assertFalse("The results contain the UNexpected message of: " + encounterDiagnosisMessage, 
+				resultsContainMessage(encounterDiagnosisMessage, results));
+		printResults(results);
 	}
 	
 }
