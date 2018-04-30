@@ -3,6 +3,8 @@ package org.sitenv.contentvalidator.model;
 import org.apache.log4j.Logger;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.parsers.CCDAConstants;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,9 +35,43 @@ public class CCDARefModel {
 	private CCDAHealthConcerns hcs;
 	private CCDAMedicalEquipment medEquipments;
 	private ArrayList<CCDAUDI> udi;
+	private CCDAHeaderElements header;
+	private ArrayList<CCDAII>  ccdTemplates;
+	private ArrayList<CCDAII>  dsTemplates;
+	private ArrayList<CCDAII>  rnTemplates;
+	private ArrayList<CCDAII>  cpTemplates;
 	
+	public CCDAHeaderElements getHeader() {
+		return header;
+	}
+
+	public void setHeader(CCDAHeaderElements header) {
+		this.header = header;
+	}
+
+	public void setSocialHistory(CCDASocialHistory socialHistory) {
+		this.socialHistory = socialHistory;
+	}
+
 	public CCDARefModel() {
 		udi = new ArrayList<CCDAUDI>();
+		
+		ccdTemplates = new ArrayList<CCDAII>();
+		ccdTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+		ccdTemplates.add(new CCDAII(CCDAConstants.CCD_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+		
+		dsTemplates = new ArrayList<CCDAII>();
+		dsTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+		dsTemplates.add(new CCDAII(CCDAConstants.DS_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+
+		rnTemplates = new ArrayList<CCDAII>();
+		rnTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+		rnTemplates.add(new CCDAII(CCDAConstants.RN_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+
+		cpTemplates = new ArrayList<CCDAII>();
+		cpTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+		cpTemplates.add(new CCDAII(CCDAConstants.CP_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+
 	}
 	
 	public ArrayList<ContentValidationResult> compare(String validationObjective, CCDARefModel submittedCCDA) {
@@ -70,8 +106,126 @@ public class CCDARefModel {
 		log.info(" Compare non CCDS Structured Data ");
 		compareNonCCDSStructuredData(validationObjective, submittedCCDA, results);
 		
+		validateDocElements(validationObjective,submittedCCDA, results);
+		
 		log.info(" Total Number of Content Validation Issues " + results.size());
 		return results;
+	}
+	
+	public void validateDocElements(String valObj, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) 
+	{
+		if(valObj.equalsIgnoreCase("170.315_b1_ToC_Amb") ||
+				valObj.equalsIgnoreCase("170.315_b4_CCDS_Amb") ) 
+				 
+		{
+			// Validate it is one of CCD/RN
+			String elementName = "Clinical Document Header ";
+			ArrayList<ContentValidationResult> ccdResults = new ArrayList<ContentValidationResult>();
+			ArrayList<ContentValidationResult> rnResults = new ArrayList<ContentValidationResult>();
+			
+			ParserUtilities.compareTemplateIds(ccdTemplates, submittedCCDA.getHeader().getDocTemplates(), ccdResults, elementName);
+			ParserUtilities.compareTemplateIds(rnTemplates, submittedCCDA.getHeader().getDocTemplates(), rnResults, elementName);	
+			
+			if( (ccdResults.size() == 0) ||
+				(rnResults.size() == 0) )
+			{
+				// Doc Type requirement is met.
+				return;
+			}
+			else 
+			{
+				//Add the Errors to Result.
+				ContentValidationResult rs = new ContentValidationResult("The scenario requires the submitted document type to be either a Continuity of Care Document, or a Referral Note, but the submitted C-CDA does not contain the relevant template Ids.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+				log.info(" Scenario requires correct document type, but submitted CCDA does not have the right document type.");
+			}
+		}
+		else if(valObj.equalsIgnoreCase("170.315_b1_ToC_Inp") ||
+				valObj.equalsIgnoreCase("170.315_b4_CCDS_Inp") )
+		{
+			// Validate it is one of CCD/RN/DS
+			String elementName = "Clinical Document Header ";
+			ArrayList<ContentValidationResult> ccdResults = new ArrayList<ContentValidationResult>();
+			ArrayList<ContentValidationResult> rnResults = new ArrayList<ContentValidationResult>();
+			ArrayList<ContentValidationResult> dsResults = new ArrayList<ContentValidationResult>();
+
+			ParserUtilities.compareTemplateIds(ccdTemplates, submittedCCDA.getHeader().getDocTemplates(), ccdResults, elementName);
+			ParserUtilities.compareTemplateIds(rnTemplates, submittedCCDA.getHeader().getDocTemplates(), rnResults, elementName);	
+			ParserUtilities.compareTemplateIds(dsTemplates, submittedCCDA.getHeader().getDocTemplates(), dsResults, elementName);
+
+			if( (ccdResults.size() == 0) ||
+					(rnResults.size() == 0) ||
+					(dsResults.size() == 0))
+			{
+				// Doc Type requirement is met.
+				return;
+			}
+			else 
+			{
+				//Add the Errors to Result.
+				ContentValidationResult rs = new ContentValidationResult("The scenario requires the submitted document type to be either a Continuity of Care Document, or a Referral Note or a Discharge Summary, but the submitted C-CDA does not contain the relevant template Ids.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+				log.info(" Scenario requires correct document type, but submitted CCDA does not have the right document type.");
+			}
+		}
+		else if(valObj.equalsIgnoreCase("170.315_b2_CIRI_Amb") || 
+				valObj.equalsIgnoreCase("170.315_b2_CIRI_Inp") ||				
+				valObj.equalsIgnoreCase("170.315_b6_DE_Amb") ||
+				valObj.equalsIgnoreCase("170.315_b6_DE_Inp") ||
+			//	valObj.equalsIgnoreCase("170.315_b7_DS4P_Amb") || 
+			//	valObj.equalsIgnoreCase("170.315_b7_DS4P_Inp") ||
+			//	valObj.equalsIgnoreCase("170.315_b8_DS4P_Amb") || 
+			//	valObj.equalsIgnoreCase("170.315_b8_DS4P_Inp") ||
+				valObj.equalsIgnoreCase("170.315_e1_VDT_Amb") ||
+				valObj.equalsIgnoreCase("170.315_e1_VDT_Inp") )
+			//	valObj.equalsIgnoreCase("170.315_g9_APIAccess_Amb") || 
+			//	valObj.equalsIgnoreCase("170.315_g9_APIAccess_Inp") )
+		{
+			// Validate for CCD
+			String elementName = "Clinical Document Header ";
+			ArrayList<ContentValidationResult> ccdResults = new ArrayList<ContentValidationResult>();
+			
+			ParserUtilities.compareTemplateIds(ccdTemplates, submittedCCDA.getHeader().getDocTemplates(), ccdResults, elementName);	
+			
+			if( (ccdResults.size() == 0))
+			{
+				// Doc Type requirement is met.
+				return;
+			}
+			else 
+			{
+				//Add the Errors to Result.
+				ContentValidationResult rs = new ContentValidationResult("The scenario requires the submitted document type to be a Continuity of Care Document, but the submitted C-CDA does not contain the relevant template Ids.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+				log.info(" Scenario requires correct document type, but submitted CCDA does not have the right document type.");
+			}
+		}
+		else if(valObj.equalsIgnoreCase("170.315_b9_CP_Amb") || 
+				valObj.equalsIgnoreCase("170.315_b9_CP_Inp") )
+		{
+			// Validate for CP
+			String elementName = "Clinical Document Header ";
+			ArrayList<ContentValidationResult> cpResults = new ArrayList<ContentValidationResult>();
+			
+			ParserUtilities.compareTemplateIds(cpTemplates, submittedCCDA.getHeader().getDocTemplates(), cpResults, elementName);	
+			
+			if( (cpResults.size() == 0))
+			{
+				// Doc Type requirement is met.
+				return;
+			}
+			else 
+			{
+				//Add the Errors to Result.
+				ContentValidationResult rs = new ContentValidationResult("The scenario requires the submitted document type to be a Care Plan Document, but the submitted C-CDA does not contain the relevant template Ids.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+				log.info(" Scenario requires correct document type, but submitted CCDA does not have the right document type.");
+			}
+		}
+		else
+		{
+			return;
+		}
 	}
 	
 	public void compareCCDS(String validationObjective, CCDARefModel submittedCCDA,ArrayList<ContentValidationResult> results) 
@@ -863,6 +1017,9 @@ public class CCDARefModel {
 		
 		if(dischargeDiagnosis != null)
 			dischargeDiagnosis.log();
+		
+		if(header != null)
+			header.log();
 	}
 	
 	public CCDAAdmissionDiagnosis getAdmissionDiagnosis() {

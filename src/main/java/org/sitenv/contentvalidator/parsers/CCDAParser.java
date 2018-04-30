@@ -41,6 +41,7 @@ public class CCDAParser {
 			CCDARefModel model = new CCDARefModel();
 			
 			model.setPatient(CCDAHeaderParser.getPatient(doc));
+			model.setHeader(CCDAHeaderParser.getHeaderElements(doc));
 			CCDABodyParser.parseBody(doc, model);
 		
 			log.info("Returning Parsed Model");

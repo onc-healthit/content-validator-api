@@ -13,6 +13,8 @@ public class CCDAConstants {
     private final static CCDAConstants constants = new CCDAConstants(); 
     
 	static public XPath CCDAXPATH;
+	static public XPathExpression DOC_TEMPLATE_EXP;
+	static public XPathExpression DOC_TYPE_EXP;
 	static public XPathExpression PATIENT_ROLE_EXP;
 	static public XPathExpression REL_ADDR_EXP;
 	static public XPathExpression REL_STREET_ADDR1_EXP;
@@ -151,6 +153,18 @@ public class CCDAConstants {
 	public static final String DEFAULT_XPATH = "/ClinicalDocument";
 	public static final String DEFAULT_LINE_NUMBER = "0";
 	
+	public static final String US_REALM_TEMPLATE = "2.16.840.1.113883.10.20.22.1.1";
+	public static final String CCDA_2015_AUG_EXT = "2015-08-01";
+	public static final String CCD_TEMPLATE = "2.16.840.1.113883.10.20.22.1.2";
+	public static final String CCD_CODE = "34133-9";
+	public static final String DS_TEMPLATE = "2.16.840.1.113883.10.20.22.1.8";
+	public static final String DS_CODE = "18842-5";
+	public static final String RN_TEMPLATE = "2.16.840.1.113883.10.20.22.1.14";
+	public static final String RN_CODE = "57133-1";
+	public static final String CP_TEMPLATE = "2.16.840.1.113883.10.20.22.1.15";
+	public static final String CP_CODE = "52521-2";
+	
+	
 	private CCDAConstants()
 	{
 		initialize();
@@ -167,6 +181,8 @@ public class CCDAConstants {
 		
 		try {
 			
+			DOC_TEMPLATE_EXP = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/templateId[not(@nullFlavor)]");
+			DOC_TYPE_EXP = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/code[not(@nullFlavor)]");
 			PATIENT_ROLE_EXP = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/recordTarget/patientRole[not(@nullFlavor)]");
 			REL_ADDR_EXP = CCDAConstants.CCDAXPATH.compile("./addr[not(@nullFlavor)]");
 			REL_STREET_ADDR1_EXP = CCDAConstants.CCDAXPATH.compile("./streetAddressLine[not(@nullFlavor)]");
