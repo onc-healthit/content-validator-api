@@ -45,7 +45,7 @@ public class CCDAParser {
 			CCDABodyParser.parseBody(doc, model);
 		
 			log.info("Returning Parsed Model");
-			model.log();
+			// model.log();
 			
 			return model;
 		} catch (ParserConfigurationException e1) {

@@ -22,6 +22,27 @@ public class ProblemParser {
     	
     	log.info(" *** Parsing Problems *** ");
     	model.setProblem(retrieveProblemDetails(doc));	
+    	if( model.getProblem() != null)
+    	{
+    		model.getProblem().setPastIllnessProblems(readPastIllnessProblems(doc));
+    	}
+	}
+    
+    public static ArrayList<CCDAProblemObs> readPastIllnessProblems(Document doc) throws XPathExpressionException
+	{
+    	ArrayList<CCDAProblemObs> probs = new ArrayList<CCDAProblemObs>();
+    	
+    	Element sectionElement = (Element) CCDAConstants.PAST_ILLNESS_EXP.evaluate(doc, XPathConstants.NODE);
+		
+		if(sectionElement != null)
+		{
+			log.info(" Found Past Illness Section ");
+			
+			probs = readProblemObservation((NodeList) CCDAConstants.PAST_ILLNESS_PROBLEM_OBS_EXPRESSION.
+					evaluate(sectionElement, XPathConstants.NODESET));
+		}
+    	
+    	return probs;
 	}
 	
 	public static CCDAProblem retrieveProblemDetails(Document doc) throws XPathExpressionException
