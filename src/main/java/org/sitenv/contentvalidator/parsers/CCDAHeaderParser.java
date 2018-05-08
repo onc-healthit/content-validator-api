@@ -3,6 +3,7 @@ package org.sitenv.contentvalidator.parsers;
 import org.apache.log4j.Logger;
 import org.sitenv.contentvalidator.model.CCDACode;
 import org.sitenv.contentvalidator.model.CCDADataElement;
+import org.sitenv.contentvalidator.model.CCDAHeaderElements;
 import org.sitenv.contentvalidator.model.CCDAPatient;
 import org.sitenv.contentvalidator.model.CCDAPreferredLanguage;
 import org.w3c.dom.Document;
@@ -18,6 +19,18 @@ public class CCDAHeaderParser {
 	
 	private static Logger log = Logger.getLogger(CCDAHeaderParser.class.getName());
 
+	static public CCDAHeaderElements getHeaderElements(Document doc) throws XPathExpressionException {
+		
+		CCDAHeaderElements header = new CCDAHeaderElements();
+		
+		header.setDocTemplates(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.DOC_TEMPLATE_EXP.
+				evaluate(doc, XPathConstants.NODESET)));
+
+		header.setDocCode(ParserUtilities.readCode((Element)CCDAConstants.DOC_TYPE_EXP.evaluate(doc, XPathConstants.NODE)));
+		
+		return header;
+	}
+	
 	static public CCDAPatient getPatient(Document doc) throws XPathExpressionException{
 		
 		CCDAPatient patient = null;

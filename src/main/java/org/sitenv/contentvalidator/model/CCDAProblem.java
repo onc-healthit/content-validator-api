@@ -16,7 +16,16 @@ public class CCDAProblem {
 	private ArrayList<CCDAII>       		sectionTemplateId;
 	private CCDACode                 		sectionCode;
 	private ArrayList<CCDAProblemConcern>  	problemConcerns;
+	private ArrayList<CCDAProblemObs>       pastIllnessProblems;
 	
+	public ArrayList<CCDAProblemObs> getPastIllnessProblems() {
+		return pastIllnessProblems;
+	}
+
+	public void setPastIllnessProblems(ArrayList<CCDAProblemObs> pastIllnessProblems) {
+		this.pastIllnessProblems = pastIllnessProblems;
+	}
+
 	public void compare(CCDAProblem submittedProblem, ArrayList<ContentValidationResult> results) {
 	
 		// handle section code.
@@ -71,11 +80,42 @@ public class CCDAProblem {
 			refPo.compare(subObs, probObsContext, results);
 		}
 		else {
-			String error = "The scenario contains problem observation for " + 
+			
+			subObs = null;
+			// Check if the problem is part of the Past Illness Section problems.
+			log.info(" Looking for problem in Past Illness section ");
+			
+			if(pastIllnessProblems != null) {
+				
+				for(int i = 0; i < pastIllnessProblems.size(); ++i) {
+					
+					CCDAProblemObs entry = pastIllnessProblems.get(i);
+					if(entry.getProblemCode() != null && 
+					   refPo.getProblemCode() != null && 
+					   refPo.getProblemCode().getCode().equalsIgnoreCase(entry.getProblemCode().getCode())) {
+								
+							log.info("Found the Problem Observation in submitted CCDA in Past Illness Section");
+							subObs = entry;
+							break;
+					}
+				}
+			}
+			
+			if(subObs != null) 
+			{
+				// Compare the problem observations
+				String probObsContext = ((refPo.getProblemCode() != null)?(refPo.getProblemCode().getDisplayName()):" Unknown Observation ");
+				refPo.compare(subObs, probObsContext, results);
+			}
+			else 
+			{
+			
+				String error = "The scenario contains problem observation for " + 
 							((refPo.getProblemCode() != null)?((refPo.getProblemCode().getDisplayName()) + " Code: " + refPo.getProblemCode().getCode()) :" Unknown Observation ") +
 							" , however there is no matching observation in the submitted CCDA. ";
-			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-			results.add(rs);
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
 		}
 		
 	}
@@ -110,6 +150,14 @@ public class CCDAProblem {
 		for(int k = 0; k < problemConcerns.size(); k++) {
 			problemConcerns.get(k).log();
 		}
+		
+		if(pastIllnessProblems != null)
+		{
+			log.info("Size of Past Illness Problems " + pastIllnessProblems.size());
+			for(int i = 0; i < pastIllnessProblems.size(); i++) {
+				pastIllnessProblems.get(i).log();
+			}
+		}
 	}
 	
 	public ArrayList<CCDAProblemConcern> getProblemConcerns() {
@@ -143,5 +191,6 @@ public class CCDAProblem {
 	{
 		problemConcerns = new ArrayList<CCDAProblemConcern>();
 		sectionTemplateId = new ArrayList<CCDAII>();
+		pastIllnessProblems = new ArrayList<CCDAProblemObs>();
 	}
 }
