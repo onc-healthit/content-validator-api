@@ -2,6 +2,7 @@ package org.sitenv.contentvalidator.service;
 
 import org.apache.log4j.Logger;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.SeverityLevel;
 import org.sitenv.contentvalidator.model.CCDARefModel;
 import org.sitenv.contentvalidator.parsers.CCDAParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,11 @@ public class ContentValidatorService {
 	}
 	
 	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName, String ccdaFile) {
+		return validate(validationObjective, referenceFileName, ccdaFile, SeverityLevel.INFO);
+	}
+	
+	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName,
+			String ccdaFile, SeverityLevel severityLevel) {
 		log.info(" ***** CAME INTO THE REFERENCE VALIDATOR *****");
 		ArrayList<ContentValidationResult> results = new ArrayList<>();
 		if(!isObjectiveValidForContentValidation(validationObjective)) {
@@ -39,7 +45,7 @@ public class ContentValidatorService {
 			log.info(" Val Obj " + validationObjective + " Ref File " + referenceFileName);
 
 			// Parse passed in File
-			CCDARefModel submittedCCDA = parser.parse(ccdaFile);
+			CCDARefModel submittedCCDA = parser.parse(ccdaFile, severityLevel);
 
 			CCDARefModel ref = null;
 			if( (referenceFileName != null)
@@ -50,7 +56,7 @@ public class ContentValidatorService {
 
 			if((ref != null) && (submittedCCDA != null)) {
 				log.info("Comparing the Ref Model to the Submitted Model ");
-				results = ref.compare(validationObjective, submittedCCDA );
+				results = ref.compare(validationObjective, submittedCCDA);
 			}
 			else {
 				log.error(" Submitted Model = " + ((submittedCCDA==null)?" Model is null":submittedCCDA.toString()));

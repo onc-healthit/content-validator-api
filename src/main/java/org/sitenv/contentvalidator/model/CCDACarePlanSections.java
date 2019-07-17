@@ -43,21 +43,27 @@ public class CCDACarePlanSections {
 		}
 	}	
 	
-	public void compare(CCDACarePlanSections submittedCarePlanSections, ArrayList<ContentValidationResult> results) {				
-		final String warningPrefix = "A Care Plan section is missing: The scenario contains the ";
-		final String warningSuffix = ", but it was not found in the submitted document";
-		
-		if(interventionsSectionV3) {
-			if(!submittedCarePlanSections.interventionsSectionV3) {
-				results.add(new ContentValidationResult(warningPrefix + INTERVENTIONS_SECTION_V3 + warningSuffix,
-						ContentValidationResultLevel.WARNING, CCDAConstants.DEFAULT_XPATH, CCDAConstants.DEFAULT_LINE_NUMBER));
+	public void compare(CCDACarePlanSections submittedCarePlanSections, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA) {		
+		if (submittedCCDA.warningsPermitted()) {
+			final String warningPrefix = "A Care Plan section is missing: The scenario contains the ";
+			final String warningSuffix = ", but it was not found in the submitted document";
+			
+			if(interventionsSectionV3) {
+				if(!submittedCarePlanSections.interventionsSectionV3) {
+					results.add(new ContentValidationResult(warningPrefix + INTERVENTIONS_SECTION_V3 + warningSuffix,
+							ContentValidationResultLevel.WARNING, CCDAConstants.DEFAULT_XPATH, CCDAConstants.DEFAULT_LINE_NUMBER));
+				}
 			}
-		}
-		if(healthStatusEvaluationsAndOutcomesSection) {
-			if(!submittedCarePlanSections.healthStatusEvaluationsAndOutcomesSection) {
-				results.add(new ContentValidationResult(warningPrefix + HEALTH_STATUS_EVALUATIONS_AND_OUTCOMES_SECTION + warningSuffix,
-						ContentValidationResultLevel.WARNING, CCDAConstants.DEFAULT_XPATH, CCDAConstants.DEFAULT_LINE_NUMBER));
+			if(healthStatusEvaluationsAndOutcomesSection) {
+				if(!submittedCarePlanSections.healthStatusEvaluationsAndOutcomesSection) {
+					results.add(new ContentValidationResult(warningPrefix + HEALTH_STATUS_EVALUATIONS_AND_OUTCOMES_SECTION + warningSuffix,
+							ContentValidationResultLevel.WARNING, CCDAConstants.DEFAULT_XPATH, CCDAConstants.DEFAULT_LINE_NUMBER));
+				}
 			}
+		} else {
+			log.info(
+					"Skipping CCDACarePlanSections.compare 'interventionsSectionV3' and 'healthStatusEvaluationsAndOutcomesSection' checks  due to severityLevel: "
+							+ submittedCCDA.getSeverityLevelName());			
 		}
 	}
 

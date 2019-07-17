@@ -3,6 +3,7 @@ package org.sitenv.contentvalidator.model;
 import org.apache.log4j.Logger;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.dto.enums.SeverityLevel;
 import org.sitenv.contentvalidator.parsers.CCDAConstants;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
@@ -40,6 +41,7 @@ public class CCDARefModel {
 	private ArrayList<CCDAII>  dsTemplates;
 	private ArrayList<CCDAII>  rnTemplates;
 	private ArrayList<CCDAII>  cpTemplates;
+	private SeverityLevel severityLevel;
 	
 	public CCDAHeaderElements getHeader() {
 		return header;
@@ -54,6 +56,11 @@ public class CCDARefModel {
 	}
 
 	public CCDARefModel() {
+		this(SeverityLevel.INFO);
+	}
+	
+	public CCDARefModel(SeverityLevel severityLevel) {
+		this.severityLevel = severityLevel;
 		udi = new ArrayList<CCDAUDI>();
 		
 		ccdTemplates = new ArrayList<CCDAII>();
@@ -297,7 +304,7 @@ public class CCDARefModel {
 		
 		if((this.getAllergy() != null) && (submittedCCDA.getAllergy() != null) ) {
 			log.info("Start Allergy Comparison ");
-			this.allergy.compare(submittedCCDA.getAllergy(), results);
+			this.allergy.compare(submittedCCDA.getAllergy(), results, submittedCCDA);
 		}
 		else if ( (this.getAllergy() != null) && (submittedCCDA.getAllergy() == null) ) 
 		{
@@ -690,10 +697,17 @@ public class CCDARefModel {
 			
 		}
 		else {
-			
-			// MAKE THIS A WARNING SINCE IT IS A BEST PRACTICE
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires patient's birth sex to be captured as part of social history data, but submitted file does have birth sex information", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
-			results.add(rs);
+			if (submittedCCDA.warningsPermitted()) {
+				// MAKE THIS A WARNING SINCE IT IS A BEST PRACTICE
+				ContentValidationResult rs = new ContentValidationResult(
+						"The scenario requires patient's birth sex to be captured as part of social history data, but submitted file does have birth sex information",
+						ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0");
+				results.add(rs);
+			} else {
+				log.info(
+						"Skipping 'SocialHistory BirthSex code' check in CCDARefModel.validateBirthSex due to severityLevel: "
+								+ submittedCCDA.getSeverityLevelName());
+			}
 		}
 	}
 	
@@ -843,7 +857,7 @@ public class CCDARefModel {
 	private void comparePatients(CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
 		
 		if((patient != null) && (submittedCCDA.getPatient() != null)) {
-			this.patient.compare(submittedCCDA.getPatient(), results);
+			this.patient.compare(submittedCCDA.getPatient(), results, submittedCCDA);
 		}
 		else if( (patient == null) && (submittedCCDA.getPatient() != null) ) {
 			ContentValidationResult rs = new ContentValidationResult("The scenario does not require patient data, but submitted file does have patient data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
@@ -860,7 +874,7 @@ public class CCDARefModel {
 	
 	private void compareCarePlanSections(CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {		
 		if(carePlanSections != null && submittedCCDA.getCarePlanSections() != null) {
-			this.carePlanSections.compare(submittedCCDA.getCarePlanSections(), results);
+			this.carePlanSections.compare(submittedCCDA.getCarePlanSections(), results, submittedCCDA);
 		} else {
 			log.error("An unexpected programmatic error has occurred where either "
 					+ "carePlanSections is null or submittedCCDA.getCarePlanSections() is null, "
@@ -1345,6 +1359,17 @@ public class CCDARefModel {
 	public void setMedEquipments(CCDAMedicalEquipment medEquipments) {
 		this.medEquipments = medEquipments;
 	}
+	
+	public boolean warningsPermitted() {
+		return severityLevel == SeverityLevel.WARNING || severityLevel == SeverityLevel.INFO;				
+	}
+	
+	public boolean infoPermitted() {
+		return severityLevel == SeverityLevel.INFO;				
+	}
 
+	public String getSeverityLevelName() {
+		return severityLevel.name();
+	}
 	
 }
