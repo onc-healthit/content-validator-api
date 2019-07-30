@@ -3,6 +3,7 @@ package org.sitenv.contentvalidator.model;
 import org.apache.log4j.Logger;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.dto.enums.SeverityLevel;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
@@ -30,9 +31,9 @@ public class CCDAAllergy {
 		for(int k = 0; k < allergyConcern.size(); k++) {
 			allergyConcern.get(k).log();
 		}
-	}
+	}	
 	
-	public void compare(CCDAAllergy submittedAllergy, ArrayList<ContentValidationResult> results) {
+	public void compare(CCDAAllergy submittedAllergy, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA) {
 		
 		// handle section code.
 		ParserUtilities.compareCode(sectionCode, submittedAllergy.getSectionCode(), results, "Allergy Section");
@@ -41,10 +42,10 @@ public class CCDAAllergy {
 		ParserUtilities.compareTemplateIds(sectionTemplateId, submittedAllergy.getSectionTemplateId(), results, "Allergy Section");
 		
 		//Compare details
-		compareAllergyData(submittedAllergy, results);
+		compareAllergyData(submittedAllergy, results, submittedCCDA);
 	}
 	
-	private void compareAllergyData(CCDAAllergy submittedAllergy, ArrayList<ContentValidationResult> results) {
+	private void compareAllergyData(CCDAAllergy submittedAllergy, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA) {
 		
 		HashMap<CCDAAllergyObs, CCDAAllergyConcern> allergies = getAllergyObservationsConcernMap();
 		
@@ -52,13 +53,14 @@ public class CCDAAllergy {
 			
 			//check to see if the ref data is part of the problem data submitted
 			log.info(" Comparing Allergy Data for " + ent.getKey());
-			submittedAllergy.validateAllergyData(ent.getKey(), ent.getValue(), results);
+			submittedAllergy.validateAllergyData(ent.getKey(), ent.getValue(), results, submittedCCDA);
 			
 		}
 		
 	}
 	
-	private void validateAllergyData(CCDAAllergyObs refAl, CCDAAllergyConcern refCo, ArrayList<ContentValidationResult> results ) {
+	private void validateAllergyData(CCDAAllergyObs refAl, CCDAAllergyConcern refCo, ArrayList<ContentValidationResult> results, 
+			CCDARefModel submittedCCDA) {
 	
 		HashMap<CCDAAllergyObs, CCDAAllergyConcern> allergies = getAllergyObservationsConcernMap();
 		
@@ -93,7 +95,7 @@ public class CCDAAllergy {
 			 
 			String allergyObsContext = ((refAl.getAllergySubstance() != null)?(refAl.getAllergySubstance().getDisplayName()):" No Known Allergy ");
 			refCo.compare(conc, allergyObsContext, results);
-			refAl.compare(subObs, allergyObsContext, results);
+			refAl.compare(subObs, allergyObsContext, results, submittedCCDA);
 		}
 		else {
 			

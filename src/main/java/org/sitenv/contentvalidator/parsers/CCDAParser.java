@@ -3,6 +3,7 @@ package org.sitenv.contentvalidator.parsers;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BOMInputStream;
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.dto.enums.SeverityLevel;
 import org.sitenv.contentvalidator.model.CCDARefModel;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
@@ -32,13 +33,17 @@ public class CCDAParser {
 	}
 	
 	public CCDARefModel parse(String ccdaFile) {
+		return parse(ccdaFile, SeverityLevel.INFO);
+	}
+	
+	public CCDARefModel parse(String ccdaFile, SeverityLevel severityLevel) {
 		try {
 			//log.info(" Parsing File " + ccdaFile);
 			initDoc(ccdaFile);
 			CCDAConstants.getInstance();
 		
 			log.info("Creating Model");
-			CCDARefModel model = new CCDARefModel();
+			CCDARefModel model = new CCDARefModel(severityLevel);
 			
 			model.setPatient(CCDAHeaderParser.getPatient(doc));
 			model.setHeader(CCDAHeaderParser.getHeaderElements(doc));

@@ -41,6 +41,7 @@ public class CCDAAllergyReaction {
 		return ParserUtilities.templateIdsAreFound(refIds,  subIds);
 	}
 	
+	// (user) SeverityLevel note: Called by CCDAAllergyObs.compare therefore severityLevel is allowed to be enforced there and passed on to here since all warnings
 	public void validateSeverity(CCDAAllergySeverity refSeverity,String allergyObsContext, ArrayList<ContentValidationResult> results) {
 		
 		log.info("Comparing Severity ");

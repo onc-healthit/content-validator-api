@@ -382,12 +382,12 @@ public class CCDAPatient {
 		return false;
 	}	
 
-	public void compare(CCDAPatient patient, ArrayList<ContentValidationResult> results) {
+	public void compare(CCDAPatient patient, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA) {
 	
-		compareNames(patient, results);
+		compareNames(patient, results, submittedCCDA);
 		compareMiscellaneous(patient, results);
 		compareRaceAndEthnicity(patient, results);
-		compareTelecoms(patient, results);
+		compareTelecoms(patient, results, submittedCCDA);
 	}
 	
 	private void compareRaceAndEthnicity(CCDAPatient patient, ArrayList<ContentValidationResult> results) {
@@ -503,7 +503,7 @@ public class CCDAPatient {
 		
 	}
 
-	private void compareNames(CCDAPatient patient, ArrayList<ContentValidationResult> results) {
+	private void compareNames(CCDAPatient patient, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA) {
 		
 		log.info("Comparing Patient's First Name ");
 		// Compare First Name
@@ -594,10 +594,15 @@ public class CCDAPatient {
 			results.add(rs);
 		}
 		else if( (previousName != null) && (patient.getPreviousName() == null)){
-			
-			// MAKE THIS A WARNING Since it is a best practice and cannot be enforced.
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires patient previous name, but submitted file does not have patient previous name", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
-			results.add(rs);
+			if (submittedCCDA.warningsPermitted()) {				
+				// MAKE THIS A WARNING Since it is a best practice and cannot be enforced.
+				ContentValidationResult rs = new ContentValidationResult("The scenario requires patient previous name, but submitted file does not have patient previous name", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
+				results.add(rs);
+			} else {
+				log.info(
+						"Skipping 'else if( (previousName != null) && (patient.getPreviousName() == null))' check in CCDAPatient.compareNames due to severityLevel: "
+								+ submittedCCDA.getSeverityLevelName());
+			}
 		}
 		else {
 			log.info("Submitted and Reference CCDA models have null previous name ");
@@ -628,19 +633,26 @@ public class CCDAPatient {
 		}
 	}
 	
-	private void compareTelecoms(CCDAPatient patient, ArrayList<ContentValidationResult> results) {
-		log.info("Comparing Patient's telecom/@use and telecom/@value");
-		// Compare telecom/@use and telecom/@value
-		for(CCDATelecom tel : telecom) {
-			if(!patient.containsTelecomUseAndValue(tel)) {
-				String warningMessage = "Patient Telecom in the submitted file does not match the expected Telecom. "
-						+ "The following values are expected: "
-						+ "telecom/@use = " + tel.getUseAttribute() 
-						+ " and telecom/@value = " + tel.getValueAttribute();
-				ContentValidationResult rs = new ContentValidationResult(warningMessage, ContentValidationResultLevel.WARNING,
-						"/ClinicalDocument", "0");
-				results.add(rs);
+	private void compareTelecoms(CCDAPatient patient, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA) {
+		// <overwrite with other non-warning telecom comparisons here if any>
+		
+		if (submittedCCDA.warningsPermitted()) {
+			log.info("Comparing Patient's telecom/@use and telecom/@value");		
+			for(CCDATelecom tel : telecom) {
+				if(!patient.containsTelecomUseAndValue(tel)) {
+					String warningMessage = "Patient Telecom in the submitted file does not match the expected Telecom. "
+							+ "The following values are expected: "
+							+ "telecom/@use = " + tel.getUseAttribute() 
+							+ " and telecom/@value = " + tel.getValueAttribute();
+					ContentValidationResult rs = new ContentValidationResult(warningMessage, ContentValidationResultLevel.WARNING,
+							"/ClinicalDocument", "0");
+					results.add(rs);
+				}
 			}
+		} else {
+			log.info(
+					"Skipping 'Comparing Patient's telecom/@use and telecom/@value' check in CCDAPatient.compareTelecoms due to severityLevel: "
+							+ submittedCCDA.getSeverityLevelName());
 		}
 	}	
 	
