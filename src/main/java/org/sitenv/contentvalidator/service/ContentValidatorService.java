@@ -32,12 +32,13 @@ public class ContentValidatorService {
 	}
 	
 	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName, String ccdaFile) {
-		return validate(validationObjective, referenceFileName, ccdaFile, SeverityLevel.INFO);
+		return validate(validationObjective, referenceFileName, ccdaFile, false, SeverityLevel.INFO);
 	}
 	
 	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName,
-			String ccdaFile, SeverityLevel severityLevel) {
+			String ccdaFile, boolean curesUpdate, SeverityLevel severityLevel) {
 		log.info(" ***** CAME INTO THE REFERENCE VALIDATOR *****");
+		
 		ArrayList<ContentValidationResult> results = new ArrayList<>();
 		if(!isObjectiveValidForContentValidation(validationObjective)) {
 			log.warn("Content Validation not performed for objective " + validationObjective);
