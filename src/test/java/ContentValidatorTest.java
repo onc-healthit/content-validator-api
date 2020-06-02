@@ -148,7 +148,7 @@ public class ContentValidatorTest {
 	
 	private static ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String validationObjective, 
 			String referenceFileName, String ccdaFileAsString, SeverityLevel severityLevel) {
-		return validator.validate(validationObjective, referenceFileName, ccdaFileAsString, severityLevel);
+		return validator.validate(validationObjective, referenceFileName, ccdaFileAsString, false, severityLevel);
 	}
 
 	private static ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String referenceFileName, URI ccdaFileURI) {
