@@ -49,7 +49,10 @@ public class CCDABodyParser {
 		ImmunizationParser.parse(doc, model);
 		
 		log.info("Parsing Medical Equipments");
-		MedicalEquipmentParser.parse(doc, model);		
+		MedicalEquipmentParser.parse(doc, model);
+		
+		log.info(" Parsing Notes Section ");
+		NotesParser.parse(doc,model);
 		
 	}
 }
