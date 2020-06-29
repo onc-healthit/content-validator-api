@@ -43,6 +43,16 @@ public class CCDARefModel {
 	private ArrayList<CCDAII>  cpTemplates;
 	private SeverityLevel severityLevel;
 	
+	private ArrayList<CCDANotes> notes;
+	
+	public ArrayList<CCDANotes> getNotes() {
+		return notes;
+	}
+
+	public void setNotes(ArrayList<CCDANotes> notes) {
+		this.notes = notes;
+	}
+
 	public CCDAHeaderElements getHeader() {
 		return header;
 	}
@@ -57,11 +67,32 @@ public class CCDARefModel {
 
 	public CCDARefModel() {
 		this(SeverityLevel.INFO);
+		udi = new ArrayList<CCDAUDI>();
+		notes = new ArrayList<CCDANotes>();
+		
+		ccdTemplates = new ArrayList<CCDAII>();
+		ccdTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+		ccdTemplates.add(new CCDAII(CCDAConstants.CCD_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+		
+		dsTemplates = new ArrayList<CCDAII>();
+		dsTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+		dsTemplates.add(new CCDAII(CCDAConstants.DS_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+
+		rnTemplates = new ArrayList<CCDAII>();
+		rnTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+		rnTemplates.add(new CCDAII(CCDAConstants.RN_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+
+		cpTemplates = new ArrayList<CCDAII>();
+		cpTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+		cpTemplates.add(new CCDAII(CCDAConstants.CP_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
+		
+		
 	}
 	
 	public CCDARefModel(SeverityLevel severityLevel) {
 		this.severityLevel = severityLevel;
 		udi = new ArrayList<CCDAUDI>();
+		notes = new ArrayList<CCDANotes>();
 		
 		ccdTemplates = new ArrayList<CCDAII>();
 		ccdTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
@@ -269,6 +300,9 @@ public class CCDARefModel {
 		
 		log.info("Comparing Immunizations ");
 		compareImmunizations(validationObjective, submittedCCDA, results);
+		
+		log.info(" Comparing Notes ");
+		compareNotes(validationObjective, submittedCCDA, results);
 		
 		log.info("Finished comparison , returning results");
 		
@@ -568,6 +602,53 @@ public class CCDARefModel {
 			
 			log.info("Model and Submitted CCDA do not have Procedures for comparison ");
 		}
+	}
+	
+	public void compareNotes(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
+		
+		log.info("Retrieving Notes Section for comparison ");
+		HashMap<String, CCDANotes> refNotes = this.getAllNotes();
+		HashMap<String, CCDANotes> subNotes= submittedCCDA.getAllNotes();
+		
+		if( (refNotes != null && refNotes.size() > 0) &&  
+			(subNotes != null && subNotes.size() > 0)  ) {
+			
+			log.info("Notes present in both models ");
+			CCDANotes.compareNotes(refNotes, subNotes, results);
+			
+		} else if ( (refNotes != null && refNotes.size() > 0) && 
+				(subNotes == null || subNotes.size() == 0) ) {
+			
+			// handle the case where the Notes section does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Notes, but the submitted C-CDA does not contain lab result data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Notes data, but submitted document does not contain Notes data");
+			
+		}else if ((refNotes == null || refNotes.size() == 0) && 
+				(subNotes != null && subNotes.size() > 0) ) {
+		
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Notes, but the submitted C-CDA does contain Notes data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info("Model does not have Notes for comparison ");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Notes for comparison ");
+		}
+	}
+	
+	private HashMap<String, CCDANotes> getAllNotes() 
+	{
+		HashMap<String,CCDANotes> results = new HashMap<String,CCDANotes>();
+		
+		if(notes != null) {
+			
+			for(CCDANotes note : notes) {
+				results.put(note.getSectionCode().getCode(), note);
+			}
+		}
+		
+		return results;
 	}
 	
 	private HashMap<String, CCDALabResultObs> getAllLabResultObs() 
@@ -1018,6 +1099,11 @@ public class CCDARefModel {
 		for(int j = 0; j < udi.size(); j++) {
 			udi.get(j).log();
 			
+		}
+		
+		for(int k = 0; k < notes.size(); k++) {
+			
+			notes.get(k).log();
 		}
 		
 		if(medEquipments != null)

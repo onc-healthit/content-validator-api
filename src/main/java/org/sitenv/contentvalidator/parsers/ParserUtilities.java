@@ -15,6 +15,29 @@ import java.util.ArrayList;
 public class ParserUtilities {
 	
 	private static Logger log = Logger.getLogger(ParserUtilities.class.getName());
+	
+	public static void compareAuthor(CCDAAuthor refAuthor, CCDAAuthor subAuthor, ArrayList<ContentValidationResult> results, String elementName) {
+		
+		// handle nulls.
+				if((refAuthor != null) && (subAuthor != null) ) {
+
+					refAuthor.matches(subAuthor, results, elementName);
+				}
+				else if ((refAuthor == null) && (subAuthor != null)) {
+					ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+					results.add(rs);
+				}
+				else if((refAuthor != null) && (subAuthor == null)){
+					ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+					results.add(rs);
+				} 
+				else {
+					// do nothing since both are null.
+					log.info(" Both Submitted and Ref Authors are null for " + elementName);
+				}
+		
+		
+	}
 
 	public static void compareDataElement(CCDADataElement refCode, CCDADataElement submittedCode,
 										  ArrayList<ContentValidationResult> results, String elementName) {
@@ -319,6 +342,73 @@ public class ParserUtilities {
 			// do nothing since both are null
 			log.info("Both Ref and submitted CCDA have no templated Ids for " + elementName);
 		}
+	}
+	
+	public static CCDAAuthor readAuthor(Element auth) throws XPathExpressionException {
+		
+		CCDAAuthor author = null;
+		
+		if(auth != null) {
+			
+			log.info(" Found Author ");
+			author = new CCDAAuthor();
+			
+			author.setTemplateId(readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+					evaluate(auth, XPathConstants.NODESET)));
+			
+			author.setEffTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_TIME_EXP.
+						evaluate(auth, XPathConstants.NODE)));
+			
+			author.setAuthorIds(readTemplateIdList((NodeList) CCDAConstants.REL_ID_EXP.
+					evaluate(auth, XPathConstants.NODESET)));
+			
+			Element assignedAuthor = (Element)CCDAConstants.REL_ASSIGNED_AUTHOR_EXP.evaluate(auth, XPathConstants.NODE);
+			
+			if(assignedAuthor != null) {
+				
+				log.info(" Found Assigned Author ");
+				
+				author.setAuthorIds(readTemplateIdList((NodeList) CCDAConstants.REL_ID_EXP.
+						evaluate(assignedAuthor, XPathConstants.NODESET)));
+				
+				Element assignedPerson = (Element)CCDAConstants.REL_ASSIGNED_AUTHOR_EXP.evaluate(assignedAuthor, XPathConstants.NODE);
+				
+				if(assignedPerson != null) {
+					
+					log.info(" Found Assigned Person ");
+					author.setAuthorFirstName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_GIVEN_NAME_EXP.
+							evaluate(assignedPerson, XPathConstants.NODE)));
+					
+					author.setAuthorFirstName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_FAMILY_NAME_EXP.
+							evaluate(assignedPerson, XPathConstants.NODE)));
+					
+					author.setAuthorName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_NAME_EXP.
+							evaluate(assignedPerson, XPathConstants.NODE)));
+				
+				}
+				
+				Element repOrg = (Element)CCDAConstants.REL_REP_ORG_EXP.evaluate(auth, XPathConstants.NODE);
+				
+				if(repOrg != null) {
+					
+					log.info(" Found Rep Org ");
+				
+					author.setRepOrgIds(readTemplateIdList((NodeList) CCDAConstants.REL_ID_EXP.
+							evaluate(repOrg, XPathConstants.NODESET)));
+					
+					author.setOrgName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_NAME_EXP.
+							evaluate(repOrg, XPathConstants.NODE)));
+					
+					author.setTelecoms(ParserUtilities.readTelecomList((NodeList) CCDAConstants.REL_TELECOM_EXP.
+							evaluate(repOrg, XPathConstants.NODESET)));
+				
+				}
+				
+			}
+			
+		}
+				
+		return author;
 	}
 	
 	public static CCDACode readCode(Element codeElement)
