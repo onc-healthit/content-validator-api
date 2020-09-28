@@ -18,6 +18,8 @@ public class CCDAAllergy {
 	private CCDACode                 		sectionCode;
 	private ArrayList<CCDAAllergyConcern>	allergyConcern;
 	
+	private CCDAAuthor 						author;
+	
 	public void log() {
 		
 		if(sectionCode != null)
@@ -31,6 +33,9 @@ public class CCDAAllergy {
 		for(int k = 0; k < allergyConcern.size(); k++) {
 			allergyConcern.get(k).log();
 		}
+		
+		if(author != null)
+			author.log();
 	}	
 	
 	public void compare(CCDAAllergy submittedAllergy, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA) {
@@ -159,5 +164,15 @@ public class CCDAAllergy {
 		sectionTemplateId = new ArrayList<CCDAII>();
 		allergyConcern = new ArrayList<CCDAAllergyConcern>();
 	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 	
 }

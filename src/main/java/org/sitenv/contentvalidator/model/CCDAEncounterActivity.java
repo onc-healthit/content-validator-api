@@ -1,8 +1,10 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CCDAEncounterActivity {
 
@@ -14,6 +16,9 @@ public class CCDAEncounterActivity {
 	private ArrayList<CCDAEncounterDiagnosis> diagnoses;
 	private ArrayList<CCDAServiceDeliveryLoc> sdLocs;
 	private ArrayList<CCDAProblemObs>         indications;
+	private ArrayList<CCDANotesActivity>		notesActivity;
+	
+	private CCDAAuthor	author;
 	
 	public void log() {
 		
@@ -42,6 +47,22 @@ public class CCDAEncounterActivity {
 		
 		for(int n = 0; n < indications.size(); n++) {
 			indications.get(n).log();
+		}
+		
+		for(int p = 0; p < notesActivity.size(); p++) {
+			notesActivity.get(p).log();
+		}
+		
+		if(author != null)
+			author.log();
+	}
+	
+	public void getAllNotesActivities(HashMap<String, CCDANotesActivity> results) {
+		
+		if(notesActivity != null && notesActivity.size() > 0) {
+			
+			log.info(" Found non-null notes activity ");
+			ParserUtilities.populateNotesActiviteis(notesActivity, results);
 		}
 	}
 	
@@ -98,11 +119,30 @@ public class CCDAEncounterActivity {
 			this.sdLocs = sdl;
 	}
 
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
+	}
+
 	public CCDAEncounterActivity()
 	{
 		diagnoses = new ArrayList<CCDAEncounterDiagnosis>();
 		templateId = new ArrayList<CCDAII>();
 		indications = new ArrayList<CCDAProblemObs>();
 		sdLocs = new ArrayList<CCDAServiceDeliveryLoc>();
+		notesActivity = new ArrayList<CCDANotesActivity>();
 	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 }

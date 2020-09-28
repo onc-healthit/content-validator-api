@@ -138,24 +138,24 @@ public class CCDAAuthor {
 		log.info(" Comparing data for Author Tempalte Ids: ");
 
 		// Compare template Ids 
-		String elementName = "Comapring Author Template Ids for : " + elName;		
-		ParserUtilities.compareTemplateIds(templateId, subAuthor.getTemplateId(), results, elementName);
+		String elementName = "Comapring Author Template Ids for : " + elName;		 // Not mandatory so skipping
+		// ParserUtilities.compareTemplateIds(templateId, subAuthor.getTemplateId(), results, elementName);
 		
 		// Compare Author Ids 
-		elementName = "Comapring Author Ids for : " + elName;
-		ParserUtilities.compareTemplateIds(authorIds, subAuthor.getAuthorIds(), results, elementName);
+		elementName = "Comapring Author Ids for : " + elName; // Not mandatory so skipping
+		// ParserUtilities.compareTemplateIds(authorIds, subAuthor.getAuthorIds(), results, elementName);
 		
 		// Compare REp Ord Ids 		
-		elementName = "Comapring Rep Org Ids for : " + elName;
-		ParserUtilities.compareTemplateIds(repOrgIds, subAuthor.getRepOrgIds(), results, elementName);
+		elementName = "Comapring Rep Org Ids for : " + elName; // Not mandatory so skipping
+		// ParserUtilities.compareTemplateIds(repOrgIds, subAuthor.getRepOrgIds(), results, elementName);
 
 		// Compare Effective Times
-		elementName = "Comparing Author Time for " + elName;
-		ParserUtilities.compareEffectiveTime(effTime, subAuthor.getEffTime(), results, elementName);
+		elementName = "Comparing Author Time for " + elName; 
+		ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, subAuthor.getEffTime(), results, elementName);
 		
 		// Compare Org Name 
-		elementName = "Comparing Author Represented Organization Name for " + elName;
-		ParserUtilities.compareDataElement(orgName, subAuthor.getOrgName(), results, elementName);
+		elementName = "Comparing Author Organization Name for " + elName;
+		ParserUtilities.compareDataElementText(orgName, subAuthor.getOrgName(), results, elementName);
 	}
 
 }

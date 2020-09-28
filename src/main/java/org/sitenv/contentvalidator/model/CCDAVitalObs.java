@@ -21,6 +21,8 @@ public class CCDAVitalObs {
 	private CCDACode						interpretationCode;
 	private ArrayList<CCDAPQ> 				referenceValue;
 	
+	private CCDAAuthor author;
+	
 	public static void compareVitalObsData(HashMap<String, CCDAVitalObs> refVitals, 
 			HashMap<String, CCDAVitalObs> subVitals, 	ArrayList<ContentValidationResult> results) {
 
@@ -105,6 +107,9 @@ public class CCDAVitalObs {
 		for(int k = 0; k < referenceValue.size(); k++) {
 			referenceValue.get(k).log();
 		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public CCDAVitalObs()
@@ -172,4 +177,14 @@ public class CCDAVitalObs {
 		if(rvl != null)
 			this.referenceValue = rvl;
 	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 }

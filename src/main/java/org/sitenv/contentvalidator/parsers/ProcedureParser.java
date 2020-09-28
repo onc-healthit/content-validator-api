@@ -14,7 +14,7 @@ public class ProcedureParser {
 	
 	private static Logger log = Logger.getLogger(ProcedureParser.class.getName());
 	
-	public static void parse(Document doc, CCDARefModel model) throws XPathExpressionException {
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
 	    	
 	    	log.info(" *** Parsing Procedures *** ");
 	    	model.setProcedure(retrievePrcedureDetails(doc));	

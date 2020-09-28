@@ -19,6 +19,8 @@ public class CCDAProblemObs {
 	private CCDAEffTime          effTime;
 	private CCDACode             problemCode;
 	
+	private CCDAAuthor author;
+	
 	public static void compareProblemObservationData(HashMap<String, CCDAProblemObs> refProblems, 
 			HashMap<String, CCDAProblemObs> subProblems, 	ArrayList<ContentValidationResult> results, String context) {
 
@@ -98,6 +100,8 @@ public class CCDAProblemObs {
 		if(problemCode != null)
 			log.info("Problem Code = " + problemCode.getCode());
 		
+		if(author != null)
+			author.log();
 	}
 	
 	public ArrayList<CCDAII> getTemplateId() {
@@ -147,6 +151,15 @@ public class CCDAProblemObs {
 	{
 		templateId = new ArrayList<CCDAII>();
 		translationProblemType = new ArrayList<CCDACode>();
+	}
+
+	
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	static Boolean checkCodeAndTrans(CCDAProblemObs refObs, HashMap<String, CCDAProblemObs> subProblems) {

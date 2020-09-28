@@ -19,6 +19,8 @@ public class CCDACarePlanSections {
 	private boolean interventionsSectionV3;
 	private boolean healthStatusEvaluationsAndOutcomesSection; 
 	
+	private CCDAAuthor	author;
+	
 	public CCDACarePlanSections() {
 		templateIds = new ArrayList<CCDAII>();
 	}
@@ -41,6 +43,9 @@ public class CCDACarePlanSections {
 			log.info(" Tempalte Id root [" + j + "] = " + templateIds.get(j).getRootValue());
 			log.info(" Tempalte Id extension [" + j + "] = " + templateIds.get(j).getExtValue());
 		}
+		
+		if(author != null)
+			author.log();
 	}	
 	
 	public void compare(CCDACarePlanSections submittedCarePlanSections, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA) {		
@@ -85,4 +90,13 @@ public class CCDACarePlanSections {
 		}
 	}
 
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
+	
 }

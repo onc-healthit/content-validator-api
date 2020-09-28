@@ -14,9 +14,9 @@ public class EncounterDiagnosesParser {
 	
 	private static Logger log = Logger.getLogger(EncounterDiagnosesParser.class.getName());
 	
-    public static void parse(Document doc, CCDARefModel model) throws XPathExpressionException {
+    public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
     	
-    	model.setEncounter(retrieveEncounterDetails(doc));	
+    	model.setEncounter(retrieveEncounterDetails(doc, curesUpdate));	
     	
     	model.setAdmissionDiagnosis(retrieveAdmissionDiagnosisDetails(doc));
     	
@@ -118,7 +118,7 @@ public class EncounterDiagnosesParser {
     }
 
 	
-	public static CCDAEncounter retrieveEncounterDetails(Document doc) throws XPathExpressionException
+	public static CCDAEncounter retrieveEncounterDetails(Document doc, boolean curesUpdate) throws XPathExpressionException
 	{
 		Element sectionElement = (Element) CCDAConstants.ENCOUNTER_EXPRESSION.evaluate(doc, XPathConstants.NODE);
 		CCDAEncounter encounters = null;
@@ -138,13 +138,13 @@ public class EncounterDiagnosesParser {
 			
 			// Get Entries
 			encounters.setEncActivities(readEncounterActivity((NodeList) CCDAConstants.REL_ENC_ENTRY_EXP.
-					evaluate(sectionElement, XPathConstants.NODESET)));
+					evaluate(sectionElement, XPathConstants.NODESET), curesUpdate));
 		}
 		return encounters;
 	}
 	
 	
-	public static ArrayList<CCDAEncounterActivity> readEncounterActivity(NodeList encounterActivityNodeList) throws XPathExpressionException
+	public static ArrayList<CCDAEncounterActivity> readEncounterActivity(NodeList encounterActivityNodeList, boolean curesUpdate) throws XPathExpressionException
 	{
 		ArrayList<CCDAEncounterActivity> encounterActivityList = new ArrayList<>();
 		CCDAEncounterActivity encounterActivity;
@@ -179,6 +179,10 @@ public class EncounterDiagnosesParser {
 								evaluate(encounterActivityElement, XPathConstants.NODESET);
 				
 				encounterActivity.setIndications(readProblemObservation(indicationNodeList));
+				
+				// Add Notes Activity if present.
+				encounterActivity.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION.
+						evaluate(encounterActivityElement, XPathConstants.NODESET), null));
 				
 				encounterActivityList.add(encounterActivity);
 			}

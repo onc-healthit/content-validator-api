@@ -13,6 +13,8 @@ public class CCDATobaccoUse {
 	private CCDACode							tobaccoUseCode;
 	private CCDAEffTime							tobaccoUseTime;
 	
+	private CCDAAuthor author;
+	
 	public void log() {
 		
 		if(tobaccoUseSectionCode != null)
@@ -28,8 +30,25 @@ public class CCDATobaccoUse {
 		
 		if(tobaccoUseTime != null)
 			tobaccoUseTime.log();
+		
+		if(author != null)
+			author.log();
 	}
 	
+	
+	
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
+
+
 	public ArrayList<CCDAII> getTobaccoUseTemplateIds() {
 		return tobaccoUseTemplateIds;
 	}

@@ -18,6 +18,8 @@ public class CCDAMedication {
 	private CCDACode                 			sectionCode;
 	private ArrayList<CCDAMedicationActivity>  	medActivities;
 	
+	private CCDAAuthor author;
+	
 	public void compare(CCDAMedication subMedication, ArrayList<ContentValidationResult> results ) {
 		
 		// handle section code.
@@ -69,6 +71,9 @@ public class CCDAMedication {
 		for(int k = 0; k < medActivities.size(); k++) {
 			medActivities.get(k).log();
 		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public ArrayList<CCDAMedicationActivity> getMedActivities() {
@@ -104,4 +109,14 @@ public class CCDAMedication {
 		templateIds = new ArrayList<CCDAII>();
 		medActivities = new ArrayList<CCDAMedicationActivity>();
 	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 }

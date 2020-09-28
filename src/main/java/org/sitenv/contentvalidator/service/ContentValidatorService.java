@@ -46,7 +46,7 @@ public class ContentValidatorService {
 			log.info(" Val Obj " + validationObjective + " Ref File " + referenceFileName);
 
 			// Parse passed in File
-			CCDARefModel submittedCCDA = parser.parse(ccdaFile, severityLevel);
+			CCDARefModel submittedCCDA = parser.parse(ccdaFile, severityLevel, curesUpdate);
 
 			CCDARefModel ref = null;
 			if( (referenceFileName != null)
@@ -57,7 +57,7 @@ public class ContentValidatorService {
 
 			if((ref != null) && (submittedCCDA != null)) {
 				log.info("Comparing the Ref Model to the Submitted Model ");
-				results = ref.compare(validationObjective, submittedCCDA);
+				results = ref.compare(validationObjective, submittedCCDA, curesUpdate);
 			}
 			else {
 				log.error(" Submitted Model = " + ((submittedCCDA==null)?" Model is null":submittedCCDA.toString()));

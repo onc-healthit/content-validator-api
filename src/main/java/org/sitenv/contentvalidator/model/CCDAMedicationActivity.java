@@ -23,6 +23,8 @@ public class CCDAMedicationActivity {
 	private CCDACode							adminUnitCode;
 	private CCDAConsumable						consumable;
 	
+	private CCDAAuthor author;
+	
 	public static void compareMedicationActivityData(HashMap<String, CCDAMedicationActivity> refActivities, 
 			HashMap<String, CCDAMedicationActivity> subActivities, 	ArrayList<ContentValidationResult> results) {
 
@@ -128,6 +130,9 @@ public class CCDAMedicationActivity {
 		if(consumable != null) {
 			consumable.log();
 		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public ArrayList<CCDAII> getTemplateIds() {
@@ -208,5 +213,16 @@ public class CCDAMedicationActivity {
 	{
 		templateIds = new ArrayList<CCDAII>();
 	}
+
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
 	
 }

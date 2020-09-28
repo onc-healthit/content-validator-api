@@ -15,6 +15,8 @@ public class CCDAAllergyReaction {
 	private CCDACode					reactionCode;
 	private CCDAAllergySeverity			severity;
 	
+	private CCDAAuthor					author;
+	
 	public Boolean isSameAs(CCDAAllergyReaction refReact) {
 		
 		log.info("Comparing Reactions ");
@@ -95,6 +97,9 @@ public class CCDAAllergyReaction {
 		
 		if(severity != null)
 			severity.log();
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public ArrayList<CCDAII> getTemplateIds() {
@@ -128,4 +133,13 @@ public class CCDAAllergyReaction {
 		templateIds = new ArrayList<CCDAII>();
 	}
 
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
+	
 }

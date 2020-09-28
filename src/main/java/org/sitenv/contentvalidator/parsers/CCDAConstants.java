@@ -74,6 +74,8 @@ public class CCDAConstants {
 	// Notes and Companion Guide templates
 	static public XPathExpression NOTES_EXPRESSION;
 	static public XPathExpression REL_NOTES_ACTIVITY_EXPRESSION;
+	static public XPathExpression REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION;
+	static public XPathExpression NOTES_ACTIVITY_EXPRESSION;
 	
 	//Problem Stuff
 	static public XPathExpression PROBLEM_EXPRESSION; 
@@ -326,6 +328,9 @@ public class CCDAConstants {
 			
 			NOTES_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.2.65']]");
 			REL_NOTES_ACTIVITY_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.202']]");
+			REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entryRelationship/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.202']]");
+			NOTES_ACTIVITY_EXPRESSION = CCDAConstants.CCDAXPATH.compile("//act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.202']]");
+			
 
 		} catch (XPathExpressionException e) {
 			// TODO Auto-generated catch block

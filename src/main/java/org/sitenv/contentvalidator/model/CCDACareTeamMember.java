@@ -10,11 +10,16 @@ public class CCDACareTeamMember {
 
 	private ArrayList<CCDAParticipant> members;
 	
+	private CCDAAuthor	author;
+	
 	public void log() {
 		
 		for (int i = 0; i < members.size(); i++) {
 			members.get(i).log();
 		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public CCDACareTeamMember()
@@ -31,4 +36,14 @@ public class CCDACareTeamMember {
 		if(ms != null)
 			this.members = ms;
 	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 }

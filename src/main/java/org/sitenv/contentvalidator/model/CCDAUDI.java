@@ -15,6 +15,8 @@ public class CCDAUDI {
 	private CCDACode deviceCode;
 	private ArrayList<CCDAII> scopingEntityId;
 	
+	private CCDAAuthor author;
+	
 	public CCDAUDI() {
 		templateIds = new ArrayList<CCDAII>();
 		UDIValue = new ArrayList<CCDAII>();
@@ -102,8 +104,19 @@ public class CCDAUDI {
 		if(deviceCode != null)
 			log.info(" Device Code = " + deviceCode.getCode());
 		
+		if(author != null)
+			author.log();
+		
 	}
 	
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
 	public ArrayList<CCDAII> getTemplateIds() {
 		return templateIds;
 	}

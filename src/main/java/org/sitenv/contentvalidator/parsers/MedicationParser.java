@@ -16,7 +16,7 @@ public class MedicationParser {
 	
 	private static Logger log = Logger.getLogger(MedicationParser.class.getName());
 	
-	public static void parse(Document doc, CCDARefModel model) throws XPathExpressionException {
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
     	
     	model.setMedication(retrieveMedicationDetails(doc));	
     	model.setDischargeMedication(retrieveDischargeMedicationDetails(doc));

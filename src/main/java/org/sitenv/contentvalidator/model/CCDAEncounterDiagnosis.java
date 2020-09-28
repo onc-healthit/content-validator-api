@@ -12,6 +12,8 @@ public class CCDAEncounterDiagnosis {
 	private CCDACode                  entryCode;
 	private ArrayList<CCDAProblemObs> problemObs;
 
+	private CCDAAuthor author;
+	
 	public void log() {
 		
 		log.info("*** Encounter Diagnosis ***");
@@ -26,6 +28,9 @@ public class CCDAEncounterDiagnosis {
 		for(int l = 0; l < problemObs.size(); l++) {
 			problemObs.get(l).log();
 		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public ArrayList<CCDAII> getTemplateId() {
@@ -58,7 +63,17 @@ public class CCDAEncounterDiagnosis {
 		if(pobs != null)
 			this.problemObs = pobs;
 	}
+	
+	
 
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
 
 	public CCDAEncounterDiagnosis()
 	{

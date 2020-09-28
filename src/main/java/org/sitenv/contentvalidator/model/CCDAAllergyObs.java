@@ -20,6 +20,8 @@ public class CCDAAllergyObs {
 	private ArrayList<CCDAAllergyReaction>  reactions;
 	private Boolean							negationInd;
 	
+	private CCDAAuthor						author;
+	
 	public void compare(CCDAAllergyObs subObs, String allergyObsContext, ArrayList<ContentValidationResult> results, 
 			CCDARefModel submittedCCDA) {
 		
@@ -105,6 +107,9 @@ public class CCDAAllergyObs {
 			reactions.get(k).log();
 		}
 		
+		if(author != null)
+			author.log();
+		
 	}
 	
 	public ArrayList<CCDAII> getTemplateId() {
@@ -166,5 +171,23 @@ public class CCDAAllergyObs {
 		templateId = new ArrayList<CCDAII>();
 		reactions = new ArrayList<CCDAAllergyReaction>();
 	}
+
+	public Boolean getNegationInd() {
+		return negationInd;
+	}
+
+	public void setNegationInd(Boolean negationInd) {
+		this.negationInd = negationInd;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 	
 }

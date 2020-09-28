@@ -20,12 +20,54 @@ public class CCDANotesActivity {
 	private CCDAEffTime          			effTime;
 	private CCDAAuthor						author;
 	
+	private CCDANotes						parent;
+	
 	public CCDANotesActivity() { 
 		
 		templateId = new ArrayList<CCDAII>();
 		
 	}
+
+	public static void compareNotesActivities(HashMap<String, CCDANotesActivity> refNotes, 
+			HashMap<String, CCDANotesActivity> subNotes, 	ArrayList<ContentValidationResult> results) {
+
+		log.info(" Start Comparing Notes Section level data ");
+		
+		// For each Notes activity in the Ref Model, check if it is present in the subCCDA Model.
+		for(Map.Entry<String, CCDANotesActivity> ent: refNotes.entrySet()) {
+
+			if(subNotes.containsKey(ent.getKey())) {
+
+				log.info("Comparing Notes Activity since the section level matched ");
+				String context = "Notes Section corresponding to the code " + ent.getKey();
+				subNotes.get(ent.getKey()).compare(ent.getValue(), results, context, false);
+
+
+			} else {
+				// Error
+				String error = "The scenario contains Notes data with code " + ent.getKey() +
+						" , however there is no matching data in the submitted CCDA. ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+		}
+		
+	}
 	
+	
+	
+	public CCDANotes getParent() {
+		return parent;
+	}
+
+
+
+	public void setParent(CCDANotes parent) {
+		this.parent = parent;
+	}
+
+
+
 	public static Logger getLog() {
 		return log;
 	}
@@ -124,7 +166,7 @@ public class CCDANotesActivity {
 		if( (refNotesActs != null && refNotesActs.size() > 0) &&  
 				(subNotesActs != null && subNotesActs.size() > 0)  ) {
 				
-				log.info("Notes present in both models ");
+				log.info("Notes present in both models, Size of Ref Notes Activities = " + refNotesActs.size() + " : Size of Sub Notes Activities = " + subNotesActs.size());
 				CCDANotesActivity.compareNotesActivity(refNotesActs, subNotesActs, results, context);
 				
 			} else if ( (refNotesActs != null && refNotesActs.size() > 0) && 
@@ -135,16 +177,10 @@ public class CCDANotesActivity {
 				results.add(rs);
 				log.info(" Scenario requires Notes Activity Entry but submitted document does not contain Notes Activity Entrydata");
 				
-			}else if ((refNotesActs == null || refNotesActs.size() == 0) && 
-					(subNotesActs != null && subNotesActs.size() > 0) ) {
-			
-				ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to Notes Activity Entry, but the submitted C-CDA does contain Notes Activity Entry data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-				results.add(rs);
-				log.info("Model does not have Notes Activities for comparison ");
+			}
+			else {
 				
-			} else {
-				
-				log.info("Model and Submitted CCDA do not have Notes Activity Entries for comparison ");
+				log.info("Ref Model does not have Notes Activity Entries for comparison ");
 			}
 		
 	}
@@ -152,16 +188,16 @@ public class CCDANotesActivity {
 	public static void compareNotesActivity(HashMap<String, CCDANotesActivity> refNotes, 
 			HashMap<String, CCDANotesActivity> subNotes, 	ArrayList<ContentValidationResult> results, String context) {
 
-		log.info(" Start Comparing Notes Section level data ");
+		log.info(" Start Comparing Notes Activity Entry level data ");
 		
 		// For each Notes section in the Ref Model, check if it is present in the subCCDA Model.
 		for(Map.Entry<String, CCDANotesActivity> ent: refNotes.entrySet()) {
 
 			if(subNotes.containsKey(ent.getKey())) {
 
-				log.info("Comparing Notes Activity Entry  ");
-				context += ", Comparing Notes Activity Entry corresponding to the code " + ent.getKey();
-				subNotes.get(ent.getKey()).compare(ent.getValue(), results, context);
+				log.info("Comparing Notes Activity Entry since we found the entry with the code. " + ent.getKey());
+				context += ", Notes Activity Entry corresponding to the code " + ent.getKey();
+				subNotes.get(ent.getKey()).compare(ent.getValue(), results, context, true);
 
 
 			} else {
@@ -172,20 +208,11 @@ public class CCDANotesActivity {
 				results.add(rs);
 			}
 		}
-
-		// Handle the case where the Notes data is not present in the reference, 
-		if( (refNotes == null || refNotes.size() == 0) && (subNotes != null && subNotes.size() > 0) ) {
-
-			// Error
-			String error = "The scenario does not require Notes Activity Entry data " + 
-					" , however there is Notes Activity Entry data in the submitted CCDA. ";
-			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-			results.add(rs);
-		}
 		
 	}
 	
-	public void compare(CCDANotesActivity refNote, ArrayList<ContentValidationResult> results , String context) {
+	public void compare(CCDANotesActivity refNote, ArrayList<ContentValidationResult> results , String context, boolean parentComparison) {
+		
 		
 		log.info("Comparing Notes Activity Entry ");
 		
@@ -194,19 +221,33 @@ public class CCDANotesActivity {
 		
 		// Compare Effective Times
 		String elementNameTime = "Effective Time for " + context;
-		//ParserUtilities.compareEffectiveTime(refResult.getMeasurementTime(), measurementTime, results, elementNameTime);
+		ParserUtilities.compareEffectiveTimeValue(refNote.getEffTime(), getEffTime(), results, elementNameTime);
 		
 		// Compare Activity Codes 
 		String elementNameVal = " Comparing Notes Activity code element for " + context;
 		ParserUtilities.compareCode(refNote.getActivityCode(), activityCode, results, elementNameVal);
 		
+		
 		// Compare Status Codes 
 		String elementNameVal1 = " Comparing Notes Activity Status code element for " + context;
 		ParserUtilities.compareDataElement(refNote.getStatusCode(), statusCode, results, elementNameVal1);
 		
+		
 		// Comapring Author for Entry
 		String elementVal2 = " , Comparing Author Entry for : " + context;
 		ParserUtilities.compareAuthor(refNote.getAuthor(), author, results, elementVal2);
+		
+		if(parentComparison && (this.parent != null) && (refNote.parent != null)) {
+			
+			log.info(" Comparing Parent Notes Section details ");
+			// Handle Template Ids
+			String elementNameVal3 = "Comparing Notes Section tempalte Ids " + context;
+			ParserUtilities.compareTemplateIds(refNote.parent.getSectionTemplateId(), parent.getSectionTemplateId(), results, elementNameVal3);
+			
+			// Compare section Codes 
+			elementNameVal3 = "Comparing Notes Section code element for " + context;
+			ParserUtilities.compareCode(refNote.parent.getSectionCode(), parent.getSectionCode(), results, elementNameVal3);
+		}
 		
 		// May be add check to comapre TEXT.
 		log.info(" TODO  :  Add Check for Text which only checks null ");

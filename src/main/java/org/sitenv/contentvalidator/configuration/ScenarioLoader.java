@@ -56,7 +56,7 @@ public class ScenarioLoader implements InitializingBean {
                 	
                 	log.info("Parsing File : " + file.getName());
                     byte[] encoded = Files.readAllBytes(Paths.get(file.toURI()));
-                    CCDARefModel m = ccdaParser.parse(new String(encoded, "UTF-8"));
+                    CCDARefModel m = ccdaParser.parse(new String(encoded, "UTF-8"), true);
                     String modelName = FilenameUtils.getBaseName(file.getName());
                     refModelHashMap.put(modelName, m);
                 }

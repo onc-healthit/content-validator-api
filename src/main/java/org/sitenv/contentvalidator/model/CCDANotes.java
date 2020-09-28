@@ -17,12 +17,33 @@ public class CCDANotes {
 	private CCDACode                 		sectionCode;
 	private ArrayList<CCDANotesActivity>		notesActivity;
 	
+	private CCDAAuthor author;
+	
 	public CCDANotes() { 
 		
 		sectionTemplateId = new ArrayList<CCDAII>();
 		notesActivity = new ArrayList<CCDANotesActivity>();
 	}
 	
+	public void getAllNotesActivities(HashMap<String, CCDANotesActivity> results) {
+		
+		if(notesActivity != null && notesActivity.size() > 0) {
+			
+			log.info(" Found non-null notes activity ");
+			ParserUtilities.populateNotesActiviteis(notesActivity, results);
+		}
+	}
+	
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
+
 	public ArrayList<CCDAII> getSectionTemplateId() {
 		return sectionTemplateId;
 	}
@@ -57,6 +78,9 @@ public class CCDANotes {
 		for(int k = 0; k < notesActivity.size(); k++) {
 			notesActivity.get(k).log();
 		}
+		
+		if(author != null)
+			author.log();
 	}	
 	
 	public static void compareNotes(HashMap<String, CCDANotes> refNotes, 
@@ -69,8 +93,8 @@ public class CCDANotes {
 
 			if(subNotes.containsKey(ent.getKey())) {
 
-				log.info("Comparing Notes Section Observation ");
-				String context = "Comparing Notes Section corresponding to the code " + ent.getKey();
+				log.info("Comparing Notes Section since the section level matched ");
+				String context = "Notes Section corresponding to the code " + ent.getKey();
 				subNotes.get(ent.getKey()).compare(ent.getValue(), results, context);
 
 
@@ -97,7 +121,7 @@ public class CCDANotes {
 	
 	public void compare(CCDANotes refNote, ArrayList<ContentValidationResult> results , String context) {
 		
-		log.info("Comparing Notes ");
+		log.info("Comparing Notes section level information ");
 		
 		// Handle Template Ids
 		ParserUtilities.compareTemplateIds(refNote.getSectionTemplateId(), sectionTemplateId, results, context);
@@ -110,7 +134,7 @@ public class CCDANotes {
 		String elementNameVal = "Comparing Notes Section code element for " + context;
 		ParserUtilities.compareCode(refNote.getSectionCode(), sectionCode, results, elementNameVal);
 		
-		context += ", Comapring Notes Activity ";
+		// context += ", Comapring Notes Activity ";
 		CCDANotesActivity.compareNotesActivity(refNote.getNotesActivity(), this.getNotesActivity(), results, context);
 	}
 

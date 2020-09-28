@@ -15,6 +15,8 @@ public class CCDAVitalOrg {
 	private CCDAEffTime						effTime;
 	private ArrayList<CCDAVitalObs>			vitalObs;
 	
+	private CCDAAuthor author;
+	
 	public void log() {
 		
 		if(orgCode != null)
@@ -37,6 +39,9 @@ public class CCDAVitalOrg {
 		for(int k = 0; k < vitalObs.size(); k++) {
 			vitalObs.get(k).log();
 		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public CCDAVitalOrg()
@@ -96,6 +101,15 @@ public class CCDAVitalOrg {
 		if(vobs != null)
 			this.vitalObs = vobs;
 	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
 	
 	
 }

@@ -14,6 +14,8 @@ public class CCDASocialHistory {
 	private ArrayList<CCDATobaccoUse>			tobaccoUse;
 	private CCDABirthSexObs						birthSex;
 	
+	private CCDAAuthor author;
+	
 	public CCDABirthSexObs getBirthSex() {
 		return birthSex;
 	}
@@ -42,6 +44,9 @@ public class CCDASocialHistory {
 		
 		if(birthSex != null)
 			birthSex.log();
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public CCDASocialHistory()
@@ -49,6 +54,15 @@ public class CCDASocialHistory {
 		sectionTemplateIds = new ArrayList<CCDAII>();
 		smokingStatus = new ArrayList<CCDASmokingStatus>();
 		tobaccoUse = new ArrayList<CCDATobaccoUse>();
+	}
+
+	
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	public ArrayList<CCDAII> getSectionTemplateIds() {

@@ -11,6 +11,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ParserUtilities {
 	
@@ -24,8 +25,8 @@ public class ParserUtilities {
 					refAuthor.matches(subAuthor, results, elementName);
 				}
 				else if ((refAuthor == null) && (subAuthor != null)) {
-					ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-					results.add(rs);
+					
+					log.info(" Getting additional author information which is allowed ");
 				}
 				else if((refAuthor != null) && (subAuthor == null)){
 					ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
@@ -37,6 +38,35 @@ public class ParserUtilities {
 				}
 		
 		
+	}
+	
+	public static void compareDataElementText(CCDADataElement refDe, CCDADataElement subDe,
+			  ArrayList<ContentValidationResult> results, String elementName) {
+
+		// handle nulls.
+		if((refDe!= null) && (subDe != null) && (refDe.getValue() != null) && (subDe.getValue() != null)) {
+		
+			if(subDe.getValue().equalsIgnoreCase(refDe.getValue())){
+				// do nothing since both match.
+				log.info(" Both Submitted and Ref codes match for " + elementName);
+			}
+			else {
+				ContentValidationResult rs = new ContentValidationResult("The scenario requires Provenance Org Name of : (" + refDe.getValue() + ") for: " + elementName + ", but submitted file contains Provenance Org Name of : (" + subDe.getValue() + ") which does not match ", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+		
+		}
+		else if ((refDe == null) && (subDe != null)) {
+			log.info(" The submitted file has Provenance Org Name which is ok ");
+		}
+		else if((refDe != null) && (subDe == null)){
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires Provenance Org Name as part of: " + elementName + " data, but submitted file does not contain Provenance Org Name as part of : " + elementName + " which does not match ", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		} 
+		else {
+			// do nothing since both are null.
+			log.info(" Both Submitted and Ref codes are null for " + elementName);
+		}
 	}
 
 	public static void compareDataElement(CCDADataElement refCode, CCDADataElement submittedCode,
@@ -88,6 +118,54 @@ public class ParserUtilities {
 		}
 	}
 	
+	public static void compareEffectiveTimeValue(CCDAEffTime refTime, CCDAEffTime submittedTime,
+			ArrayList<ContentValidationResult> results, String elementName) {
+
+		// handle nulls.
+		if((refTime != null) && (submittedTime != null) ) {
+		
+			log.info(" Effective Times are not null in both Ref and Submitted models, so compare value attributes for them. ");
+			refTime.compareValueElement(submittedTime, results, elementName);
+		
+		}
+		else if ((refTime == null) && (submittedTime != null && submittedTime.hasValidData()) ) {
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else if((refTime != null && refTime.hasValidData()) && (submittedTime == null)){
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		} 
+		else {
+			// do nothing since both are null.
+			log.info(" Both Submitted and Ref times are null for " + elementName);
+		}
+	}
+	
+	public static void compareEffectiveTimeValueWithFullPrecision(CCDAEffTime refTime, CCDAEffTime submittedTime,
+			ArrayList<ContentValidationResult> results, String elementName) {
+
+		// handle nulls.
+		if((refTime != null) && (submittedTime != null) ) {
+		
+			log.info(" Effective Times are not null in both Ref and Submitted models, so compare value attributes for them. ");
+			refTime.compareValueElementWithFullPrecision(submittedTime, results, elementName);
+		
+		}
+		else if ((refTime == null) && (submittedTime != null && submittedTime.hasValidData()) ) {
+			
+			log.info(" Submitted CCDA File can have time values even if not present in the Ref C-CDA ");
+		}
+		else if((refTime != null && refTime.hasValidData()) && (submittedTime == null)){
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		} 
+		else {
+			// do nothing since both are null.
+			log.info(" Both Submitted and Ref times are null for " + elementName);
+		}
+	}
+	
 	public static Boolean compareCodesAndTranlations(CCDACode refCode, CCDACode submittedCode) {
 		
 		/*
@@ -121,6 +199,32 @@ public class ParserUtilities {
 		
 		log.info(" Could not find the Ref Code or Translation code in the Submitted codes ");
 		return false;
+	}
+	
+	public static void compareCodeAndTranslations(CCDACode refCode, CCDACode submittedCode,
+			   ArrayList<ContentValidationResult> results, String elementName) {
+
+		// handle section code.
+		if((refCode != null) && (submittedCode != null) ) {
+		
+			if(refCode.matches(submittedCode, results, elementName)) {
+				// do nothing since both match.
+				log.info(" Both Submitted and Ref codes match for " + elementName);
+			}
+			
+		}
+		else if ((refCode == null) && (submittedCode != null)) {
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else if((refCode != null) && (submittedCode == null)){
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		} 
+		else {
+			// do nothing since both are null.
+			log.info(" Both Submitted and Ref codes are null for " + elementName);
+		}
 	}
 
 	public static void compareCode(CCDACode refCode, CCDACode submittedCode,
@@ -317,7 +421,7 @@ public class ParserUtilities {
 			for(CCDAII r : refList) {
 			
 				if(!r.isPartOf(submittedList)) {
-					String error = "The " + elementName + " template id, Root Value = " 
+					String error = "The " + elementName + " : element - template id, Root Value = " 
 							+ ((r.getRootValue() != null)?r.getRootValue():"None specified") + " and Extension Value = " 
 					        + ((r.getExtValue() != null)?r.getExtValue():"No Extension value") + " is not present in the submitted CCDA's ";
 					ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
@@ -371,7 +475,7 @@ public class ParserUtilities {
 				author.setAuthorIds(readTemplateIdList((NodeList) CCDAConstants.REL_ID_EXP.
 						evaluate(assignedAuthor, XPathConstants.NODESET)));
 				
-				Element assignedPerson = (Element)CCDAConstants.REL_ASSIGNED_AUTHOR_EXP.evaluate(assignedAuthor, XPathConstants.NODE);
+				Element assignedPerson = (Element)CCDAConstants.REL_ASSIGNED_PERSON_EXP.evaluate(assignedAuthor, XPathConstants.NODE);
 				
 				if(assignedPerson != null) {
 					
@@ -387,7 +491,7 @@ public class ParserUtilities {
 				
 				}
 				
-				Element repOrg = (Element)CCDAConstants.REL_REP_ORG_EXP.evaluate(auth, XPathConstants.NODE);
+				Element repOrg = (Element)CCDAConstants.REL_REP_ORG_EXP.evaluate(assignedAuthor, XPathConstants.NODE);
 				
 				if(repOrg != null) {
 					
@@ -777,5 +881,78 @@ public class ParserUtilities {
 		}
 		return telecoms;
 	}	
+	
+	public static ArrayList<CCDANotesActivity> readNotesActivity(NodeList notesActivityList, CCDANotes parent) throws XPathExpressionException
+	{
+		ArrayList<CCDANotesActivity> notesActList = null;
+		
+		if(!ParserUtilities.isNodeListEmpty(notesActivityList)) {
+			
+			notesActList = new ArrayList<>();
+			
+			for (int i = 0; i < notesActivityList.getLength(); i++) {
+				
+				log.info("Found Notes Activity ");
+				
+				CCDANotesActivity notesActivity = new CCDANotesActivity();
+				
+				notesActivity.setParent(parent);
+				
+				Element notesActElem = (Element) notesActivityList.item(i);
+				
+				notesActivity.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+											evaluate(notesActElem, XPathConstants.NODESET)));
+				
+				notesActivity.setActivityCode(ParserUtilities.readCodeWithTranslation((Element) CCDAConstants.REL_CODE_EXP.
+						evaluate(notesActElem, XPathConstants.NODE)));
+				
+				notesActivity.setStatusCode(ParserUtilities.readCode((Element) CCDAConstants.REL_STATUS_CODE_EXP.
+						evaluate(notesActElem, XPathConstants.NODE)));
+				
+				notesActivity.setText(ParserUtilities.readTextContext((Element) CCDAConstants.REL_TEXT_EXP.
+						evaluate(notesActElem, XPathConstants.NODE)));
+				
+				notesActivity.setEffTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+									evaluate(notesActElem, XPathConstants.NODE)));
+				
+				notesActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+						evaluate(notesActElem, XPathConstants.NODE)));
+				
+				notesActList.add(notesActivity);
+			}
+			
+		}
+		
+		return notesActList;
+	}
+	
+	public static void populateNotesActiviteis(ArrayList<CCDANotesActivity> notesActs, HashMap<String,CCDANotesActivity> results) {
+		
+		if(notesActs != null && notesActs.size() > 0) {
+		
+			for(CCDANotesActivity act : notesActs) {
+				
+				CCDACode actCode = act.getActivityCode();
+				
+				// If Translations exist, we need to use translation codes.
+				if(actCode.getTranslations() != null && actCode.getTranslations().size() > 0) {
+					
+					ArrayList<CCDACode> actTransCodes = actCode.getTranslations();
+					
+					// Already size has been checked.
+					if(actTransCodes.get(0).getCode() != null) {
+						
+						log.info(" Adding the activity by code itslef and not translation " + actTransCodes.get(0).getCode() );
+						results.put(actTransCodes.get(0).getCode(), act);
+					}
+				}
+				else {
+					
+					log.info(" Adding the activity by code itslef and not translation " + actCode.getCode());
+					results.put(actCode.getCode(), act);
+				}
+			} // For all Notes Activities
+		}		
+	}
 	
 }

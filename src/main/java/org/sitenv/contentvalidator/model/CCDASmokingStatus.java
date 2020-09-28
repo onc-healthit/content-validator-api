@@ -16,6 +16,8 @@ public class CCDASmokingStatus {
 	private CCDACode							smokingStatusCode;
 	private CCDAEffTime							observationTime;
 	
+	private CCDAAuthor author;
+	
 	public static void compareSmokingStatus(HashMap<String, CCDASmokingStatus> refStatus, 
 			HashMap<String, CCDASmokingStatus> subStatus, 	ArrayList<ContentValidationResult> results) {
 
@@ -50,11 +52,24 @@ public class CCDASmokingStatus {
 		
 		if(observationTime != null)
 			observationTime.log();
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public CCDASmokingStatus()
 	{
 		smokingStatusTemplateIds = new ArrayList<CCDAII>();
+	}
+	
+	
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	public ArrayList<CCDAII> getSmokingStatusTemplateIds() {
