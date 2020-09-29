@@ -13,6 +13,9 @@ public class CCDALabResult {
 	private CCDACode					sectionCode;
 	private ArrayList<CCDALabResultOrg>	resultOrg;
 	private Boolean						isLabTestInsteadOfResult;
+	private ArrayList<CCDANotesActivity>		notesActivity;
+	
+	private CCDAAuthor	author;
 	
 	public HashMap<String, CCDALabResultObs> getLabResultsMap() {
 		
@@ -61,6 +64,13 @@ public class CCDALabResult {
 		for(int k = 0; k < resultOrg.size(); k++) {
 			resultOrg.get(k).log();
 		}
+		
+		for(int l = 0; l < notesActivity.size(); l++) {
+			notesActivity.get(l).log();
+		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public CCDALabResult()
@@ -68,6 +78,7 @@ public class CCDALabResult {
 		resultSectionTempalteIds = new ArrayList<CCDAII>();
 		resultOrg = new ArrayList<CCDALabResultOrg>();
 		isLabTestInsteadOfResult = false;
+		notesActivity = new ArrayList<CCDANotesActivity>();
 	}
 
 	public ArrayList<CCDAII> getResultSectionTempalteIds() {
@@ -97,4 +108,22 @@ public class CCDALabResult {
 		if(ros != null)
 			this.resultOrg = ros;
 	}
+
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 }

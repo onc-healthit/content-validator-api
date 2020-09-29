@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +13,9 @@ public class CCDAEncounter {
 	private ArrayList<CCDAII>    templateId;
 	private CCDACode  sectionCode;
 	private ArrayList<CCDAEncounterActivity> encActivities;
+	private ArrayList<CCDANotesActivity>		notesActivity;
+	
+	private CCDAAuthor	author;
 	
 	public HashMap<String, CCDAProblemObs> getAllDiagnosisObservations(Boolean includeTrans) {
 		
@@ -67,6 +71,23 @@ public class CCDAEncounter {
 		return diagnoses;
 	}
 	
+	public void getAllNotesActivities(HashMap<String, CCDANotesActivity> results) {
+		
+		if(notesActivity != null && notesActivity.size() > 0) {
+			
+			log.info(" Found non-null notes activity ");
+			ParserUtilities.populateNotesActiviteis(notesActivity, results);
+		}
+		
+		if( encActivities != null && encActivities.size() > 0) {
+			
+			for(CCDAEncounterActivity encAct : encActivities) {
+				
+				encAct.getAllNotesActivities(results);
+			}
+		}
+	}
+	
 	public void log() {
 		
 		if(sectionCode != null)
@@ -80,6 +101,13 @@ public class CCDAEncounter {
 		for(int k = 0; k < encActivities.size(); k++) {
 			encActivities.get(k).log();
 		}
+		
+		for(int l = 0; l < notesActivity.size(); l++) {
+			notesActivity.get(l).log();
+		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public ArrayList<CCDAII> getTemplateId() {
@@ -107,10 +135,39 @@ public class CCDAEncounter {
 		if(enActivities != null)
 			this.encActivities = enActivities;
 	}
+	
+	
+
+	public static Logger getLog() {
+		return log;
+	}
+
+	public static void setLog(Logger log) {
+		CCDAEncounter.log = log;
+	}
+
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
+	}
 
 	public CCDAEncounter()
 	{
 		encActivities = new ArrayList<CCDAEncounterActivity>();
 		templateId = new ArrayList<CCDAII>();
+		notesActivity = new ArrayList<CCDANotesActivity>();
 	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 }

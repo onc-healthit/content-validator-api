@@ -12,6 +12,8 @@ public class CCDADischargeDiagnosis {
 	private CCDACode  sectionCode;
 	private ArrayList<CCDAProblemObs> diagnosis;
 	
+	private CCDAAuthor author;
+	
 	public void log() {
 		
 		if(sectionCode != null)
@@ -25,6 +27,9 @@ public class CCDADischargeDiagnosis {
 		for(int k = 0; k < diagnosis.size(); k++) {
 			diagnosis.get(k).log();
 		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public CCDADischargeDiagnosis() {
@@ -56,5 +61,15 @@ public class CCDADischargeDiagnosis {
 	public void setDiagnosis(ArrayList<CCDAProblemObs> diagnosis) {
 		this.diagnosis = diagnosis;
 	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 	
 }

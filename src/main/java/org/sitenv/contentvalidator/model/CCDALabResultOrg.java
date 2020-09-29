@@ -14,6 +14,8 @@ public class CCDALabResultOrg {
 	private CCDAEffTime						effTime;
 	private ArrayList<CCDALabResultObs>		resultObs;
 	
+	private CCDAAuthor	author;
+	
 	public void log() {
 		
 		if(orgCode != null)
@@ -33,6 +35,9 @@ public class CCDALabResultOrg {
 		for(int k = 0; k < resultObs.size(); k++) {
 			resultObs.get(k).log();
 		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public CCDALabResultOrg()
@@ -84,5 +89,15 @@ public class CCDALabResultOrg {
 		if(robs != null)
 			this.resultObs = robs;
 	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 	
 }

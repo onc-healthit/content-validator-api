@@ -18,6 +18,8 @@ public class CCDAProblem {
 	private ArrayList<CCDAProblemConcern>  	problemConcerns;
 	private ArrayList<CCDAProblemObs>       pastIllnessProblems;
 	
+	private CCDAAuthor author;
+	
 	public ArrayList<CCDAProblemObs> getPastIllnessProblems() {
 		return pastIllnessProblems;
 	}
@@ -158,6 +160,9 @@ public class CCDAProblem {
 				pastIllnessProblems.get(i).log();
 			}
 		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public ArrayList<CCDAProblemConcern> getProblemConcerns() {
@@ -185,6 +190,15 @@ public class CCDAProblem {
 
 	public void setSectionCode(CCDACode sectionCode) {
 		this.sectionCode = sectionCode;
+	}
+
+	
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	public CCDAProblem()

@@ -13,6 +13,8 @@ public class CCDAVitalSigns {
 	private CCDACode					sectionCode;
 	private ArrayList<CCDAVitalOrg>		vitalsOrg;
 	
+	private CCDAAuthor author;
+	
 	public HashMap<String, CCDAVitalObs> getVitalObsMap() {
 		
 		HashMap<String, CCDAVitalObs> results = new HashMap<String, CCDAVitalObs>();
@@ -50,6 +52,9 @@ public class CCDAVitalSigns {
 		for(int k = 0; k < vitalsOrg.size(); k++) {
 			vitalsOrg.get(k).log();
 		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public ArrayList<CCDAII> getTemplateIds() {
@@ -78,6 +83,16 @@ public class CCDAVitalSigns {
 		
 		if(vos != null)
 			this.vitalsOrg = vos;
+	}
+	
+	
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	public CCDAVitalSigns()

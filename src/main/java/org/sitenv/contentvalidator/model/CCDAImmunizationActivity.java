@@ -22,6 +22,8 @@ public class CCDAImmunizationActivity {
 	private CCDAConsumable						consumable;
 	private CCDAOrganization					organization;
 	
+	private CCDAAuthor	author;
+	
 	public static void compareImmunizationActivityData(HashMap<String, CCDAImmunizationActivity> refActivities, 
 			HashMap<String, CCDAImmunizationActivity> subActivities, 	ArrayList<ContentValidationResult> results) {
 
@@ -125,6 +127,9 @@ public class CCDAImmunizationActivity {
 		if(organization != null) {
 			organization.log();
 		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public CCDAOrganization getOrganization() {
@@ -198,4 +203,16 @@ public class CCDAImmunizationActivity {
 	public void setOrganization(CCDAOrganization representedOrg) {
 		organization = representedOrg;
 	}
+
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 }

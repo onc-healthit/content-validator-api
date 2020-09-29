@@ -22,6 +22,9 @@ public class CCDALabResultObs {
 	private String 							resultString;
 	private CCDACode						interpretationCode;
 	private ArrayList<CCDAPQ>				referenceValue;
+	private ArrayList<CCDANotesActivity>		notesActivity;
+	
+	private CCDAAuthor	author;
 	
 	public static void compareLabResultData(HashMap<String, CCDALabResultObs> refResults, 
 			HashMap<String, CCDALabResultObs> subResults, 	ArrayList<ContentValidationResult> results) {
@@ -147,6 +150,7 @@ public class CCDALabResultObs {
 	{
 		templateIds = new ArrayList<CCDAII>();
 		referenceValue = new ArrayList<CCDAPQ>();
+		notesActivity = new ArrayList<CCDANotesActivity>();
 	}
 	
 	public void log() {
@@ -177,6 +181,13 @@ public class CCDALabResultObs {
 		for(int k = 0; k < referenceValue.size(); k++) {
 			referenceValue.get(k).log();
 		}
+		
+		for(int l = 0; l < notesActivity.size();l++) {
+			notesActivity.get(l).log();
+		}
+		
+		if(author != null)
+			author.log();
 	}
 
 	public ArrayList<CCDAII> getTemplateIds() {
@@ -258,6 +269,23 @@ public class CCDALabResultObs {
 	public void setReferenceValue(ArrayList<CCDAPQ> referenceValue) {
 		this.referenceValue = referenceValue;
 	}
+
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
 	
 	
 }

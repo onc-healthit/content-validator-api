@@ -16,6 +16,8 @@ public class CCDAProblemConcern {
 	private CCDAEffTime      			effTime;
 	private ArrayList<CCDAProblemObs>  	problems;
 	
+	private CCDAAuthor author;
+	
 	public void compare(CCDAProblemConcern subConc, String problemObsContext, ArrayList<ContentValidationResult> results ) {
 		
 		log.info(" Comparing Concern data for problem " + problemObsContext);
@@ -55,12 +57,25 @@ public class CCDAProblemConcern {
 		for(int k = 0; k < problems.size(); k++) {
 			problems.get(k).log();
 		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public CCDAProblemConcern()
 	{
 		problems = new ArrayList<CCDAProblemObs>();
 		templateId = new ArrayList<CCDAII>();
+	}
+	
+	
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
 	}
 
 	public ArrayList<CCDAII> getTemplateId() {

@@ -13,6 +13,8 @@ public class CCDAImmunization {
 	private CCDACode                 			sectionCode;
 	private ArrayList<CCDAImmunizationActivity> immActivity;
 	
+	private CCDAAuthor	author;
+	
 	public HashMap<String, CCDAImmunizationActivity> getImmunizationActivitiesMap() {
 		
 		HashMap<String, CCDAImmunizationActivity> acts = new HashMap<String, CCDAImmunizationActivity>();
@@ -44,6 +46,9 @@ public class CCDAImmunization {
 		for(int k = 0; k < immActivity.size(); k++) {
 			immActivity.get(k).log();
 		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public ArrayList<CCDAII> getTemplateIds() {
@@ -73,6 +78,18 @@ public class CCDAImmunization {
 		if(iats != null)
 			this.immActivity = iats;
 	}
+	
+	
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
 
 	public CCDAImmunization() 
 	{

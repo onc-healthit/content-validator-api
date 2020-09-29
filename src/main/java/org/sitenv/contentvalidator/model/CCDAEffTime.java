@@ -151,6 +151,90 @@ public class CCDAEffTime {
 		}*/
 	}
 	
+	public void compareValueElement(CCDAEffTime subTime, ArrayList<ContentValidationResult> results, String elementName) {
+		
+		String refTime;
+		String submittedtime;
+		log.info(" Comparing Effective Times for " + elementName);
+			 
+		// Compare Time value element
+		if(valuePresent && subTime.getValuePresent() ) {
+
+			if(value.getValue().length() >= 8)
+				refTime = value.getValue().substring(0,8);
+			else 
+				refTime = value.getValue();
+
+			if(subTime.getValue().getValue().length() >= 8)
+				submittedtime = subTime.getValue().getValue().substring(0,8);
+			else 
+				submittedtime = subTime.getValue().getValue();
+
+			if(refTime.equalsIgnoreCase(submittedtime) ) {
+				log.info("Value Time element matches");
+			}
+			else {
+				String error = "The " + elementName + " (Effective Time: Value ) is " + value.getValue() + " , but submitted CCDA (Effective Time: Value ) is " + subTime.getValue().getValue() + " which does not match ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+
+		}
+		else if(valuePresent && !subTime.getValuePresent()) {
+
+			String error = "The " + elementName + " (value time element ) is required, but submitted CCDA does not contain the (value time element) for " + elementName;
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else if(!valuePresent && subTime.getValuePresent()) {
+
+			String error = "The " + elementName + " (value time element) is not required, but submitted CCDA contains the (value time element) for " + elementName;
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else {
+			log.info("Value Time elements absent in both refernce and submitted models ");
+		}
+	}
+	
+	public void compareValueElementWithFullPrecision(CCDAEffTime subTime, ArrayList<ContentValidationResult> results, String elementName) {
+		
+		String refTime;
+		String submittedtime;
+		log.info(" Comparing Effective Times for " + elementName);
+			 
+		// Compare Time value element
+		if(valuePresent && subTime.getValuePresent() ) {
+
+			
+			refTime = value.getValue();
+			submittedtime = subTime.getValue().getValue();
+
+			if(refTime.equalsIgnoreCase(submittedtime) ) {
+				log.info("Value Time element matches");
+			}
+			else {
+				String error = "The " + elementName + " (Effective Time: Value ) is " + value.getValue() + " , but submitted CCDA (Effective Time: Value ) is " + subTime.getValue().getValue() + " which does not match ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+
+		}
+		else if(valuePresent && !subTime.getValuePresent()) {
+
+			String error = "The " + elementName + " (value time element ) is required, but submitted CCDA does not contain the (value time element) for " + elementName;
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else if(!valuePresent && subTime.getValuePresent()) {
+
+			log.info(" It is ok to have author time even if it is not present in the Ref CCDA");
+		}
+		else {
+			log.info("Value Time elements absent in both refernce and submitted models ");
+		}
+	}
+	
 	public void log() {
 		
 		log.info("Eff Time Low = " + (lowPresent ? low.getValue() : "No Low"));

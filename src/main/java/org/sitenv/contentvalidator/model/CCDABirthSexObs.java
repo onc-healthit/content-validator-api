@@ -12,6 +12,8 @@ public class CCDABirthSexObs {
 	private CCDACode                            birthSexObsCode;
 	private CCDACode							sexCode;
 	private CCDAEffTime							observationTime;
+	
+	private CCDAAuthor	author;
 
 	public CCDABirthSexObs() {
 		templateIds = new ArrayList<CCDAII>();
@@ -32,6 +34,9 @@ public class CCDABirthSexObs {
 
 		if(observationTime != null)
 			observationTime.log();
+		
+		if(author != null)
+			author.log();
 	}
 
 	public ArrayList<CCDAII> getTemplateIds() {
@@ -67,4 +72,14 @@ public class CCDABirthSexObs {
 	public void setObservationTime(CCDAEffTime observationTime) {
 		this.observationTime = observationTime;
 	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 }

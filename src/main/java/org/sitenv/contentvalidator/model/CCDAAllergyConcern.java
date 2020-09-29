@@ -16,6 +16,8 @@ public class CCDAAllergyConcern {
 	private CCDAEffTime      			effTime;
 	private ArrayList<CCDAAllergyObs>  	allergyObs;
 	
+	private CCDAAuthor						author;
+	
 	public void compare(CCDAAllergyConcern subConc, String allergyObsContext, ArrayList<ContentValidationResult> results ) {
 		
 		log.info(" Comparing Concern data for Allergy " + allergyObsContext);
@@ -55,6 +57,9 @@ public class CCDAAllergyConcern {
 		for(int k = 0; k < allergyObs.size(); k++) {
 			allergyObs.get(k).log();
 		}
+		
+		if(author != null) 
+			author.log();
 	}
 	
 	public CCDAAllergyConcern()
@@ -106,4 +111,14 @@ public class CCDAAllergyConcern {
 		if(aobs != null)
 			this.allergyObs = aobs;
 	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 }

@@ -12,6 +12,9 @@ public class CCDAProcedure {
 	private ArrayList<CCDAII>       		sectionTemplateId;
 	private CCDACode                 		sectionCode;
 	private ArrayList<CCDAProcActProc>		procActsProcs;
+	private ArrayList<CCDANotesActivity>		notesActivity;
+	
+	private CCDAAuthor author;
 	
 	public ArrayList<CCDAUDI> getAllUdis() {
 		
@@ -65,12 +68,20 @@ public class CCDAProcedure {
 		for(int k = 0; k < procActsProcs.size(); k++) {
 			procActsProcs.get(k).log();
 		}
+		
+		for(int l = 0; l < notesActivity.size(); l++) {
+			notesActivity.get(l).log();
+		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public CCDAProcedure()
 	{
 		sectionTemplateId = new ArrayList<CCDAII>();
 		procActsProcs = new ArrayList<CCDAProcActProc>();
+		notesActivity = new ArrayList<CCDANotesActivity>();
 	}
 
 	public ArrayList<CCDAII> getSectionTemplateId() {
@@ -101,6 +112,34 @@ public class CCDAProcedure {
 			this.procActsProcs = paps;
 	}
 	
+	
+	
+	public static Logger getLog() {
+		return log;
+	}
+
+	public static void setLog(Logger log) {
+		CCDAProcedure.log = log;
+	}
+
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
+	}
+	
+	
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
 	public void addProcActsProcs(ArrayList<CCDAProcActProc> paps) {
 		
 		if(paps != null) {

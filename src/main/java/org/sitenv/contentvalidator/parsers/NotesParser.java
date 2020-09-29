@@ -17,7 +17,7 @@ public class NotesParser {
 
 private static Logger log = Logger.getLogger(NotesParser.class.getName());
 	
-	public static void parse(Document doc, CCDARefModel model) throws XPathExpressionException {
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
     	
     	model.setNotes(retrieveNotesDetails(doc));	
     	
@@ -46,8 +46,11 @@ private static Logger log = Logger.getLogger(NotesParser.class.getName());
 					evaluate(elem, XPathConstants.NODE)));
 				
 				// Grab the notes activities
-				note.setNotesActivity(readNotesActivity((NodeList) CCDAConstants.REL_NOTES_ACTIVITY_EXPRESSION.
-						evaluate(elem, XPathConstants.NODESET)));
+				note.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_NOTES_ACTIVITY_EXPRESSION.
+						evaluate(elem, XPathConstants.NODESET), note));
+				
+				note.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+						evaluate(elem, XPathConstants.NODE)));
 				
 				notes.add(note);
 			}
@@ -57,45 +60,5 @@ private static Logger log = Logger.getLogger(NotesParser.class.getName());
 		return notes;
 	}
 	
-	public static ArrayList<CCDANotesActivity> readNotesActivity(NodeList notesActivityList) throws XPathExpressionException
-	{
-		ArrayList<CCDANotesActivity> notesActList = null;
-		
-		if(!ParserUtilities.isNodeListEmpty(notesActivityList)) {
-			
-			notesActList = new ArrayList<>();
-			
-			for (int i = 0; i < notesActivityList.getLength(); i++) {
-				
-				log.info("Found Notes Activity ");
-				
-				CCDANotesActivity notesActivity = new CCDANotesActivity();
-				
-				Element notesActElem = (Element) notesActivityList.item(i);
-				
-				notesActivity.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
-											evaluate(notesActElem, XPathConstants.NODESET)));
-				
-				notesActivity.setActivityCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
-						evaluate(notesActElem, XPathConstants.NODE)));
-				
-				notesActivity.setStatusCode(ParserUtilities.readCode((Element) CCDAConstants.REL_STATUS_CODE_EXP.
-						evaluate(notesActElem, XPathConstants.NODE)));
-				
-				notesActivity.setText(ParserUtilities.readTextContext((Element) CCDAConstants.REL_TEXT_EXP.
-						evaluate(notesActElem, XPathConstants.NODE)));
-				
-				notesActivity.setEffTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
-									evaluate(notesActElem, XPathConstants.NODE)));
-				
-				notesActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
-						evaluate(notesActElem, XPathConstants.NODE)));
-				
-				notesActList.add(notesActivity);
-			}
-			
-		}
-		
-		return notesActList;
-	}
+	
 }

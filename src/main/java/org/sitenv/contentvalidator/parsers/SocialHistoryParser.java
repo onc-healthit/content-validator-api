@@ -14,7 +14,7 @@ public class SocialHistoryParser {
 	
 	private static Logger log = Logger.getLogger(SocialHistoryParser.class.getName());
 	
-	public static void parse(Document doc, CCDARefModel model) throws XPathExpressionException {
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
     	
     	log.info(" *** Parsing Social History *** ");
     	model.setSmokingStatus(retrieveSmokingStatusDetails(doc));	

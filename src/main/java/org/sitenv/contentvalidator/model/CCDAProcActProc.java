@@ -23,6 +23,9 @@ public class CCDAProcActProc {
 	private ArrayList<CCDAUDI>					udi;
 	private CCDACode							deviceCode;
 	private CCDAII								scopingEntityId;
+	private ArrayList<CCDANotesActivity>		notesActivity;
+	
+	private CCDAAuthor author;
 	
 	public static void compareProcedures(HashMap<String, CCDAProcActProc> refProcs, 
 			HashMap<String, CCDAProcActProc> subProcs, 	ArrayList<ContentValidationResult> results) {
@@ -117,6 +120,13 @@ public class CCDAProcActProc {
 		for(int m = 0; m < udi.size(); m++) {
 			udi.get(m).log();
 		}
+		
+		for(int n = 0; n < notesActivity.size(); n++) {
+			notesActivity.get(n).log();
+		}
+		
+		if(author != null)
+			author.log();
 	}
 	
 	public CCDAProcActProc()
@@ -125,6 +135,7 @@ public class CCDAProcActProc {
 		performer = new ArrayList<CCDAAssignedEntity>();
 		sdLocs = new ArrayList<CCDAServiceDeliveryLoc>();
 		udi = new ArrayList<CCDAUDI>();
+		notesActivity = new ArrayList<CCDANotesActivity>();
 	}
 
 	public ArrayList<CCDAII> getSectionTemplateId() {
@@ -221,5 +232,24 @@ public class CCDAProcActProc {
 			this.udi = udis;
 		
 	}
+
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
+	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
+	
 	
 }

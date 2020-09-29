@@ -11,6 +11,8 @@ public class CCDAMedicalEquipment {
 	private ArrayList<CCDAII>       		sectionTemplateId;
 	private CCDACode                 		sectionCode;
 	private ArrayList<CCDAUDI>			    udis;
+	
+	private CCDAAuthor 	author;
 
 	public void log() {
 		
@@ -27,6 +29,9 @@ public class CCDAMedicalEquipment {
 		for(int j = 0; j < udis.size(); j++) {
 			udis.get(j).log();
 		}
+		
+		if(author != null)
+			author.log();
 		
 	}
 	
@@ -72,5 +77,19 @@ public class CCDAMedicalEquipment {
 			}
 		}
 	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+
+	public void setUdis(ArrayList<CCDAUDI> udis) {
+		this.udis = udis;
+	}
+	
+	
 
 }

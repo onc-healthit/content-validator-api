@@ -11,6 +11,8 @@ public class CCDAAllergySeverity {
 	private ArrayList<CCDAII>				templateIds;
 	private CCDACode						severity;
 	
+	private CCDAAuthor		author;
+	
 	public void log() {
 		
 		log.info("***Allergy Severity ***");
@@ -22,6 +24,9 @@ public class CCDAAllergySeverity {
 			log.info(" Tempalte Id [" + j + "] = " + templateIds.get(j).getRootValue());
 			log.info(" Tempalte Id Ext [" + j + "] = " + templateIds.get(j).getExtValue());
 		}
+		
+		if(author != null)
+			author.log();
 		
 	}
 
@@ -47,4 +52,14 @@ public class CCDAAllergySeverity {
 	{
 		templateIds = new ArrayList<CCDAII>();
 	}
+
+	public CCDAAuthor getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(CCDAAuthor author) {
+		this.author = author;
+	}
+	
+	
 }

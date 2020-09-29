@@ -32,11 +32,11 @@ public class CCDAParser {
 		doc = builder.parse(new BOMInputStream(IOUtils.toInputStream(ccdaFile, StandardCharsets.UTF_8.name())));
 	}
 	
-	public CCDARefModel parse(String ccdaFile) {
-		return parse(ccdaFile, SeverityLevel.INFO);
+	public CCDARefModel parse(String ccdaFile, boolean curesUpdate) {
+		return parse(ccdaFile, SeverityLevel.INFO, curesUpdate);
 	}
 	
-	public CCDARefModel parse(String ccdaFile, SeverityLevel severityLevel) {
+	public CCDARefModel parse(String ccdaFile, SeverityLevel severityLevel, boolean curesUpdate) {
 		try {
 			//log.info(" Parsing File " + ccdaFile);
 			initDoc(ccdaFile);
@@ -45,9 +45,9 @@ public class CCDAParser {
 			log.info("Creating Model");
 			CCDARefModel model = new CCDARefModel(severityLevel);
 			
-			model.setPatient(CCDAHeaderParser.getPatient(doc));
-			model.setHeader(CCDAHeaderParser.getHeaderElements(doc));
-			CCDABodyParser.parseBody(doc, model);
+			model.setPatient(CCDAHeaderParser.getPatient(doc, curesUpdate));
+			model.setHeader(CCDAHeaderParser.getHeaderElements(doc, curesUpdate));
+			CCDABodyParser.parseBody(doc, model, curesUpdate);
 		
 			log.info("Returning Parsed Model");
 			// model.log();

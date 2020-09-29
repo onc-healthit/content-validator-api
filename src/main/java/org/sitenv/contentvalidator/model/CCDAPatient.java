@@ -382,12 +382,12 @@ public class CCDAPatient {
 		return false;
 	}	
 
-	public void compare(CCDAPatient patient, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA) {
+	public void compare(CCDAPatient patient, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA, boolean curesUpdate) {
 	
 		compareNames(patient, results, submittedCCDA);
 		compareMiscellaneous(patient, results);
 		compareRaceAndEthnicity(patient, results);
-		compareTelecoms(patient, results, submittedCCDA);
+		compareTelecoms(patient, results, submittedCCDA, curesUpdate);
 	}
 	
 	private void compareRaceAndEthnicity(CCDAPatient patient, ArrayList<ContentValidationResult> results) {
@@ -633,20 +633,28 @@ public class CCDAPatient {
 		}
 	}
 	
-	private void compareTelecoms(CCDAPatient patient, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA) {
+	private void compareTelecoms(CCDAPatient patient, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA, boolean curesUpdate) {
 		// <overwrite with other non-warning telecom comparisons here if any>
 		
 		if (submittedCCDA.warningsPermitted()) {
 			log.info("Comparing Patient's telecom/@use and telecom/@value");		
 			for(CCDATelecom tel : telecom) {
 				if(!patient.containsTelecomUseAndValue(tel)) {
-					String warningMessage = "Patient Telecom in the submitted file does not match the expected Telecom. "
+					String message = "Patient Telecom in the submitted file does not match the expected Telecom. "
 							+ "The following values are expected: "
 							+ "telecom/@use = " + tel.getUseAttribute() 
 							+ " and telecom/@value = " + tel.getValueAttribute();
-					ContentValidationResult rs = new ContentValidationResult(warningMessage, ContentValidationResultLevel.WARNING,
-							"/ClinicalDocument", "0");
-					results.add(rs);
+					if(curesUpdate) {
+						ContentValidationResult rs = new ContentValidationResult(message, ContentValidationResultLevel.ERROR,
+								"/ClinicalDocument", "0");
+						results.add(rs);
+					}
+					else {
+						ContentValidationResult rs = new ContentValidationResult(message, ContentValidationResultLevel.WARNING,
+								"/ClinicalDocument", "0");
+						results.add(rs);
+					}
+					
 				}
 			}
 		} else {

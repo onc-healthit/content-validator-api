@@ -16,7 +16,7 @@ public class CareTeamMemberParser {
 	
 	private static Logger log = Logger.getLogger(CareTeamMemberParser.class.getName());
 	
-    public static void parse(Document doc, CCDARefModel model) throws XPathExpressionException {
+    public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
     	
     	log.info(" *** Parsing Care Team Members *** ");
     	model.setMembers(retrieveCTMDetails(doc));	
