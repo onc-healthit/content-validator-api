@@ -46,6 +46,9 @@ public class MedicalEquipmentParser {
 			meq.addUDIs(readUDIsFromProcedures((NodeList)CCDAConstants.REL_PROC_ACT_PROC_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET)));
 			
+			meq.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+			
 		}
 		
 		return meq;
@@ -120,7 +123,8 @@ public class MedicalEquipmentParser {
 			device.setScopingEntityId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_SCOPING_ENTITY_ID_EXP.
 					evaluate(deviceElement, XPathConstants.NODESET)));
 			
-			
+			device.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(deviceElement, XPathConstants.NODE)));
 			deviceList.add(device);
 			
 		}

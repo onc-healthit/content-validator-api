@@ -35,6 +35,9 @@ public class VitalSignParser {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			vitalSigns.setVitalsOrg(readVitalOrganizer((NodeList) CCDAConstants.REL_VITAL_ORG_EXPRESSION.
 					evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			vitalSigns.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 		}
 		return vitalSigns;
 	}
@@ -68,6 +71,10 @@ public class VitalSignParser {
 			
 			vitalOrganizer.setVitalObs(readVitalObservation((NodeList) CCDAConstants.REL_COMP_OBS_EXP.
 					evaluate(vitalOrganizerElement, XPathConstants.NODESET)));
+			
+			vitalOrganizer.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(vitalOrganizerElement, XPathConstants.NODE)));
+			
 			vitalOrganizerList.add(vitalOrganizer);
 		}
 		return vitalOrganizerList;
@@ -97,6 +104,9 @@ public class VitalSignParser {
 					evaluate(resultObservationElement, XPathConstants.NODE)));
 			
 			vitalObservation.setInterpretationCode(ParserUtilities.readCode((Element) CCDAConstants.REL_INT_CODE_EXP.
+					evaluate(resultObservationElement, XPathConstants.NODE)));
+			
+			vitalObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(resultObservationElement, XPathConstants.NODE)));
 			
 			Element vsResult = (Element) CCDAConstants.REL_VAL_EXP.

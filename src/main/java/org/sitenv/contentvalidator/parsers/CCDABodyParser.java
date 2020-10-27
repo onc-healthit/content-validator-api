@@ -54,6 +54,9 @@ public class CCDABodyParser {
 		if(curesUpdate) {
 			log.info(" Parsing Notes Section ");
 			NotesParser.parse(doc,model, curesUpdate);
+			
+			log.info(" Parsing Doc Author ");
+			AuthorParser.parse(doc, model, curesUpdate);
 		}
 		
 	}

@@ -44,6 +44,9 @@ public class EncounterDiagnosesParser {
 			// Get Entries
 			admDiag.setDiagnosis(readHospitalAdmissionDiagnosis((NodeList) CCDAConstants.REL_HOSPITAL_ADMISSION_DIAG_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			admDiag.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 		}
 		
 		return admDiag;
@@ -91,6 +94,9 @@ public class EncounterDiagnosesParser {
 			// Get Entries
 			dischargeDiag.setDiagnosis(readHospitalDischargeDiagnosis((NodeList) CCDAConstants.REL_HOSPITAL_DISCHARGE_DIAG_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			dischargeDiag.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 		}
 		
 		return dischargeDiag;
@@ -139,6 +145,9 @@ public class EncounterDiagnosesParser {
 			// Get Entries
 			encounters.setEncActivities(readEncounterActivity((NodeList) CCDAConstants.REL_ENC_ENTRY_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET), curesUpdate));
+			
+			encounters.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 		}
 		return encounters;
 	}
@@ -184,7 +193,12 @@ public class EncounterDiagnosesParser {
 				encounterActivity.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION.
 						evaluate(encounterActivityElement, XPathConstants.NODESET), null));
 				
+				encounterActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+						evaluate(encounterActivityElement, XPathConstants.NODE)));
+				
 				encounterActivityList.add(encounterActivity);
+				
+				
 			}
 		}
 		return encounterActivityList;
@@ -214,6 +228,10 @@ public class EncounterDiagnosesParser {
 										evaluate(encounterDiagnosisElement, XPathConstants.NODESET);
 			
 			encounterDiagnosis.setProblemObs(readProblemObservation(problemObservationNodeList));
+			
+			encounterDiagnosis.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(encounterDiagnosisElement, XPathConstants.NODE)));
+			
 			encounterDiagnosisList.add(encounterDiagnosis);
 		}
 		
@@ -283,6 +301,9 @@ public class EncounterDiagnosesParser {
 										evaluate(problemObservationElement, XPathConstants.NODE)));
 			
 			problemObservation.setProblemCode(ParserUtilities.readCodeWithTranslation((Element) CCDAConstants.REL_VAL__WITH_TRANS_EXP.
+					evaluate(problemObservationElement, XPathConstants.NODE)));
+			
+			problemObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(problemObservationElement, XPathConstants.NODE)));
 			
 			problemObservationList.add(problemObservation);

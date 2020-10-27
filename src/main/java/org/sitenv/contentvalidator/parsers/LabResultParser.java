@@ -39,6 +39,9 @@ public class LabResultParser {
 									evaluate(sectionElement, XPathConstants.NODESET)));
 			
 			labResults.setIsLabTestInsteadOfResult(false);
+			
+			labResults.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 		}
 		return labResults;
 	}
@@ -70,6 +73,9 @@ public class LabResultParser {
 			
 			labResultOrg.setResultObs(readResultObservation((NodeList) CCDAConstants.REL_COMP_OBS_EXP.
 					evaluate(labResultOrgElement, XPathConstants.NODESET)));
+			
+			labResultOrg.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(labResultOrgElement, XPathConstants.NODE)));
 			labResultOrgList.add(labResultOrg);
 		}
 		return labResultOrgList;
@@ -99,6 +105,9 @@ public class LabResultParser {
 					evaluate(resultObservationElement, XPathConstants.NODE)));
 			
 			resultObservation.setInterpretationCode(ParserUtilities.readCode((Element) CCDAConstants.REL_INT_CODE_EXP.
+					evaluate(resultObservationElement, XPathConstants.NODE)));
+			
+			resultObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(resultObservationElement, XPathConstants.NODE)));
 			
 			Element resultValue = (Element) CCDAConstants.REL_VAL_EXP.

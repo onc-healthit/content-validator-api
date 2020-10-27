@@ -39,6 +39,9 @@ public class ImmunizationParser {
 					evaluate(sectionElement, XPathConstants.NODE)));
 			immunizations.setImmActivity(readImmunization((NodeList) CCDAConstants.REL_ENTRY_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			immunizations.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 		}
 		return immunizations;
 	}
@@ -100,6 +103,10 @@ public class ImmunizationParser {
 					
 					immunizationActivity.setOrganization(representedOrg);
 				}
+				
+				immunizationActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+						evaluate(immunizationActivityElement, XPathConstants.NODE)));
+				
 				immunizationActivityList.add(immunizationActivity);
 			}
 		}

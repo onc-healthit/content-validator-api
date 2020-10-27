@@ -1,8 +1,10 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CCDALabResultOrg {
 
@@ -15,6 +17,17 @@ public class CCDALabResultOrg {
 	private ArrayList<CCDALabResultObs>		resultObs;
 	
 	private CCDAAuthor	author;
+	
+	public void getAllNotesActivities(HashMap<String, CCDANotesActivity> results) {
+		
+		if( resultObs != null && resultObs.size() > 0) {
+			
+			for(CCDALabResultObs res : resultObs) {
+				
+				res.getAllNotesActivities(results);
+			}
+		}
+	}
 	
 	public void log() {
 		

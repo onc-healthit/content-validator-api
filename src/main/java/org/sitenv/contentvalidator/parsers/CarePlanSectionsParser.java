@@ -32,6 +32,9 @@ public class CarePlanSectionsParser {
 			log.info("interventions tagName: " + interventions.getTagName());
 			log.info("Setting: Document HAS Interventions Section (V3) 2.16.840.1.113883.10.20.21.2.3:2015-08-01");
 			carePlanSections.setInterventionsSectionV3(true);
+			
+			carePlanSections.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(interventions, XPathConstants.NODE)));
 		} else {
 			log.info("Document does NOT have Interventions Section (V3) 2.16.840.1.113883.10.20.21.2.3:2015-08-01");
 		}
@@ -41,7 +44,10 @@ public class CarePlanSectionsParser {
 		if(healthStatusEvals != null) {
 			log.info("healthStatusEvals tagName: " + healthStatusEvals.getTagName());
 			log.info("Setting: Document HAS Health Status Evaluations and Outcomes Section 2.16.840.1.113883.10.20.22.2.61");
-			carePlanSections.setHealthStatusEvaluationsAndOutcomesSection(true);			
+			carePlanSections.setHealthStatusEvaluationsAndOutcomesSection(true);	
+			
+			carePlanSections.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(healthStatusEvals, XPathConstants.NODE)));
 		} else {
 			log.info("Document does NOT have Health Status Evaluations and Outcomes Section 2.16.840.1.113883.10.20.22.2.61");
 		}

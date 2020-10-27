@@ -157,6 +157,7 @@ public class CCDAConstants {
 	static public XPathExpression REL_ASSN_ENTITY_ADDR;
 	static public XPathExpression REL_ASSN_ENTITY_PERSON_NAME;
 	static public XPathExpression REL_ASSN_ENTITY_TEL_EXP;
+	static public XPathExpression AUTHOR_EXP;
 	static public XPathExpression REL_AUTHOR_EXP;
 	static public XPathExpression REL_ASSIGNED_AUTHOR_EXP;
 	static public XPathExpression REL_ASSIGNED_PERSON_EXP;
@@ -225,6 +226,7 @@ public class CCDAConstants {
 			REL_LANG_PREF_EXP = CCDAConstants.CCDAXPATH.compile("./preferenceInd[not(@nullFlavor)]");
 			REL_TELECOM_EXP = CCDAConstants.CCDAXPATH.compile("./telecom[not(@nullFlavor)]");
 			REL_TEXT_EXP = CCDAConstants.CCDAXPATH.compile("./text[not(@nullFlavor)]");
+			AUTHOR_EXP = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/author[not(@nullFlavor)]");
 			REL_AUTHOR_EXP = CCDAConstants.CCDAXPATH.compile("./author[not(@nullFlavor)]");
 			REL_ASSIGNED_AUTHOR_EXP = CCDAConstants.CCDAXPATH.compile("./assignedAuthor[not(@nullFlavor)]");
 			REL_ASSIGNED_PERSON_EXP = CCDAConstants.CCDAXPATH.compile("./assignedPerson[not(@nullFlavor)]");

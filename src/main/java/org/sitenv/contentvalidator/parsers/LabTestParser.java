@@ -37,6 +37,10 @@ public class LabTestParser {
 		
 			labTests.setResultOrg(LabResultParser.readResultOrganizer((NodeList) CCDAConstants.REL_LAB_TEST_ORG_EXPRESSION.
 													evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			labTests.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+			
 			labTests.setIsLabTestInsteadOfResult(true);
 		}
 		return labTests;

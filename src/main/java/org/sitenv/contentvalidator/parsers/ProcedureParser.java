@@ -44,6 +44,9 @@ public class ProcedureParser {
 			procedures.addProcActsProcs(readProcedures((NodeList) CCDAConstants.REL_PROC_ACT_ACT_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET)));
 			
+			procedures.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+			
 		}
 		return procedures;
 	}
@@ -89,6 +92,9 @@ public class ProcedureParser {
 			
 			NodeList serviceDeliveryNodeList = (NodeList) CCDAConstants.REL_PROCEDURE_SDL_EXPRESSION.
 						evaluate(procedureElement, XPathConstants.NODESET);
+			
+			procedure.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(procedureElement, XPathConstants.NODE)));
 			
 			procedure.setSdLocs(readServiceDeliveryLocators(serviceDeliveryNodeList));
 			
@@ -172,6 +178,8 @@ public class ProcedureParser {
 			device.setScopingEntityId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_SCOPING_ENTITY_ID_EXP.
 					evaluate(deviceElement, XPathConstants.NODESET)));
 			
+			device.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(deviceElement, XPathConstants.NODE)));
 			
 			deviceList.add(device);
 			

@@ -62,6 +62,9 @@ public class ProblemParser {
 			
 			problems.setProblemConcerns(readProblemConcern((NodeList) CCDAConstants.REL_ACT_ENTRY_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			problems.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 		}
 		return problems;
 	}
@@ -90,6 +93,9 @@ public class ProblemParser {
 			
 			problemConcern.setProblems(readProblemObservation((NodeList) CCDAConstants.REL_PROBLEM_OBS_EXPRESSION.
 					evaluate(problemConcernElement, XPathConstants.NODESET)));
+			
+			problemConcern.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(problemConcernElement, XPathConstants.NODE)));
 			
 			problemConcernList.add(problemConcern);
 		}
@@ -124,6 +130,9 @@ public class ProblemParser {
 										evaluate(problemObservationElement, XPathConstants.NODE)));
 			
 			problemObservation.setProblemCode(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_EXP.
+					evaluate(problemObservationElement, XPathConstants.NODE)));
+			
+			problemObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(problemObservationElement, XPathConstants.NODE)));
 			
 			problemObservationList.add(problemObservation);

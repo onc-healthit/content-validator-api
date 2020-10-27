@@ -38,6 +38,9 @@ public class AllergiesParser {
 			
 			allergies.setAllergyConcern(readAllergyConcern((NodeList) CCDAConstants.REL_ACT_ENTRY_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			allergies.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 		}
 		return allergies;
 	}
@@ -70,6 +73,9 @@ public class AllergiesParser {
 			allergyConcern.setAllergyObs(readAllergyObservation((NodeList) CCDAConstants.REL_ENTRY_RELSHIP_OBS_EXP.
 					evaluate(allergyConcernElement, XPathConstants.NODESET)));
 			
+			allergyConcern.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(allergyConcernElement, XPathConstants.NODE)));
+			
 			allergyConcernList.add(allergyConcern);
 		}
 		return allergyConcernList;
@@ -101,6 +107,9 @@ public class AllergiesParser {
 			allergyObservation.setReactions(readAllergyReaction((NodeList) CCDAConstants.REL_ALLERGY_REACTION_EXPRESSION.
 																evaluate(allergyObservationElement, XPathConstants.NODESET)));
 		
+			allergyObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(allergyObservationElement, XPathConstants.NODE)));
+			
 			allergyObservationList.add(allergyObservation);
 		}
 	    return allergyObservationList;
@@ -127,6 +136,10 @@ public class AllergiesParser {
 			
 				allergyReaction.setSeverity(readAllergySeverity((Element) CCDAConstants.REL_ALLERGY_SEVERITY_EXPRESSION.
 																evaluate(allergyReactionElement, XPathConstants.NODE)));
+				
+				allergyReaction.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+						evaluate(allergyReactionElement, XPathConstants.NODE)));
+				
 				allergyReactionList.add(allergyReaction);
 			}
 			return allergyReactionList;		
@@ -147,6 +160,9 @@ public class AllergiesParser {
 			allergySeverity.setSeverity(ParserUtilities
 					.readCode((Element) CCDAConstants.REL_VAL_EXP.evaluate(
 							allergySeverityElement, XPathConstants.NODE)));
+			
+			allergySeverity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(allergySeverityElement, XPathConstants.NODE)));
 
 			return allergySeverity;
 		}

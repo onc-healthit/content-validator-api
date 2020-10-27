@@ -26,6 +26,15 @@ public class CCDALabResultObs {
 	
 	private CCDAAuthor	author;
 	
+	public void getAllNotesActivities(HashMap<String, CCDANotesActivity> results) {
+		
+		if(notesActivity != null && notesActivity.size() > 0) {
+			
+			log.info(" Found non-null notes activity ");
+			ParserUtilities.populateNotesActiviteis(notesActivity, results);
+		}
+	}
+	
 	public static void compareLabResultData(HashMap<String, CCDALabResultObs> refResults, 
 			HashMap<String, CCDALabResultObs> subResults, 	ArrayList<ContentValidationResult> results) {
 
