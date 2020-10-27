@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,23 @@ public class CCDALabResult {
 	private ArrayList<CCDANotesActivity>		notesActivity;
 	
 	private CCDAAuthor	author;
+	
+	public void getAllNotesActivities(HashMap<String, CCDANotesActivity> results) {
+		
+		if(notesActivity != null && notesActivity.size() > 0) {
+			
+			log.info(" Found non-null notes activity ");
+			ParserUtilities.populateNotesActiviteis(notesActivity, results);
+		}
+		
+		if( resultOrg != null && resultOrg.size() > 0) {
+			
+			for(CCDALabResultOrg org : resultOrg) {
+				
+				org.getAllNotesActivities(results);
+			}
+		}
+	}
 	
 	public HashMap<String, CCDALabResultObs> getLabResultsMap() {
 		

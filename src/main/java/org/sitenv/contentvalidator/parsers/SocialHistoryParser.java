@@ -46,6 +46,9 @@ public class SocialHistoryParser {
 			
 			NodeList bsList = (NodeList) CCDAConstants.REL_BIRTHSEX_OBS_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET);
+			
+			socailHistory.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 	
 			socailHistory.setBirthSex(readBirthSex(bsList));
 		}
@@ -105,6 +108,9 @@ public class SocialHistoryParser {
 			smokingStatus.setObservationTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
 					evaluate(smokingStatusElement, XPathConstants.NODE)));
 			
+			smokingStatus.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(smokingStatusElement, XPathConstants.NODE)));
+			
 			smokingStatusList.add(smokingStatus);
 		}
 		return smokingStatusList;
@@ -132,6 +138,9 @@ public class SocialHistoryParser {
 					evaluate(tobaccoUseElement, XPathConstants.NODE)));
 			
 			tobaccoUse.setTobaccoUseTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+					evaluate(tobaccoUseElement, XPathConstants.NODE)));
+			
+			tobaccoUse.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(tobaccoUseElement, XPathConstants.NODE)));
 			
 			tobaccoUseList.add(tobaccoUse);

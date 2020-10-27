@@ -43,10 +43,30 @@ public class CCDARefModel {
 	private ArrayList<CCDAII>  cpTemplates;
 	private SeverityLevel severityLevel;
 	
+	// Cures Update
+	private ArrayList<CCDAAuthor> authors;
+	
 	// Cures Update changes for section level notes
 	private ArrayList<CCDANotes> notes;
 	private ArrayList<CCDANotesActivity> notesEntries;
 	
+	
+	public ArrayList<CCDAAuthor> getAuthors() {
+		return authors;
+	}
+
+	public void setAuthors(ArrayList<CCDAAuthor> author) {
+		this.authors = author;
+	}
+
+	public ArrayList<CCDANotesActivity> getNotesEntries() {
+		return notesEntries;
+	}
+
+	public void setNotesEntries(ArrayList<CCDANotesActivity> notesEntries) {
+		this.notesEntries = notesEntries;
+	}
+
 	public ArrayList<CCDANotes> getNotes() {
 		return notes;
 	}
@@ -72,6 +92,7 @@ public class CCDARefModel {
 		udi = new ArrayList<CCDAUDI>();
 		notes = new ArrayList<CCDANotes>();
 		notesEntries = new ArrayList<CCDANotesActivity>();
+		authors = new ArrayList<CCDAAuthor>();
 		
 		ccdTemplates = new ArrayList<CCDAII>();
 		ccdTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
@@ -96,6 +117,8 @@ public class CCDARefModel {
 		this.severityLevel = severityLevel;
 		udi = new ArrayList<CCDAUDI>();
 		notes = new ArrayList<CCDANotes>();
+		notesEntries = new ArrayList<CCDANotesActivity>();
+		authors = new ArrayList<CCDAAuthor>();
 		
 		ccdTemplates = new ArrayList<CCDAII>();
 		ccdTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
@@ -308,6 +331,9 @@ public class CCDARefModel {
 		if(curesUpdate) {
 			log.info(" Comparing Notes ");
 			compareNotesActivities(validationObjective, submittedCCDA, results, curesUpdate);
+			
+			log.info(" Comparing Author ");
+			compareAuthorEntries(validationObjective, submittedCCDA, results, curesUpdate);
 		}
 
 		
@@ -709,8 +735,61 @@ public class CCDARefModel {
 			encounter.getAllNotesActivities(results);
 		}
 		
+		if(labResults != null) {
+			log.info("Retrieving notes activities from lab results ");
+			labResults.getAllNotesActivities(results);
+		}
+		
+		if(procedure != null) {
+			log.info("Retrieving notes activities from procedure ");
+			procedure.getAllNotesActivities(results);
+		}
+		
 		log.info(" Notes Activities Size = " + results.size());
 		return results;
+	}
+	
+	public void compareAuthorEntries(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, boolean curesUpdate) {
+		
+		log.info("Retrieving Author Entries for comparison ");
+		
+		ArrayList<CCDAAuthor> refAuths = this.getAuthors();
+		ArrayList<CCDAAuthor> subAuths = submittedCCDA.getAuthors();
+		
+		if( (refAuths != null && refAuths.size() > 0) &&  
+			(subAuths != null && subAuths.size() > 0)  ) {
+			
+			log.info("Authors present in both models ");
+			String elName = "Document Level.";
+			CCDAAuthor.compareAuthors(refAuths, subAuths, results, elName);
+			
+		} 	
+		else if ( (refAuths != null && refAuths.size() > 0) && 
+				(subAuths == null || subAuths.size() == 0) ) {
+			
+			// handle the case where the Notes section does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to Author (Provenance), but the submitted C-CDA does not contain Author data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Author data, but submitted document does not contain Author data");
+			
+		}else if ((refAuths == null || refAuths.size() == 0) && 
+				(subAuths != null && subAuths.size() > 0) ) {
+		
+			log.info("Model does not have Authors for comparison, it is ok for submitted CCDA to include Authors for all occasions");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Authors for comparison ");
+		}
+		
+		compareSectionAndEntryLevelProvenance(validationObjective, submittedCCDA, results, curesUpdate);
+	}
+	
+	public void compareSectionAndEntryLevelProvenance(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, boolean curesUpdate) {
+		
+		// Compare Allergies Provenance 
+		allergy.compareAuthor(submittedCCDA.getAllergy(), results, curesUpdate);
+		
 	}
 	
 	private HashMap<String, CCDALabResultObs> getAllLabResultObs() 

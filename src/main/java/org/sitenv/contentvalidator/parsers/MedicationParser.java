@@ -39,6 +39,9 @@ public class MedicationParser {
 			
 			medications.setMedActivities(readMedication((NodeList) CCDAConstants.REL_MED_ENTRY_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			medications.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 		}
 		return medications;
 	}
@@ -60,6 +63,9 @@ public class MedicationParser {
 			
 			medications.setMedActivities(readMedication((NodeList) CCDAConstants.REL_MED_ENTRY_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			medications.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 		}
 		return medications;
 	}
@@ -81,6 +87,9 @@ public class MedicationParser {
 			
 			medications.setMedActivities(readDischargeMedication((NodeList) CCDAConstants.DM_ENTRY_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			medications.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
 		}
 		return medications;
 	}
@@ -135,6 +144,10 @@ public class MedicationParser {
 			
 			medicationActivity.setConsumable(readMedicationInformation((Element) CCDAConstants.REL_CONSUM_EXP.
 					evaluate(entryElement, XPathConstants.NODE)));
+			
+			medicationActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(entryElement, XPathConstants.NODE)));
+			
 			medicationList.add(medicationActivity);
 		}
 		return medicationList;
@@ -196,6 +209,10 @@ public class MedicationParser {
 				
 				medicationActivity.setConsumable(readMedicationInformation((Element) CCDAConstants.REL_CONSUM_EXP.
 						evaluate(entryElementDM, XPathConstants.NODE)));
+				
+				medicationActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+						evaluate(entryElementDM, XPathConstants.NODE)));
+				
 				medicationList.add(medicationActivity);	
 			}
 			

@@ -131,6 +131,73 @@ public class CCDAAllergy {
 		return allergies;
 	}
 	
+	public void compareAuthor(CCDAAllergy subAllergy, ArrayList<ContentValidationResult> results, boolean curesUpdate) {
+		
+		// Compare if the author info in this reference author is present in submitted author.
+		String elName = "Allergy Section";
+		if(author != null && subAllergy.getAuthor() != null) {			
+			author.matches(subAllergy.getAuthor(), results, elName);
+		}
+		else if(author != null && subAllergy.getAuthor() == null) {
+			
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires Provenance data for " + elName +
+					" however the submitted file does not contain the Provenance data for " + elName + "." , ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else {
+			log.info(" Author is null in the reference data, nothing to do");
+		}
+		
+		// Compare Authors for Allergy Concerns
+		ArrayList<CCDAAuthor> refAllConcAuths = this.getAllergyConcernAuthors();
+		ArrayList<CCDAAuthor> subAllConcAuths = subAllergy.getAllergyConcernAuthors();
+		
+		log.info("Comparing Authors for Allergy Concerns");
+		elName += "/AllergyConcern";
+		CCDAAuthor.compareAuthors(refAllConcAuths, subAllConcAuths, results, elName);
+		
+		// Compare Authors for Allergy Observations
+		ArrayList<CCDAAuthor> refAllObsAuths = this.getAllergyObsAuthors();
+		ArrayList<CCDAAuthor> subAllObsAuths = subAllergy.getAllergyObsAuthors();
+				
+		log.info("Comparing Authors for Allergy Observations");
+		elName += "/AllergyObservation";
+		CCDAAuthor.compareAuthors(refAllObsAuths, subAllObsAuths, results, elName);
+				
+	}
+	
+	public ArrayList<CCDAAuthor> getAllergyConcernAuthors() {
+		
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+		
+		for(CCDAAllergyConcern allConc : allergyConcern) {
+			
+			if(allConc.getAuthor() != null) {
+				authors.add(allConc.getAuthor());
+			}
+		}	
+		
+		return authors;
+	}
+	
+	public ArrayList<CCDAAuthor> getAllergyObsAuthors() {
+		
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+		
+		for(CCDAAllergyConcern allConc : allergyConcern) {
+			
+			for(CCDAAllergyObs allObs : allConc.getAllergyObs()) {
+				
+				if(allObs.getAuthor() != null) {
+					authors.add(allObs.getAuthor());
+				}
+				
+			}
+		}	
+		
+		return authors;
+	}
+	
 	public ArrayList<CCDAII> getSectionTemplateId() {
 		return sectionTemplateId;
 	}

@@ -135,7 +135,7 @@ public class CCDAAuthor {
 	
 	public void matches(CCDAAuthor subAuthor, ArrayList<ContentValidationResult> results, String elName) {
 		
-		log.info(" Comparing data for Author Tempalte Ids: ");
+		log.info(" Comparing data for Author Template Ids: ");
 
 		// Compare template Ids 
 		String elementName = "Comapring Author Template Ids for : " + elName;		 // Not mandatory so skipping
@@ -157,5 +157,92 @@ public class CCDAAuthor {
 		elementName = "Comparing Author Organization Name for " + elName;
 		ParserUtilities.compareDataElementText(orgName, subAuthor.getOrgName(), results, elementName);
 	}
+	
+    public static void compareAuthors(ArrayList<CCDAAuthor> refAuths, ArrayList<CCDAAuthor> subAuths, 
+    		ArrayList<ContentValidationResult> results, String elName) {
+		
+		log.info(" Comparing data for Author.");
+		log.info(" Ref Model Auth Size = " + (refAuths !=null ? refAuths.size():0));
+		log.info(" Sub Model Auth Size = " + (subAuths !=null ? subAuths.size():0));
+		
+		for(CCDAAuthor auth : refAuths) {
+			
+			log.info("Checking Ref Author with Sub Authors ");
+			if(auth.getEffTime() != null && 
+					auth.getEffTime().getValuePresent() && !isProvenancePresent(auth.getEffTime(), auth.getOrgName(), subAuths)) {
+				
+				String orgName = "";
+				if(auth.getOrgName() != null && auth.getOrgName().getValue() != null)
+					orgName = auth.getOrgName().getValue();
+				
+				ContentValidationResult rs = new ContentValidationResult("The scenario requires Provenance data of Time  : " + auth.getEffTime().getValue().getValue() + " and an Organization Name of : " + 
+				  orgName + " at the " + elName + ", which was not found in the submitted data. ", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+			else {
+				log.info(" Found Provenance data, nothing else to do ..");
+			}
+		}
+		
+		// Compare Author Sizes
+		if(refAuths != null && subAuths != null && 
+				!(refAuths.size() == subAuths.size())) {
+			
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires a total of " + refAuths.size() + " Author Entries for " + elName
+					+ ", however the submitted data had only " + subAuths.size() + " entries.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+					results.add(rs);
+		}
+		
+	}
+    
+    public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement name, ArrayList<CCDAAuthor> subAuths) {
+    	
+    	boolean retVal = false;
+    	String elName = "Comparing Author Provenance Data";
+    	ArrayList<ContentValidationResult> res = new ArrayList<ContentValidationResult>();
+    	
+    	for(CCDAAuthor auth : subAuths) {
+    		   		
+    		ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, auth.getEffTime(), res, elName);
+    		
+    		ParserUtilities.compareDataElementText(name, auth.getOrgName(), res, elName);
+    		
+    		if(res != null && res.size() == 0 ) {
+    			
+    			log.info(" Matched Provenance Data ");
+    			retVal = true;
+    			break;
+    		}
+    		else {
+    			res.clear();
+    		}
+    	}
+    	
+    	return retVal;
+    }
+    
+    public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement name, CCDAAuthor subAuth) {
+    	
+    	boolean retVal = false;
+    	String elName = "Comparing Author Provenance Data";
+    	ArrayList<ContentValidationResult> res = new ArrayList<ContentValidationResult>();   	
+    	
+    	ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, subAuth.getEffTime(), res, elName);
+    		
+    	ParserUtilities.compareDataElementText(name, subAuth.getOrgName(), res, elName);
+    		
+    	if(res != null && res.size() == 0 ) {
+    			
+    		log.info(" Matched Provenance Data ");
+    		retVal = true;
+    			
+    	}
+    	else {
+    		log.info(" Provenance data did not match ");
+    		retVal = false;
+    	}
+    	
+    	return retVal;
+    }
 
 }
