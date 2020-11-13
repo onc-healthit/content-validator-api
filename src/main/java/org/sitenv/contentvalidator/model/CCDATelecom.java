@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.springframework.util.StringUtils;
 
 public class CCDATelecom {
 
@@ -35,6 +36,13 @@ public class CCDATelecom {
 		this.valueAttribute = valueAttribute;
 	}
 	
+	private String formatTelecomValue(String value) {
+		if(!StringUtils.isEmpty(value)) {
+			return value.replaceAll("[^0-9+1]", "").replace("+1", "");
+		}
+		return value;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -52,7 +60,7 @@ public class CCDATelecom {
 		if (valueAttribute == null) {
 			if (other.valueAttribute != null)
 				return false;
-		} else if (!valueAttribute.equalsIgnoreCase(other.valueAttribute))
+		} else if (!formatTelecomValue(valueAttribute).equalsIgnoreCase(formatTelecomValue(other.valueAttribute)))
 			return false;
 		return true;
 	}	
