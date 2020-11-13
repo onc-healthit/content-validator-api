@@ -37,7 +37,7 @@ public class CCDATelecom {
 	}
 	
 	private String formatTelecomValue(String value) {
-		if(!StringUtils.isEmpty(value)) {
+		if (!StringUtils.isEmpty(value)) {
 			return value.replaceAll("[^0-9]", "");
 		}
 		return value;
