@@ -2,6 +2,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
@@ -53,7 +54,7 @@ public class ContentValidatorTest {
 	 * 170.315_e1_vdt_amb_sample2, 170.315_b2_ciri__r21_sample1_ds, 170.315_b4_ccds_create_inp_sample2, 170.315_g9_api_access_amb_sample2, 
 	 * 170.315_b2_ciri__r21_sample1_ccd, 170.315_g9_api_access_amb_sample1
 	*/
-	private static final String LOCAL_SCENARIO_DIRECTORY = "C:/Programming/SITE/scenarios/";
+	private static final String LOCAL_SCENARIO_DIRECTORY = "src/test/resources";
 	private static final String DEFAULT_REFERENCE_FILENAME = "170.315_b1_toc_amb_sample1_v13.pdf";
 	private static final String REF_TOC_AMBULATORY = DEFAULT_REFERENCE_FILENAME;
 	private static final String REF_CAREPLAN_AMBULATORY = "170.315_b9_cp_amb_sample1.xml";
@@ -168,7 +169,8 @@ public class ContentValidatorTest {
 	
     private static ScenarioLoader setupAndReturnScenarioLoader(CCDAParser ccdaParser){
         ScenarioLoader scenarioLoader;
-        String scenarioDir = LOCAL_SCENARIO_DIRECTORY;
+        File file = new File(LOCAL_SCENARIO_DIRECTORY);
+        String scenarioDir = file.getAbsolutePath();        
         scenarioLoader = new ScenarioLoader();
         scenarioLoader.setScenarioFilePath(scenarioDir);
         scenarioLoader.setCcdaParser(ccdaParser);
@@ -279,6 +281,8 @@ public class ContentValidatorTest {
 		final String interventionsWarning = "A Care Plan section is missing: The scenario contains the Interventions Section (V3) 2.16.840.1.113883.10.20.21.2.3:2015-08-01, "
 				+ "but it was not found in the submitted document";
 		String carePlanMessage = "A Care Plan section is missing";
+		String birthSexMessage = "The scenario requires patient's birth sex to be captured as part of social history data, but submitted file does have birth sex information";
+		
 		
 		ArrayList<ContentValidationResult> results;
 		
@@ -289,6 +293,13 @@ public class ContentValidatorTest {
 		results = validateDocumentAndReturnResults(DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA);		
 		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
 				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
+
+		printHeader("birth sex, has 2 warning and 1 error"
+				+ "expect 2 warning and 1 error");
+		results = validateDocumentAndReturnResults(DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA);		
+		assertFalse("The results contain the unexpected message of: " + birthSexMessage, 
+				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.ERROR));
+				
 		
 		printHeader("cp amb, has both in ref and sub, expect no related warnings for missing cp sections");
 		results = validateDocumentAndReturnResults(VO_CAREPLAN_AMBULATORY, REF_CAREPLAN_AMBULATORY,
@@ -479,12 +490,11 @@ public class ContentValidatorTest {
 	}
 	
 	@Test
-	public void severityLevelLimitTestFileWithThreeWarningsOnly() {
-		printHeader("severityLevelLimitTestFileWithThreeWarningsOnly");
+	public void severityLevelLimitTestFileWithTwoWarningsOnly() {
+		printHeader("severityLevelLimitTestFileWithTwoWarningsOnly");
 		
 		final String warning1 = "Patient Telecom in the submitted file does not match the expected Telecom. The following values are expected: telecom/@use = MC and telecom/@value = tel:+1(555)-777-1234";
 		final String warning2 = "Patient Telecom in the submitted file does not match the expected Telecom. The following values are expected: telecom/@use = HP and telecom/@value = tel:+1(555)-723-1544";
-		final String warning3 = "The scenario requires patient's birth sex to be captured as part of social history data, but submitted file does have birth sex information";
 		
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE,
 				DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA, SeverityLevel.INFO);
@@ -493,7 +503,6 @@ public class ContentValidatorTest {
 		ContentValidationResultLevel expectedSeverity = ContentValidationResultLevel.WARNING;
 		severityLevelLimitTestHelperAssertMessageAndSeverity(results, warning1, expectedSeverity);
 		severityLevelLimitTestHelperAssertMessageAndSeverity(results, warning2, expectedSeverity);
-		severityLevelLimitTestHelperAssertMessageAndSeverity(results, warning3, expectedSeverity);
 
 		results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE,
 				DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA, SeverityLevel.WARNING);
@@ -501,7 +510,6 @@ public class ContentValidatorTest {
 		assertTrue("expecting (the same) 3 warnings", results.size() == 3);
 		severityLevelLimitTestHelperAssertMessageAndSeverity(results, warning1, expectedSeverity);
 		severityLevelLimitTestHelperAssertMessageAndSeverity(results, warning2, expectedSeverity);
-		severityLevelLimitTestHelperAssertMessageAndSeverity(results, warning3, expectedSeverity);
 		
 		results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE,
 				DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA, SeverityLevel.ERROR);		
