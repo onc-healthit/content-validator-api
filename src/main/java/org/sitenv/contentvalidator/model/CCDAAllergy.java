@@ -132,38 +132,27 @@ public class CCDAAllergy {
 	}
 	
 	public void compareAuthor(CCDAAllergy subAllergy, ArrayList<ContentValidationResult> results, boolean curesUpdate) {
-		
-		// Compare if the author info in this reference author is present in submitted author.
 		String elName = "Allergy Section";
-		if(author != null && subAllergy.getAuthor() != null) {			
-			author.matches(subAllergy.getAuthor(), results, elName);
-		}
-		else if(author != null && subAllergy.getAuthor() == null) {
-			
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires Provenance data for " + elName +
-					" however the submitted file does not contain the Provenance data for " + elName + "." , ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-			results.add(rs);
-		}
-		else {
-			log.info(" Author is null in the reference data, nothing to do");
-		}
 		
-		// Compare Authors for Allergy Concerns
+		CCDAAuthor.compareSectionLevelAuthor(elName, author, subAllergy.getAuthor(), results);
+
+		log.info("Comparing Authors for Allergy Concerns");
 		ArrayList<CCDAAuthor> refAllConcAuths = this.getAllergyConcernAuthors();
 		ArrayList<CCDAAuthor> subAllConcAuths = subAllergy.getAllergyConcernAuthors();
-		
-		log.info("Comparing Authors for Allergy Concerns");
 		elName += "/AllergyConcern";
 		CCDAAuthor.compareAuthors(refAllConcAuths, subAllConcAuths, results, elName);
-		
-		// Compare Authors for Allergy Observations
+
+		log.info("Comparing Authors for Allergy Observations");
 		ArrayList<CCDAAuthor> refAllObsAuths = this.getAllergyObsAuthors();
 		ArrayList<CCDAAuthor> subAllObsAuths = subAllergy.getAllergyObsAuthors();
-				
-		log.info("Comparing Authors for Allergy Observations");
 		elName += "/AllergyObservation";
 		CCDAAuthor.compareAuthors(refAllObsAuths, subAllObsAuths, results, elName);
-				
+
+		log.info("Comparing Authors for Allergy Reactions");
+		ArrayList<CCDAAuthor> refAllReactAuths = this.getAllergyReactionAuthors();
+		ArrayList<CCDAAuthor> subAllReactAuths = subAllergy.getAllergyReactionAuthors();			
+		elName += "/AllergyReaction";
+		CCDAAuthor.compareAuthors(refAllReactAuths, subAllReactAuths, results, elName);
 	}
 	
 	public ArrayList<CCDAAuthor> getAllergyConcernAuthors() {
@@ -195,6 +184,21 @@ public class CCDAAllergy {
 			}
 		}	
 		
+		return authors;
+	}
+	
+	public ArrayList<CCDAAuthor> getAllergyReactionAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+
+		for (CCDAAllergyConcern curConcern : allergyConcern) {
+			for (CCDAAllergyObs curObs : curConcern.getAllergyObs()) {
+				for (CCDAAllergyReaction curReaction : curObs.getReactions()) {
+					if (curReaction.getAuthor() != null) {
+						authors.add(curReaction.getAuthor());
+					}
+				}
+			}
+		}
 		return authors;
 	}
 	

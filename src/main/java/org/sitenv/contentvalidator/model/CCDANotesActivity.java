@@ -185,8 +185,8 @@ public class CCDANotesActivity {
 		
 	}
 	
-	public static void compareNotesActivity(HashMap<String, CCDANotesActivity> refNotes, 
-			HashMap<String, CCDANotesActivity> subNotes, 	ArrayList<ContentValidationResult> results, String context) {
+	public static void compareNotesActivity(HashMap<String, CCDANotesActivity> refNotes,
+			HashMap<String, CCDANotesActivity> subNotes, ArrayList<ContentValidationResult> results, String context) {
 
 		log.info(" Start Comparing Notes Activity Entry level data ");
 		
@@ -233,7 +233,7 @@ public class CCDANotesActivity {
 		ParserUtilities.compareDataElement(refNote.getStatusCode(), statusCode, results, elementNameVal1);
 		
 		
-		// Comapring Author for Entry
+		// Comparing Author for Entry
 		String elementVal2 = " , Comparing Author Entry for : " + context;
 		ParserUtilities.compareAuthor(refNote.getAuthor(), author, results, elementVal2);
 		

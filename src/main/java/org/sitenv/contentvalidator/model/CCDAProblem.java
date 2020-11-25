@@ -36,7 +36,7 @@ public class CCDAProblem {
 		// Hanlde Section Template Ids
 		ParserUtilities.compareTemplateIds(sectionTemplateId, submittedProblem.getSectionTemplateId(), results, "Problem Section");
 		
-		//Compare details
+		// Compare details
 		compareProblemData(submittedProblem, results);
 	}
 	
@@ -46,7 +46,7 @@ public class CCDAProblem {
 		
 		for(Map.Entry<CCDAProblemObs, CCDAProblemConcern> ent: probs.entrySet()) {
 			
-			//check to see if the ref data is part of the problem data submitted
+			// check to see if the ref data is part of the problem data submitted
 			submittedProblem.validateProblemData(ent.getKey(), ent.getValue(), results);
 			
 		}
@@ -138,6 +138,69 @@ public class CCDAProblem {
 		
 		return pobs;
 	}
+	
+	public void compareAuthor(CCDAProblem subProblem, ArrayList<ContentValidationResult> results, boolean curesUpdate) {
+		String elName = "Problem Section";
+		
+		CCDAAuthor.compareSectionLevelAuthor(elName, author, subProblem.getAuthor(), results);
+
+		log.info("Comparing Authors for Problem Concerns");
+		ArrayList<CCDAAuthor> refAllConcAuths = this.getProblemConcernAuthors();
+		ArrayList<CCDAAuthor> subAllConcAuths = subProblem.getProblemConcernAuthors();
+		elName += "/ProblemConcern";
+		CCDAAuthor.compareAuthors(refAllConcAuths, subAllConcAuths, results, elName);
+		
+		log.info("Comparing Authors for Problem Observation in Problem Concern (problems)");
+		ArrayList<CCDAAuthor> refAllObsInProbConcAuths = this.getProblemObsInProblemConcAuthors();
+		ArrayList<CCDAAuthor> subAllObsInProbConcAuths = subProblem.getProblemObsInProblemConcAuthors();		
+		elName += "/ProblemObservation";
+		CCDAAuthor.compareAuthors(refAllObsInProbConcAuths, subAllObsInProbConcAuths, results, elName);
+		
+		log.info("Comparing Authors for Problem Observation in Past Medical History Section/Problem Observation (pastIllnessProblems)");
+		ArrayList<CCDAAuthor> refAllObsPastIllnessAuths = this.getProblemObsPastIllnessAuthors();
+		ArrayList<CCDAAuthor> subAllObsPastIllnessAuths = subProblem.getProblemObsPastIllnessAuthors();		
+		// Providing elName directly for this one vs concatenating since part of a different section but stored in thie CCDAProblem model
+		CCDAAuthor.compareAuthors(refAllObsPastIllnessAuths, subAllObsPastIllnessAuths, results,
+				"Past Medical History Section (Past Illness)/ProblemObservation");
+	}
+	
+	public ArrayList<CCDAAuthor> getProblemConcernAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+		
+		for (CCDAProblemConcern curConcern : problemConcerns) {
+			if (curConcern.getAuthor() != null) {
+				authors.add(curConcern.getAuthor());
+			}
+		}
+		
+		return authors;
+	}
+
+	public ArrayList<CCDAAuthor> getProblemObsInProblemConcAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+
+		for (CCDAProblemConcern curConcern : problemConcerns) {
+			for (CCDAProblemObs curObs : curConcern.getProblems()) {
+				if (curObs.getAuthor() != null) {
+					authors.add(curObs.getAuthor());
+				}
+			}
+		}
+
+		return authors;
+	}
+	 
+	public ArrayList<CCDAAuthor> getProblemObsPastIllnessAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+
+		for (CCDAProblemObs curObs : pastIllnessProblems) {
+			if (curObs.getAuthor() != null) {
+				authors.add(curObs.getAuthor());
+			}
+		}
+		
+		return authors;
+	}	
 	
 	public void log() {
 		

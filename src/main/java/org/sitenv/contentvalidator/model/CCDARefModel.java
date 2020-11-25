@@ -785,11 +785,16 @@ public class CCDARefModel {
 		compareSectionAndEntryLevelProvenance(validationObjective, submittedCCDA, results, curesUpdate);
 	}
 	
-	public void compareSectionAndEntryLevelProvenance(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, boolean curesUpdate) {
-		
+	public void compareSectionAndEntryLevelProvenance(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, 
+			boolean curesUpdate) {
 		// Compare Allergies Provenance 
 		allergy.compareAuthor(submittedCCDA.getAllergy(), results, curesUpdate);
 		
+		// TODO-db:Add new compareAuthor methods, for each section that needs it
+		problem.compareAuthor(submittedCCDA.getProblem(), results, curesUpdate);		
+		// TODO-db: Add remaining Sections
+//		Procedures, Medications, Immunizations, Problems, Lab Results, Vitals, any more?
+//		procedure.compareAuthor(submittedCCDA.getProcedure(), results, curesUpdate);		
 	}
 	
 	private HashMap<String, CCDALabResultObs> getAllLabResultObs() 
