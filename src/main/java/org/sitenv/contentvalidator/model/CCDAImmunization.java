@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,30 @@ public class CCDAImmunization {
 		return acts;
 	}
 	
+	public void compareAuthor(CCDAImmunization subImmunization, ArrayList<ContentValidationResult> results,
+			boolean curesUpdate) {
+		String elName = "Immunizations Section";
+
+		CCDAAuthor.compareSectionLevelAuthor(elName, author, subImmunization.getAuthor(), results);
+
+		log.info("Comparing Authors for Immunization Activity");
+		ArrayList<CCDAAuthor> refAllImmActAuths = this.getImmunizationActivityAuthors();
+		ArrayList<CCDAAuthor> subAllImmActAuths = subImmunization.getImmunizationActivityAuthors();
+		elName += "/ImmunizationActivity";
+		CCDAAuthor.compareAuthors(refAllImmActAuths, subAllImmActAuths, results, elName);
+	}
+
+	public ArrayList<CCDAAuthor> getImmunizationActivityAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+
+		for (CCDAImmunizationActivity curImmAct : immActivity) {
+			if (curImmAct.getAuthor() != null) {
+				authors.add(curImmAct.getAuthor());
+			}
+		}
+
+		return authors;
+	}
 	
 	public void log() {
 		

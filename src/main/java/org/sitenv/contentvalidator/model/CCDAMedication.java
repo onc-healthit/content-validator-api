@@ -58,6 +58,31 @@ public class CCDAMedication {
 		return acts;
 	}
 	
+	public void compareAuthor(CCDAMedication subMedication, ArrayList<ContentValidationResult> results,
+			boolean curesUpdate) {
+		String elName = "Medications Section";
+
+		CCDAAuthor.compareSectionLevelAuthor(elName, author, subMedication.getAuthor(), results);
+
+		log.info("Comparing Authors for Medication Activity");
+		ArrayList<CCDAAuthor> refAllMedActAuths = this.getMedicationActivityAuthors();
+		ArrayList<CCDAAuthor> subAllMedActAuths = subMedication.getMedicationActivityAuthors();
+		elName += "/MedicationActivity";
+		CCDAAuthor.compareAuthors(refAllMedActAuths, subAllMedActAuths, results, elName);
+	}
+
+	public ArrayList<CCDAAuthor> getMedicationActivityAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+
+		for (CCDAMedicationActivity curMedAct : medActivities) {
+			if (curMedAct.getAuthor() != null) {
+				authors.add(curMedAct.getAuthor());
+			}
+		}
+
+		return authors;
+	}
+	
 	public void log() {
 		
 		if(sectionCode != null)

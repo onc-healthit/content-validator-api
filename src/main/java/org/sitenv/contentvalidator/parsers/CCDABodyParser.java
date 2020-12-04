@@ -13,7 +13,7 @@ public class CCDABodyParser {
 	static public void parseBody(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException{
 	
 		log.info(" Parsing Encounters ");
-		EncounterDiagnosesParser.parse(doc,model, curesUpdate);
+		EncounterParser.parse(doc,model, curesUpdate);
 		
 		log.info(" Parsing Problems ");
 		ProblemParser.parse(doc, model, curesUpdate);

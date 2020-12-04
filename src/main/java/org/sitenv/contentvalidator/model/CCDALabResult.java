@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
@@ -65,6 +66,51 @@ public class CCDALabResult {
 
 	public void setIsLabTestInsteadOfResult(Boolean isLabTestInsteadOfResult) {
 		this.isLabTestInsteadOfResult = isLabTestInsteadOfResult;
+	}
+	
+	public void compareAuthor(CCDALabResult subResults, ArrayList<ContentValidationResult> results,
+			boolean curesUpdate) {
+		String elName = "Results Section";
+
+		CCDAAuthor.compareSectionLevelAuthor(elName, author, subResults.getAuthor(), results);
+
+		log.info("Comparing Authors for Result Organizer");
+		ArrayList<CCDAAuthor> refAllOrgsAuths = this.getResultOrganizerAuthors();
+		ArrayList<CCDAAuthor> subAllOrgsAuths = subResults.getResultOrganizerAuthors();
+		elName += "/ResultOrganizer";
+		CCDAAuthor.compareAuthors(refAllOrgsAuths, subAllOrgsAuths, results, elName);
+
+		log.info("Comparing Authors for Result Observations");
+		ArrayList<CCDAAuthor> refAllObsAuths = this.getResultObsAuthors();
+		ArrayList<CCDAAuthor> subAllObsAuths = subResults.getResultObsAuthors();
+		elName += "/ResultObservation";
+		CCDAAuthor.compareAuthors(refAllObsAuths, subAllObsAuths, results, elName);
+	}
+
+	public ArrayList<CCDAAuthor> getResultOrganizerAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+
+		for (CCDALabResultOrg curOrg : resultOrg) {
+			if (curOrg.getAuthor() != null) {
+				authors.add(curOrg.getAuthor());
+			}
+		}
+
+		return authors;
+	}
+
+	public ArrayList<CCDAAuthor> getResultObsAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+
+		for (CCDALabResultOrg curOrg : resultOrg) {
+			for (CCDALabResultObs curObs : curOrg.getResultObs()) {
+				if (curObs.getAuthor() != null) {
+					authors.add(curObs.getAuthor());
+				}
+			}
+		}
+
+		return authors;
 	}
 
 	public void log() {

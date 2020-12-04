@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +39,51 @@ public class CCDAVitalSigns {
 		
 		return results;
 	}
+	
+	public void compareAuthor(CCDAVitalSigns subVitalSigns, ArrayList<ContentValidationResult> results,
+			boolean curesUpdate) {
+		String elName = "Vital Signs Section";
+
+		CCDAAuthor.compareSectionLevelAuthor(elName, author, subVitalSigns.getAuthor(), results);
+
+		log.info("Comparing Authors for Vital Signs Organizer");
+		ArrayList<CCDAAuthor> refAllOrgsAuths = this.getVitalSignsOrganizerAuthors();
+		ArrayList<CCDAAuthor> subAllOrgsAuths = subVitalSigns.getVitalSignsOrganizerAuthors();
+		elName += "/VitalSignsOrganizer";
+		CCDAAuthor.compareAuthors(refAllOrgsAuths, subAllOrgsAuths, results, elName);
+
+		log.info("Comparing Authors for Vital Signs Observation");
+		ArrayList<CCDAAuthor> refAllObsAuths = this.getVitalSignsObsAuthors();
+		ArrayList<CCDAAuthor> subAllObsAuths = subVitalSigns.getVitalSignsObsAuthors();
+		elName += "/VitalSignsObservation";
+		CCDAAuthor.compareAuthors(refAllObsAuths, subAllObsAuths, results, elName);
+	}
+	
+	public ArrayList<CCDAAuthor> getVitalSignsOrganizerAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+		
+		for (CCDAVitalOrg curOrg : vitalsOrg) {
+			if (curOrg.getAuthor() != null) {
+				authors.add(curOrg.getAuthor());
+			}
+		}	
+		
+		return authors;
+	}
+	
+	public ArrayList<CCDAAuthor> getVitalSignsObsAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+		
+		for (CCDAVitalOrg curOrg : vitalsOrg) {
+			for (CCDAVitalObs curObs : curOrg.getVitalObs()) {
+				if (curObs.getAuthor() != null) {
+					authors.add(curObs.getAuthor());
+				}
+			}
+		}
+		
+		return authors;
+	}	
 
 	public void log() {
 		
