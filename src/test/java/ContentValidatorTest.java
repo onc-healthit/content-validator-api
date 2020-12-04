@@ -1,38 +1,29 @@
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.sitenv.contentvalidator.configuration.ScenarioLoader;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.dto.enums.SeverityLevel;
 import org.sitenv.contentvalidator.model.CCDARefModel;
-import org.sitenv.contentvalidator.parsers.CCDAParser;
 import org.sitenv.contentvalidator.service.ContentValidatorService;
 
-public class ContentValidatorTest {
+public class ContentValidatorTest extends ContentValidatorTester {	
 	
-	private static HashMap<String, CCDARefModel> refModelHashMap = loadAndParseScenariosAndGetRefModelHashMap();	
+	private static final String CURES_SCENARIO_DIRECTORY = TEST_RESOURCES_DIRECTORY + "/preCures/ref";
+	private static HashMap<String, CCDARefModel> refModelHashMap = loadAndParseScenariosAndGetRefModelHashMap(
+			CURES_SCENARIO_DIRECTORY);
 	private static ContentValidatorService validator = new ContentValidatorService(refModelHashMap);
-	{
+	static {
 		println();
 		println("Keys: " + refModelHashMap.keySet());
 		println("Values: " + refModelHashMap.values());
 	}
-	
-	private static final boolean LOG_RESULTS_TO_CONSOLE = true;
 	
 	private static final String DEFAULT_VALIDATION_OBJECTIVE = "170.315_b1_ToC_Amb";
 	private static final String VO_TOC_AMBULATORY = DEFAULT_VALIDATION_OBJECTIVE;
@@ -54,16 +45,16 @@ public class ContentValidatorTest {
 	 * 170.315_e1_vdt_amb_sample2, 170.315_b2_ciri__r21_sample1_ds, 170.315_b4_ccds_create_inp_sample2, 170.315_g9_api_access_amb_sample2, 
 	 * 170.315_b2_ciri__r21_sample1_ccd, 170.315_g9_api_access_amb_sample1
 	*/
-	private static final String LOCAL_SCENARIO_DIRECTORY = "src/test/resources";
+
 	private static final String DEFAULT_REFERENCE_FILENAME = "170.315_b1_toc_amb_sample1_v13.pdf";
-	private static final String REF_TOC_AMBULATORY = DEFAULT_REFERENCE_FILENAME;
+	private static final String REF_TOC_AMBULATORY = DEFAULT_REFERENCE_FILENAME;	
 	private static final String REF_CAREPLAN_AMBULATORY = "170.315_b9_cp_amb_sample1.xml";
 	private static final String REF_CAREPLAN_INPATIENT = "170.315_b9_cp_inp_sample1.xml";
 	private static final String REF_CAREPLAN_NO_INTERVENTION_OR_HEALTH_STATUS = REF_TOC_AMBULATORY;
 	private static final String REF_CAREPLAN_NO_INTERVENTION_HAS_HEALTH_STATUS = "cp_NoInterventionsHasHealthStatus.xml";
 	private static final String REF_CAREPLAN_NO_HEALTH_STATUS_HAS_INTERVENTION = "cp_NoHealthStatusHasIntervention.xml";
 	private static final String REF_E1_VDT_AMBULATORY = "170.315_e1_vdt_amb_sample1.xml";
-	private static final String REF_E1_VDT_INPATIENT = "170.315_e1_vdt_inp_sample2.xml";	
+	private static final String REF_E1_VDT_INPATIENT = "170.315_e1_vdt_inp_sample2.xml";
 	
 	/**
 	 * One example of many related issues:
@@ -84,158 +75,48 @@ public class ContentValidatorTest {
 	static {
 		try {
 			SUBMITTED_CCDA = new URI[] {
-					ContentValidatorTest.class.getResource("/170.315_b1_toc_amb_sample1_Submitted_T1.xml").toURI(),
-					ContentValidatorTest.class.getResource("/170.315_b9_cp_amb_sample1_v5.xml").toURI(),
-					ContentValidatorTest.class.getResource("/170.315_b9_cp_amb_sample1_v5_Remove_Interventions.xml").toURI(),
-					ContentValidatorTest.class.getResource("/170.315_b9_cp_amb_sample1_v5_Remove_HealthStatus.xml").toURI(),
-					ContentValidatorTest.class.getResource("/NT_CCDS_Sample1_r21_v4.xml").toURI()
+					ContentValidatorTest.class.getResource("preCures/sub/170.315_b1_toc_amb_sample1_Submitted_T1.xml").toURI(),
+					ContentValidatorTest.class.getResource("preCures/sub/170.315_b9_cp_amb_sample1_v5.xml").toURI(),
+					ContentValidatorTest.class.getResource("preCures/sub/170.315_b9_cp_amb_sample1_v5_Remove_Interventions.xml").toURI(),
+					ContentValidatorTest.class.getResource("preCures/sub/170.315_b9_cp_amb_sample1_v5_Remove_HealthStatus.xml").toURI(),
+					ContentValidatorTest.class.getResource("preCures/sub/NT_CCDS_Sample1_r21_v4.xml").toURI(),
+					ContentValidatorTest.class.getResource("cures/sub/RemoveAuthorInHeader_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
 		}
 	}
 	
-	private static final URI DEFAULT_SUBMITTED_CCDA = SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES];
+	private static final URI DEFAULT_SUBMITTED_CCDA = SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES];		
 	
-	private static void println() {
-		if (LOG_RESULTS_TO_CONSOLE) System.out.println();		
-	}
-	
-	private static void println(String message) {
-		print(message);
-		println();
-	}
-	
-	private static void print(String message) {
-		if (LOG_RESULTS_TO_CONSOLE) System.out.print(message);		
-	}
-	
-	private static void printHeader(String title) {
-		println();
-		println("------------------------RUNNING TEST-------------------------");
-		println("********************" + title + "********************");
-		println();
-	}
-	
-	private static String convertCCDAFileToString(URI ccdaFileURI) {
-		StringBuilder sb = new StringBuilder();
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(ccdaFileURI.getPath()));
-			String sCurrentLine = "";
-			while ((sCurrentLine = br.readLine()) != null) {
-				sb.append(sCurrentLine);
-			}
-		} catch (Exception e) {
-			println(e.toString());
-		} finally {
-			try {
-				br.close();
-			} catch (IOException e) {
-				if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
-			}
-		}
-		return sb.toString();
-	}
-	
-	private static ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String referenceFileName, String ccdaFileAsString) {
+	private ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String referenceFileName, String ccdaFileAsString) {
 		return validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE, referenceFileName, ccdaFileAsString);
 	}
 
-	private static ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String validationObjective, 
+	private ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String validationObjective, 
 			String referenceFileName, String ccdaFileAsString) {
 		return validateDocumentAndReturnResults(validationObjective, referenceFileName, ccdaFileAsString, SeverityLevel.INFO);
 	}
 	
-	private static ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String validationObjective, 
+	private ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String validationObjective, 
 			String referenceFileName, String ccdaFileAsString, SeverityLevel severityLevel) {
 		return validator.validate(validationObjective, referenceFileName, ccdaFileAsString, false, severityLevel);
 	}
 
-	private static ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String referenceFileName, URI ccdaFileURI) {
+	private ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String referenceFileName, URI ccdaFileURI) {
 		return validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE, referenceFileName, ccdaFileURI);
 	}
 	
-	private static ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String validationObjective, 
+	private ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String validationObjective, 
 			String referenceFileName, URI ccdaFileURI) {
 		return validateDocumentAndReturnResults(validationObjective, referenceFileName, ccdaFileURI, SeverityLevel.INFO);
 	}
 	
-	private static ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String validationObjective, 
+	private ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String validationObjective, 
 			String referenceFileName, URI ccdaFileURI, SeverityLevel severityLevel) {
 		String ccdaFileAsString = convertCCDAFileToString(ccdaFileURI);
 		return validateDocumentAndReturnResults(validationObjective, referenceFileName, ccdaFileAsString, severityLevel);
-	}
-	
-    private static ScenarioLoader setupAndReturnScenarioLoader(CCDAParser ccdaParser){
-        ScenarioLoader scenarioLoader;
-        File file = new File(LOCAL_SCENARIO_DIRECTORY);
-        String scenarioDir = file.getAbsolutePath();        
-        scenarioLoader = new ScenarioLoader();
-        scenarioLoader.setScenarioFilePath(scenarioDir);
-        scenarioLoader.setCcdaParser(ccdaParser);
-        return scenarioLoader;
-    }
-	
-    private static HashMap<String, CCDARefModel> loadAndParseScenariosAndGetRefModelHashMap() {
-		ScenarioLoader scenarioLoader = setupAndReturnScenarioLoader(new CCDAParser());
-		try {
-			scenarioLoader.afterPropertiesSet(); //we manually set the props and dir...so this manually kicks off loading the scenarios
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return scenarioLoader.getRefModelHashMap();
-    }
-    
-    private static void printResults(List<ContentValidationResult> results) {
-    	int resultIndex = 1;
-    	for(ContentValidationResult curResult : results) {
-    			println("Result #" + resultIndex);
-    			println("Severity: " + (curResult.getContentValidationResultLevel() != null 
-    					? curResult.getContentValidationResultLevel() : "null"));
-    			println("Line Number: " + (curResult.getLineNumber() != null 
-    					? curResult.getLineNumber() : "null"));
-    			println("Message: " + (curResult.getMessage() != null 
-    					? curResult.getMessage() : "null"));
-    			println("XPath: " + (curResult.getXpath() != null 
-    					? curResult.getXpath() : "null"));
-    			resultIndex++;
-    	}
-    }
-
-    private static boolean resultsContainMessage(String searchString, List<ContentValidationResult> results) {
-    	return resultsContainMessage(searchString, results, null);
-    }
-    
-    private static boolean resultsContainMessage(String searchString, List<ContentValidationResult> results, 
-    		ContentValidationResultLevel expectedSeverity) {
-    	for(ContentValidationResult curResult: results) {
-    		if(curResult.getMessage().contains(searchString)) {
-    			return resultContainsSeverity(expectedSeverity, curResult);
-    		}
-    	}
-    	return false;
-    }
-    
-	private static boolean resultContainsSeverity(ContentValidationResultLevel expectedSeverity,
-			ContentValidationResult curResult) {
-		if(expectedSeverity != null && curResult.getContentValidationResultLevel() == expectedSeverity) {
-    		return true;
-		}
-		return false;
-    }    
-    
-	private static boolean resultsContainSeverity(List<ContentValidationResult> results,
-			ContentValidationResultLevel expectedSeverity) {
-		boolean isExpectedSeverity = false; 
-    	for(ContentValidationResult curResult: results) {
-    		isExpectedSeverity = resultContainsSeverity(expectedSeverity, curResult);
-    		if(isExpectedSeverity) {
-    			return true;
-    		}
-    	}
-    	return false;
-    }    
+	}    
     
 	@Test
 	public void stringConversionAndResultsSizeTest() {
@@ -570,20 +451,5 @@ public class ContentValidatorTest {
 				"The reults contain the unexpected severity of: " + expectedSeverity.name(),
 				resultsContainSeverity(results, expectedSeverity));		
 	}
-	
-	private void severityLevelLimitTestHelperAssertMessageAndSeverity(ArrayList<ContentValidationResult> results, String curIssue,
-			ContentValidationResultLevel expectedSeverity) {
-		assertTrue(
-				"The results do not contain the expected message of: " + curIssue
-						+ " or do not have the expected severity of: " + expectedSeverity.name(),
-				resultsContainMessage(curIssue, results, expectedSeverity));
-	}
-	
-	private void severityLevelLimitTestHelperAssertSeverityOnly(ArrayList<ContentValidationResult> results,
-			ContentValidationResultLevel expectedSeverity) {
-		assertTrue(
-				"The results do not contain the expected severity of: " + expectedSeverity.name(),
-				resultsContainSeverity(results, expectedSeverity));
-	}
-	
+
 }
