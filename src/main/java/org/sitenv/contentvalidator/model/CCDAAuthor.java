@@ -205,22 +205,25 @@ public class CCDAAuthor {
     	String elName = "Comparing Author Provenance Data";
     	ArrayList<ContentValidationResult> res = new ArrayList<ContentValidationResult>();
     	
-    	for(CCDAAuthor auth : subAuths) {
-    		   		
-    		ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, auth.getEffTime(), res, elName);
-    		
-    		ParserUtilities.compareDataElementText(name, auth.getOrgName(), res, elName);
-    		
-    		if(res != null && res.size() == 0 ) {
-    			
-    			log.info(" Matched Provenance Data ");
-    			retVal = true;
-    			break;
-    		}
-    		else {
-    			res.clear();
-    		}
-    	}
+    	if (subAuths == null) {
+    		log.info("subAuths is null, skipping: " + elName);
+    	} else {
+	    	for(CCDAAuthor auth : subAuths) {
+	    		ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, auth.getEffTime(), res, elName);
+	    		
+	    		ParserUtilities.compareDataElementText(name, auth.getOrgName(), res, elName);
+	    		
+	    		if(res != null && res.size() == 0 ) {
+	    			
+	    			log.info(" Matched Provenance Data ");
+	    			retVal = true;
+	    			break;
+	    		}
+	    		else {
+	    			res.clear();
+	    		}
+	    	}
+		}
     	
     	return retVal;
     }

@@ -76,11 +76,14 @@ public class CCDAProcedure {
 			boolean curesUpdate) {
 		String elName = "Procedures Section";
 
-		CCDAAuthor.compareSectionLevelAuthor(elName, author, subProcedure.getAuthor(), results);
+		CCDAAuthor.compareSectionLevelAuthor(elName, author,
+				subProcedure != null && subProcedure.getAuthor() != null ? subProcedure.getAuthor() : null, results);
 
 		log.info("Comparing Authors for Procedure Activity Procedure");
 		ArrayList<CCDAAuthor> refAllPAPAuths = this.getProcedureActivityProcedureAuthors();
-		ArrayList<CCDAAuthor> subAllPAPAuths = subProcedure.getProcedureActivityProcedureAuthors();
+		ArrayList<CCDAAuthor> subAllPAPAuths = subProcedure != null && subProcedure.getProcedureActivityProcedureAuthors() != null
+				? subProcedure.getProcedureActivityProcedureAuthors()
+				: null;
 		elName += "/ProcedureActivityProcedure";
 		CCDAAuthor.compareAuthors(refAllPAPAuths, subAllPAPAuths, results, elName);
 	}

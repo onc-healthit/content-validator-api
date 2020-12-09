@@ -94,29 +94,40 @@ public class CCDAEncounter {
 		final String encSec = "Encounters Section";
 		String elName = encSec;
 
-		CCDAAuthor.compareSectionLevelAuthor(elName, author, subEncounter.getAuthor(), results);
+		CCDAAuthor.compareSectionLevelAuthor(elName, author,
+				subEncounter != null && subEncounter.getAuthor() != null ? subEncounter.getAuthor() : null, results);
 
 		log.info("Comparing Authors for Encounter Activity");
 		ArrayList<CCDAAuthor> refAllEncActAuths = this.getEncounterActivityAuthors();
-		ArrayList<CCDAAuthor> subAllEncActAuths = subEncounter.getEncounterActivityAuthors();
+		ArrayList<CCDAAuthor> subAllEncActAuths = subEncounter != null && subEncounter.getEncounterActivityAuthors() != null
+				? subEncounter.getEncounterActivityAuthors()
+				: null;
 		elName += "/EncounterActivity";
 		CCDAAuthor.compareAuthors(refAllEncActAuths, subAllEncActAuths, results, elName);
 
 		log.info("Comparing Authors for Encounter Diagnoses");
 		ArrayList<CCDAAuthor> refAllEncDiagAuths = this.getEncounterDiagnosesAuthors();
-		ArrayList<CCDAAuthor> subAllEncDiagAuths = subEncounter.getEncounterDiagnosesAuthors();
+		ArrayList<CCDAAuthor> subAllEncDiagAuths = subEncounter != null && subEncounter.getEncounterDiagnosesAuthors() != null
+				? subEncounter.getEncounterDiagnosesAuthors()
+				: null;
 		elName += "/EncounterDiagnoses";
 		CCDAAuthor.compareAuthors(refAllEncDiagAuths, subAllEncDiagAuths, results, elName);
 
 		log.info("Comparing Authors for Encounter Diagnoses/Problem Observation");
 		ArrayList<CCDAAuthor> refAllEncDiagProbObsAuths = this.getEncounterDiagnosesProblemObservationAuthors();
-		ArrayList<CCDAAuthor> subAllEncDiagProbObsAuths = subEncounter.getEncounterDiagnosesProblemObservationAuthors();
+		ArrayList<CCDAAuthor> subAllEncDiagProbObsAuths = subEncounter != null
+				&& subEncounter.getEncounterDiagnosesProblemObservationAuthors() != null
+				? subEncounter.getEncounterDiagnosesProblemObservationAuthors()
+				: null;
 		elName += "/ProblemObservation";
 		CCDAAuthor.compareAuthors(refAllEncDiagProbObsAuths, subAllEncDiagProbObsAuths, results, elName);
 
 		log.info("Comparing Authors for Encounter Activity/Indication");
 		ArrayList<CCDAAuthor> refAllEncActIndicationAuths = this.getEncounterActivityIndicationAuthors();
-		ArrayList<CCDAAuthor> subAllEncActIndicationAuths = subEncounter.getEncounterActivityIndicationAuthors();
+		ArrayList<CCDAAuthor> subAllEncActIndicationAuths = subEncounter != null
+				&& subEncounter.getEncounterActivityIndicationAuthors() != null
+				? subEncounter.getEncounterActivityIndicationAuthors()
+				: null;
 		CCDAAuthor.compareAuthors(refAllEncActIndicationAuths, subAllEncActIndicationAuths, results,
 				encSec + "/EncounterActivity/Indication");
 	}

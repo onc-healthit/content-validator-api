@@ -134,23 +134,30 @@ public class CCDAAllergy {
 	public void compareAuthor(CCDAAllergy subAllergy, ArrayList<ContentValidationResult> results, boolean curesUpdate) {
 		String elName = "Allergy Section";
 		
-		CCDAAuthor.compareSectionLevelAuthor(elName, author, subAllergy.getAuthor(), results);
+		CCDAAuthor.compareSectionLevelAuthor(elName, author,
+				subAllergy != null && subAllergy.getAuthor() != null ? subAllergy.getAuthor() : null, results);
 
 		log.info("Comparing Authors for Allergy Concerns");
 		ArrayList<CCDAAuthor> refAllConcAuths = this.getAllergyConcernAuthors();
-		ArrayList<CCDAAuthor> subAllConcAuths = subAllergy.getAllergyConcernAuthors();
+		ArrayList<CCDAAuthor> subAllConcAuths = subAllergy != null && subAllergy.getAllergyConcernAuthors() != null
+				? subAllergy.getAllergyConcernAuthors()
+				: null;
 		elName += "/AllergyConcern";
 		CCDAAuthor.compareAuthors(refAllConcAuths, subAllConcAuths, results, elName);
 
 		log.info("Comparing Authors for Allergy Observations");
 		ArrayList<CCDAAuthor> refAllObsAuths = this.getAllergyObsAuthors();
-		ArrayList<CCDAAuthor> subAllObsAuths = subAllergy.getAllergyObsAuthors();
+		ArrayList<CCDAAuthor> subAllObsAuths = subAllergy != null && subAllergy.getAllergyObsAuthors() != null
+				? subAllergy.getAllergyObsAuthors()
+				: null;
 		elName += "/AllergyObservation";
 		CCDAAuthor.compareAuthors(refAllObsAuths, subAllObsAuths, results, elName);
 
 		log.info("Comparing Authors for Allergy Reactions");
 		ArrayList<CCDAAuthor> refAllReactAuths = this.getAllergyReactionAuthors();
-		ArrayList<CCDAAuthor> subAllReactAuths = subAllergy.getAllergyReactionAuthors();			
+		ArrayList<CCDAAuthor> subAllReactAuths = subAllergy != null && subAllergy.getAllergyReactionAuthors() != null
+				? subAllergy.getAllergyReactionAuthors()
+				: null;			
 		elName += "/AllergyReaction";
 		CCDAAuthor.compareAuthors(refAllReactAuths, subAllReactAuths, results, elName);
 	}

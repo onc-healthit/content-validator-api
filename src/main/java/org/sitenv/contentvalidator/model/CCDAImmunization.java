@@ -37,11 +37,15 @@ public class CCDAImmunization {
 			boolean curesUpdate) {
 		String elName = "Immunizations Section";
 
-		CCDAAuthor.compareSectionLevelAuthor(elName, author, subImmunization.getAuthor(), results);
+		CCDAAuthor.compareSectionLevelAuthor(elName, author,
+				subImmunization != null && subImmunization.getAuthor() != null ? subImmunization.getAuthor() : null,
+				results);
 
 		log.info("Comparing Authors for Immunization Activity");
 		ArrayList<CCDAAuthor> refAllImmActAuths = this.getImmunizationActivityAuthors();
-		ArrayList<CCDAAuthor> subAllImmActAuths = subImmunization.getImmunizationActivityAuthors();
+		ArrayList<CCDAAuthor> subAllImmActAuths = subImmunization != null && subImmunization.getImmunizationActivityAuthors() != null
+				? subImmunization.getImmunizationActivityAuthors()
+				: null;
 		elName += "/ImmunizationActivity";
 		CCDAAuthor.compareAuthors(refAllImmActAuths, subAllImmActAuths, results, elName);
 	}

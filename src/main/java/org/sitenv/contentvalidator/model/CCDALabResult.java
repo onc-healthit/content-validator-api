@@ -72,17 +72,22 @@ public class CCDALabResult {
 			boolean curesUpdate) {
 		String elName = "Results Section";
 
-		CCDAAuthor.compareSectionLevelAuthor(elName, author, subResults.getAuthor(), results);
+		CCDAAuthor.compareSectionLevelAuthor(elName, author,
+				subResults != null && subResults.getAuthor() != null ? subResults.getAuthor() : null, results);
 
 		log.info("Comparing Authors for Result Organizer");
 		ArrayList<CCDAAuthor> refAllOrgsAuths = this.getResultOrganizerAuthors();
-		ArrayList<CCDAAuthor> subAllOrgsAuths = subResults.getResultOrganizerAuthors();
+		ArrayList<CCDAAuthor> subAllOrgsAuths = subResults != null && subResults.getResultOrganizerAuthors() != null
+				? subResults.getResultOrganizerAuthors()
+				: null;
 		elName += "/ResultOrganizer";
 		CCDAAuthor.compareAuthors(refAllOrgsAuths, subAllOrgsAuths, results, elName);
 
 		log.info("Comparing Authors for Result Observations");
 		ArrayList<CCDAAuthor> refAllObsAuths = this.getResultObsAuthors();
-		ArrayList<CCDAAuthor> subAllObsAuths = subResults.getResultObsAuthors();
+		ArrayList<CCDAAuthor> subAllObsAuths = subResults != null && subResults.getResultObsAuthors() != null
+				? subResults.getResultObsAuthors()
+				: null;
 		elName += "/ResultObservation";
 		CCDAAuthor.compareAuthors(refAllObsAuths, subAllObsAuths, results, elName);
 	}
