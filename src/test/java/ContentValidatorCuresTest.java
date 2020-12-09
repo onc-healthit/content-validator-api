@@ -1,4 +1,6 @@
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,19 +28,25 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	
 	private static final boolean LOG_RESULTS_TO_CONSOLE = true;
 	
-	private static final String DEFAULT_VALIDATION_OBJECTIVE = "170.315_b1_ToC_Amb";
+	private static final String B1_TOC_AMB_VALIDATION_OBJECTIVE = "170.315_b1_ToC_Amb";
+	private static final String DEFAULT_VALIDATION_OBJECTIVE = B1_TOC_AMB_VALIDATION_OBJECTIVE;	
 	
 	private static final String DEFAULT_REFERENCE_FILENAME = "170.315_b1_toc_amb_sample1";
 	
 	private static final String REF_CURES_ADD_AUTHORS = "ModRef_AddAuthors_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml";
+	private static final String REF_CURES_B1_TOC_AMB_SAMPLE3 = "170.315_b1_toc_amb_sample3_v2.xml";	
 	
 	private static final int SUB_CURES_MISSING_AUTHOR_IN_HEADER = 0;
+	private static final int SUB_EF = 1;
+	private static final int SUB_MATCH_REF_B1_TOC_AMB_SAMPLE3 = 2;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
 		try {
 			SUBMITTED_CCDA = new URI[] {
-					ContentValidatorCuresTest.class.getResource("cures/sub/RemoveAuthorInHeader_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/sub/RemoveAuthorInHeader_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/C-CDA_R2-1_CCD_EF.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample3.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -74,7 +82,34 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 			String referenceFileName, URI ccdaFileURI, SeverityLevel severityLevel) {
 		String ccdaFileAsString = convertCCDAFileToString(ccdaFileURI);
 		return validateDocumentAndReturnResultsCures(validationObjective, referenceFileName, ccdaFileAsString, severityLevel);
-	}	
+	}
+	
+	@Test
+	public void cures_basicContentValidationTest() {
+		printHeader("cures_basicContentValidationTest");
+		try {
+			ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+					DEFAULT_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3, SUBMITTED_CCDA[SUB_EF],
+					SeverityLevel.ERROR);
+			printResults(results);
+		} catch (Exception e) {
+			fail(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void cures_matchingSubAndRefExpectNoIssuesTest() {
+		printHeader("cures_matchingSubAndRefExpectNoIssuesTest");
+
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3,
+				SUBMITTED_CCDA[SUB_MATCH_REF_B1_TOC_AMB_SAMPLE3], SeverityLevel.ERROR);
+		printResults(results);
+		
+		assertFalse("The submitted and reference files match so there should not be any results yet there are results",
+				results.size() > 0);		
+	}
 		
 	@Test
 	public void cures_authorinHeaderTest() {		
