@@ -17,10 +17,10 @@ public class ProcedureParser {
 	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
 	    	
 	    	log.info(" *** Parsing Procedures *** ");
-	    	model.setProcedure(retrievePrcedureDetails(doc));	
+	    	model.setProcedure(retrieveProcedureDetails(doc));	
 		}
 	
-	public static CCDAProcedure retrievePrcedureDetails(Document doc) throws XPathExpressionException
+	public static CCDAProcedure retrieveProcedureDetails(Document doc) throws XPathExpressionException
 	{
 		CCDAProcedure procedures = null;
 		Element sectionElement = (Element) CCDAConstants.PROCEDURE_EXPRESSION.evaluate(doc, XPathConstants.NODE);

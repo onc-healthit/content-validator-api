@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;  
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class CCDAProcedure {
 	private ArrayList<CCDAII>       		sectionTemplateId;
 	private CCDACode                 		sectionCode;
 	private ArrayList<CCDAProcActProc>		procActsProcs;
-	private ArrayList<CCDANotesActivity>		notesActivity;
+	private ArrayList<CCDANotesActivity>	notesActivity;
 	
 	private CCDAAuthor author;
 	
@@ -25,7 +26,7 @@ public class CCDAProcedure {
 			ParserUtilities.populateNotesActiviteis(notesActivity, results);
 		}
 		
-		if( procActsProcs != null && procActsProcs.size() > 0) {
+		if(procActsProcs != null && procActsProcs.size() > 0) {
 			
 			for(CCDAProcActProc proc : procActsProcs) {
 				
@@ -70,8 +71,34 @@ public class CCDAProcedure {
 		
 		return results;
 	}
-
 	
+	public void compareAuthor(CCDAProcedure subProcedure, ArrayList<ContentValidationResult> results,
+			boolean curesUpdate) {
+		String elName = "Procedures Section";
+
+		CCDAAuthor.compareSectionLevelAuthor(elName, author,
+				subProcedure != null && subProcedure.getAuthor() != null ? subProcedure.getAuthor() : null, results);
+
+		log.info("Comparing Authors for Procedure Activity Procedure");
+		ArrayList<CCDAAuthor> refAllPAPAuths = this.getProcedureActivityProcedureAuthors();
+		ArrayList<CCDAAuthor> subAllPAPAuths = subProcedure != null && subProcedure.getProcedureActivityProcedureAuthors() != null
+				? subProcedure.getProcedureActivityProcedureAuthors()
+				: null;
+		elName += "/ProcedureActivityProcedure";
+		CCDAAuthor.compareAuthors(refAllPAPAuths, subAllPAPAuths, results, elName);
+	}
+	
+	public ArrayList<CCDAAuthor> getProcedureActivityProcedureAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+		
+		for (CCDAProcActProc curProcActProc : procActsProcs) {
+			if (curProcActProc.getAuthor() != null) {
+				authors.add(curProcActProc.getAuthor());
+			}
+		}
+		
+		return authors;
+	}	
 	
 	public void log() {
 		

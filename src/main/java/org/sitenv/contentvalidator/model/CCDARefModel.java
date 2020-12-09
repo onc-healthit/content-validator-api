@@ -785,11 +785,32 @@ public class CCDARefModel {
 		compareSectionAndEntryLevelProvenance(validationObjective, submittedCCDA, results, curesUpdate);
 	}
 	
-	public void compareSectionAndEntryLevelProvenance(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, boolean curesUpdate) {
-		
-		// Compare Allergies Provenance 
-		allergy.compareAuthor(submittedCCDA.getAllergy(), results, curesUpdate);
-		
+	public void compareSectionAndEntryLevelProvenance(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate) {
+		if (allergy != null)
+			allergy.compareAuthor(submittedCCDA.getAllergy() != null ? submittedCCDA.getAllergy() : null, 
+					results, curesUpdate);
+		if (problem != null)
+			problem.compareAuthor(submittedCCDA.getProblem() != null ? submittedCCDA.getProblem() : null, 
+					results, curesUpdate);
+		if (procedure != null)
+			procedure.compareAuthor(submittedCCDA.getProcedure() != null ? submittedCCDA.getProcedure() : null, 
+					results, curesUpdate); // TODO-db: Finish if required: PAP/UDI, PAP/Notes, PAAct?, PAObs?
+		if (medication != null)
+			medication.compareAuthor(submittedCCDA.getMedication() != null ? submittedCCDA.getMedication() : null,
+					results, curesUpdate); // TODO-db: Look at parser, may be more authors to collect
+		if (immunization != null)
+			immunization.compareAuthor(submittedCCDA.getImmunization() != null ? submittedCCDA.getImmunization() : null,
+					results, curesUpdate);
+		if (labResults != null)
+			labResults.compareAuthor(submittedCCDA.getLabResults() != null ? submittedCCDA.getLabResults() : null,
+					results, curesUpdate);
+		if (vitalSigns != null)
+			vitalSigns.compareAuthor(submittedCCDA.getVitalSigns() != null ? submittedCCDA.getVitalSigns() : null,
+					results, curesUpdate);
+		if (encounter != null)
+			encounter.compareAuthor(submittedCCDA.getEncounter() != null ? submittedCCDA.getEncounter() : null, 
+					results, curesUpdate); // TODO-db: Consider adding remaining items in EncounterParser (multiple problem observations, see retrieveAdmissionDiagnosisDetails and below)		
 	}
 	
 	private HashMap<String, CCDALabResultObs> getAllLabResultObs() 

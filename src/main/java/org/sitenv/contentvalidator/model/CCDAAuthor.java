@@ -175,8 +175,11 @@ public class CCDAAuthor {
 				if(auth.getOrgName() != null && auth.getOrgName().getValue() != null)
 					orgName = auth.getOrgName().getValue();
 				
-				ContentValidationResult rs = new ContentValidationResult("The scenario requires Provenance data of Time  : " + auth.getEffTime().getValue().getValue() + " and an Organization Name of : " + 
-				  orgName + " at the " + elName + ", which was not found in the submitted data. ", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				ContentValidationResult rs = new ContentValidationResult(
+						"The scenario requires Provenance data of Time  : " + auth.getEffTime().getValue().getValue()
+								+ " and an Organization Name of : " + orgName + " at the " + elName
+								+ ", which was not found in the submitted data. ",
+						ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 				results.add(rs);
 			}
 			else {
@@ -186,10 +189,11 @@ public class CCDAAuthor {
 		
 		// Compare Author Sizes
 		if(refAuths != null && subAuths != null && 
-				!(refAuths.size() == subAuths.size())) {
-			
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires a total of " + refAuths.size() + " Author Entries for " + elName
-					+ ", however the submitted data had only " + subAuths.size() + " entries.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				!(refAuths.size() == subAuths.size())) {			
+			ContentValidationResult rs = new ContentValidationResult(
+					"The scenario requires a total of " + refAuths.size() + " Author Entries for " + elName
+							+ ", however the submitted data had only " + subAuths.size() + " entries.",
+					ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 					results.add(rs);
 		}
 		
@@ -201,22 +205,25 @@ public class CCDAAuthor {
     	String elName = "Comparing Author Provenance Data";
     	ArrayList<ContentValidationResult> res = new ArrayList<ContentValidationResult>();
     	
-    	for(CCDAAuthor auth : subAuths) {
-    		   		
-    		ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, auth.getEffTime(), res, elName);
-    		
-    		ParserUtilities.compareDataElementText(name, auth.getOrgName(), res, elName);
-    		
-    		if(res != null && res.size() == 0 ) {
-    			
-    			log.info(" Matched Provenance Data ");
-    			retVal = true;
-    			break;
-    		}
-    		else {
-    			res.clear();
-    		}
-    	}
+    	if (subAuths == null) {
+    		log.info("subAuths is null, skipping: " + elName);
+    	} else {
+	    	for(CCDAAuthor auth : subAuths) {
+	    		ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, auth.getEffTime(), res, elName);
+	    		
+	    		ParserUtilities.compareDataElementText(name, auth.getOrgName(), res, elName);
+	    		
+	    		if(res != null && res.size() == 0 ) {
+	    			
+	    			log.info(" Matched Provenance Data ");
+	    			retVal = true;
+	    			break;
+	    		}
+	    		else {
+	    			res.clear();
+	    		}
+	    	}
+		}
     	
     	return retVal;
     }
@@ -244,5 +251,27 @@ public class CCDAAuthor {
     	
     	return retVal;
     }
+    
+	/**
+	 * Compare if the root section-level author info in this reference author is present in submitted author
+	 */
+	public static void compareSectionLevelAuthor(String elName, CCDAAuthor refAuthor, CCDAAuthor subAuthor,
+			ArrayList<ContentValidationResult> results) {		
+		log.info("Comparing " + elName + ", section-level-only author");
+		log.info("Ref Section Author " + (refAuthor != null ? "found" : "not found"));
+		log.info("Sub Section Author " + (subAuthor != null ? "found" : "not found"));
+		
+		if (refAuthor != null && subAuthor != null) {
+			refAuthor.matches(subAuthor, results, elName);
+		} else if (refAuthor != null && subAuthor == null) {
+			ContentValidationResult rs = new ContentValidationResult(
+					"The scenario requires Provenance data for " + elName
+							+ " however the submitted file does not contain the Provenance data for " + elName + ".",
+					ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+			results.add(rs);
+		} else {
+			log.info("Author is null in the reference data, nothing to do");
+		}		
+	}    
 
 }

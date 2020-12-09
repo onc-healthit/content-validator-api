@@ -10,9 +10,9 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import java.util.ArrayList;
 
-public class EncounterDiagnosesParser {
+public class EncounterParser {
 	
-	private static Logger log = Logger.getLogger(EncounterDiagnosesParser.class.getName());
+	private static Logger log = Logger.getLogger(EncounterParser.class.getName());
 	
     public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
     	
@@ -23,7 +23,158 @@ public class EncounterDiagnosesParser {
     	model.setDischargeDiagnosis(retrieveDischargeDiagnosisDetails(doc));
 	}
     
-    public static CCDAAdmissionDiagnosis retrieveAdmissionDiagnosisDetails(Document doc) throws XPathExpressionException
+    public static CCDAEncounter retrieveEncounterDetails(Document doc, boolean curesUpdate) throws XPathExpressionException
+	{
+		Element sectionElement = (Element) CCDAConstants.ENCOUNTER_EXPRESSION.evaluate(doc, XPathConstants.NODE);
+		CCDAEncounter encounters = null;
+		
+		if(sectionElement != null)
+		{
+			log.info(" Adding Encounter ");
+			encounters = new CCDAEncounter();
+			
+			//Get Template Ids
+			encounters.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET)));
+			
+			// Get Section Code
+			encounters.setSectionCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+			
+			// Get Entries
+			encounters.setEncActivities(readEncounterActivity((NodeList) CCDAConstants.REL_ENC_ENTRY_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET), curesUpdate));
+			
+			encounters.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+		}
+		return encounters;
+	}
+    
+	public static ArrayList<CCDAEncounterActivity> readEncounterActivity(NodeList encounterActivityNodeList, boolean curesUpdate) throws XPathExpressionException
+	{
+		ArrayList<CCDAEncounterActivity> encounterActivityList = new ArrayList<>();
+		CCDAEncounterActivity encounterActivity;
+		for (int i = 0; i < encounterActivityNodeList.getLength(); i++) {
+			
+			Element encounterActivityElement = (Element) encounterActivityNodeList.item(i);
+			
+			if(encounterActivityElement != null)
+			{
+				log.info(" Adding Encounter Activity");
+				encounterActivity = new CCDAEncounterActivity();
+				
+				//Get Tempalte Ids
+				encounterActivity.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+						evaluate(encounterActivityElement, XPathConstants.NODESET)));
+
+				encounterActivity.setEncounterTypeCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+										evaluate(encounterActivityElement, XPathConstants.NODE)));
+				
+				encounterActivity.setEffectiveTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+															evaluate(encounterActivityElement, XPathConstants.NODE)));
+				
+				encounterActivity.setSdLocs(readServiceDeliveryLocators((NodeList) CCDAConstants.REL_PART_ROLE_EXP.
+																evaluate(encounterActivityElement, XPathConstants.NODESET)));
+				
+				NodeList encounterDiagnosisNodeList = (NodeList) CCDAConstants.REL_ENTRY_RELSHIP_ACT_EXP.
+								evaluate(encounterActivityElement, XPathConstants.NODESET);
+				
+				encounterActivity.setDiagnoses(readEncounterDiagnosis(encounterDiagnosisNodeList));
+				
+				NodeList indicationNodeList = (NodeList) CCDAConstants.REL_ENTRY_RELSHIP_OBS_EXP.
+								evaluate(encounterActivityElement, XPathConstants.NODESET);
+				
+				encounterActivity.setIndications(readProblemObservation(indicationNodeList));
+				
+				// Add Notes Activity if present.
+				encounterActivity.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION.
+						evaluate(encounterActivityElement, XPathConstants.NODESET), null));
+				
+				encounterActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+						evaluate(encounterActivityElement, XPathConstants.NODE)));
+				
+				encounterActivityList.add(encounterActivity);
+				
+				
+			}
+		}
+		return encounterActivityList;
+	}
+	
+	public static ArrayList<CCDAEncounterDiagnosis> readEncounterDiagnosis(NodeList encounterDiagnosisNodeList) throws XPathExpressionException
+	{
+		ArrayList<CCDAEncounterDiagnosis> encounterDiagnosisList = null;
+		if(encounterDiagnosisNodeList.getLength() > 0)
+		{
+			encounterDiagnosisList = new ArrayList<>();
+		}
+		CCDAEncounterDiagnosis encounterDiagnosis;
+		for (int i = 0; i < encounterDiagnosisNodeList.getLength(); i++) {
+			
+			log.info(" Adding Encounter Diagnosis");
+			
+			Element encounterDiagnosisElement = (Element) encounterDiagnosisNodeList.item(i);
+			encounterDiagnosis = new CCDAEncounterDiagnosis();
+			encounterDiagnosis.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+					evaluate(encounterDiagnosisElement, XPathConstants.NODESET)));
+			
+			encounterDiagnosis.setEntryCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+									evaluate(encounterDiagnosisElement, XPathConstants.NODE)));
+			
+			NodeList problemObservationNodeList = (NodeList) CCDAConstants.REL_ENTRY_RELSHIP_OBS_EXP.
+										evaluate(encounterDiagnosisElement, XPathConstants.NODESET);
+			
+			encounterDiagnosis.setProblemObs(readProblemObservation(problemObservationNodeList));
+			
+			encounterDiagnosis.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(encounterDiagnosisElement, XPathConstants.NODE)));
+			
+			encounterDiagnosisList.add(encounterDiagnosis);
+		}
+		
+		return encounterDiagnosisList;
+	}
+	
+	public static ArrayList<CCDAProblemObs> readProblemObservation(NodeList problemObservationNodeList) throws XPathExpressionException
+	{
+		ArrayList<CCDAProblemObs> problemObservationList = null;
+		if(problemObservationNodeList.getLength() > 0)
+		{
+			problemObservationList = new ArrayList<>();
+		}
+		CCDAProblemObs problemObservation;
+		for (int i = 0; i < problemObservationNodeList.getLength(); i++) {
+			
+			log.info(" Adding Problem Observation as part of encounter ");
+			problemObservation = new CCDAProblemObs();
+			
+			Element problemObservationElement = (Element) problemObservationNodeList.item(i);
+			problemObservation.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+					evaluate(problemObservationElement, XPathConstants.NODESET)));
+			
+			problemObservation.setProblemType(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+									evaluate(problemObservationElement, XPathConstants.NODE)));
+			
+			problemObservation.setTranslationProblemType(ParserUtilities.readCodeList((NodeList) CCDAConstants.REL_CODE_TRANS_EXP.
+									evaluate(problemObservationElement, XPathConstants.NODESET)));
+			
+			problemObservation.setEffTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+										evaluate(problemObservationElement, XPathConstants.NODE)));
+			
+			problemObservation.setProblemCode(ParserUtilities.readCodeWithTranslation((Element) CCDAConstants.REL_VAL__WITH_TRANS_EXP.
+					evaluate(problemObservationElement, XPathConstants.NODE)));
+			
+			problemObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(problemObservationElement, XPathConstants.NODE)));
+			
+			problemObservationList.add(problemObservation);
+		}
+		
+		return problemObservationList;
+	}	
+
+	public static CCDAAdmissionDiagnosis retrieveAdmissionDiagnosisDetails(Document doc) throws XPathExpressionException
 	{
 		Element sectionElement = (Element) CCDAConstants.ADMISSION_DIAG_EXP.evaluate(doc, XPathConstants.NODE);
 		CCDAAdmissionDiagnosis admDiag = null;
@@ -121,122 +272,7 @@ public class EncounterDiagnosesParser {
 		
 		log.info(" Size of Discharge Diagnosis Problem Observations : " + encDiagList.size());
 		return encDiagList;
-    }
-
-	
-	public static CCDAEncounter retrieveEncounterDetails(Document doc, boolean curesUpdate) throws XPathExpressionException
-	{
-		Element sectionElement = (Element) CCDAConstants.ENCOUNTER_EXPRESSION.evaluate(doc, XPathConstants.NODE);
-		CCDAEncounter encounters = null;
-		
-		if(sectionElement != null)
-		{
-			log.info(" Adding Encounter ");
-			encounters = new CCDAEncounter();
-			
-			//Get Template Ids
-			encounters.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
-					evaluate(sectionElement, XPathConstants.NODESET)));
-			
-			// Get Section Code
-			encounters.setSectionCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
-					evaluate(sectionElement, XPathConstants.NODE)));
-			
-			// Get Entries
-			encounters.setEncActivities(readEncounterActivity((NodeList) CCDAConstants.REL_ENC_ENTRY_EXP.
-					evaluate(sectionElement, XPathConstants.NODESET), curesUpdate));
-			
-			encounters.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
-					evaluate(sectionElement, XPathConstants.NODE)));
-		}
-		return encounters;
-	}
-	
-	
-	public static ArrayList<CCDAEncounterActivity> readEncounterActivity(NodeList encounterActivityNodeList, boolean curesUpdate) throws XPathExpressionException
-	{
-		ArrayList<CCDAEncounterActivity> encounterActivityList = new ArrayList<>();
-		CCDAEncounterActivity encounterActivity;
-		for (int i = 0; i < encounterActivityNodeList.getLength(); i++) {
-			
-			Element encounterActivityElement = (Element) encounterActivityNodeList.item(i);
-			
-			if(encounterActivityElement != null)
-			{
-				log.info(" Adding Encounter Activity");
-				encounterActivity = new CCDAEncounterActivity();
-				
-				//Get Tempalte Ids
-				encounterActivity.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
-						evaluate(encounterActivityElement, XPathConstants.NODESET)));
-
-				encounterActivity.setEncounterTypeCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
-										evaluate(encounterActivityElement, XPathConstants.NODE)));
-				
-				encounterActivity.setEffectiveTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
-															evaluate(encounterActivityElement, XPathConstants.NODE)));
-				
-				encounterActivity.setSdLocs(readServiceDeliveryLocators((NodeList) CCDAConstants.REL_PART_ROLE_EXP.
-																evaluate(encounterActivityElement, XPathConstants.NODESET)));
-				
-				NodeList encounterDiagnosisNodeList = (NodeList) CCDAConstants.REL_ENTRY_RELSHIP_ACT_EXP.
-								evaluate(encounterActivityElement, XPathConstants.NODESET);
-				
-				encounterActivity.setDiagnoses(readEncounterDiagnosis(encounterDiagnosisNodeList));
-				
-				NodeList indicationNodeList = (NodeList) CCDAConstants.REL_ENTRY_RELSHIP_OBS_EXP.
-								evaluate(encounterActivityElement, XPathConstants.NODESET);
-				
-				encounterActivity.setIndications(readProblemObservation(indicationNodeList));
-				
-				// Add Notes Activity if present.
-				encounterActivity.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION.
-						evaluate(encounterActivityElement, XPathConstants.NODESET), null));
-				
-				encounterActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
-						evaluate(encounterActivityElement, XPathConstants.NODE)));
-				
-				encounterActivityList.add(encounterActivity);
-				
-				
-			}
-		}
-		return encounterActivityList;
-	}
-	
-	public static ArrayList<CCDAEncounterDiagnosis> readEncounterDiagnosis(NodeList encounterDiagnosisNodeList) throws XPathExpressionException
-	{
-		ArrayList<CCDAEncounterDiagnosis> encounterDiagnosisList = null;
-		if(encounterDiagnosisNodeList.getLength() > 0)
-		{
-			encounterDiagnosisList = new ArrayList<>();
-		}
-		CCDAEncounterDiagnosis encounterDiagnosis;
-		for (int i = 0; i < encounterDiagnosisNodeList.getLength(); i++) {
-			
-			log.info(" Adding Encounter Diagnosis");
-			
-			Element encounterDiagnosisElement = (Element) encounterDiagnosisNodeList.item(i);
-			encounterDiagnosis = new CCDAEncounterDiagnosis();
-			encounterDiagnosis.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
-					evaluate(encounterDiagnosisElement, XPathConstants.NODESET)));
-			
-			encounterDiagnosis.setEntryCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
-									evaluate(encounterDiagnosisElement, XPathConstants.NODE)));
-			
-			NodeList problemObservationNodeList = (NodeList) CCDAConstants.REL_ENTRY_RELSHIP_OBS_EXP.
-										evaluate(encounterDiagnosisElement, XPathConstants.NODESET);
-			
-			encounterDiagnosis.setProblemObs(readProblemObservation(problemObservationNodeList));
-			
-			encounterDiagnosis.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
-					evaluate(encounterDiagnosisElement, XPathConstants.NODE)));
-			
-			encounterDiagnosisList.add(encounterDiagnosis);
-		}
-		
-		return encounterDiagnosisList;
-	}
+    }	
 	
 	public static ArrayList<CCDAServiceDeliveryLoc> readServiceDeliveryLocators(NodeList serviceDeliveryLocNodeList) throws XPathExpressionException
 	{
@@ -272,44 +308,6 @@ public class EncounterDiagnosesParser {
 		}
 		
 		return serviceDeliveryLocsList;
-	}
-	
-	public static ArrayList<CCDAProblemObs> readProblemObservation(NodeList problemObservationNodeList) throws XPathExpressionException
-	{
-		ArrayList<CCDAProblemObs> problemObservationList = null;
-		if(problemObservationNodeList.getLength() > 0)
-		{
-			problemObservationList = new ArrayList<>();
-		}
-		CCDAProblemObs problemObservation;
-		for (int i = 0; i < problemObservationNodeList.getLength(); i++) {
-			
-			log.info(" Adding Problem Observation as part of encounter ");
-			problemObservation = new CCDAProblemObs();
-			
-			Element problemObservationElement = (Element) problemObservationNodeList.item(i);
-			problemObservation.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
-					evaluate(problemObservationElement, XPathConstants.NODESET)));
-			
-			problemObservation.setProblemType(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
-									evaluate(problemObservationElement, XPathConstants.NODE)));
-			
-			problemObservation.setTranslationProblemType(ParserUtilities.readCodeList((NodeList) CCDAConstants.REL_CODE_TRANS_EXP.
-									evaluate(problemObservationElement, XPathConstants.NODESET)));
-			
-			problemObservation.setEffTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
-										evaluate(problemObservationElement, XPathConstants.NODE)));
-			
-			problemObservation.setProblemCode(ParserUtilities.readCodeWithTranslation((Element) CCDAConstants.REL_VAL__WITH_TRANS_EXP.
-					evaluate(problemObservationElement, XPathConstants.NODE)));
-			
-			problemObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
-					evaluate(problemObservationElement, XPathConstants.NODE)));
-			
-			problemObservationList.add(problemObservation);
-		}
-		
-		return problemObservationList;
 	}
 
 }

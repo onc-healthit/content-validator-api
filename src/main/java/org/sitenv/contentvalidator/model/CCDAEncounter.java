@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
 import org.apache.log4j.Logger;
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
@@ -86,6 +87,105 @@ public class CCDAEncounter {
 				encAct.getAllNotesActivities(results);
 			}
 		}
+	}
+	
+	public void compareAuthor(CCDAEncounter subEncounter, ArrayList<ContentValidationResult> results,
+			boolean curesUpdate) {
+		final String encSec = "Encounters Section";
+		String elName = encSec;
+
+		CCDAAuthor.compareSectionLevelAuthor(elName, author,
+				subEncounter != null && subEncounter.getAuthor() != null ? subEncounter.getAuthor() : null, results);
+
+		log.info("Comparing Authors for Encounter Activity");
+		ArrayList<CCDAAuthor> refAllEncActAuths = this.getEncounterActivityAuthors();
+		ArrayList<CCDAAuthor> subAllEncActAuths = subEncounter != null && subEncounter.getEncounterActivityAuthors() != null
+				? subEncounter.getEncounterActivityAuthors()
+				: null;
+		elName += "/EncounterActivity";
+		CCDAAuthor.compareAuthors(refAllEncActAuths, subAllEncActAuths, results, elName);
+
+		log.info("Comparing Authors for Encounter Diagnoses");
+		ArrayList<CCDAAuthor> refAllEncDiagAuths = this.getEncounterDiagnosesAuthors();
+		ArrayList<CCDAAuthor> subAllEncDiagAuths = subEncounter != null && subEncounter.getEncounterDiagnosesAuthors() != null
+				? subEncounter.getEncounterDiagnosesAuthors()
+				: null;
+		elName += "/EncounterDiagnoses";
+		CCDAAuthor.compareAuthors(refAllEncDiagAuths, subAllEncDiagAuths, results, elName);
+
+		log.info("Comparing Authors for Encounter Diagnoses/Problem Observation");
+		ArrayList<CCDAAuthor> refAllEncDiagProbObsAuths = this.getEncounterDiagnosesProblemObservationAuthors();
+		ArrayList<CCDAAuthor> subAllEncDiagProbObsAuths = subEncounter != null
+				&& subEncounter.getEncounterDiagnosesProblemObservationAuthors() != null
+				? subEncounter.getEncounterDiagnosesProblemObservationAuthors()
+				: null;
+		elName += "/ProblemObservation";
+		CCDAAuthor.compareAuthors(refAllEncDiagProbObsAuths, subAllEncDiagProbObsAuths, results, elName);
+
+		log.info("Comparing Authors for Encounter Activity/Indication");
+		ArrayList<CCDAAuthor> refAllEncActIndicationAuths = this.getEncounterActivityIndicationAuthors();
+		ArrayList<CCDAAuthor> subAllEncActIndicationAuths = subEncounter != null
+				&& subEncounter.getEncounterActivityIndicationAuthors() != null
+				? subEncounter.getEncounterActivityIndicationAuthors()
+				: null;
+		CCDAAuthor.compareAuthors(refAllEncActIndicationAuths, subAllEncActIndicationAuths, results,
+				encSec + "/EncounterActivity/Indication");
+	}
+
+	public ArrayList<CCDAAuthor> getEncounterActivityAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+
+		for (CCDAEncounterActivity curEncAct : encActivities) {
+			if (curEncAct.getAuthor() != null) {
+				authors.add(curEncAct.getAuthor());
+			}
+		}
+
+		return authors;
+	}
+
+	public ArrayList<CCDAAuthor> getEncounterDiagnosesAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+
+		for (CCDAEncounterActivity curEncAct : encActivities) {
+			for (CCDAEncounterDiagnosis curEncDiag : curEncAct.getDiagnoses()) {
+				if (curEncDiag.getAuthor() != null) {
+					authors.add(curEncDiag.getAuthor());
+				}
+			}
+		}
+
+		return authors;
+	}
+
+	public ArrayList<CCDAAuthor> getEncounterDiagnosesProblemObservationAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+
+		for (CCDAEncounterActivity curEncAct : encActivities) {
+			for (CCDAEncounterDiagnosis curEncDiag : curEncAct.getDiagnoses()) {
+				for (CCDAProblemObs curProbObs : curEncDiag.getProblemObs()) {
+					if (curProbObs.getAuthor() != null) {
+						authors.add(curProbObs.getAuthor());
+					}
+				}
+			}
+		}
+
+		return authors;
+	}
+
+	public ArrayList<CCDAAuthor> getEncounterActivityIndicationAuthors() {
+		ArrayList<CCDAAuthor> authors = new ArrayList<CCDAAuthor>();
+
+		for (CCDAEncounterActivity curEncAct : encActivities) {
+			for (CCDAProblemObs curIndication : curEncAct.getIndications()) {
+				if (curIndication.getAuthor() != null) {
+					authors.add(curIndication.getAuthor());
+				}
+			}
+		}
+
+		return authors;
 	}
 	
 	public void log() {

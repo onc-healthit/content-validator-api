@@ -17,27 +17,23 @@ public class ParserUtilities {
 	
 	private static Logger log = Logger.getLogger(ParserUtilities.class.getName());
 	
-	public static void compareAuthor(CCDAAuthor refAuthor, CCDAAuthor subAuthor, ArrayList<ContentValidationResult> results, String elementName) {
-		
+	public static void compareAuthor(CCDAAuthor refAuthor, CCDAAuthor subAuthor, ArrayList<ContentValidationResult> results, String elementName) {		
 		// handle nulls.
-				if((refAuthor != null) && (subAuthor != null) ) {
+		if ((refAuthor != null) && (subAuthor != null)) {
 
-					refAuthor.matches(subAuthor, results, elementName);
-				}
-				else if ((refAuthor == null) && (subAuthor != null)) {
-					
-					log.info(" Getting additional author information which is allowed ");
-				}
-				else if((refAuthor != null) && (subAuthor == null)){
-					ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-					results.add(rs);
-				} 
-				else {
-					// do nothing since both are null.
-					log.info(" Both Submitted and Ref Authors are null for " + elementName);
-				}
-		
-		
+			refAuthor.matches(subAuthor, results, elementName);
+		} else if ((refAuthor == null) && (subAuthor != null)) {
+
+			log.info(" Getting additional author information which is allowed ");
+		} else if ((refAuthor != null) && (subAuthor == null)) {
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName
+					+ " data, but submitted file does not contain " + elementName + " data",
+					ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+			results.add(rs);
+		} else {
+			// do nothing since both are null.
+			log.info(" Both Submitted and Ref Authors are null for " + elementName);
+		}				
 	}
 	
 	public static void compareDataElementText(CCDADataElement refDe, CCDADataElement subDe,
