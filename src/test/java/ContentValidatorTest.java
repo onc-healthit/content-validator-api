@@ -15,9 +15,9 @@ import org.sitenv.contentvalidator.service.ContentValidatorService;
 
 public class ContentValidatorTest extends ContentValidatorTester {	
 	
-	private static final String CURES_SCENARIO_DIRECTORY = TEST_RESOURCES_DIRECTORY + "/preCures/ref";
+	private static final String PRE_CURES_SCENARIO_DIRECTORY = TEST_RESOURCES_DIRECTORY + "/preCures/ref";
 	private static HashMap<String, CCDARefModel> refModelHashMap = loadAndParseScenariosAndGetRefModelHashMap(
-			CURES_SCENARIO_DIRECTORY);
+			PRE_CURES_SCENARIO_DIRECTORY);
 	private static ContentValidatorService validator = new ContentValidatorService(refModelHashMap);
 	static {
 		println();
@@ -56,6 +56,9 @@ public class ContentValidatorTest extends ContentValidatorTester {
 	private static final String REF_E1_VDT_AMBULATORY = "170.315_e1_vdt_amb_sample1.xml";
 	private static final String REF_E1_VDT_INPATIENT = "170.315_e1_vdt_inp_sample2.xml";
 	
+	private static final String MOD_REF_ADDBIRTHSEX_B1_TOC_AMB_SAMPLE1 = "ModRef_AddBirthSex_b1TocAmbSample1.xml";
+	private static final String MOD_REF_NO_BIRTH_SEX_B1_TOC_AMB_SAMPLE1 = "ModRef_NonCures_NoBirthSex_b1TocAmbSample1.xml";
+	
 	/**
 	 * One example of many related issues:
 	 * Expected (170.315_b1_toc_amb_sample1.xml test scenario):
@@ -66,10 +69,12 @@ public class ContentValidatorTest extends ContentValidatorTester {
 	 * 	<telecom value="tel:+1(555)-112-1544" use="HP"/> <!-- value is 964-4466 instead of 112-1544 -dbTest -->
 	*/
 	private static final int SUB_HAS_TELECOM_MISMATCHES = 0;
+	private static final int SUB_NO_BIRTH_SEX = SUB_HAS_TELECOM_MISMATCHES;
 	private static final int SUB_HAS_INTERVENTIONS_AND_HEALTH_STATUS_AND_IS_CP_AMB = 1;
 	private static final int SUB_MISSING_INTERVENTIONS_AND_HAS_HEALTH_STATUS_AND_IS_CP_AMB = 2;
 	private static final int SUB_MISSING_HEALTH_STATUS_AND_HAS_INTERVENTIONS_AND_IS_CP_AMB = 3;
 	private static final int SUB_NT_CCDS_SAMPLE1_R21_HAS_ENCOUNTER_DIAGNOSIS = 4;
+	private static final int SUB_B1_TOC_AMB_SAMPLE1_ADD_BIRTH_SEX = 5;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -80,7 +85,7 @@ public class ContentValidatorTest extends ContentValidatorTester {
 					ContentValidatorTest.class.getResource("preCures/sub/170.315_b9_cp_amb_sample1_v5_Remove_Interventions.xml").toURI(),
 					ContentValidatorTest.class.getResource("preCures/sub/170.315_b9_cp_amb_sample1_v5_Remove_HealthStatus.xml").toURI(),
 					ContentValidatorTest.class.getResource("preCures/sub/NT_CCDS_Sample1_r21_v4.xml").toURI(),
-					ContentValidatorTest.class.getResource("cures/sub/RemoveAuthorInHeader_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml").toURI()
+					ContentValidatorTest.class.getResource("preCures/sub/170.315_b1_toc_amb_sample1_Submitted_T1_AddBirthSex.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -141,7 +146,10 @@ public class ContentValidatorTest extends ContentValidatorTester {
 	public void telecomTest() {
 		printHeader("telecomTest");
 		
-		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResults(DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA);
+		// non-cures enforces a WARNING for telecom issues as opposed to an ERROR with cures
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResults(DEFAULT_REFERENCE_FILENAME,
+				DEFAULT_SUBMITTED_CCDA);
 		assertFalse("No results were returned", results.isEmpty());
 		println("FINAL RESULTS");
 		println("No of Entries = " + results.size());
@@ -162,8 +170,6 @@ public class ContentValidatorTest extends ContentValidatorTester {
 		final String interventionsWarning = "A Care Plan section is missing: The scenario contains the Interventions Section (V3) 2.16.840.1.113883.10.20.21.2.3:2015-08-01, "
 				+ "but it was not found in the submitted document";
 		String carePlanMessage = "A Care Plan section is missing";
-		String birthSexMessage = "The scenario requires patient's birth sex to be captured as part of social history data, but submitted file does have birth sex information";
-		
 		
 		ArrayList<ContentValidationResult> results;
 		
@@ -174,14 +180,7 @@ public class ContentValidatorTest extends ContentValidatorTester {
 		results = validateDocumentAndReturnResults(DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA);		
 		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
 				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
-
-		printHeader("birth sex, has 2 warning and 1 error"
-				+ "expect 2 warning and 1 error");
-		results = validateDocumentAndReturnResults(DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA);		
-		assertFalse("The results contain the unexpected message of: " + birthSexMessage, 
-				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.ERROR));
-				
-		
+						
 		printHeader("cp amb, has both in ref and sub, expect no related warnings for missing cp sections");
 		results = validateDocumentAndReturnResults(VO_CAREPLAN_AMBULATORY, REF_CAREPLAN_AMBULATORY,
 				SUBMITTED_CCDA[SUB_HAS_INTERVENTIONS_AND_HEALTH_STATUS_AND_IS_CP_AMB]);
@@ -371,31 +370,121 @@ public class ContentValidatorTest extends ContentValidatorTester {
 	}
 	
 	@Test
-	public void severityLevelLimitTestFileWithTwoWarningsOnly() {
-		printHeader("severityLevelLimitTestFileWithTwoWarningsOnly");
+	public void birthSexTest_old_delete_when_birth_sex_added_to_all_refs() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
 		
-		final String warning1 = "Patient Telecom in the submitted file does not match the expected Telecom. The following values are expected: telecom/@use = MC and telecom/@value = tel:+1(555)-777-1234";
-		final String warning2 = "Patient Telecom in the submitted file does not match the expected Telecom. The following values are expected: telecom/@use = HP and telecom/@value = tel:+1(555)-723-1544";
+		// Sub missing birth sex returns an ERROR for curesUpdate or a WARNING for non-cures (2015) 
+		// as per regulation https://www.healthit.gov/isa/uscdi-data/birth-sex
+		// Note: Even though the birthSexMessage implies birth sex is required because it is in the scenario, 
+		// we require it regardless of it being there or not - 
+		// the source code (CCDARefModel.validateBirthSex ) purposely does not even reference the scenario, only the submitted file.
 		
+		String birthSexMessage = "The scenario requires patient's birth sex to be captured as part of social history data, "
+				+ "but submitted file does not have birth sex information";
+		
+		ArrayList<ContentValidationResult> results;		
+		
+		// *** these tests are NOT written in a future proof manner - although they will likely work after birth sex is added to scenarios, 
+		// we need to delete this entire test at that point
+		
+		printHeader("Ref has birth sex. Sub does not have birth sex. Expect birth sex warning");
+		results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE, MOD_REF_ADDBIRTHSEX_B1_TOC_AMB_SAMPLE1,
+				DEFAULT_SUBMITTED_CCDA, SeverityLevel.WARNING);
+		printResults(results);
+		assertTrue("Expect birth sex warning: " + birthSexMessage, 
+				resultsContainMessage(birthSexMessage, results, ContentValidationResultLevel.WARNING));
+		
+		printHeader("Ref does not have have birth sex. Sub does not have birth sex. "
+				+ "Still expect birth sex warning despite ref not requiring it");
+		results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE, DEFAULT_REFERENCE_FILENAME,
+				DEFAULT_SUBMITTED_CCDA, SeverityLevel.WARNING);
+		printResults(results);
+		assertTrue("Expect birth sex warning despite ref not requiring it: " + birthSexMessage, 
+				resultsContainMessage(birthSexMessage, results, ContentValidationResultLevel.WARNING));
+		
+		printHeader("Ref has birth sex. Sub has birth sex. Expect NO birth sex warning as sub has birth sex");
+		results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE, MOD_REF_ADDBIRTHSEX_B1_TOC_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_B1_TOC_AMB_SAMPLE1_ADD_BIRTH_SEX], SeverityLevel.WARNING);
+		printResults(results);
+		assertFalse("Expect NO birth sex warning as sub has birth sex but got: " + birthSexMessage, 
+				resultsContainMessage(birthSexMessage, results, ContentValidationResultLevel.WARNING));				
+	}
+	
+	@Test
+	public void birthSexTest() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// Sub missing birth sex returns an ERROR for curesUpdate or a WARNING for non-cures (2015) 
+		// as per regulation https://www.healthit.gov/isa/uscdi-data/birth-sex
+		// Note: Even though the birthSexMessage implies birth sex is required because it is in the scenario, 
+		// we require it regardless of it being there or not - 
+		// the source code (CCDARefModel.validateBirthSex ) purposely does not even reference the scenario, only the submitted file.
+		
+		String birthSexMessage = "The scenario requires patient's birth sex to be captured as part of social history data, "
+				+ "but submitted file does not have birth sex information";
+		
+		ArrayList<ContentValidationResult> results;		
+		
+		// *** these tests are written in a future proof manner, knowing that birth sex will be added to all the scenarios ***
+		
+		printHeader("Ref has birth sex. Sub does not have birth sex. Expect birth sex warning");
+		results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE, REF_TOC_AMBULATORY,
+				SUBMITTED_CCDA[SUB_NO_BIRTH_SEX], SeverityLevel.WARNING);
+		printResults(results);
+		assertTrue("Expect birth sex warning: " + birthSexMessage, 
+				resultsContainMessage(birthSexMessage, results, ContentValidationResultLevel.WARNING));
+		
+		printHeader("Ref does not have have birth sex. Sub does not have birth sex. "
+				+ "Still expect birth sex warning despite ref not requiring it");
+		results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE, MOD_REF_NO_BIRTH_SEX_B1_TOC_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_NO_BIRTH_SEX], SeverityLevel.WARNING);
+		printResults(results);
+		assertTrue("Expect birth sex warning despite ref not requiring it: " + birthSexMessage, 
+				resultsContainMessage(birthSexMessage, results, ContentValidationResultLevel.WARNING));
+		
+		printHeader("Ref has birth sex. Sub has birth sex. Expect NO birth sex warning as sub has birth sex");
+		results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE, REF_TOC_AMBULATORY,
+				SUBMITTED_CCDA[SUB_B1_TOC_AMB_SAMPLE1_ADD_BIRTH_SEX], SeverityLevel.WARNING);
+		printResults(results);
+		assertFalse("Expect NO birth sex warning as sub has birth sex but got: " + birthSexMessage, 
+				resultsContainMessage(birthSexMessage, results, ContentValidationResultLevel.WARNING));				
+	}	
+	
+	@Test
+	public void severityLevelLimitTestFileWithThreeWarningsOnly() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// For non-cures, telecom issues are a WARNING vs an error
+		
+		final String warning1 = "Patient Telecom in the submitted file does not match the expected Telecom. "
+				+ "The following values are expected: telecom/@use = MC and telecom/@value = tel:+1(555)-777-1234";
+		final String warning2 = "Patient Telecom in the submitted file does not match the expected Telecom. "
+				+ "The following values are expected: telecom/@use = HP and telecom/@value = tel:+1(555)-723-1544";
+		final String warning3 = "The scenario requires patient's birth sex to be captured as part of social history data, "
+				+ "but submitted file does not have birth sex information";
+
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE,
 				DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA, SeverityLevel.INFO);
-		printResults(results);		
+		printResults(results);
 		assertTrue("expecting 3 warnings", results.size() == 3);
 		ContentValidationResultLevel expectedSeverity = ContentValidationResultLevel.WARNING;
 		severityLevelLimitTestHelperAssertMessageAndSeverity(results, warning1, expectedSeverity);
 		severityLevelLimitTestHelperAssertMessageAndSeverity(results, warning2, expectedSeverity);
+		severityLevelLimitTestHelperAssertMessageAndSeverity(results, warning3, expectedSeverity);
 
-		results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE,
-				DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA, SeverityLevel.WARNING);
+		results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE, DEFAULT_REFERENCE_FILENAME,
+				DEFAULT_SUBMITTED_CCDA, SeverityLevel.WARNING);
 		printResults(results);
 		assertTrue("expecting (the same) 3 warnings", results.size() == 3);
 		severityLevelLimitTestHelperAssertMessageAndSeverity(results, warning1, expectedSeverity);
 		severityLevelLimitTestHelperAssertMessageAndSeverity(results, warning2, expectedSeverity);
-		
-		results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE,
-				DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA, SeverityLevel.ERROR);		
-		printResults(results);		
-		assertTrue("expecting no warnings or info (and no errors due to no (content) errors in file)", results.isEmpty());
+		severityLevelLimitTestHelperAssertMessageAndSeverity(results, warning3, expectedSeverity);
+
+		results = validateDocumentAndReturnResults(DEFAULT_VALIDATION_OBJECTIVE, DEFAULT_REFERENCE_FILENAME,
+				DEFAULT_SUBMITTED_CCDA, SeverityLevel.ERROR);
+		printResults(results);
+		assertTrue("expecting no warnings or info (and no errors due to no (content) errors in file)",
+				results.isEmpty());
 	}
 	
 	@Test
