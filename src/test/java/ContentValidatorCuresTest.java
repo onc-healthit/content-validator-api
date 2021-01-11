@@ -46,8 +46,11 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_HAS_TELECOM_MISMATCHES = 3;
 	private static final int SUB_HAS_NOTE_ACTIVITY_WITH_AUTHOR_IN_PROCEDURES = 4;
 	private static final int SUB_HAS_PROCEDURE_ACTIVITY_PROCEDURE_WITH_AUTHOR_IN_PROCEDURES = 5;
-	private static final int SUB_HAS_RESULT_ORGANIZER_WITH_AUTHOR_IN_RESULTS= 6;
-	private static final int SUB_HAS_RESULT_ORGANIZER_WITHOUT_AUTHOR_IN_RESULTS= 7;
+	private static final int SUB_HAS_RESULT_ORGANIZER_WITH_AUTHOR_IN_RESULTS = 6;
+	private static final int SUB_HAS_RESULT_ORGANIZER_WITHOUT_AUTHOR_IN_RESULTS = 7;
+	private static final int SUB_LAB_RESULTS_NOT_FOUND_SITE_3199 = 8;
+	private static final int SUB_LAB_RESULTS_STILL_NOT_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_SITE_3199 = 9;
+	private static final int SUB_LAB_RESULTS_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_AND_OBS_CODES_SITE_3199 = 10;
 	
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
@@ -61,7 +64,10 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/sub/AddNoteActivityWithAuthorToProcedures_b1_toc_amb_s1.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/AddAuthorToProceduresProcedureActivityProcedure_b1_toc_amb_s1.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/AddAuthorToResultsResultOrganizer_e1_vdt_amb_s1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/AddResultOrganizerWithoutAuthorToResults_e1_vdt_amb_s1.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/sub/AddResultOrganizerWithoutAuthorToResults_e1_vdt_amb_s1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/HasNullFlavorOnResultOrganizerCode.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/DoesNotHaveNullFlavorOnResultOrganizerCode.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/DoesNotHaveNullFlavorOnResultOrganizerObservationCodes.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -193,6 +199,66 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		assertFalse("Expect NO birth sex error as sub has birth sex but got: " + birthSexMessage, 
 				resultsContainMessage(birthSexMessage, results, ContentValidationResultLevel.ERROR));		
 	}
+	
+	@Test
+	public void cures_labResultsNotFoundDueToNullFLavorOnResultOrganizerCodeSite3199Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+		
+		// Result Organizer has nullFlavor on code but not part of parsing so irrelevant
+		// Result Organizer/Observation/code HAS nullFlavor on all 7 instances
+		// the first 6 of which should not have nullFlavor as they also have data.
+		// The nullFlavor is causing nothing to be parsed in the sub, and therefore no lab data to be found
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_LAB_RESULTS_NOT_FOUND_SITE_3199], SeverityLevel.ERROR);			
+		printResults(results);
+		
+		final String missingLabResultsMessage = "The scenario requires data related to patient's lab results, "
+				+ "but the submitted C-CDA does not contain lab result data."; 
+		assertTrue("Results should have contained the followiing message but did not: " + missingLabResultsMessage, 
+				resultsContainMessage(missingLabResultsMessage, results, ContentValidationResultLevel.ERROR));	
+	}
+	
+	@Test
+	public void cures_labResultsStillNotFoundDueToNoNullFLavorOnResultOrganizerObservationCodesSite3199Test() {		
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+
+		// Result Organizer does not have nullFlavor on code but not part of parsing so irrelevant 
+		// and therefore doesn't fix C-CDA issue
+		// Result Organizer/Observation/code still HAS nullFlavor on all 7 instances
+		// the first 6 of which should not have nullFlavor as they also have data.
+		// The nullFlavor is causing nothing to be parsed in the sub, and therefore no lab data to be found
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_LAB_RESULTS_STILL_NOT_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_SITE_3199],
+				SeverityLevel.ERROR);		
+		printResults(results);
+		
+		final String missingLabResultsMessage = "The scenario requires data related to patient's lab results, "
+				+ "but the submitted C-CDA does not contain lab result data."; 
+		assertTrue("Results should have contained the followiing message but did not: " + missingLabResultsMessage, 
+				resultsContainMessage(missingLabResultsMessage, results, ContentValidationResultLevel.ERROR));
+	}
+	
+	@Test
+	public void cures_labResultsAreFoundDueToNoNullFLavorOnResultOrganizerObservationCodesSite3199Test() {		
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+
+		// Result Organizer has nullFlavor on code but not part of parsing so irrelevant
+		// Result Organizer/Observation/code does not have nullFlavor on the first 6 instances
+		// which allows for a pass due to it being able to parse the codes/lab results.
+		// 7th instance is not needed and has no data so nullFlavor actually makes sense
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_LAB_RESULTS_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_AND_OBS_CODES_SITE_3199],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		final String missingLabResultsMessage = "The scenario requires data related to patient's lab results, "
+				+ "but the submitted C-CDA does not contain lab result data."; 
+		assertFalse("Results should not have contained the followiing message : " + missingLabResultsMessage, 
+				resultsContainMessage(missingLabResultsMessage, results, ContentValidationResultLevel.ERROR));
+	}	
 	
 	@Test
 	public void cures_severityLevelLimitTestFileWithThreeErrorsOnly() {
