@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
@@ -29,16 +30,28 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final boolean LOG_RESULTS_TO_CONSOLE = true;
 	
 	private static final String B1_TOC_AMB_VALIDATION_OBJECTIVE = "170.315_b1_ToC_Amb";
-	private static final String DEFAULT_VALIDATION_OBJECTIVE = B1_TOC_AMB_VALIDATION_OBJECTIVE;	
+	private static final String E1_VDT_AMB_VALIDATION_OBJECTIVE = "170.315_e1_VDT_Amb";
 	
-	private static final String DEFAULT_REFERENCE_FILENAME = "170.315_b1_toc_amb_sample1";
-	
-	private static final String REF_CURES_ADD_AUTHORS = "ModRef_AddAuthors_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml";
-	private static final String REF_CURES_B1_TOC_AMB_SAMPLE3 = "170.315_b1_toc_amb_sample3_v2.xml";	
+	private static final String REF_CURES_B1_TOC_AMB_SAMPLE1 = "170.315_b1_toc_amb_sample1_v1.pdf";
+	private static final String REF_CURES_B1_TOC_AMB_SAMPLE3 = "170.315_b1_toc_amb_sample3_v2.xml";
+	private static final String REF_CURES_E1_VDT_AMB_SAMPLE1 = "170.315_e1_vdt_amb_sample1.xml";
+	private static final String MOD_REF_CURES_ADD_AUTHORS = "ModRef_AddAuthors_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml";
+	private static final String MOD_REF_CURES_NO_BIRTH_SEX_B1_TOC_AMB_SAMPLE1 = "ModRef_CuresNoBirthSex_b1TocAmbSample1.xml";
 	
 	private static final int SUB_CURES_MISSING_AUTHOR_IN_HEADER = 0;
+	private static final int SUB_HAS_BIRTH_SEX = SUB_CURES_MISSING_AUTHOR_IN_HEADER;
 	private static final int SUB_EF = 1;
+	private static final int SUB_NO_BIRTH_SEX = SUB_EF;
 	private static final int SUB_MATCH_REF_B1_TOC_AMB_SAMPLE3 = 2;
+	private static final int SUB_HAS_TELECOM_MISMATCHES = 3;
+	private static final int SUB_HAS_NOTE_ACTIVITY_WITH_AUTHOR_IN_PROCEDURES = 4;
+	private static final int SUB_HAS_PROCEDURE_ACTIVITY_PROCEDURE_WITH_AUTHOR_IN_PROCEDURES = 5;
+	private static final int SUB_HAS_RESULT_ORGANIZER_WITH_AUTHOR_IN_RESULTS = 6;
+	private static final int SUB_HAS_RESULT_ORGANIZER_WITHOUT_AUTHOR_IN_RESULTS = 7;
+	private static final int SUB_LAB_RESULTS_NOT_FOUND_SITE_3199 = 8;
+	private static final int SUB_LAB_RESULTS_STILL_NOT_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_SITE_3199 = 9;
+	private static final int SUB_LAB_RESULTS_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_AND_OBS_CODES_SITE_3199 = 10;
+	
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -46,17 +59,25 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 			SUBMITTED_CCDA = new URI[] {
 					ContentValidatorCuresTest.class.getResource("cures/sub/RemoveAuthorInHeader_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/C-CDA_R2-1_CCD_EF.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample3.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample3.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("preCures/sub/170.315_b1_toc_amb_sample1_Submitted_T1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/AddNoteActivityWithAuthorToProcedures_b1_toc_amb_s1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/AddAuthorToProceduresProcedureActivityProcedure_b1_toc_amb_s1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/AddAuthorToResultsResultOrganizer_e1_vdt_amb_s1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/AddResultOrganizerWithoutAuthorToResults_e1_vdt_amb_s1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/HasNullFlavorOnResultOrganizerCode.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/DoesNotHaveNullFlavorOnResultOrganizerCode.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/DoesNotHaveNullFlavorOnResultOrganizerObservationCodes.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
 		}
 	}
 	
-	private static final URI DEFAULT_SUBMITTED_CCDA_CURES = SUBMITTED_CCDA[SUB_CURES_MISSING_AUTHOR_IN_HEADER];		
+	private static final URI URI_SUB_CURES_MISSING_AUTHOR_IN_HEADER = SUBMITTED_CCDA[SUB_CURES_MISSING_AUTHOR_IN_HEADER];		
 	
 	private ArrayList<ContentValidationResult> validateDocumentAndReturnResultsCures(String referenceFileName, String ccdaFileAsString) {
-		return validateDocumentAndReturnResultsCures(DEFAULT_VALIDATION_OBJECTIVE, referenceFileName, ccdaFileAsString);
+		return validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, referenceFileName, ccdaFileAsString);
 	}
 
 	private ArrayList<ContentValidationResult> validateDocumentAndReturnResultsCures(String validationObjective, 
@@ -70,7 +91,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	}
 
 	private ArrayList<ContentValidationResult> validateDocumentAndReturnResultsCures(String referenceFileName, URI ccdaFileURI) {
-		return validateDocumentAndReturnResultsCures(DEFAULT_VALIDATION_OBJECTIVE, referenceFileName, ccdaFileURI);
+		return validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, referenceFileName, ccdaFileURI);
 	}
 	
 	private ArrayList<ContentValidationResult> validateDocumentAndReturnResultsCures(String validationObjective, 
@@ -89,7 +110,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		printHeader("cures_basicContentValidationTest");
 		try {
 			ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
-					DEFAULT_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3, SUBMITTED_CCDA[SUB_EF],
+					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3, SUBMITTED_CCDA[SUB_EF],
 					SeverityLevel.ERROR);
 			printResults(results);
 		} catch (Exception e) {
@@ -107,16 +128,181 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				SUBMITTED_CCDA[SUB_MATCH_REF_B1_TOC_AMB_SAMPLE3], SeverityLevel.ERROR);
 		printResults(results);
 		
-		assertFalse("The submitted and reference files match so there should not be any results yet there are results",
-				results.size() > 0);		
+		if (results.size() > 1) {
+			fail("There should not be more than 1 error");
+		} else if(results.size() == 1) {
+			// birth sex is an exception as it is not dependent on what is in the scenario
+			// if we have a message, and it is not the birth sex exception, we fail
+			// zero is a pass, so we don't mention
+			if (!resultsContainMessage("The scenario requires patient's birth sex to be captured as part of social history data, "
+					+ "but submitted file does not have birth sex information", results, ContentValidationResultLevel.ERROR)) {
+				fail("The submitted and reference files match so there should not be any results yet there are results");
+			}
+		}		
 	}
+	
+	@Test
+	public void cures_telecomTest() {
+		printHeader("telecomTest");
+		
+		// Cures enforces an ERROR for telecom issues as opposed to a warning with non-cures
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(REF_CURES_B1_TOC_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES]);
+		assertFalse("No results were returned", results.isEmpty());
+		println("FINAL RESULTS");
+		println("No of Entries = " + results.size());
+		
+		final String telecomMessage = "Patient Telecom in the submitted file does not match the expected Telecom";
+		assertTrue("The results do not contain the expected message of: " + telecomMessage, 
+				resultsContainMessage(telecomMessage, results, ContentValidationResultLevel.ERROR));
+		
+		printResults(results);
+	}	
+	
+	@Test
+	public void cures_birthSexTest() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// Sub missing birth sex returns an ERROR for curesUpdate or a WARNING for non-cures (2015) 
+		// as per regulation https://www.healthit.gov/isa/uscdi-data/birth-sex
+		// Note: Even though the birthSexMessage implies birth sex is required because it is in the scenario, 
+		// we require it regardless of it being there or not - 
+		// the source code (CCDARefModel.validateBirthSex ) purposely does not even reference the scenario, only the submitted file.
+		
+		String birthSexMessage = "The scenario requires patient's birth sex to be captured as part of social history data, "
+				+ "but submitted file does not have birth sex information";
+		
+		ArrayList<ContentValidationResult> results;
+		
+		// *** these tests are written in a future proof manner, knowing that birth sex will be added to all the scenarios ***
+		
+		printHeader("Ref has birth sex. Sub does not have birth sex. Expect birth sex error");
+		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_NO_BIRTH_SEX], SeverityLevel.ERROR);
+		printResults(results);
+		assertTrue("Expect birth sex error: " + birthSexMessage, 
+				resultsContainMessage(birthSexMessage, results, ContentValidationResultLevel.ERROR));
+		
+		printHeader("Ref does not have have birth sex. Sub does not have birth sex. "
+				+ "Still expect birth sex error despite ref not requiring it");
+		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_CURES_NO_BIRTH_SEX_B1_TOC_AMB_SAMPLE1, SUBMITTED_CCDA[SUB_NO_BIRTH_SEX], SeverityLevel.ERROR);
+		printResults(results);
+		assertTrue("Expect birth sex error despite ref not requiring it: " + birthSexMessage, 
+				resultsContainMessage(birthSexMessage, results, ContentValidationResultLevel.ERROR));
+		
+		printHeader("Ref has birth sex. Sub has birth sex. Expect NO birth sex error as sub has birth sex");
+		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_HAS_BIRTH_SEX], SeverityLevel.ERROR);
+		printResults(results);
+		assertFalse("Expect NO birth sex error as sub has birth sex but got: " + birthSexMessage, 
+				resultsContainMessage(birthSexMessage, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_labResultsNotFoundDueToNullFLavorOnResultOrganizerCodeSite3199Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+		
+		// Result Organizer has nullFlavor on code but not part of parsing so irrelevant
+		// Result Organizer/Observation/code HAS nullFlavor on all 7 instances
+		// the first 6 of which should not have nullFlavor as they also have data.
+		// The nullFlavor is causing nothing to be parsed in the sub, and therefore no lab data to be found
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_LAB_RESULTS_NOT_FOUND_SITE_3199], SeverityLevel.ERROR);			
+		printResults(results);
+		
+		final String missingLabResultsMessage = "The scenario requires data related to patient's lab results, "
+				+ "but the submitted C-CDA does not contain lab result data."; 
+		assertTrue("Results should have contained the followiing message but did not: " + missingLabResultsMessage, 
+				resultsContainMessage(missingLabResultsMessage, results, ContentValidationResultLevel.ERROR));	
+	}
+	
+	@Test
+	public void cures_labResultsStillNotFoundDueToNoNullFLavorOnResultOrganizerObservationCodesSite3199Test() {		
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+
+		// Result Organizer does not have nullFlavor on code but not part of parsing so irrelevant 
+		// and therefore doesn't fix C-CDA issue
+		// Result Organizer/Observation/code still HAS nullFlavor on all 7 instances
+		// the first 6 of which should not have nullFlavor as they also have data.
+		// The nullFlavor is causing nothing to be parsed in the sub, and therefore no lab data to be found
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_LAB_RESULTS_STILL_NOT_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_SITE_3199],
+				SeverityLevel.ERROR);		
+		printResults(results);
+		
+		final String missingLabResultsMessage = "The scenario requires data related to patient's lab results, "
+				+ "but the submitted C-CDA does not contain lab result data."; 
+		assertTrue("Results should have contained the followiing message but did not: " + missingLabResultsMessage, 
+				resultsContainMessage(missingLabResultsMessage, results, ContentValidationResultLevel.ERROR));
+	}
+	
+	@Test
+	public void cures_labResultsAreFoundDueToNoNullFLavorOnResultOrganizerObservationCodesSite3199Test() {		
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+
+		// Result Organizer has nullFlavor on code but not part of parsing so irrelevant
+		// Result Organizer/Observation/code does not have nullFlavor on the first 6 instances
+		// which allows for a pass due to it being able to parse the codes/lab results.
+		// 7th instance is not needed and has no data so nullFlavor actually makes sense
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_LAB_RESULTS_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_AND_OBS_CODES_SITE_3199],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		final String missingLabResultsMessage = "The scenario requires data related to patient's lab results, "
+				+ "but the submitted C-CDA does not contain lab result data."; 
+		assertFalse("Results should not have contained the followiing message : " + missingLabResultsMessage, 
+				resultsContainMessage(missingLabResultsMessage, results, ContentValidationResultLevel.ERROR));
+	}	
+	
+	@Test
+	public void cures_severityLevelLimitTestFileWithThreeErrorsOnly() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		final String error1 = "Patient Telecom in the submitted file does not match the expected Telecom. "
+				+ "The following values are expected: telecom/@use = MC and telecom/@value = tel:+1(555)-777-1234";
+		final String error2 = "Patient Telecom in the submitted file does not match the expected Telecom. "
+				+ "The following values are expected: telecom/@use = HP and telecom/@value = tel:+1(555)-723-1544";
+		final String error3 = "The scenario requires patient's birth sex to be captured as part of social history data, "
+				+ "but submitted file does not have birth sex information";
+
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				REF_CURES_B1_TOC_AMB_SAMPLE1, SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES], SeverityLevel.INFO);
+		printResults(results);
+		assertTrue("expecting 3 errors", results.size() == 3);
+		ContentValidationResultLevel expectedSeverity = ContentValidationResultLevel.ERROR;
+		severityLevelLimitTestHelperAssertMessageAndSeverity(results, error1, expectedSeverity);
+		severityLevelLimitTestHelperAssertMessageAndSeverity(results, error2, expectedSeverity);
+		severityLevelLimitTestHelperAssertMessageAndSeverity(results, error3, expectedSeverity);
+
+		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES], SeverityLevel.WARNING);
+		printResults(results);
+		assertTrue("expecting (the same) 3 errors", results.size() == 3);
+		severityLevelLimitTestHelperAssertMessageAndSeverity(results, error1, expectedSeverity);
+		severityLevelLimitTestHelperAssertMessageAndSeverity(results, error2, expectedSeverity);
+		severityLevelLimitTestHelperAssertMessageAndSeverity(results, error3, expectedSeverity);
+		
+		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES], SeverityLevel.ERROR);
+		printResults(results);
+		assertTrue("expecting (the same) 3 errors", results.size() == 3);
+		severityLevelLimitTestHelperAssertMessageAndSeverity(results, error1, expectedSeverity);
+		severityLevelLimitTestHelperAssertMessageAndSeverity(results, error2, expectedSeverity);
+		severityLevelLimitTestHelperAssertMessageAndSeverity(results, error3, expectedSeverity);
+	}	
 		
 	@Test
 	public void cures_authorinHeaderTest() {		
 		printHeader("cures_authorinHeaderTest");
 		
-		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(DEFAULT_VALIDATION_OBJECTIVE,
-				DEFAULT_REFERENCE_FILENAME, DEFAULT_SUBMITTED_CCDA_CURES, SeverityLevel.ERROR);
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				REF_CURES_B1_TOC_AMB_SAMPLE1, URI_SUB_CURES_MISSING_AUTHOR_IN_HEADER, SeverityLevel.ERROR);
 		failIfNoResults(results);
 		printResults(results);
 				
@@ -130,8 +316,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_authorinAllergiesTest() {
 		printHeader("cures_authorinAllergiesTest");
 		
-		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(DEFAULT_VALIDATION_OBJECTIVE,
-				REF_CURES_ADD_AUTHORS, DEFAULT_SUBMITTED_CCDA_CURES, SeverityLevel.ERROR);
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_CURES_ADD_AUTHORS, URI_SUB_CURES_MISSING_AUTHOR_IN_HEADER, SeverityLevel.ERROR);
 		failIfNoResults(results);
 		printResults(results);
 		
@@ -167,8 +353,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_authorinProblemsTest() {
 		printHeader("cures_authorinProblemsTest");		
 		
-		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(DEFAULT_VALIDATION_OBJECTIVE,
-				REF_CURES_ADD_AUTHORS, DEFAULT_SUBMITTED_CCDA_CURES, SeverityLevel.ERROR);
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_CURES_ADD_AUTHORS, URI_SUB_CURES_MISSING_AUTHOR_IN_HEADER, SeverityLevel.ERROR);
 		failIfNoResults(results);
 		printResults(results);
 		
@@ -210,8 +396,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_authorInProceduresTest() {
 		printHeader("cures_authorInProceduresTest");		
 		
-		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(DEFAULT_VALIDATION_OBJECTIVE,
-				REF_CURES_ADD_AUTHORS, DEFAULT_SUBMITTED_CCDA_CURES, SeverityLevel.ERROR);
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_CURES_ADD_AUTHORS, URI_SUB_CURES_MISSING_AUTHOR_IN_HEADER, SeverityLevel.ERROR);
 		failIfNoResults(results);
 		printResults(results);
 		
@@ -232,11 +418,46 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	}
 	
 	@Test
+	public void cures_ZeroAuthorsInRefOneOrMoreInSubProceduresProcedureActivityProcedureTest() {
+		// SITE-3193
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_HAS_PROCEDURE_ACTIVITY_PROCEDURE_WITH_AUTHOR_IN_PROCEDURES], SeverityLevel.ERROR);
+		printResults(results);
+		
+		// Procedures Section/ProcedureActivityProcedure author missing in ref yet is in sub (sub does have author, ref does not/not require it)
+		// There is no situation where we should be requiring 0 of something. The submitted file should be allowed to have more information than the scenario.
+		final String zeroAuthorsInRefOneOrMoreInSub = "The scenario requires a total of 0 Author Entries for "
+				+ "Procedures Section/ProcedureActivityProcedure, however the submitted data had only 1 entries.";
+		assertFalse("The results should not contain the unexpected message of: " + zeroAuthorsInRefOneOrMoreInSub, 
+				resultsContainMessage(zeroAuthorsInRefOneOrMoreInSub, results, ContentValidationResultLevel.ERROR));			
+	}	
+	
+	// TODO: Analyze: Seems like a bug that this is being identified as Procedure Activity Procedure when it is Note Activity, check parser/check with dragon. Do we enforce author here too?
+	// To see the bug we must comment out 'if (refAuths != null && refAuths.size() != 0) {' compareAuthors in CCDAAuthore and run this test
+	// Try to find a way to repro with current code legitimately and go from there...
+	@Test
+	public void cures_ZeroAuthorsInRefOneOrMoreInSubProceduresNoteActivityTest() {
+		// SITE-3193 (done), SITE-3194 (not yet done, see todo above)		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_HAS_NOTE_ACTIVITY_WITH_AUTHOR_IN_PROCEDURES], SeverityLevel.ERROR);
+		printResults(results);
+		
+		// Procedures Section/Note Activity author missing in ref yet is in sub (sub does have author, ref does not/not require it)
+		// There is no situation where we should be requiring 0 of something. The submitted file should be allowed to have more information than the scenario.
+		final String zeroAuthorsInRefOneOrMoreInSub = "The scenario requires a total of 0 Author Entries for "
+				+ "Procedures Section/ProcedureActivityProcedure, however the submitted data had only 1 entries.";
+		assertFalse("The results should not contain the unexpected message of: " + zeroAuthorsInRefOneOrMoreInSub, 
+				resultsContainMessage(zeroAuthorsInRefOneOrMoreInSub, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
 	public void cures_authorInMedicationsTest() {
 		printHeader("cures_authorInMedicationsTest");		
 		
-		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(DEFAULT_VALIDATION_OBJECTIVE,
-				REF_CURES_ADD_AUTHORS, DEFAULT_SUBMITTED_CCDA_CURES, SeverityLevel.ERROR);
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_CURES_ADD_AUTHORS, URI_SUB_CURES_MISSING_AUTHOR_IN_HEADER, SeverityLevel.ERROR);
 		failIfNoResults(results);
 		printResults(results);
 		
@@ -260,8 +481,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_authorInImmunizationsTest() {
 		printHeader("cures_authorInImmunizationsTest");		
 		
-		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(DEFAULT_VALIDATION_OBJECTIVE,
-				REF_CURES_ADD_AUTHORS, DEFAULT_SUBMITTED_CCDA_CURES, SeverityLevel.ERROR);
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_CURES_ADD_AUTHORS, URI_SUB_CURES_MISSING_AUTHOR_IN_HEADER, SeverityLevel.ERROR);
 		failIfNoResults(results);
 		printResults(results);
 		
@@ -283,8 +504,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_authorInResultsTest() {
 		printHeader("cures_authorInResultsTest");
 		
-		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(DEFAULT_VALIDATION_OBJECTIVE,
-				REF_CURES_ADD_AUTHORS, DEFAULT_SUBMITTED_CCDA_CURES, SeverityLevel.ERROR);
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_CURES_ADD_AUTHORS, URI_SUB_CURES_MISSING_AUTHOR_IN_HEADER, SeverityLevel.ERROR);
 		failIfNoResults(results);
 		printResults(results);
 		
@@ -309,11 +530,42 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	}
 	
 	@Test
+	public void cures_ZeroAuthorsInRefOneOrMoreInSubResultsResultOrganizerTest() {
+		// SITE-3189
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_HAS_RESULT_ORGANIZER_WITH_AUTHOR_IN_RESULTS], SeverityLevel.ERROR);
+		printResults(results);
+		
+		// Results Section/ResultsOrganizer author missing in ref yet is in sub (sub does have author, ref does not/not require it)
+		// There is no situation where we should be requiring 0 of something. The submitted file should be allowed to have more information than the scenario.
+		final String zeroAuthorsInRefOneOrMoreInSub = "The scenario requires a total of 0 Author Entries for "
+				+ "Results Section/ResultOrganizer, however the submitted data had only 1 entries.";
+		assertFalse("The results should not contain the unexpected message of: " + zeroAuthorsInRefOneOrMoreInSub, 
+				resultsContainMessage(zeroAuthorsInRefOneOrMoreInSub, results, ContentValidationResultLevel.ERROR));			
+	}
+	
+	@Test
+	public void cures_ZeroAuthorsInRefAndZeroInSubResultsResultOrganizerTest() {
+		// SITE-3189
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1,
+				SUBMITTED_CCDA[SUB_HAS_RESULT_ORGANIZER_WITHOUT_AUTHOR_IN_RESULTS], SeverityLevel.ERROR);
+		printResults(results);
+		
+		// Results Section/ResultsOrganizer author missing in ref yet and missing in sub
+		final String zeroAuthorsInRefOneOrMoreInSub = "The scenario requires a total of 0 Author Entries for "
+				+ "Results Section/ResultOrganizer, however the submitted data had only 1 entries.";
+		assertFalse("The results should not contain the unexpected message of: " + zeroAuthorsInRefOneOrMoreInSub, 
+				resultsContainMessage(zeroAuthorsInRefOneOrMoreInSub, results, ContentValidationResultLevel.ERROR));			
+	}		
+	
+	@Test
 	public void cures_authorInVitalSignsTest() {
 		printHeader("cures_authorInVitalSignsTest");
 		
-		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(DEFAULT_VALIDATION_OBJECTIVE,
-				REF_CURES_ADD_AUTHORS, DEFAULT_SUBMITTED_CCDA_CURES, SeverityLevel.ERROR);
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_CURES_ADD_AUTHORS, URI_SUB_CURES_MISSING_AUTHOR_IN_HEADER, SeverityLevel.ERROR);
 		failIfNoResults(results);
 		printResults(results);
 		
@@ -341,8 +593,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_authorInEncountersTest() {
 		printHeader("cures_authorInEncountersTest");		
 		
-		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(DEFAULT_VALIDATION_OBJECTIVE,
-				REF_CURES_ADD_AUTHORS, DEFAULT_SUBMITTED_CCDA_CURES, SeverityLevel.ERROR);
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_CURES_ADD_AUTHORS, URI_SUB_CURES_MISSING_AUTHOR_IN_HEADER, SeverityLevel.ERROR);
 		failIfNoResults(results);
 		printResults(results);
 		

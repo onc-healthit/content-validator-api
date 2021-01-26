@@ -633,35 +633,35 @@ public class CCDAPatient {
 		}
 	}
 	
-	private void compareTelecoms(CCDAPatient patient, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA, boolean curesUpdate) {
-		// <overwrite with other non-warning telecom comparisons here if any>
-		
-		if (submittedCCDA.warningsPermitted()) {
-			log.info("Comparing Patient's telecom/@use and telecom/@value");		
-			for(CCDATelecom tel : telecom) {
-				if(!patient.containsTelecomUseAndValue(tel)) {
-					String message = "Patient Telecom in the submitted file does not match the expected Telecom. "
-							+ "The following values are expected: "
-							+ "telecom/@use = " + tel.getUseAttribute() 
-							+ " and telecom/@value = " + tel.getValueAttribute();
-					if(curesUpdate) {
-						ContentValidationResult rs = new ContentValidationResult(message, ContentValidationResultLevel.ERROR,
-								"/ClinicalDocument", "0");
+	private void compareTelecoms(CCDAPatient patient, ArrayList<ContentValidationResult> results,
+			CCDARefModel submittedCCDA, boolean curesUpdate) {
+
+		log.info("Comparing Patient's telecom/@use and telecom/@value");
+		for (CCDATelecom tel : telecom) {
+			if (!patient.containsTelecomUseAndValue(tel)) {
+				String message = "Patient Telecom in the submitted file does not match the expected Telecom. "
+						+ "The following values are expected: " + "telecom/@use = " + tel.getUseAttribute()
+						+ " and telecom/@value = " + tel.getValueAttribute();
+				if (curesUpdate) {
+					ContentValidationResult rs = new ContentValidationResult(message,
+							ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+					results.add(rs);
+				} else {
+					if (submittedCCDA.warningsPermitted()) {
+						ContentValidationResult rs = new ContentValidationResult(message,
+								ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0");
 						results.add(rs);
+					} else {
+						log.info(
+								"Skipping 'Comparing Patient's telecom/@use and telecom/@value' check in "
+								+ "CCDAPatient.compareTelecoms due to severityLevel: "
+										+ submittedCCDA.getSeverityLevelName());
 					}
-					else {
-						ContentValidationResult rs = new ContentValidationResult(message, ContentValidationResultLevel.WARNING,
-								"/ClinicalDocument", "0");
-						results.add(rs);
-					}
-					
 				}
+
 			}
-		} else {
-			log.info(
-					"Skipping 'Comparing Patient's telecom/@use and telecom/@value' check in CCDAPatient.compareTelecoms due to severityLevel: "
-							+ submittedCCDA.getSeverityLevelName());
 		}
-	}	
+
+	}
 	
 }

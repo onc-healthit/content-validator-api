@@ -940,16 +940,25 @@ public class CCDARefModel {
 			
 		}
 		else {
-			if (submittedCCDA.warningsPermitted()) {
-				// MAKE THIS A WARNING SINCE IT IS A BEST PRACTICE
-				ContentValidationResult rs = new ContentValidationResult(
-						"The scenario requires patient's birth sex to be captured as part of social history data, but submitted file does have birth sex information",
+			// Sub missing birth sex returns an ERROR for curesUpdate or a WARNING for non-cures (2015) as per regulation https://www.healthit.gov/isa/uscdi-data/birth-sex
+			// Note: Even though the birthSexMessage implies birth sex is required because it is in the scenario, we require it regardless of it being there or not - 
+			// this source code purposely does not even reference the scenario, only the submitted file.
+			final String birthSexMessage = "The scenario requires patient's birth sex to be captured as part of social history data, "
+					+ "but submitted file does not have birth sex information";
+			if (curesUpdate) {
+				ContentValidationResult rs = new ContentValidationResult(birthSexMessage,
 						ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 				results.add(rs);
 			} else {
-				log.info(
-						"Skipping 'SocialHistory BirthSex code' check in CCDARefModel.validateBirthSex due to severityLevel: "
-								+ submittedCCDA.getSeverityLevelName());
+				if (submittedCCDA.warningsPermitted()) {
+					ContentValidationResult rs = new ContentValidationResult(birthSexMessage,
+							ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0");
+					results.add(rs);
+				} else {
+					log.info(
+							"Skipping non-cures 'SocialHistory BirthSex code' check in CCDARefModel.validateBirthSex due to severityLevel: "
+									+ submittedCCDA.getSeverityLevelName());
+				}
 			}
 		}
 	}
