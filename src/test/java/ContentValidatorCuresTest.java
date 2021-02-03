@@ -51,6 +51,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_LAB_RESULTS_NOT_FOUND_SITE_3199 = 8;
 	private static final int SUB_LAB_RESULTS_STILL_NOT_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_SITE_3199 = 9;
 	private static final int SUB_LAB_RESULTS_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_AND_OBS_CODES_SITE_3199 = 10;
+	private static final int SUB_SOCIAL_HISTORY_WITHOUT_BIRTH_SEX_OBS_TEMPLATE_SITE_3094 = 11;
+	private static final int SUB_SOCIAL_HISTORY_WITH_BIRTH_SEX_OBS_TEMPLATE_SITE_3094 = 12;
 	
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
@@ -67,7 +69,9 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/sub/AddResultOrganizerWithoutAuthorToResults_e1_vdt_amb_s1.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/HasNullFlavorOnResultOrganizerCode.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/DoesNotHaveNullFlavorOnResultOrganizerCode.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/DoesNotHaveNullFlavorOnResultOrganizerObservationCodes.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/sub/DoesNotHaveNullFlavorOnResultOrganizerObservationCodes.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SocialHistoryWithoutBirthSexObsTemplateSite3094.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SocialHistoryWithBirthSexObsTemplateSite3094.xml").toURI(),
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -114,8 +118,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					SeverityLevel.ERROR);
 			printResults(results);
 		} catch (Exception e) {
-			fail(e.getMessage());
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 	}
 	
@@ -631,5 +635,66 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		assertTrue("The results do not contain the expected message of: " + noAuthorInEncounterActivityIndication, 
 				resultsContainMessage(noAuthorInEncounterActivityIndication, results, ContentValidationResultLevel.ERROR));		
 	}
+	
+	@Test
+	public void cures_SocialHistoryWithoutBirthSexObsTemplate_Site3094_test() {		
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+
+		// Social History does not have a birth Sex observation entry. Instead, it has Social History Observation (missing extension though) 2.16.840.1.113883.10.20.22.4.38:2015-08-01
+		// Expect no exception thrown handling this scenario, and expect a relevant birth sex error if no exception is thrown
+		// THe XML for the code element is irrelevant, because the template is not the Birth Sex template
+		ArrayList<ContentValidationResult> results = null;
+		try {
+			results = validateDocumentAndReturnResultsCures(
+					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+					SUBMITTED_CCDA[SUB_SOCIAL_HISTORY_WITHOUT_BIRTH_SEX_OBS_TEMPLATE_SITE_3094], SeverityLevel.ERROR);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		if (results != null) {
+			printResults(results);		
+			final String requiresBirthSexError = "The scenario requires patient's birth sex to be captured "
+					+ "as part of social history data, but submitted file does not have birth sex information";
+			assertTrue("The results do not contain the expected message of: " + requiresBirthSexError, 
+					resultsContainMessage(requiresBirthSexError, results, ContentValidationResultLevel.ERROR));
+		}
+	}
+	
+	@Test
+	public void cures_SocialHistoryWithBirthSexObsTemplate_Site3094_test() {		
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+
+		// Social History has a proper Birth Sex Observation entry. <templateId root="2.16.840.1.113883.10.20.22.4.200" extension="2016-06-01"/>
+		// Expect no exception thrown handling this scenario, but do not expect a birth sex error for requiring it, but do expect one for the proper code, M, or F.
+		// Notice in the below XML there is no @code, so @code is not handled, but, it's within the Birth Sex template (see file), so template inclusion is handled
+		// Also notice that although there is a nullFlavor, it is not an exception for the requirement of the code. This is the case for both cures, and the IG,
+		// because, you cannot use a nullFlavor for a fixed single value in C-CDA. Note: The duplicate-like IG error is separate and cannot be tested here (part of the reference-c-cda-validator).
+		// <code nullFlavor="UNK" displayName="Birth Sex"/>  
+		ArrayList<ContentValidationResult> results = null;
+		try {
+			results = validateDocumentAndReturnResultsCures(
+					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+					SUBMITTED_CCDA[SUB_SOCIAL_HISTORY_WITH_BIRTH_SEX_OBS_TEMPLATE_SITE_3094], SeverityLevel.ERROR);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());			
+		}
+		
+		if (results != null) {
+			printResults(results);
+			
+			final String requiresBirthSexError = "The scenario requires patient's birth sex to be captured "
+					+ "as part of social history data, but submitted file does not have birth sex information";
+			assertFalse("The contain the unexpected message of: " + requiresBirthSexError, 
+					resultsContainMessage(requiresBirthSexError, results, ContentValidationResultLevel.ERROR));
+			
+			final String requiresBirthSexCodeError = "The scenario requires patient's birth sex to use the codes M or F "
+					+ "but the submitted C-CDA does not contain either of these codes.";
+			assertTrue("The results do not contain the expected message of: " + requiresBirthSexCodeError, 
+					resultsContainMessage(requiresBirthSexCodeError, results, ContentValidationResultLevel.ERROR));			
+		}
+	}	
 
 }

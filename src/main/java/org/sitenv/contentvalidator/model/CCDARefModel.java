@@ -926,15 +926,18 @@ public class CCDARefModel {
 			 (submittedCCDA.getSocialHistory().getBirthSex() != null)) {
 			
 			// Validate that the code is M or F.
-			if( (submittedCCDA.getSocialHistory().getBirthSex().getSexCode() != null)  && 
-				((submittedCCDA.getSocialHistory().getBirthSex().getSexCode().getCode().equalsIgnoreCase("M")) || 
-				(submittedCCDA.getSocialHistory().getBirthSex().getSexCode().getCode().equalsIgnoreCase("F"))) )
+			if( (submittedCCDA.getSocialHistory().getBirthSex().getSexCode() != null && 
+				 submittedCCDA.getSocialHistory().getBirthSex().getSexCode().getCode() != null) && 
+					( (submittedCCDA.getSocialHistory().getBirthSex().getSexCode().getCode().equalsIgnoreCase("M") ) || 
+					  (submittedCCDA.getSocialHistory().getBirthSex().getSexCode().getCode().equalsIgnoreCase("F") ) ) )
 			{
 				//do nothing.
 				return;
 			}
 			else {
-				ContentValidationResult rs = new ContentValidationResult("The scenario requires patient's birth sex to use the codes M or F but the submitted C-CDA does not contain either of these codes.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				ContentValidationResult rs = new ContentValidationResult(
+						"The scenario requires patient's birth sex to use the codes M or F but the submitted C-CDA does not contain either of these codes.",
+						ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 				results.add(rs);
 			}
 			
