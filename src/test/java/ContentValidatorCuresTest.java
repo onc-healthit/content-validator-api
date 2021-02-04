@@ -669,8 +669,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// Social History has a proper Birth Sex Observation entry. <templateId root="2.16.840.1.113883.10.20.22.4.200" extension="2016-06-01"/>
 		// Expect no exception thrown handling this scenario, but do not expect a birth sex error for requiring it, but do expect one for the proper code, M, or F.
 		// Notice in the below XML there is no @code, so @code is not handled, but, it's within the Birth Sex template (see file), so template inclusion is handled
-		// Also notice that although there is a nullFlavor, it is not an exception for the requirement of the code. This is the case for both cures, and the IG,
-		// because, you cannot use a nullFlavor for a fixed single value in C-CDA. Note: The duplicate-like IG error is separate and cannot be tested here (part of the reference-c-cda-validator).
+		// Also notice that although there is a nullFlavor, it is not an exception for the requirement of the code 
+		// because you cannot use a nullFlavor for a fixed single value in C-CDA.
 		// <code nullFlavor="UNK" displayName="Birth Sex"/>  
 		ArrayList<ContentValidationResult> results = null;
 		try {
