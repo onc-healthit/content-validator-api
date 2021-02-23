@@ -926,15 +926,18 @@ public class CCDARefModel {
 			 (submittedCCDA.getSocialHistory().getBirthSex() != null)) {
 			
 			// Validate that the code is M or F.
-			if( (submittedCCDA.getSocialHistory().getBirthSex().getSexCode() != null)  && 
-				((submittedCCDA.getSocialHistory().getBirthSex().getSexCode().getCode().equalsIgnoreCase("M")) || 
-				(submittedCCDA.getSocialHistory().getBirthSex().getSexCode().getCode().equalsIgnoreCase("F"))) )
+			if( (submittedCCDA.getSocialHistory().getBirthSex().getSexCode() != null && 
+				 submittedCCDA.getSocialHistory().getBirthSex().getSexCode().getCode() != null) && 
+					( (submittedCCDA.getSocialHistory().getBirthSex().getSexCode().getCode().equalsIgnoreCase("M") ) || 
+					  (submittedCCDA.getSocialHistory().getBirthSex().getSexCode().getCode().equalsIgnoreCase("F") ) ) )
 			{
 				//do nothing.
 				return;
 			}
 			else {
-				ContentValidationResult rs = new ContentValidationResult("The scenario requires patient's birth sex to use the codes M or F but the submitted C-CDA does not contain either of these codes.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				ContentValidationResult rs = new ContentValidationResult(
+						"The scenario requires patient's birth sex to use the codes M or F but the submitted C-CDA does not contain either of these codes.",
+						ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 				results.add(rs);
 			}
 			
@@ -970,28 +973,51 @@ public class CCDARefModel {
 		HashMap<String, CCDASmokingStatus> subStatus = submittedCCDA.getAllSmokingStatuses();
 		
 		if( (refStatus != null && refStatus.size() > 0) &&  
-			(subStatus != null && subStatus.size() > 0)  ) {
+			(subStatus != null && subStatus.size() > 0) ) {
 			
 			log.info("Smoking Status present in both models ");
 			CCDASmokingStatus.compareSmokingStatus(refStatus, subStatus, results);
 			
 		} else if ( (refStatus != null && refStatus.size() > 0) && 
-				(subStatus == null || subStatus.size() == 0) ) {
+				    (subStatus == null || subStatus.size() == 0) ) {
 			
 			// handle the case where the Vitals Section does not exist in the submitted CCDA
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Smoking Status, but the submitted C-CDA does not contain Smoking Status data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult(
+					"The scenario requires data related to patient's Smoking Status, "
+					+ "but the submitted C-CDA does not contain Smoking Status data.",
+					ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 			results.add(rs);
 			log.info(" Scenario requires Smoking Status but submitted document does not contain Smoking Status data");
 			
-		}else if ((refStatus == null || refStatus.size() == 0) && 
-				(subStatus != null && subStatus.size() > 0) ) {
-		
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Smoking Status, but the submitted C-CDA does contain Smoking Status data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-			results.add(rs);
-			log.info("Model does not have Smoking Status for comparison ");
+		} else if ( (refStatus == null || refStatus.size() == 0) && 
+				    (subStatus != null && subStatus.size() > 0) ) {
 			
-		} else {
+			log.info("Model does not have Smoking Status for comparison ");			
 			
+			// Handle exception for SITE-3220 ETT GG, Content Val: "Smoking Status for b(1) / g(6)"
+			boolean isError = false;
+			for (CCDASmokingStatus ssVal : subStatus.values()) {
+				// Note: Even though we are calling getSmokingStatusCode, it is actually populated by the C-CDA Value element in the parser, 
+				// and the Value is what we want in this case, and is of type CD
+				if (ssVal != null && ssVal.getSmokingStatusCode() != null
+						&& ssVal.getSmokingStatusCode().getCode() != null
+						&& ssVal.getSmokingStatusCode().getCode().equals("266927001")) {
+					log.info("Skipping error for sub containing Smoking Status data "
+							+ "due to inclusion of SNOMED CT code 266927001, \"Unknown if ever smoked\"");
+				} else {
+					isError = true; // At least one Smoking Status value/@code did not equal the exception code
+					break; // Since we only ever fire one error regardless of the count, it's OK to break out for efficiency
+				}
+			}
+			if (isError) {
+				ContentValidationResult rs = new ContentValidationResult(
+						"The scenario does not require data related to patient's Smoking Status, "
+						+ "but the submitted C-CDA does contain Smoking Status data.",
+						ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+				results.add(rs);
+			}			
+			
+		} else {			
 			log.info("Model and Submitted CCDA do not have Smoking Statuss for comparison ");
 		}
 		

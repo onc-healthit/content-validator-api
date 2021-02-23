@@ -30,11 +30,17 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final boolean LOG_RESULTS_TO_CONSOLE = true;
 	
 	private static final String B1_TOC_AMB_VALIDATION_OBJECTIVE = "170.315_b1_ToC_Amb";
+	private static final String B1_TOC_INP_VALIDATION_OBJECTIVE = "170.315_b1_ToC_Inp";
+	
 	private static final String E1_VDT_AMB_VALIDATION_OBJECTIVE = "170.315_e1_VDT_Amb";
 	
-	private static final String REF_CURES_B1_TOC_AMB_SAMPLE1 = "170.315_b1_toc_amb_sample1_v1.pdf";
-	private static final String REF_CURES_B1_TOC_AMB_SAMPLE3 = "170.315_b1_toc_amb_sample3_v2.xml";
-	private static final String REF_CURES_E1_VDT_AMB_SAMPLE1 = "170.315_e1_vdt_amb_sample1.xml";
+	private static final String REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF = "170.315_b1_toc_amb_sample1_v1.pdf";
+	
+	private static final String REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY = "170.315_b1_toc_amb_sample3_v2.xml";
+	private static final String REF_CURES_B1_INP_AMB_SAMPLE3_JANE = "170.315_b1_toc_inp_sample3.xml";
+	
+	private static final String REF_CURES_E1_VDT_AMB_SAMPLE1_ALICE = "170.315_e1_vdt_amb_sample1.xml";
+
 	private static final String MOD_REF_CURES_ADD_AUTHORS = "ModRef_AddAuthors_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml";
 	private static final String MOD_REF_CURES_NO_BIRTH_SEX_B1_TOC_AMB_SAMPLE1 = "ModRef_CuresNoBirthSex_b1TocAmbSample1.xml";
 	
@@ -51,7 +57,13 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_LAB_RESULTS_NOT_FOUND_SITE_3199 = 8;
 	private static final int SUB_LAB_RESULTS_STILL_NOT_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_SITE_3199 = 9;
 	private static final int SUB_LAB_RESULTS_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_AND_OBS_CODES_SITE_3199 = 10;
-	
+	private static final int SUB_SOCIAL_HISTORY_WITHOUT_BIRTH_SEX_OBS_TEMPLATE_SITE_3094 = 11;
+	private static final int SUB_SOCIAL_HISTORY_WITH_BIRTH_SEX_OBS_TEMPLATE_SITE_3094 = 12;
+	private static final int ADD_SMOKING_STATUS_ENTRY_FORMER_SMOKER_B1_TOC_AMB_S3_SITE_3220 = 13;
+	private static final int ADD_SMOKING_STATUS_ENTRY_FORMER_SMOKER_B1_TOC_INP_S3_SITE_3220 = 14;
+	private static final int ADD_SMOKING_STATUS_ENTRY_UNKNOWN_SMOKER_B1_TOC_AMB_S3_SITE_3220 = 15;
+	private static final int ADD_SMOKING_STATUS_ENTRY_UNKNOWN_SMOKER_B1_TOC_INP_S3_SITE_3220 = 16;
+	private static final int ADD_SMOKING_STATUS_ENTRY_FORMER_AND_UNKNOWN_SMOKER_B1_TOC_AMB_S3_SITE_3220 = 17;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -67,7 +79,14 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/sub/AddResultOrganizerWithoutAuthorToResults_e1_vdt_amb_s1.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/HasNullFlavorOnResultOrganizerCode.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/DoesNotHaveNullFlavorOnResultOrganizerCode.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/DoesNotHaveNullFlavorOnResultOrganizerObservationCodes.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/sub/DoesNotHaveNullFlavorOnResultOrganizerObservationCodes.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SocialHistoryWithoutBirthSexObsTemplateSite3094.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SocialHistoryWithBirthSexObsTemplateSite3094.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryFormerSmoker_b1_toc_amb_s3_Site3220.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryFormerSmoker_b1_inp_amb_s3_Site3220.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryUnknownSmoker_b1_toc_amb_s3_Site3220.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryUnknownSmoker_b1_inp_amb_s3_Site3220.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryFormerAndUnknownSmoker_b1_toc_amb_s3_Site3220.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -110,12 +129,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		printHeader("cures_basicContentValidationTest");
 		try {
 			ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
-					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3, SUBMITTED_CCDA[SUB_EF],
+					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY, SUBMITTED_CCDA[SUB_EF],
 					SeverityLevel.ERROR);
 			printResults(results);
 		} catch (Exception e) {
-			fail(e.getMessage());
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 	}
 	
@@ -124,7 +143,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		printHeader("cures_matchingSubAndRefExpectNoIssuesTest");
 
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
-				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3,
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
 				SUBMITTED_CCDA[SUB_MATCH_REF_B1_TOC_AMB_SAMPLE3], SeverityLevel.ERROR);
 		printResults(results);
 		
@@ -147,7 +166,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		// Cures enforces an ERROR for telecom issues as opposed to a warning with non-cures
 		
-		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(REF_CURES_B1_TOC_AMB_SAMPLE1,
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF,
 				SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES]);
 		assertFalse("No results were returned", results.isEmpty());
 		println("FINAL RESULTS");
@@ -178,7 +197,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// *** these tests are written in a future proof manner, knowing that birth sex will be added to all the scenarios ***
 		
 		printHeader("Ref has birth sex. Sub does not have birth sex. Expect birth sex error");
-		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF,
 				SUBMITTED_CCDA[SUB_NO_BIRTH_SEX], SeverityLevel.ERROR);
 		printResults(results);
 		assertTrue("Expect birth sex error: " + birthSexMessage, 
@@ -193,7 +212,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				resultsContainMessage(birthSexMessage, results, ContentValidationResultLevel.ERROR));
 		
 		printHeader("Ref has birth sex. Sub has birth sex. Expect NO birth sex error as sub has birth sex");
-		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF,
 				SUBMITTED_CCDA[SUB_HAS_BIRTH_SEX], SeverityLevel.ERROR);
 		printResults(results);
 		assertFalse("Expect NO birth sex error as sub has birth sex but got: " + birthSexMessage, 
@@ -209,7 +228,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// the first 6 of which should not have nullFlavor as they also have data.
 		// The nullFlavor is causing nothing to be parsed in the sub, and therefore no lab data to be found
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
-				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1,
+				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1_ALICE,
 				SUBMITTED_CCDA[SUB_LAB_RESULTS_NOT_FOUND_SITE_3199], SeverityLevel.ERROR);			
 		printResults(results);
 		
@@ -229,7 +248,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// the first 6 of which should not have nullFlavor as they also have data.
 		// The nullFlavor is causing nothing to be parsed in the sub, and therefore no lab data to be found
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
-				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1,
+				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1_ALICE,
 				SUBMITTED_CCDA[SUB_LAB_RESULTS_STILL_NOT_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_SITE_3199],
 				SeverityLevel.ERROR);		
 		printResults(results);
@@ -249,7 +268,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// which allows for a pass due to it being able to parse the codes/lab results.
 		// 7th instance is not needed and has no data so nullFlavor actually makes sense
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
-				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1,
+				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1_ALICE,
 				SUBMITTED_CCDA[SUB_LAB_RESULTS_FOUND_REMOVED_NULL_FLAVOR_ORG_CODE_AND_OBS_CODES_SITE_3199],
 				SeverityLevel.ERROR);
 		printResults(results);
@@ -272,7 +291,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "but submitted file does not have birth sex information";
 
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE,
-				REF_CURES_B1_TOC_AMB_SAMPLE1, SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES], SeverityLevel.INFO);
+				REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF, SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES], SeverityLevel.INFO);
 		printResults(results);
 		assertTrue("expecting 3 errors", results.size() == 3);
 		ContentValidationResultLevel expectedSeverity = ContentValidationResultLevel.ERROR;
@@ -280,7 +299,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		severityLevelLimitTestHelperAssertMessageAndSeverity(results, error2, expectedSeverity);
 		severityLevelLimitTestHelperAssertMessageAndSeverity(results, error3, expectedSeverity);
 
-		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF,
 				SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES], SeverityLevel.WARNING);
 		printResults(results);
 		assertTrue("expecting (the same) 3 errors", results.size() == 3);
@@ -288,7 +307,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		severityLevelLimitTestHelperAssertMessageAndSeverity(results, error2, expectedSeverity);
 		severityLevelLimitTestHelperAssertMessageAndSeverity(results, error3, expectedSeverity);
 		
-		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF,
 				SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES], SeverityLevel.ERROR);
 		printResults(results);
 		assertTrue("expecting (the same) 3 errors", results.size() == 3);
@@ -302,7 +321,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		printHeader("cures_authorinHeaderTest");
 		
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE,
-				REF_CURES_B1_TOC_AMB_SAMPLE1, URI_SUB_CURES_MISSING_AUTHOR_IN_HEADER, SeverityLevel.ERROR);
+				REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF, URI_SUB_CURES_MISSING_AUTHOR_IN_HEADER, SeverityLevel.ERROR);
 		failIfNoResults(results);
 		printResults(results);
 				
@@ -421,7 +440,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_ZeroAuthorsInRefOneOrMoreInSubProceduresProcedureActivityProcedureTest() {
 		// SITE-3193
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
-				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF,
 				SUBMITTED_CCDA[SUB_HAS_PROCEDURE_ACTIVITY_PROCEDURE_WITH_AUTHOR_IN_PROCEDURES], SeverityLevel.ERROR);
 		printResults(results);
 		
@@ -440,7 +459,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_ZeroAuthorsInRefOneOrMoreInSubProceduresNoteActivityTest() {
 		// SITE-3193 (done), SITE-3194 (not yet done, see todo above)		
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
-				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1,
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF,
 				SUBMITTED_CCDA[SUB_HAS_NOTE_ACTIVITY_WITH_AUTHOR_IN_PROCEDURES], SeverityLevel.ERROR);
 		printResults(results);
 		
@@ -533,7 +552,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_ZeroAuthorsInRefOneOrMoreInSubResultsResultOrganizerTest() {
 		// SITE-3189
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
-				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1,
+				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1_ALICE,
 				SUBMITTED_CCDA[SUB_HAS_RESULT_ORGANIZER_WITH_AUTHOR_IN_RESULTS], SeverityLevel.ERROR);
 		printResults(results);
 		
@@ -549,7 +568,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_ZeroAuthorsInRefAndZeroInSubResultsResultOrganizerTest() {
 		// SITE-3189
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
-				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1,
+				E1_VDT_AMB_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_AMB_SAMPLE1_ALICE,
 				SUBMITTED_CCDA[SUB_HAS_RESULT_ORGANIZER_WITHOUT_AUTHOR_IN_RESULTS], SeverityLevel.ERROR);
 		printResults(results);
 		
@@ -631,5 +650,159 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		assertTrue("The results do not contain the expected message of: " + noAuthorInEncounterActivityIndication, 
 				resultsContainMessage(noAuthorInEncounterActivityIndication, results, ContentValidationResultLevel.ERROR));		
 	}
+	
+	@Test
+	public void cures_SocialHistoryWithoutBirthSexObsTemplate_Site3094Test() {		
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+
+		// Social History does not have a birth Sex observation entry. Instead, it has Social History Observation (missing extension though) 2.16.840.1.113883.10.20.22.4.38:2015-08-01
+		// Expect no exception thrown handling this scenario, and expect a relevant birth sex error if no exception is thrown
+		// THe XML for the code element is irrelevant, because the template is not the Birth Sex template
+		ArrayList<ContentValidationResult> results = null;
+		try {
+			results = validateDocumentAndReturnResultsCures(
+					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF,
+					SUBMITTED_CCDA[SUB_SOCIAL_HISTORY_WITHOUT_BIRTH_SEX_OBS_TEMPLATE_SITE_3094], SeverityLevel.ERROR);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		
+		if (results != null) {
+			printResults(results);		
+			final String requiresBirthSexError = "The scenario requires patient's birth sex to be captured "
+					+ "as part of social history data, but submitted file does not have birth sex information";
+			assertTrue("The results do not contain the expected message of: " + requiresBirthSexError, 
+					resultsContainMessage(requiresBirthSexError, results, ContentValidationResultLevel.ERROR));
+		}
+	}
+	
+	@Test
+	public void cures_SocialHistoryWithBirthSexObsTemplate_Site3094Test() {		
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+
+		// Social History has a proper Birth Sex Observation entry. <templateId root="2.16.840.1.113883.10.20.22.4.200" extension="2016-06-01"/>
+		// Expect no exception thrown handling this scenario, but do not expect a birth sex error for requiring it, but do expect one for the proper code, M, or F.
+		// Notice in the below XML there is no @code, so @code is not handled, but, it's within the Birth Sex template (see file), so template inclusion is handled
+		// Also notice that although there is a nullFlavor, it is not an exception for the requirement of the code 
+		// because you cannot use a nullFlavor for a fixed single value in C-CDA.
+		// <code nullFlavor="UNK" displayName="Birth Sex"/>  
+		ArrayList<ContentValidationResult> results = null;
+		try {
+			results = validateDocumentAndReturnResultsCures(
+					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF,
+					SUBMITTED_CCDA[SUB_SOCIAL_HISTORY_WITH_BIRTH_SEX_OBS_TEMPLATE_SITE_3094], SeverityLevel.ERROR);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());			
+		}
+		
+		if (results != null) {
+			printResults(results);
+			
+			final String requiresBirthSexError = "The scenario requires patient's birth sex to be captured "
+					+ "as part of social history data, but submitted file does not have birth sex information";
+			assertFalse("The contain the unexpected message of: " + requiresBirthSexError, 
+					resultsContainMessage(requiresBirthSexError, results, ContentValidationResultLevel.ERROR));
+			
+			final String requiresBirthSexCodeError = "The scenario requires patient's birth sex to use the codes M or F "
+					+ "but the submitted C-CDA does not contain either of these codes.";
+			assertTrue("The results do not contain the expected message of: " + requiresBirthSexCodeError, 
+					resultsContainMessage(requiresBirthSexCodeError, results, ContentValidationResultLevel.ERROR));			
+		}
+	}
+	
+	@Test
+	public void cures_socialHistorySmokingStatusValueCodeNotEqualToUnknownIfEverSmoked_b1_amb_s3_happy_Site3220Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+		
+		// Without 'Unknown' code exception (has former smoker code):
+		// Expect Fail AFTER fix and FAIL in prod BEFORE fix (regression test)
+		// Targeted Snippet: <value xsi:type="CD" code="8517006" displayName="Former smoker" codeSystem="2.16.840.1.113883.6.96" />
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
+				SUBMITTED_CCDA[ADD_SMOKING_STATUS_ENTRY_FORMER_SMOKER_B1_TOC_AMB_S3_SITE_3220], SeverityLevel.ERROR);			
+		printResults(results);
+		
+		final String message = "The scenario does not require data related to patient's Smoking Status, "
+				+ "but the submitted C-CDA does contain Smoking Status data."; 
+		assertTrue("Results should have contained the followiing message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
+	}
+	
+	@Test
+	public void cures_socialHistorySmokingStatusValueCodeNotEqualToUnknownIfEverSmoked_b1_inp_s3_jane_Site3220Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+		
+		// Without 'Unknown' code exception (has former smoker code):
+		// Expect Fail AFTER fix and FAIL in prod BEFORE fix (regression test)
+		// Targeted Snippet: <value xsi:type="CD" code="8517006" displayName="Former smoker" codeSystem="2.16.840.1.113883.6.96" />
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_INP_VALIDATION_OBJECTIVE, REF_CURES_B1_INP_AMB_SAMPLE3_JANE,
+				SUBMITTED_CCDA[ADD_SMOKING_STATUS_ENTRY_FORMER_SMOKER_B1_TOC_INP_S3_SITE_3220], SeverityLevel.ERROR);			
+		printResults(results);
+		
+		final String message = "The scenario does not require data related to patient's Smoking Status, "
+				+ "but the submitted C-CDA does contain Smoking Status data."; 
+		assertTrue("Results should have contained the followiing message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
+	}
+	
+	@Test
+	public void cures_socialHistorySmokingStatusValueCodeIsEqualToUnknownIfEverSmoked_b1_amb_s3_happy_Site3220Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+		
+		// With 'Unknown' code exception:
+		// Expect Pass AFTER fix and FAIL in prod BEFORE fix
+		// Targeted Snippet: <value xsi:type="CD" code="266927001" displayName="Unknown if ever smoked" 
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
+				SUBMITTED_CCDA[ADD_SMOKING_STATUS_ENTRY_UNKNOWN_SMOKER_B1_TOC_AMB_S3_SITE_3220], SeverityLevel.ERROR);			
+		printResults(results);
+		
+		final String message = "The scenario does not require data related to patient's Smoking Status, "
+				+ "but the submitted C-CDA does contain Smoking Status data."; 
+		assertFalse("Results should not have contained the followiing message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+	}	
+	
+	@Test
+	public void cures_socialHistorySmokingStatusValueCodeIsEqualToUnknownIfEverSmoked_b1_inp_s3_jane_Site3220Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+		
+		// With 'Unknown' code exception:
+		// Expect Pass AFTER fix and FAIL in prod BEFORE fix
+		// Targeted Snippet: <value xsi:type="CD" code="266927001" displayName="Unknown if ever smoked"
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_INP_VALIDATION_OBJECTIVE, REF_CURES_B1_INP_AMB_SAMPLE3_JANE,
+				SUBMITTED_CCDA[ADD_SMOKING_STATUS_ENTRY_UNKNOWN_SMOKER_B1_TOC_INP_S3_SITE_3220], SeverityLevel.ERROR);			
+		printResults(results);
+		
+		final String message = "The scenario does not require data related to patient's Smoking Status, "
+				+ "but the submitted C-CDA does contain Smoking Status data."; 
+		assertFalse("Results should not have contained the followiing message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+	}
+	
+	@Test
+	public void cures_socialHistorySmokingStatusValueCodeNotEqualToUnknownInAtLeastOneEntry_b1_amb_s3_happy_Site3220Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());		
+		
+		// Has 2 Smoking Status Observation entries, one passes with 'Unknown' exception and one fails since it is not the 'Unknown' exception 
+		// Expect one failure error for the fail that is not the 'Unknown' exception
+		// Expect Fail AFTER fix and FAIL in prod BEFORE fix (regression test)
+		// Targeted Snippets: 
+		// 1: <value xsi:type="CD" code="8517006" displayName="Former smoker" codeSystem="2.16.840.1.113883.6.96" />
+		// 2: <value xsi:type="CD" code="266927001" displayName="Unknown if ever smoked" codeSystem="2.16.840.1.113883.6.96"/> 
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
+				SUBMITTED_CCDA[ADD_SMOKING_STATUS_ENTRY_FORMER_AND_UNKNOWN_SMOKER_B1_TOC_AMB_S3_SITE_3220], SeverityLevel.ERROR);			
+		printResults(results);
+		
+		final String message = "The scenario does not require data related to patient's Smoking Status, "
+				+ "but the submitted C-CDA does contain Smoking Status data."; 
+		assertTrue("Results should have contained the followiing message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
+	}	
 
 }
