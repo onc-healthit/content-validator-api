@@ -37,10 +37,14 @@ public class CCDATelecom {
 	}
 	
 	private String formatTelecomValue(String value) {
-		if (!StringUtils.isEmpty(value)) {
-			return value.replaceAll("[^0-9]", "");
+		if(!StringUtils.isEmpty(value) && !value.contains("mailto")) {
+			return value.replaceAll("[^0-9+]", "");
 		}
 		return value;
+	}
+	
+	private boolean isTelecomContainsMailValue(String value) {
+		return value!=null && value.contains("mailto");
 	}
 	
 	@Override
@@ -52,11 +56,15 @@ public class CCDATelecom {
 		if (getClass() != obj.getClass())
 			return false;
 		CCDATelecom other = (CCDATelecom) obj;
-		if (useAttribute == null) {
-			if (other.useAttribute != null)
+		
+		if(!isTelecomContainsMailValue(valueAttribute)) {
+			if (useAttribute == null) {
+				if (other.useAttribute != null)
+					return false;
+			} else if (!useAttribute.equalsIgnoreCase(other.useAttribute))
 				return false;
-		} else if (!useAttribute.equalsIgnoreCase(other.useAttribute))
-			return false;
+		}
+		
 		if (valueAttribute == null) {
 			if (other.valueAttribute != null)
 				return false;
