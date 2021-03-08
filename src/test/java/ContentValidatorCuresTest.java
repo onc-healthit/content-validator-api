@@ -45,7 +45,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 
 	private static final String MOD_REF_CURES_ADD_AUTHORS = "ModRef_AddAuthors_b1TocAmbCcdR21Aample1V13.xml";
 	private static final String MOD_REF_CURES_NO_BIRTH_SEX_B1_TOC_AMB_SAMPLE1 = "ModRef_CuresNoBirthSex_b1TocAmbSample1.xml";
-	private static final String MOD_REF_CURES_MODREF_REMOVE_VITAL_SIGNS_OBS_AUTHORS_E1_VDT_INP_SAMPLE1_REBECCA = "ModRef_RemoveVitalSignsObsAuthors_E1VdtInpSample1.xml";
+	private static final String MOD_REF_CURES_MODREF_REMOVE_VITAL_SIGNS_OBS_AUTHORS_E1_VDT_INP_SAMPLE1_REBECCA = 
+			"ModRef_RemoveVitalSignsObsAuthors_E1VdtInpSample1.xml";
+	private static final String MOD_REF_ADD_NOTES_ACTIVITY_ENCOUNTER_ENTRY_B1_TOC_AMB_S1 = 
+			"ModRef_AddNotesActivityEncounterEntry_b1TocAmbS1.xml";
+	private static final String MOD_REF_ADD_NOTES_ACTIVITY_PAP_ENTRY_RELATIONSHIP_B1_TOC_AMB_S1 = 
+			"ModRef_AddNotesActivityProcActProcEntryRel_b1TocAmbS1.xml";
 	
 	private static final int SUB_CURES_MISSING_AUTHOR_IN_HEADER = 0;
 	private static final int SUB_HAS_BIRTH_SEX = SUB_CURES_MISSING_AUTHOR_IN_HEADER;
@@ -72,7 +77,10 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_VITAL_SIGNS_SECTION_HAS_5_ORGANIZERS_10_OBSERVATIONS_4_AUTHORS_TOTAL_REBECCA_SITE_3232 = 20;
 	private static final int SUB_VITAL_SIGNS_SECTION_HAS_5_ORGANIZERS_10_OBSERVATIONS_0_AUTHORS_TOTAL_REBECCA_SITE_3232 = 21;
 	private static final int SUB_ADD_2_AUTHORS_TO_PROB_SEC_CONC_OBS_B1_TOC_AMB_CCD_R21_SAMPLE1V13_SITE3235 = 22;
-	private static final int HAS_2_AUTHORS_INHEADER_B1_TOC_AMB_S1_SITE_3235 = 23;	
+	private static final int HAS_2_AUTHORS_INHEADER_B1_TOC_AMB_S1_SITE_3235 = 23;
+	private static final int SUB_DUPLICATE_OF_B1_TOC_AMB_SAMPLE1_REF = 24;
+	private static final int SUB_DUPLICATE_OF_MOD_REF_ADD_NOTES_ACTIVITY_ENCOUNTER_ENTRY_B1_TOC_AMB_S1 = 25;
+	private static final int SUB_DUPLICATE_OF_MOD_REF_ADD_NOTES_ACTIVITY_PAP_ENTRY_RELATIONSHIP_B1_TOC_AMB_S1 = 26;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -101,7 +109,10 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/sub/vitalSignsSectionWith5Organizers10Observations_4AuthorsTotal_rebecca_Site3232.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/vitalSignsSectionWith5Organizers10Observations_0AuthorsTotal_rebecca_Site3232.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/Add2AuthorsToProbSecConcObs_b1TocAmbCcdR21Sample1V13_Site3235.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/Has2AuthorsInHeader_b1TocAmbS1_Site3235.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/sub/Has2AuthorsInHeader_b1TocAmbS1_Site3235.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/ref/ModRef_AddNotesActivityEncounterEntry_b1TocAmbS1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/ref/ModRef_AddNotesActivityProcActProcEntryRel_b1TocAmbS1.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -948,6 +959,72 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "however the submitted data had only 2 entries.";
 		assertFalse("Results should not have contained the followiing message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_NotesActivityInResultsParser_ExpectError_Site3153Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// Notes Activity Results entry
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, MOD_REF_ADD_NOTES_ACTIVITY_ENCOUNTER_ENTRY_B1_TOC_AMB_S1,
+				SUBMITTED_CCDA[SUB_DUPLICATE_OF_B1_TOC_AMB_SAMPLE1_REF], SeverityLevel.ERROR);			
+		printResults(results);
+		
+		final String message = "The scenario requires data related to patient's Notes, "
+				+ "but the submitted C-CDA does not contain Notes data."; 
+		assertTrue("Results should have contained the followiing message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_NotesActivityInResultsParser_ExpectNoError_Site3153Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// Notes Activity Results entry
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, MOD_REF_ADD_NOTES_ACTIVITY_ENCOUNTER_ENTRY_B1_TOC_AMB_S1,
+				SUBMITTED_CCDA[SUB_DUPLICATE_OF_MOD_REF_ADD_NOTES_ACTIVITY_ENCOUNTER_ENTRY_B1_TOC_AMB_S1],
+				SeverityLevel.ERROR);			
+		printResults(results);
+		
+		final String message = "The scenario requires data related to patient's Notes, "
+				+ "but the submitted C-CDA does not contain Notes data."; 
+		assertFalse("Results should not have contained the followiing message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+	}
+	
+	@Test
+	public void cures_NotesActivityInProceudureParser_ExpectError_Site3153Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// Notes Activity in Procedures Procedure Activity Procedure entryRelationship
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, MOD_REF_ADD_NOTES_ACTIVITY_PAP_ENTRY_RELATIONSHIP_B1_TOC_AMB_S1,
+				SUBMITTED_CCDA[SUB_DUPLICATE_OF_B1_TOC_AMB_SAMPLE1_REF], SeverityLevel.ERROR);
+		printResults(results);
+		
+		final String message = "The scenario requires data related to patient's Notes, "
+				+ "but the submitted C-CDA does not contain Notes data."; 
+		assertTrue("Results should have contained the followiing message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_NotesActivityInProceudureParser_ExpectNoError_Site3153Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// Notes Activity in Procedures Procedure Activity Procedure entryRelationship
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, MOD_REF_ADD_NOTES_ACTIVITY_PAP_ENTRY_RELATIONSHIP_B1_TOC_AMB_S1,
+				SUBMITTED_CCDA[SUB_DUPLICATE_OF_MOD_REF_ADD_NOTES_ACTIVITY_PAP_ENTRY_RELATIONSHIP_B1_TOC_AMB_S1],
+				SeverityLevel.ERROR);			
+		printResults(results);
+		
+		final String message = "The scenario requires data related to patient's Notes, "
+				+ "but the submitted C-CDA does not contain Notes data."; 
+		assertFalse("Results should not have contained the followiing message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 	}
 
 }

@@ -40,6 +40,10 @@ public class LabResultParser {
 			
 			labResults.setIsLabTestInsteadOfResult(false);
 			
+			// Add Notes Activity if present in Results entry
+			labResults.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_NOTES_ACTIVITY_EXPRESSION.
+					evaluate(sectionElement, XPathConstants.NODESET), null));			
+			
 			labResults.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(sectionElement, XPathConstants.NODE)));
 		}
