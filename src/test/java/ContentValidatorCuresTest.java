@@ -33,6 +33,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final String B1_TOC_INP_VALIDATION_OBJECTIVE = "170.315_b1_ToC_Inp";
 	
 	private static final String E1_VDT_AMB_VALIDATION_OBJECTIVE = "170.315_e1_VDT_Amb";
+	private static final String E1_VDT_INP_VALIDATION_OBJECTIVE = "170.315_e1_VDT_Inp";	
 	
 	private static final String REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF = "170.315_b1_toc_amb_sample1_v1.pdf";
 	
@@ -40,9 +41,11 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final String REF_CURES_B1_INP_AMB_SAMPLE3_JANE = "170.315_b1_toc_inp_sample3.xml";
 	
 	private static final String REF_CURES_E1_VDT_AMB_SAMPLE1_ALICE = "170.315_e1_vdt_amb_sample1.xml";
+	private static final String REF_CURES_E1_VDT_INP_SAMPLE1_REBECCA = "170.315_e1_vdt_inp_sample1.xml";
 
-	private static final String MOD_REF_CURES_ADD_AUTHORS = "ModRef_AddAuthors_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml";
+	private static final String MOD_REF_CURES_ADD_AUTHORS = "ModRef_AddAuthors_b1TocAmbCcdR21Aample1V13.xml";
 	private static final String MOD_REF_CURES_NO_BIRTH_SEX_B1_TOC_AMB_SAMPLE1 = "ModRef_CuresNoBirthSex_b1TocAmbSample1.xml";
+	private static final String MOD_REF_CURES_MODREF_REMOVE_VITAL_SIGNS_OBS_AUTHORS_E1_VDT_INP_SAMPLE1_REBECCA = "ModRef_RemoveVitalSignsObsAuthors_E1VdtInpSample1.xml";
 	
 	private static final int SUB_CURES_MISSING_AUTHOR_IN_HEADER = 0;
 	private static final int SUB_HAS_BIRTH_SEX = SUB_CURES_MISSING_AUTHOR_IN_HEADER;
@@ -64,6 +67,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int ADD_SMOKING_STATUS_ENTRY_UNKNOWN_SMOKER_B1_TOC_AMB_S3_SITE_3220 = 15;
 	private static final int ADD_SMOKING_STATUS_ENTRY_UNKNOWN_SMOKER_B1_TOC_INP_S3_SITE_3220 = 16;
 	private static final int ADD_SMOKING_STATUS_ENTRY_FORMER_AND_UNKNOWN_SMOKER_B1_TOC_AMB_S3_SITE_3220 = 17;
+	private static final int SUB_VITAL_SIGNS_SECTION_HAS_5_ORGANIZERS_10_OBSERVATIONS_10_AUTHORS_TOTAL_REBECCA_SITE_3232 = 18;
+	private static final int SUB_VITAL_SIGNS_SECTION_HAS_5_ORGANIZERS_10_OBSERVATIONS_2_AUTHORS_TOTAL_REBECCA_SITE_3232 = 19;
+	private static final int SUB_VITAL_SIGNS_SECTION_HAS_5_ORGANIZERS_10_OBSERVATIONS_4_AUTHORS_TOTAL_REBECCA_SITE_3232 = 20;
+	private static final int SUB_VITAL_SIGNS_SECTION_HAS_5_ORGANIZERS_10_OBSERVATIONS_0_AUTHORS_TOTAL_REBECCA_SITE_3232 = 21;
+	private static final int SUB_ADD_2_AUTHORS_TO_PROB_SEC_CONC_OBS_B1_TOC_AMB_CCD_R21_SAMPLE1V13_SITE3235 = 22;
+	private static final int HAS_2_AUTHORS_INHEADER_B1_TOC_AMB_S1_SITE_3235 = 23;	
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -86,7 +95,13 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryFormerSmoker_b1_inp_amb_s3_Site3220.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryUnknownSmoker_b1_toc_amb_s3_Site3220.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryUnknownSmoker_b1_inp_amb_s3_Site3220.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryFormerAndUnknownSmoker_b1_toc_amb_s3_Site3220.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryFormerAndUnknownSmoker_b1_toc_amb_s3_Site3220.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/vitalSignsSectionWith5Organizers10Observations_10AuthorsTotal_rebecca_Site3232.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/vitalSignsSectionWith5Organizers10Observations_2AuthorsTotal_rebecca_Site3232.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/vitalSignsSectionWith5Organizers10Observations_4AuthorsTotal_rebecca_Site3232.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/vitalSignsSectionWith5Organizers10Observations_0AuthorsTotal_rebecca_Site3232.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/Add2AuthorsToProbSecConcObs_b1TocAmbCcdR21Sample1V13_Site3235.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/Has2AuthorsInHeader_b1TocAmbS1_Site3235.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -802,7 +817,137 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		final String message = "The scenario does not require data related to patient's Smoking Status, "
 				+ "but the submitted C-CDA does contain Smoking Status data."; 
 		assertTrue("Results should have contained the followiing message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
-	}	
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+	}
+	
+	@Test
+	public void cures_VitalSignsSection5Organizers10Observations10AuthorsTotal_ExpectNoError_Site3232Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// sub > ref expect pass (sub only needs at least as many or equal to ref to pass, sub never needs more than ref)
+		// From ETT GG: "The fact that the validator is throwing an error for "only" having 10 entries instead of the required 4 seems like a lingering bug."
+		// https://groups.google.com/u/0/g/edge-test-tool/c/8AbZgOd-QgM
+		// There are 5 VItal Signs Organizers and 10 VItal Signs Observations (within them, not all evenly spread).
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				E1_VDT_INP_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_INP_SAMPLE1_REBECCA,
+				SUBMITTED_CCDA[SUB_VITAL_SIGNS_SECTION_HAS_5_ORGANIZERS_10_OBSERVATIONS_10_AUTHORS_TOTAL_REBECCA_SITE_3232],
+				SeverityLevel.ERROR);
+		printResults(results);		 
+		
+		final String message = "The scenario requires a total of 4 Author Entries for Vital Signs Section"
+				+ "/VitalSignsOrganizer/VitalSignsObservation, however the submitted data had only 10 entries.";
+		assertFalse("Results should not have contained the followiing message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_VitalSignsSection5Organizers10Observations2AuthorsTotal_ExpectError_Site3232Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// sub < ref expect fail (sub has to have at least as many as ref to pass)
+		// https://groups.google.com/u/0/g/edge-test-tool/c/8AbZgOd-QgM
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				E1_VDT_INP_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_INP_SAMPLE1_REBECCA,
+				SUBMITTED_CCDA[SUB_VITAL_SIGNS_SECTION_HAS_5_ORGANIZERS_10_OBSERVATIONS_2_AUTHORS_TOTAL_REBECCA_SITE_3232],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		final String message = "The scenario requires a total of 4 Author Entries for Vital Signs Section"
+				+ "/VitalSignsOrganizer/VitalSignsObservation, however the submitted data had only 2 entries.";
+		assertTrue("Results should not have contained the followiing message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_VitalSignsSection5Organizers10Observations4AuthorsTotal_ExpectNoError_Site3232Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// sub == ref (non 0) expect pass (if sub has as many as ref, then we are meeting the req)
+		// https://groups.google.com/u/0/g/edge-test-tool/c/8AbZgOd-QgM
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				E1_VDT_INP_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_INP_SAMPLE1_REBECCA,
+				SUBMITTED_CCDA[SUB_VITAL_SIGNS_SECTION_HAS_5_ORGANIZERS_10_OBSERVATIONS_4_AUTHORS_TOTAL_REBECCA_SITE_3232],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		final String message = "The scenario requires a total of 4 Author Entries for Vital Signs Section"
+				+ "/VitalSignsOrganizer/VitalSignsObservation, however the submitted data had only 4 entries.";
+		assertFalse("Results should not have contained the followiing message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_VitalSignsSection5Organizers10Observations0AuthorsTotal_ExpectError_Site3232Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// sub < ref (sub is 0) expect fail (sub has to have at least as many as ref to pass)
+		// https://groups.google.com/u/0/g/edge-test-tool/c/8AbZgOd-QgM
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				E1_VDT_INP_VALIDATION_OBJECTIVE, REF_CURES_E1_VDT_INP_SAMPLE1_REBECCA,
+				SUBMITTED_CCDA[SUB_VITAL_SIGNS_SECTION_HAS_5_ORGANIZERS_10_OBSERVATIONS_0_AUTHORS_TOTAL_REBECCA_SITE_3232],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		final String message = "The scenario requires a total of 4 Author Entries for Vital Signs Section"
+				+ "/VitalSignsOrganizer/VitalSignsObservation, however the submitted data had only 0 entries.";
+		assertTrue("Results should not have contained the followiing message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_VitalSignsSection5Organizers10Observations0AuthorsTotal_ExpectNoError_Site3232Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// sub == ref (0) expect pass
+		// https://groups.google.com/u/0/g/edge-test-tool/c/8AbZgOd-QgM
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				E1_VDT_INP_VALIDATION_OBJECTIVE, MOD_REF_CURES_MODREF_REMOVE_VITAL_SIGNS_OBS_AUTHORS_E1_VDT_INP_SAMPLE1_REBECCA,
+				SUBMITTED_CCDA[SUB_VITAL_SIGNS_SECTION_HAS_5_ORGANIZERS_10_OBSERVATIONS_0_AUTHORS_TOTAL_REBECCA_SITE_3232],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// actual situation
+		final String message = "The scenario requires a total of 0 Author Entries for Vital Signs Section"
+				+ "/VitalSignsOrganizer/VitalSignsObservation, however the submitted data had only 0 entries.";
+		assertFalse("Results should not have contained the followiing message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+	}
+	
+	@Test
+	public void cures_ProblemSectionConcernObsRef1AuthSub2Auths_ExpectNoError_Site3235Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// sub > ref expect pass
+		// https://groups.google.com/u/1/g/edge-test-tool/c/a2CRrzzDffY/m/Lt2f7IrYBAAJ
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, MOD_REF_CURES_ADD_AUTHORS,
+				SUBMITTED_CCDA[SUB_ADD_2_AUTHORS_TO_PROB_SEC_CONC_OBS_B1_TOC_AMB_CCD_R21_SAMPLE1V13_SITE3235],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// Problem Section/ProblemConcern/ProblemObservation author missing in sub but required in modified ref
+		final String message = "The scenario requires a total of 1 Author Entries for "
+				+ "Problem Section/ProblemConcern/ProblemObservation, "
+				+ "however the submitted data had only 2 entries.";
+		assertFalse("Results should not have contained the followiing message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_Ref1AuthInHeaderSub2AuthsInHeader_ExpectNoError_Site3285Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+
+		// sub > ref expect pass
+		// https://groups.google.com/u/1/g/edge-test-tool/c/a2CRrzzDffY/m/Lt2f7IrYBAAJ		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF,
+				SUBMITTED_CCDA[HAS_2_AUTHORS_INHEADER_B1_TOC_AMB_S1_SITE_3235], SeverityLevel.ERROR);			
+		printResults(results);
+		
+		final String message = "The scenario requires a total of 1 Author Entries for Document Level., "
+				+ "however the submitted data had only 2 entries.";
+		assertFalse("Results should not have contained the followiing message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
 
 }
