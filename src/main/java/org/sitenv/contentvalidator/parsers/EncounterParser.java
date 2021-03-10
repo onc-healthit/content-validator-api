@@ -88,8 +88,9 @@ public class EncounterParser {
 				encounterActivity.setIndications(readProblemObservation(indicationNodeList));
 				
 				// Add Notes Activity if present.
-				encounterActivity.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION.
-						evaluate(encounterActivityElement, XPathConstants.NODESET), null));
+				encounterActivity.setNotesActivity(
+						ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION
+								.evaluate(encounterActivityElement, XPathConstants.NODESET), null));
 				
 				encounterActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 						evaluate(encounterActivityElement, XPathConstants.NODE)));

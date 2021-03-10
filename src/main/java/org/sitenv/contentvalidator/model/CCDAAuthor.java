@@ -187,9 +187,10 @@ public class CCDAAuthor {
 				}
 			}
 			
-			// Compare Author Sizes
+			// Compare Author Sizes			
+			// It's invalid to fire an error if ref is less than or equal to sub auth size
 			if(refAuths != null && subAuths != null && 
-					!(refAuths.size() == subAuths.size())) {			
+					!(refAuths.size() <= subAuths.size())) {
 				ContentValidationResult rs = new ContentValidationResult(
 						"The scenario requires a total of " + refAuths.size() + " Author Entries for " + elName
 								+ ", however the submitted data had only " + subAuths.size() + " entries.",

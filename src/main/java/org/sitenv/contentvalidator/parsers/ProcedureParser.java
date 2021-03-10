@@ -93,6 +93,11 @@ public class ProcedureParser {
 			NodeList serviceDeliveryNodeList = (NodeList) CCDAConstants.REL_PROCEDURE_SDL_EXPRESSION.
 						evaluate(procedureElement, XPathConstants.NODESET);
 			
+			// Add Notes Activity if present in Procedures Procedure Activity Procedure entryRelationship
+			procedure.setNotesActivity(
+					ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION
+							.evaluate(procedureElement, XPathConstants.NODESET), null));
+			
 			procedure.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(procedureElement, XPathConstants.NODE)));
 			
