@@ -945,7 +945,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	}
 	
 	@Test
-	public void cures_Ref1AuthInHeaderSub2AuthsInHeader_ExpectNoError_Site3285Test() {
+	public void cures_Ref1AuthInHeaderSub2AuthsInHeader_ExpectNoError_Site3235Test() {
 		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
 
 		// sub > ref expect pass
