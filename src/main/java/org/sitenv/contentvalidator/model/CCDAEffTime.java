@@ -5,6 +5,8 @@ import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CCDAEffTime {
 	
@@ -234,6 +236,120 @@ public class CCDAEffTime {
 			log.info("Value Time elements absent in both refernce and submitted models ");
 		}
 	}
+	
+	public void compareValueElementEnforceExactDateButOnlyPrecisionForTime(CCDAEffTime subTime,
+			ArrayList<ContentValidationResult> results, String elementName) {
+		// Enforces the following
+		// 1: If the scenario includes a date, then the submitted file must match that date exactly
+		// 2: If the scenario also includes a time, then the submitted file must match the precision and format of that time, but not the exact values (reg ex)
+		// 3: If the scenario does not include a date, then the submitted file would not need to include a date. Of course, we won't likely have a scenario without a date.
+		// 4: If the scenario includes a date only (no time), then the submitted file must match the exact date, 
+		// but is allowed to have time as well, which matches any point in time, but also matches the required C-CDA format.
+		// 5: If the scenario does not include a date, but the sub does, that is not an error, as more data is acceptable
+		// 6: If the scenario contains any value at all, and the sub does not, an error is produced
+		// 7: If the scenario includes a time, then the ref must include a time (in general)
+		String tempRefTime;
+		String tempSubTime;
+		log.info(" Comparing Times for " + elementName);
+
+		// Compare Time value element
+		if (valuePresent && subTime.getValuePresent()) {
+
+			// check first 8 chars (date) first
+			if (value.getValue().length() > 8) {
+				// limit comparison to date only, first 8 characters
+				tempRefTime = value.getValue().substring(0, 8);
+			} else {
+				// date is even less specific than the day, so compare what's there
+				tempRefTime = value.getValue();
+			}
+
+			if (subTime.getValue().getValue().length() > 8) {
+				tempSubTime = subTime.getValue().getValue().substring(0, 8);
+			} else {
+				tempSubTime = subTime.getValue().getValue();
+			}
+
+			if (tempRefTime.equalsIgnoreCase(tempSubTime)) {
+				log.info("Value Time element matches");
+			} else {
+				// 1: If the scenario includes a date, then the submitted file must match that date exactly
+				// 4: If the scenario includes a date only (no time), then the submitted file must match the exact date
+				String error = "The date portion of " + elementName + " (Time: Value ) is " + tempRefTime
+						+ " , but the date portion of submitted CCDA (Time: Value ) is " + tempSubTime
+						+ " which does not match ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
+						"/ClinicalDocument", "0");
+				results.add(rs);
+			}
+			
+			// check time (9th char and up)
+			if (value.getValue().length() > 8) {
+				// ref time has 9 chars or more
+				// ref has time so sub needs the full precision which is 4 more digits (time) followed by a + or - followed by 4 more digits (time-zone)
+				if (subTime.getValue().getValue().length() < 9) {
+					// sub time has 8 chars or less and therefore does not include a time at at all (or time-zone)
+					// 7: If the scenario includes a time, then the ref must include a time (in general)
+					String error = "The " + elementName + " (Time: Value ) is more precise than the date " + value.getValue()
+							+ " , but the submitted CCDA (Time: Value ) does not include time or time-zone data " + subTime.getValue().getValue()
+							+ " which does not match ";
+					ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
+							"/ClinicalDocument", "0");
+					results.add(rs);					
+				} else {
+					// sub time has at least 9 chars and is therefore attempting to be more precise than the date level
+					// 2: If the scenario also includes a time, then the submitted file must match the precision and format of that time, but not the exact values (reg ex)					
+					// Pure un-escaped Reg Ex: /([0-9]{8})([0-9]{4})(-|\+)([0-9]{4})/gm
+					// 1st Capturing Group ([0-9])
+					//  Match a single character present in the list below [0-9]
+					//  {8} matches the previous token exactly 8 times
+					//  0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
+					// 2nd Capturing Group ([0-9])
+					//  Match a single character present in the list below [0-9]
+					//  {4} matches the previous token exactly 4 times
+					//  0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
+					// 3rd Capturing Group (-|\+)
+					//  1st Alternative -
+					//  - matches the character - literally (case sensitive)
+					//  2nd Alternative \+
+					//  \+ matches the character + literally (case sensitive)
+					// 4th Capturing Group ([0-9])
+					//  Match a single character present in the list below [0-9]
+					//  {4} matches the previous token exactly 4 times
+					//  0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
+					// Global pattern flags
+					//  g modifier: global. All matches (don't return after first match)
+					//  m modifier: multi line. Causes ^ and $ to match the begin/end of each line (not only begin/end of string)
+					Pattern pattern = Pattern.compile("([0-9]{8})([0-9]{4})(-|\\+)([0-9]{4})");
+					Matcher matcher = pattern.matcher(subTime.getValue().getValue());
+					if (matcher.find()) {
+						log.info("We have a validly formatted date, time, and timestamp with complete and proper precision");
+					} else {
+						String error = "The " + elementName + " (Time: Value ) is " + value.getValue()
+								+ " , but the submitted CCDA time value " + subTime.getValue().getValue()
+								+ " is either not as precise as the scenario or otherwise formatted improperly.";
+						ContentValidationResult rs = new ContentValidationResult(error,
+								ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+						results.add(rs);						
+					}
+				}
+			}
+
+		} else if (valuePresent && !subTime.getValuePresent()) {
+			// 6: If the scenario contains any value at all, and the sub does not, an error is produced
+			String error = "The " + elementName
+					+ " (value time element ) is required, but submitted CCDA does not contain the (value time element) for "
+					+ elementName;
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
+					"/ClinicalDocument", "0");
+			results.add(rs);			
+		} else if (!valuePresent && subTime.getValuePresent()) {
+			// 5: If the scenario does not include a date, but the sub does, that is not an error, as more data is acceptable
+			log.info("It is OK to have author time even if it is not present in the Ref CCDA");
+		} else {
+			log.info("Value Time elements absent in both refernce and submitted models ");
+		}
+	}	
 	
 	public void log() {
 		

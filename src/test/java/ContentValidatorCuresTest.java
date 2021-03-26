@@ -33,7 +33,11 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final String B1_TOC_INP_VALIDATION_OBJECTIVE = "170.315_b1_ToC_Inp";
 	
 	private static final String E1_VDT_AMB_VALIDATION_OBJECTIVE = "170.315_e1_VDT_Amb";
-	private static final String E1_VDT_INP_VALIDATION_OBJECTIVE = "170.315_e1_VDT_Inp";	
+	private static final String E1_VDT_INP_VALIDATION_OBJECTIVE = "170.315_e1_VDT_Inp";
+	
+	private static final String G9_APIACCESS_INP_VALIDATION_OBJECTIVE = "170.315_g9_APIAccess_Inp"; 
+	
+	private static final String REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA = "170.315_g9_api_access_inp_sample1.xml";
 	
 	private static final String REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF = "170.315_b1_toc_amb_sample1_v1.pdf";
 	
@@ -81,6 +85,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_DUPLICATE_OF_B1_TOC_AMB_SAMPLE1_REF = 24;
 	private static final int SUB_DUPLICATE_OF_MOD_REF_ADD_NOTES_ACTIVITY_ENCOUNTER_ENTRY_B1_TOC_AMB_S1 = 25;
 	private static final int SUB_DUPLICATE_OF_MOD_REF_ADD_NOTES_ACTIVITY_PAP_ENTRY_RELATIONSHIP_B1_TOC_AMB_S1 = 26;
+	private static final int SUB_SITE_3241 = 27;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -112,7 +117,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/sub/Has2AuthorsInHeader_b1TocAmbS1_Site3235.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample1.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/ref/ModRef_AddNotesActivityEncounterEntry_b1TocAmbS1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/ref/ModRef_AddNotesActivityProcActProcEntryRel_b1TocAmbS1.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/ref/ModRef_AddNotesActivityProcActProcEntryRel_b1TocAmbS1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/Site3241.xml").toURI()					
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -1018,13 +1024,25 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
 				B1_TOC_AMB_VALIDATION_OBJECTIVE, MOD_REF_ADD_NOTES_ACTIVITY_PAP_ENTRY_RELATIONSHIP_B1_TOC_AMB_S1,
 				SUBMITTED_CCDA[SUB_DUPLICATE_OF_MOD_REF_ADD_NOTES_ACTIVITY_PAP_ENTRY_RELATIONSHIP_B1_TOC_AMB_S1],
-				SeverityLevel.ERROR);			
+				SeverityLevel.ERROR);
 		printResults(results);
 		
 		final String message = "The scenario requires data related to patient's Notes, "
 				+ "but the submitted C-CDA does not contain Notes data."; 
 		assertFalse("Results should not have contained the followiing message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+	}
+	
+	@Test
+	public void cures_Site3241Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+
+		// TODO: Add tests for Site3241: Blank issue and new precision requirements
+		// using the format and doc below and modifications of it 
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				G9_APIACCESS_INP_VALIDATION_OBJECTIVE, REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA,
+				SUBMITTED_CCDA[SUB_SITE_3241], SeverityLevel.ERROR);
+		printResults(results);
 	}
 
 }

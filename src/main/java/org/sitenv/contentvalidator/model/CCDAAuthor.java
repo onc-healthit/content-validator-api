@@ -172,15 +172,30 @@ public class CCDAAuthor {
 						auth.getEffTime().getValuePresent() && !isProvenancePresent(auth.getEffTime(), auth.getOrgName(), subAuths)) {
 					
 					String orgName = "";
-					if(auth.getOrgName() != null && auth.getOrgName().getValue() != null)
+					if(auth.getOrgName() != null && auth.getOrgName().getValue() != null) { 
 						orgName = auth.getOrgName().getValue();
+					}
 					
-					ContentValidationResult rs = new ContentValidationResult(
-							"The scenario requires Provenance data of Time  : " + auth.getEffTime().getValue().getValue()
-									+ " and an Organization Name of : " + orgName + " at the " + elName
-									+ ", which was not found in the submitted data. ",
+//					TODO: Wherever orgName is compared, make sure if ref has it, that scenario should too (Note: this may already be in place, and it may be enforced elsewhere, which is ok)					
+//					TODO: // Removed this for now, something about it doesn't make sense. We already check for the provenance time value in isProvenancePresent so this should likely be specific to ONLY the orgName check and not mention the time value at all.
+//					Need to think about how to rewrite this properly when time  
+					/*
+					String message = "";
+					if (orgName.isEmpty()) {
+						// Message excludes organization name. Since it is empty in ref it is not required in sub.
+						message = "The scenario requires Provenance data of Time: "
+								+ auth.getEffTime().getValue().getValue() + " at the " + elName
+								+ ", which was not found in the submitted data.";
+					} else {
+						// Message includes organization name. Since it is present in the ref it is required in the sub.
+						message = "The scenario requires Provenance data of Time: "
+								+ auth.getEffTime().getValue().getValue() + " and an Organization Name of: " + orgName
+								+ " at the " + elName + ", which was not found in the submitted data.";
+					}										
+					ContentValidationResult rs = new ContentValidationResult(message,
 							ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 					results.add(rs);
+					*/
 				}
 				else {
 					log.info(" Found Provenance data, nothing else to do ..");
@@ -202,7 +217,12 @@ public class CCDAAuthor {
     	}		
 	}
     
-    public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement name, ArrayList<CCDAAuthor> subAuths) {
+    public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement name, ArrayList<CCDAAuthor> subAuths) { 
+    	return isProvenancePresent(effTime, name, subAuths, true);
+    }
+    
+	public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement name, ArrayList<CCDAAuthor> subAuths,
+			boolean isFullPrecisionForTimeValueComparison) {
     	
     	boolean retVal = false;
     	String elName = "Comparing Author Provenance Data";
@@ -211,8 +231,12 @@ public class CCDAAuthor {
     	if (subAuths == null) {
     		log.info("subAuths is null, skipping: " + elName);
     	} else {
-	    	for(CCDAAuthor auth : subAuths) {
-	    		ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, auth.getEffTime(), res, elName);
+	    	for(CCDAAuthor auth : subAuths) {	    		
+	    		if (isFullPrecisionForTimeValueComparison) {
+	    			ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, auth.getEffTime(), res, elName);
+	    		} else {
+	    			ParserUtilities.compareTimeEnforceDateValueAndTimePrecision(effTime, auth.getEffTime(), res, elName);
+	    		}
 	    		
 	    		ParserUtilities.compareDataElementText(name, auth.getOrgName(), res, elName);
 	    		
