@@ -151,7 +151,7 @@ public class CCDAAuthor {
 
 		// Compare Effective Times
 		elementName = "Comparing Author Time for " + elName; 
-		ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, subAuthor.getEffTime(), results, elementName);
+		ParserUtilities.compareEffectiveTimeValueWithExactMatchFullPrecision(effTime, subAuthor.getEffTime(), results, elementName);
 		
 		// Compare Org Name 
 		elementName = "Comparing Author Organization Name for " + elName;
@@ -169,33 +169,42 @@ public class CCDAAuthor {
 				
 				log.info("Checking Ref Author with Sub Authors ");
 				if(auth.getEffTime() != null && 
-						auth.getEffTime().getValuePresent() && !isProvenancePresent(auth.getEffTime(), auth.getOrgName(), subAuths)) {
+						auth.getEffTime().getValuePresent()
+						&& !isProvenancePresent(auth.getEffTime(), auth.getOrgName(), subAuths, false, results, elName)) {
 					
-					String orgName = "";
-					if(auth.getOrgName() != null && auth.getOrgName().getValue() != null) { 
-						orgName = auth.getOrgName().getValue();
-					}
+//					String orgName = "";
+//					if(auth.getOrgName() != null && auth.getOrgName().getValue() != null) { 
+//						orgName = auth.getOrgName().getValue();
+//					}
 					
-//					TODO: Wherever orgName is compared, make sure if ref has it, that scenario should too (Note: this may already be in place, and it may be enforced elsewhere, which is ok)					
-//					TODO: // Removed this for now, something about it doesn't make sense. We already check for the provenance time value in isProvenancePresent so this should likely be specific to ONLY the orgName check and not mention the time value at all.
-//					Need to think about how to rewrite this properly when time  
-					/*
+					// TODO: Wherever orgName is compared, make sure if ref has it, that scenario
+					// should too (Note: this may already be in place, and it may be enforced
+					// elsewhere, which is ok)
+					// Looks like it's checked right above here in matches()
+					
 					String message = "";
-					if (orgName.isEmpty()) {
-						// Message excludes organization name. Since it is empty in ref it is not required in sub.
+//					if (orgName.isEmpty()) {
+					// NOTE: This message is never be applied since I am calling my version of
+					// isProvenancePresent which uses its own results so we can have individual
+					// error messages for each case
+					// In fact, this entire block has been made irrelevant.
+					// TODO: Rethink this logic because: 
+					// if(auth.getEffTime() != null && auth.getEffTime().getValuePresent()
+					// may be important to whether we trigger an error or not
 						message = "The scenario requires Provenance data of Time: "
 								+ auth.getEffTime().getValue().getValue() + " at the " + elName
 								+ ", which was not found in the submitted data.";
-					} else {
-						// Message includes organization name. Since it is present in the ref it is required in the sub.
-						message = "The scenario requires Provenance data of Time: "
-								+ auth.getEffTime().getValue().getValue() + " and an Organization Name of: " + orgName
-								+ " at the " + elName + ", which was not found in the submitted data.";
-					}										
+						
+//					} else {
+//						// Message includes organization name. Since it is present in the ref it is required in the sub.
+//						message = "The scenario requires Provenance data of Time: "
+//								+ auth.getEffTime().getValue().getValue() + " and an Organization Name of: " + orgName
+//								+ " at the " + elName + ", which was not found in the submitted data.";
+//					}
 					ContentValidationResult rs = new ContentValidationResult(message,
 							ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 					results.add(rs);
-					*/
+
 				}
 				else {
 					log.info(" Found Provenance data, nothing else to do ..");
@@ -218,27 +227,29 @@ public class CCDAAuthor {
 	}
     
     public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement name, ArrayList<CCDAAuthor> subAuths) { 
-    	return isProvenancePresent(effTime, name, subAuths, true);
+    	return isProvenancePresent(effTime, name, subAuths, true, null, null);
     }
     
 	public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement name, ArrayList<CCDAAuthor> subAuths,
-			boolean isFullPrecisionForTimeValueComparison) {
+			boolean isExactMatchFullPrecisionForTimeValueComparison, ArrayList<ContentValidationResult> results, String elName) {
     	
     	boolean retVal = false;
-    	String elName = "Comparing Author Provenance Data";
+    	String localElName = "Comparing Author Provenance Data";
+    	String shortLocalElName = "Author Provenance";
     	ArrayList<ContentValidationResult> res = new ArrayList<ContentValidationResult>();
     	
     	if (subAuths == null) {
-    		log.info("subAuths is null, skipping: " + elName);
+    		log.info("subAuths is null, skipping: " + localElName);
     	} else {
 	    	for(CCDAAuthor auth : subAuths) {	    		
-	    		if (isFullPrecisionForTimeValueComparison) {
-	    			ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, auth.getEffTime(), res, elName);
+	    		if (isExactMatchFullPrecisionForTimeValueComparison) {
+	    			ParserUtilities.compareEffectiveTimeValueWithExactMatchFullPrecision(effTime, auth.getEffTime(), res, localElName);
 	    		} else {
-	    			ParserUtilities.compareTimeEnforceDateValueAndTimePrecision(effTime, auth.getEffTime(), res, elName);
+					ParserUtilities.compareTimeEnforceDateValueAndTimePrecision(effTime, auth.getEffTime(), results,
+							shortLocalElName, elName);
 	    		}
 	    		
-	    		ParserUtilities.compareDataElementText(name, auth.getOrgName(), res, elName);
+	    		ParserUtilities.compareDataElementText(name, auth.getOrgName(), res, localElName);
 	    		
 	    		if(res != null && res.size() == 0 ) {
 	    			
@@ -261,7 +272,7 @@ public class CCDAAuthor {
     	String elName = "Comparing Author Provenance Data";
     	ArrayList<ContentValidationResult> res = new ArrayList<ContentValidationResult>();   	
     	
-    	ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, subAuth.getEffTime(), res, elName);
+    	ParserUtilities.compareEffectiveTimeValueWithExactMatchFullPrecision(effTime, subAuth.getEffTime(), res, elName);
     		
     	ParserUtilities.compareDataElementText(name, subAuth.getOrgName(), res, elName);
     		

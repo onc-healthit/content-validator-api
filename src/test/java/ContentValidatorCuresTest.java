@@ -54,7 +54,10 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final String MOD_REF_ADD_NOTES_ACTIVITY_ENCOUNTER_ENTRY_B1_TOC_AMB_S1 = 
 			"ModRef_AddNotesActivityEncounterEntry_b1TocAmbS1.xml";
 	private static final String MOD_REF_ADD_NOTES_ACTIVITY_PAP_ENTRY_RELATIONSHIP_B1_TOC_AMB_S1 = 
-			"ModRef_AddNotesActivityProcActProcEntryRel_b1TocAmbS1.xml";
+			"ModRef_AddNotesActivityProcActProcEntryRel_b1TocAmbS1.xml";	
+	private static final String MOD_REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA_DOC_AUTH_PRECISE_TO_TIME = 
+			"ModRef_AccurateDateAndTimeForAuthor_DocLvl_VitalSection_g9AAInpS1.xml";
+	
 	
 	private static final int SUB_CURES_MISSING_AUTHOR_IN_HEADER = 0;
 	private static final int SUB_HAS_BIRTH_SEX = SUB_CURES_MISSING_AUTHOR_IN_HEADER;
@@ -85,7 +88,11 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_DUPLICATE_OF_B1_TOC_AMB_SAMPLE1_REF = 24;
 	private static final int SUB_DUPLICATE_OF_MOD_REF_ADD_NOTES_ACTIVITY_ENCOUNTER_ENTRY_B1_TOC_AMB_S1 = 25;
 	private static final int SUB_DUPLICATE_OF_MOD_REF_ADD_NOTES_ACTIVITY_PAP_ENTRY_RELATIONSHIP_B1_TOC_AMB_S1 = 26;
-	private static final int SUB_SITE_3241 = 27;
+	private static final int SUB_HAS_DATE_AND_TIME_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241 = 27;
+	private static final int SUB_HAS_DATE_ONLY_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241 = 28;
+	private static final int SUB_HAS_DATE_ONLY_INVERSE_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241 = 29;
+	private static final int SUB_HAS_ACCURATE_DATE_AND_TIME_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241 = 30;
+	private static final int SUB_HAS_MIXED_DATE_AND_TIME_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241 = 31;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -118,7 +125,11 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample1.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/ref/ModRef_AddNotesActivityEncounterEntry_b1TocAmbS1.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/ref/ModRef_AddNotesActivityProcActProcEntryRel_b1TocAmbS1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/Site3241.xml").toURI()					
+					ContentValidatorCuresTest.class.getResource("cures/sub/hasDateAndTimeForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/hasDateOnlyForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/hasDateOnlyInverseForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/ref/ModRef_AccurateDateAndTimeForAuthor_DocLvl_VitalSection_g9AAInpS1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/hasMixedDateAndTimeForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI()					
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -266,7 +277,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String missingLabResultsMessage = "The scenario requires data related to patient's lab results, "
 				+ "but the submitted C-CDA does not contain lab result data."; 
-		assertTrue("Results should have contained the followiing message but did not: " + missingLabResultsMessage, 
+		assertTrue("Results should have contained the following message but did not: " + missingLabResultsMessage, 
 				resultsContainMessage(missingLabResultsMessage, results, ContentValidationResultLevel.ERROR));	
 	}
 	
@@ -287,7 +298,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String missingLabResultsMessage = "The scenario requires data related to patient's lab results, "
 				+ "but the submitted C-CDA does not contain lab result data."; 
-		assertTrue("Results should have contained the followiing message but did not: " + missingLabResultsMessage, 
+		assertTrue("Results should have contained the following message but did not: " + missingLabResultsMessage, 
 				resultsContainMessage(missingLabResultsMessage, results, ContentValidationResultLevel.ERROR));
 	}
 	
@@ -307,7 +318,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String missingLabResultsMessage = "The scenario requires data related to patient's lab results, "
 				+ "but the submitted C-CDA does not contain lab result data."; 
-		assertFalse("Results should not have contained the followiing message : " + missingLabResultsMessage, 
+		assertFalse("Results should not have contained the following message : " + missingLabResultsMessage, 
 				resultsContainMessage(missingLabResultsMessage, results, ContentValidationResultLevel.ERROR));
 	}	
 	
@@ -758,7 +769,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario does not require data related to patient's Smoking Status, "
 				+ "but the submitted C-CDA does contain Smoking Status data."; 
-		assertTrue("Results should have contained the followiing message but did not: " + message, 
+		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
 	}
 	
@@ -776,7 +787,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario does not require data related to patient's Smoking Status, "
 				+ "but the submitted C-CDA does contain Smoking Status data."; 
-		assertTrue("Results should have contained the followiing message but did not: " + message, 
+		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
 	}
 	
@@ -794,7 +805,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario does not require data related to patient's Smoking Status, "
 				+ "but the submitted C-CDA does contain Smoking Status data."; 
-		assertFalse("Results should not have contained the followiing message but did: " + message, 
+		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 	}	
 	
@@ -812,7 +823,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario does not require data related to patient's Smoking Status, "
 				+ "but the submitted C-CDA does contain Smoking Status data."; 
-		assertFalse("Results should not have contained the followiing message but did: " + message, 
+		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 	}
 	
@@ -833,7 +844,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario does not require data related to patient's Smoking Status, "
 				+ "but the submitted C-CDA does contain Smoking Status data."; 
-		assertTrue("Results should have contained the followiing message but did not: " + message, 
+		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 	}
 	
@@ -853,7 +864,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario requires a total of 4 Author Entries for Vital Signs Section"
 				+ "/VitalSignsOrganizer/VitalSignsObservation, however the submitted data had only 10 entries.";
-		assertFalse("Results should not have contained the followiing message but did: " + message, 
+		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 	}
 	
@@ -871,7 +882,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario requires a total of 4 Author Entries for Vital Signs Section"
 				+ "/VitalSignsOrganizer/VitalSignsObservation, however the submitted data had only 2 entries.";
-		assertTrue("Results should not have contained the followiing message but did: " + message, 
+		assertTrue("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 	}
 	
@@ -889,7 +900,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario requires a total of 4 Author Entries for Vital Signs Section"
 				+ "/VitalSignsOrganizer/VitalSignsObservation, however the submitted data had only 4 entries.";
-		assertFalse("Results should not have contained the followiing message but did: " + message, 
+		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 	}
 	
@@ -907,7 +918,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario requires a total of 4 Author Entries for Vital Signs Section"
 				+ "/VitalSignsOrganizer/VitalSignsObservation, however the submitted data had only 0 entries.";
-		assertTrue("Results should not have contained the followiing message but did: " + message, 
+		assertTrue("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 	}
 	
@@ -926,7 +937,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// actual situation
 		final String message = "The scenario requires a total of 0 Author Entries for Vital Signs Section"
 				+ "/VitalSignsOrganizer/VitalSignsObservation, however the submitted data had only 0 entries.";
-		assertFalse("Results should not have contained the followiing message but did: " + message, 
+		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 	}
 	
@@ -946,7 +957,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		final String message = "The scenario requires a total of 1 Author Entries for "
 				+ "Problem Section/ProblemConcern/ProblemObservation, "
 				+ "however the submitted data had only 2 entries.";
-		assertFalse("Results should not have contained the followiing message but did: " + message, 
+		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 	}
 	
@@ -963,7 +974,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario requires a total of 1 Author Entries for Document Level., "
 				+ "however the submitted data had only 2 entries.";
-		assertFalse("Results should not have contained the followiing message but did: " + message, 
+		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 	}
 	
@@ -979,7 +990,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario requires data related to patient's Notes, "
 				+ "but the submitted C-CDA does not contain Notes data."; 
-		assertTrue("Results should have contained the followiing message but did not: " + message, 
+		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 	}
 	
@@ -996,7 +1007,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario requires data related to patient's Notes, "
 				+ "but the submitted C-CDA does not contain Notes data."; 
-		assertFalse("Results should not have contained the followiing message but did: " + message, 
+		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 	}
 	
@@ -1012,7 +1023,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario requires data related to patient's Notes, "
 				+ "but the submitted C-CDA does not contain Notes data."; 
-		assertTrue("Results should have contained the followiing message but did not: " + message, 
+		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 	}
 	
@@ -1029,20 +1040,348 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		final String message = "The scenario requires data related to patient's Notes, "
 				+ "but the submitted C-CDA does not contain Notes data."; 
-		assertFalse("Results should not have contained the followiing message but did: " + message, 
+		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 	}
 	
 	@Test
-	public void cures_Site3241Test() {
-		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+	public void cures_provenanceOrgNameNotMatching_Site3241Test() {
+//		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+//				G9_APIACCESS_INP_VALIDATION_OBJECTIVE, REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA,
+//				SUBMITTED_CCDA[SUB_SITE_3241], SeverityLevel.ERROR);
+//		printResults(results);
+	}
 
-		// TODO: Add tests for Site3241: Blank issue and new precision requirements
-		// using the format and doc below and modifications of it 
+	// TODO: Still test for blank org in any way?	
+	
+	@Test
+	public void cures_ProvenanceTimeComparison_DocLevDatesDoNotMatch_SecLevDatesMatchTimeDoesNot_ETTGGFileFix_Site3241Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+				
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
 				G9_APIACCESS_INP_VALIDATION_OBJECTIVE, REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA,
-				SUBMITTED_CCDA[SUB_SITE_3241], SeverityLevel.ERROR);
-		printResults(results);
+				SUBMITTED_CCDA[SUB_HAS_DATE_AND_TIME_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241], SeverityLevel.ERROR);
+		printResults(results);		
+
+		// Provenance at the document level (does not match in any way (date or time)):
+		// in ref:
+		// <time value="20150622"/>
+		// in sub:
+		// <time value="20210317101614-0500"/> // Note: This also is an invalid time (extra digit), but caught by date mismatch first
+		// There is NO orgName in either the ref or the sub (TODO: does there need to be orgName at doc level, I think NOT)
+		// Expected result: The following Error should be produced:		
+		String message = "The scenario requires Provenance data of Time at the Document Level: "
+				+ "The date portion of Author Provenance (Time: Value) is 20150622, "
+				+ "but the date portion of the submitted C-CDA is 20210317, which does not match"; 
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		
+		// 4: If the scenario includes a date only (no time), then the submitted file must match the exact date, 
+		// but is allowed to have time as well, which matches any point in time, but also matches the required C-CDA format.
+		//
+		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
+		//
+		//  ref 1st occurrence:
+		//   <time value="20150622"/>
+		//  sub 1st occurrence:
+		//   <time value="201506221100-0500"/>
+		//  Comparison: 
+		//   Date matches, sub has extra time info beyond the date. 
+		//  Expected result: 
+		//   A sub is allowed to have more data then the ref as long as it meets the refs reqs.
+		//   Therefore, no error is expected for this occurrence.
+		// 
+		//  ref 2nd occurrence:
+		//   <time value="20150622"/>
+		//  sub 2nd occurrence:
+		//   <time value="201506221100-0500"/>
+		//  Comparison: 
+		//   Date matches, sub has extra time info beyond the date.
+		//  Expected result: 
+		//   A sub is allowed to have more data then the ref as long as it meets the refs reqs.
+		//   Therefore, no error is expected for this occurrence.
+		// 
+		//  ref 3rd occurrence:
+		//   <time value="20150622"/>
+		//  sub 3rd occurrence:
+		//   <time value="201506221100-0500"/>
+		//  Comparison: 
+		//   Date matches, sub has extra time info beyond the date.
+		//  Expected result: 
+		//   A sub is allowed to have more data then the ref as long as it meets the refs reqs.
+		//   Therefore, no error is expected for this occurrence.
+		// 
+		//  ref 4th occurrence:
+		//   <time value="20150622"/>
+		//  sub 4th occurrence:
+		//   <time value="201506221100-0500"/>
+		//  Comparison: 
+		//   Date matches, sub has extra time info beyond the date.
+		//  Expected result: 
+		//   A sub is allowed to have more data then the ref as long as it meets the refs reqs.
+		//   Therefore, no error is expected for this occurrence.		
+		
+		// Note: No further organizers contain an author in the ref, 
+		// therefore, no more potential relevant errors can/should be created
+		// The result(s) we do NOT expect is/are:
+		// errorPrefix + "/VitalSignsOrganizer/VitalSignsObservation: The Author Provenance (Time: Value ) is 20150622, but the submitted C-CDA time value 201506221100-0500 " +		
+		message = "is either not as precise as the scenario or otherwise formatted improperly.";		
+		assertFalse("Results should not have contained the following message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 	}
+	
+	@Test
+	public void cures_ProvenanceTimeComparison_ExactDateOnlyDate_DocLvlDif_SecLvlSame_Site3241Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// 1: If the scenario includes a date, then the submitted file must match that date exactly	
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				G9_APIACCESS_INP_VALIDATION_OBJECTIVE, REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA,
+				SUBMITTED_CCDA[SUB_HAS_DATE_ONLY_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241], SeverityLevel.ERROR);
+		printResults(results);
+
+		// Provenance at the document level (does not match):
+		// in ref:
+		// <time value="20150622"/>
+		// in sub:
+		// <time value="20210317"/>	
+		// Expected result: The following Error should be produced:		
+		String message = "The scenario requires Provenance data of Time at the Document Level: "
+				+ "The date portion of Author Provenance (Time: Value) is 20150622, "
+				+ "but the date portion of the submitted C-CDA is 20210317, which does not match."; 
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		
+		// 1: If the scenario includes a date, then the submitted file must match that date exactly
+		//
+		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
+		//
+		//  ref 1st occurrence:
+		//   <time value="20150622"/>
+		//  sub 1st occurrence:
+		//   <time value="20150622"/>
+		//  Comparison: 
+		//   Date matches exactly, date only 
+		//  Expected result: 
+		//   No error as a match
+		// 
+		//  The next 3 occurrences are the same as the 1st
+
+		// The result(s) we do NOT expect is/are:
+		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
+				+ "The date portion of Author Provenance (Time: Value) is 20150622, "
+				+ "but the date portion of the submitted C-CDA is ";
+		// we are only doing a partial check of the message since the dates match
+		// because we can't guess at what the incorrect date might be. So, as long as it
+		// doesn't return an error in relation to the date in general, it passes. See
+		// commented out end example of a possible date ahead:
+		// 19990215, which does not match.";
+		assertFalse("Results should not have contained the following message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_ProvenanceTimeComparison_ExactDateOnlyDate_DocLvlSame_SecLvlDif_Site3241Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// 1: If the scenario includes a date, then the submitted file must match that date exactly	
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				G9_APIACCESS_INP_VALIDATION_OBJECTIVE, REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA,
+				SUBMITTED_CCDA[SUB_HAS_DATE_ONLY_INVERSE_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241], SeverityLevel.ERROR);
+		printResults(results);
+
+		// Provenance at the document level (matches):
+		// in ref:
+		// <time value="20150622"/>
+		// in sub:
+		// <time value="20150622"/>	
+		// Expected result: The following Error should be produced:
+		String message = "The scenario requires Provenance data of Time at the Document Level: "
+				+ "The date portion of Author Provenance (Time: Value) is 20150622, "
+				+ "but the date portion of the submitted C-CDA is "; 
+		// 20210317, which does not match.";
+		assertFalse("Results should not have contained the following message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		
+		// 1: If the scenario includes a date, then the submitted file must match that date exactly
+		//
+		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
+		//
+		//  ref 1st occurrence:
+		//   <time value="20150622"/>
+		//  sub 1st occurrence:
+		//   <time value="19990215"/>
+		//  Comparison: 
+		//   Date does not match 
+		//  Expected result: 
+		//   Error as does not match
+		// 
+		//  The next 3 occurrences are the same as the 1st
+		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
+				+ "The date portion of Author Provenance (Time: Value) is 20150622, "
+				+ "but the date portion of the submitted C-CDA is 19990215, which does not match.";
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+	}
+	
+	@Test
+	public void cures_ProvenanceTimeComparison_DateAndTime_DocLvlSame_SecLvlSame_Site3241Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// 2: If the scenario also includes a time, then the submitted file must match the precision and format of that time, but not the exact values (reg ex)
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				G9_APIACCESS_INP_VALIDATION_OBJECTIVE,
+				MOD_REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA_DOC_AUTH_PRECISE_TO_TIME,
+				SUBMITTED_CCDA[SUB_HAS_ACCURATE_DATE_AND_TIME_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241],
+				SeverityLevel.ERROR);
+		printResults(results);
+
+		String message = "Provenance";
+		assertFalse("Results should not have contained the following message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		
+		// Provenance at the document level (does not match in any way (date or time)):
+		// in ref:
+		// <time value="201506221100-0500"/>
+		// in sub:
+		// <time value="201506221100-0500"/>
+		//  Comparison: 
+		//   Exact match full precision 
+		//  Expected result: Pass		
+		message = "?"; 
+		assertFalse("Results should not have contained the following message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		
+		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
+		//
+		// in ref:
+		// <time value="201506221100-0500"/>
+		// in sub:
+		// <time value="201506221100-0500"/>
+		//  Comparison: 
+		//   Exact match full precision 
+		//  Expected result: Pass
+		message = "?";
+		assertFalse("Results should not have contained the following message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_ProvenanceTimeComparison_DateAndTime_DocLvlNotPrecise_SecLvlNotPreciseAndMore_Site3241Test() {		
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// 2: If the scenario also includes a time, then the submitted file must match the precision and format of that time, but not the exact values (reg ex)
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				G9_APIACCESS_INP_VALIDATION_OBJECTIVE,
+				MOD_REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA_DOC_AUTH_PRECISE_TO_TIME,
+				SUBMITTED_CCDA[SUB_HAS_MIXED_DATE_AND_TIME_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241],
+				SeverityLevel.ERROR);
+		printResults(results);
+
+		// Provenance at the document level (does not match in any way (date or time)):
+		// in ref:
+		// <time value="201506221100-0500"/>
+		// in sub:
+		// <time value="201506221100"/>
+		//  Comparison: 
+		//   Has no time-zone (has time only)
+		//  Expected result: fail		
+		String message = "The scenario requires Provenance data of Time at the Document Level: "
+				+ "The Author Provenance (Time: Value) is 201506221100-0500, but the submitted C-CDA time value "
+				+ "201506221100 is either not as precise as the scenario or otherwise formatted improperly."; 
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		
+		// ---- Section level below ----
+		
+		// TODO:
+		// <time value="201506221100-07001"/> // fails as it should (extra time-zone number) but fires 2 errors vs 1, why?
+		// <time value="2015062211009-0700"/> // fails as it should (extra time number) but fires 2 errors vs 1, why? 
+		// TODO: * does fail vs + or - BUT it fires 2 errors vs 1, why?	
+		// Same issue with below error, fails as should, but 2 errors, why?
+		
+		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
+		//
+		// in ref:
+		// <time value="201506221100-0500"/>
+		// in sub:
+		// <time value="201506221100-"/>
+		//  Comparison: 
+		//   Has dash but no timezone 
+		//  Expected result: Fail
+		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
+				+ "The Author Provenance (Time: Value) is 201506221100-0500, but the submitted C-CDA time value "
+				+ "201506221100- is either not as precise as the scenario or otherwise formatted improperly.";
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		
+		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
+		//
+		// in ref:
+		// <time value="201506221100-0500"/>
+		// in sub:
+		// <time value="201901111234-0600"/>
+		//  Comparison: 
+		//   Has different base level date 
+		//  Expected result: Fail
+		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
+				+ "The Author Provenance (Time: Value) is 201506221100-0500, but the submitted C-CDA time value "
+				+ "201901111234-0600- is either not as precise as the scenario or otherwise formatted improperly.";
+//		assertTrue("Results should have contained the following message but did not: " + message, 
+//				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		
+		// add has different timezone
+		// fix all these issues with sub times
+		
+		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
+		//
+		// in ref:
+		// <time value="201506221100-0500"/>
+		// in sub:
+		// <time value="201506221100*0500"/>
+		//  Comparison: 
+		//   Has incorrect format (* instead of + or -)
+		//  Expected result: Fail
+		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
+				+ "The Author Provenance (Time: Value) is 201506221100-0500, but the submitted C-CDA time value "
+				+ "201901111234-0600- is either not as precise as the scenario or otherwise formatted improperly.";
+//		assertTrue("Results should have contained the following message but did not: " + message, 
+//				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		
+		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
+		//
+		// in ref:
+		// <time value="201506221100-0500"/>
+		// in sub:
+		// <time value="201901111234*06001234"/>
+		//  Comparison: 
+		//   Has too many characters in time-zone
+		//  Expected result: Fail
+		message = "?";
+//		assertTrue("Results should have contained the following message but did not: " + message, 
+//				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		
+		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
+		//
+		// in ref:
+		// <time value="201506221100-0500"/>
+		// in sub:
+		// <time value="20190111123478*0600"/>
+		//  Comparison: 
+		//   Has too many characters in time
+		//  Expected result: Fail
+		message = "?";
+//		assertTrue("Results should have contained the following message but did not: " + message, 
+//				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+
+	}
+	
+	
+	// TODO: cover tests for all of these scenarios (and inverse)
+
+
+
+	// 7: If the scenario includes a time, then the sub must include a time (in general) (has it's own specific error)
+	// 5: If the scenario does not include a date, but the sub does, that is not an error, as more data is acceptable
+
+	
+	// 6: If the scenario contains any value at all, and the sub does not, an error is produced
+	// 3: If the scenario does not include a date, then the submitted file would not need to include a date. Of course, we won't likely have a scenario without a date.
 
 }
