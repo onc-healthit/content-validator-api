@@ -1920,12 +1920,12 @@
 									<id root="1c2748b7-e440-41ba-bc01-dde97d84a036"/>
 									<code code="8462-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="BP Diastolic"/>
 									<statusCode code="completed"/>
-									<effectiveTime value="20150622"/>
+									<effectiveTime value="201506221100-0500"/>
 									<value xsi:type="PQ" value="88" unit="mm[Hg]"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-										<time value="20150622"/>
+										<time value="201506221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -1941,12 +1941,12 @@
 									<id root="a0e39c70-9674-4b2a-9837-cdf74200d8d5"/>
 									<code code="8480-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Intravascular Systolic"/>
 									<statusCode code="completed"/>
-									<effectiveTime value="20150622"/>
+									<effectiveTime value="201506221100-0500"/>
 									<value xsi:type="PQ" value="145" unit="mm[Hg]"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-										<time value="20150622"/>
+										<time value="201506221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -1965,6 +1965,14 @@
 									<effectiveTime value="201506221010-0500"/>
 									<value xsi:type="PQ" value="80" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<time value="201506221100-0500"/>
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>		
 								</observation>
 							</component>
 							<component>
@@ -1978,6 +1986,14 @@
 									<effectiveTime value="201506221012-0500"/>
 									<value xsi:type="PQ" value="95" unit="%"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<time value="201506221100-0500"/>
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>									
 								</observation>
 							</component>
 							<component>
@@ -1991,6 +2007,14 @@
 									<effectiveTime value="201506221015-0500"/>
 									<value xsi:type="PQ" value="38" unit="Cel"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<time value="201506221100-0500"/>
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>									
 								</observation>
 							</component>
 							<component>
@@ -2004,8 +2028,295 @@
 									<effectiveTime value="201506221015-0500"/>
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<time value="201506221100-0500"/>
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>									
 								</observation>
 							</component>
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
+									<code code="9279-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Respiratory Rate"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221015-0500"/>
+									<value xsi:type="PQ" value="18" unit="/min"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<time value="20150622"/>
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>									
+								</observation>
+							</component>
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
+									<code code="9279-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Respiratory Rate"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221015-0500"/>
+									<value xsi:type="PQ" value="18" unit="/min"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<time value="201506221100-0500"/>
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>									
+								</observation>
+							</component>
+							
+																					<!-- Expect Pass -->
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
+									<code code="9279-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Respiratory Rate"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221015-0500"/>
+									<value xsi:type="PQ" value="18" unit="/min"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- -dbTest 11 -->
+										<time value="201506221100-0500"/>
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>								
+								</observation>								
+							</component>
+							
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
+									<code code="9279-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Respiratory Rate"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221015-0500"/>
+									<value xsi:type="PQ" value="18" unit="/min"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- -dbTest 11 -->
+										<time value="201506221100-0500"/>
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>								
+								</observation>								
+							</component>
+							
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
+									<code code="9279-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Respiratory Rate"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221015-0500"/>
+									<value xsi:type="PQ" value="18" unit="/min"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- -dbTest 11 -->
+										<time value="201506221100-0500"/>
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>								
+								</observation>								
+							</component>		
+							
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
+									<code code="9279-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Respiratory Rate"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221015-0500"/>
+									<value xsi:type="PQ" value="18" unit="/min"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- -dbTest 11 -->
+										<time value="201506221100-0500"/>
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>								
+								</observation>								
+							</component>	
+							
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
+									<code code="9279-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Respiratory Rate"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221015-0500"/>
+									<value xsi:type="PQ" value="18" unit="/min"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- -dbTest 15 -->
+										<time value="20150622"/>
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>								
+								</observation>						
+							</component>		
+							
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
+									<code code="9279-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Respiratory Rate"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221015-0500"/>
+									<value xsi:type="PQ" value="18" unit="/min"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+						
+								</observation>						
+							</component>
+							
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
+									<code code="9279-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Respiratory Rate"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221015-0500"/>
+									<value xsi:type="PQ" value="18" unit="/min"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>								
+								</observation>						
+							</component>										
+							
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
+									<code code="9279-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Respiratory Rate"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221015-0500"/>
+									<value xsi:type="PQ" value="18" unit="/min"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+						
+								</observation>						
+							</component>	
+							
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
+									<code code="9279-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Respiratory Rate"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221015-0500"/>
+									<value xsi:type="PQ" value="18" unit="/min"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>							
+								</observation>						
+							</component>																										
+
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
+									<code code="9279-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Respiratory Rate"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221015-0500"/>
+									<value xsi:type="PQ" value="18" unit="/min"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- -dbTest 20 -->
+										<time value="20150622"/>
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>								
+								</observation>						
+							</component>	
+							
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
+									<code code="9279-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Respiratory Rate"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221015-0500"/>
+									<value xsi:type="PQ" value="18" unit="/min"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+									<author typeCode="AUT">
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- -dbTest 21 -->
+										<time value="201506221100-0500"/>
+										<assignedAuthor>
+											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
+											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
+										</assignedAuthor>
+									</author>								
+								</observation>						
+							</component>								
+														
 						</organizer>
 					</entry>					
 				</section>

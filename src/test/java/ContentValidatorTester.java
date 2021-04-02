@@ -9,6 +9,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.sitenv.contentvalidator.configuration.ScenarioLoader;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
@@ -173,5 +174,20 @@ public class ContentValidatorTester {
 		assertFalse("No results were returned but we expect results", results.isEmpty());
 		println("# of ContentValidationResults: " + results.size());
 	}
+	
+	public void removeSpecificIssue(ArrayList<ContentValidationResult> results, String issueMessage) {
+		ListIterator<ContentValidationResult> iter = results.listIterator();
+		while (iter.hasNext()) {
+			ContentValidationResult curResult = iter.next();
+			if (curResult.getMessage().contains(issueMessage)) {
+				iter.remove();
+			}
+		}		
+	}
+	
+	public void removeBirthSexError(ArrayList<ContentValidationResult> results) {
+		final String issueMessage = "The scenario requires patient's birth sex to be captured as part of social history data";
+		removeSpecificIssue(results, issueMessage);
+	}	
 
 }

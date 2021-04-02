@@ -169,12 +169,13 @@ public class ParserUtilities {
 					" Effective Times are not null in both Ref and Submitted models, so compare value attributes for them. ");
 			refTime.compareValueElementEnforceExactDateButOnlyPrecisionForTime(subTime, results, localElName, parentElName);
 		} else if ((refTime == null) && (subTime != null && subTime.hasValidData())) {
-			log.info(" Submitted CCDA File can have time values even if not present in the Ref C-CDA ");
+			log.info(" Submitted C-CDA File can have time values even if not present in the Ref C-CDA ");
 		} else if ((refTime != null && refTime.hasValidData()) && (subTime == null)) {
-			// TODO: Is this error specific enough?
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + localElName
-					+ " data, but submitted file does not contain " + localElName + " data",
-					ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+			final String error = parentElName + " " + localElName 
+					+ " (value time element) is required, but the submitted C-CDA does not contain the (value time element) in one of its "
+					+ parentElName + "s.";
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
+					"/ClinicalDocument", "0");
 			results.add(rs);
 		} else {
 			// do nothing since both are null

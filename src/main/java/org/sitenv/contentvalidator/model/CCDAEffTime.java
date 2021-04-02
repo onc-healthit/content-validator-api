@@ -239,6 +239,7 @@ public class CCDAEffTime {
 	
 	public void compareValueElementEnforceExactDateButOnlyPrecisionForTime(CCDAEffTime subTime,
 			ArrayList<ContentValidationResult> results, String elementName, String parentElName) {
+		System.out.println("!!: ENTER compareValueElementEnforceExactDateButOnlyPrecisionForTime");
 		// Enforces the following
 		// 1: If the scenario includes a date, then the submitted file must match that date exactly
 		// 2: If the scenario also includes a time, then the submitted file must match the precision and format of that time, but not the exact values (reg ex)
@@ -247,33 +248,40 @@ public class CCDAEffTime {
 		// but is allowed to have time as well, which matches any point in time, but also matches the required C-CDA format.
 		// 5: If the scenario does not include a date, but the sub does, that is not an error, as more data is acceptable
 		// 6: If the scenario contains any value at all, and the sub does not, an error is produced
-		// 7: If the scenario includes a time, then the ref must include a time (in general)
+		// 7: If the scenario includes a time, then the sub must include a time (in general)
 		String tempRefTime;
 		String tempSubTime;
 		final String errorPrefix = "The scenario requires Provenance data of Time at the ";
 		log.info(" Comparing Times for " + elementName);
-
+	
 		// Compare Time value element
 		if (valuePresent && subTime.getValuePresent()) {
+			
+			System.out.println("!!: actualRefTime < 9: " + value.getValue() != null ? value.getValue() : "null");
+			System.out.println("!!: actualSubTime < 9: " + subTime.getValue().getValue() != null ? subTime.getValue().getValue() : "null");
 
 			// check first 8 chars (date) first
 			if (value.getValue().length() > 8) {
+				log.info("ref time is > 8 characters long");
 				// limit comparison to date only, first 8 characters
 				tempRefTime = value.getValue().substring(0, 8);
 			} else {
+				log.info("ref time is < 9 characters long");
 				// date is even less specific than the day, so compare what's there
 				tempRefTime = value.getValue();
-			}
+			}			
 			
-			System.out.println("dbTest: " + tempRefTime);
+			System.out.println("!!: tempRefTime < 9: " + tempRefTime);
 
 			if (subTime.getValue().getValue().length() > 8) {
+				log.info("sub time is > 8 characters long");
 				tempSubTime = subTime.getValue().getValue().substring(0, 8);
 			} else {
+				log.info("sub time is < 9 characters long");
 				tempSubTime = subTime.getValue().getValue();
 			}
-			
-			System.out.println("dbTest: " + tempSubTime);
+						
+			System.out.println("!!: tempSubTime < 9: " + tempSubTime);
 
 			if (tempRefTime.equalsIgnoreCase(tempSubTime)) {
 				log.info("Value Time element matches");
@@ -281,9 +289,9 @@ public class CCDAEffTime {
 				log.info("Value Time element does not match");
 				// 1: If the scenario includes a date, then the submitted file must match that date exactly
 				// 4: If the scenario includes a date only (no time), then the submitted file must match the exact date
-				String error = errorPrefix + parentElName + ": The date portion of " + elementName + " (Time: Value) is " + tempRefTime
-						+ ", but the date portion of the submitted C-CDA is " + tempSubTime
-						+ ", which does not match.";
+				String error = errorPrefix + parentElName + ": The scenario date portion of " + elementName
+						+ " (Time: Value) is " + tempRefTime + ", but the date portion of the submitted C-CDA is "
+						+ tempSubTime + ", which does not match.";
 				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
 						"/ClinicalDocument", "0");
 				results.add(rs);
@@ -291,18 +299,22 @@ public class CCDAEffTime {
 			
 			// check time (9th char and up)
 			if (value.getValue().length() > 8) {
+				log.info("Starting logic for a ref time > 8 characters long");
 				// ref time has 9 chars or more
 				// ref has time so sub needs the full precision which is 4 more digits (time) followed by a + or - followed by 4 more digits (time-zone)
 				if (subTime.getValue().getValue().length() < 9) {
+					log.info("found sub time < 9 characters long when ref is > 8");
 					// sub time has 8 chars or less and therefore does not include a time at at all (or time-zone)
 					// 7: If the scenario includes a time, then the sub must include a time (in general)
-					String error = errorPrefix + parentElName + ": The " + elementName + " (Time: Value) is more precise than the date " + value.getValue()
-							+ ", but the submitted C-CDA (Time: Value) does not include time or time-zone data " + subTime.getValue().getValue()
-							+ ". The submitted C-CDA must include time and time-zone date as well.";
+					String error = errorPrefix + parentElName + ": The scenario " + elementName + " (Time: Value) "
+							+ value.getValue() + " is more precise than the date,"
+							+ " but the submitted C-CDA (Time: Value) " + subTime.getValue().getValue()
+							+ " does not include time or time-zone data.";
 					ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
 							"/ClinicalDocument", "0");
 					results.add(rs);					
 				} else {
+					log.info("sub and ref time > 8 characters long - applying RegEx to verify formatting");
 					// sub time has at least 9 chars and is therefore attempting to be more precise than the date level
 					// 2: If the scenario also includes a time, then the submitted file must match the precision and format of that time, but not the exact values (reg ex)					
 					// Pure un-escaped Reg Ex: /^([0-9]{8})([0-9]{4})(-|\+)([0-9]{4})$/gm
@@ -333,7 +345,8 @@ public class CCDAEffTime {
 					if (matcher.find()) {
 						log.info("We have a validly formatted date, time, and timestamp with complete and proper precision");
 					} else {
-						String error = errorPrefix + parentElName + ": The " + elementName + " (Time: Value) is " + value.getValue()
+						log.info("!! sub " + subTime.getValue().getValue() + " is invalid data as per RegEx");
+						String error = errorPrefix + parentElName + ": The scenario " + elementName + " (Time: Value) is " + value.getValue()
 								+ ", but the submitted C-CDA time value " + subTime.getValue().getValue()
 								+ " is either not as precise as the scenario or otherwise formatted improperly.";
 						ContentValidationResult rs = new ContentValidationResult(error,
