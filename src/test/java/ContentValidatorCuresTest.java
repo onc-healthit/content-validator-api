@@ -1131,8 +1131,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		
 		// Note: No further organizers contain an author in the ref, 
 		// therefore, no more potential relevant errors can/should be created
-		// The result(s) we do NOT expect is/are:
-		// We can't check for a specific error to not be fired as that error would match on we do want fired in this same test.
+		//
+		// We can't check for a specific error to not be fired as that error would match one we do want fired in this same test.
 		// Therefore, we must check the count. Currently, these are the only 2 errors we expect. 
 		// However, in the future, if another UNRELATED error is appropriate due to an update, we will have to modify the document so it does not fire.
 		// If the error is related, then it is a valid fail and breakdown of our logic, which must be addressed in our source code.
@@ -1154,9 +1154,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// in sub:
 		// <time value="20210317"/>	
 		// Expected result: The following Error should be produced:		
-		String message = "The scenario requires Provenance data of Time at the Document Level: "
-				+ "The scenario date portion of Author Provenance (Time: Value) is 20150622, "
-				+ "but the date portion of the submitted C-CDA is 20210317, which does not match."; 
+		String message = "The scenario requires Document Level (Time: Value) Provenance data which was not found in the submitted data. "
+				+ "The scenario value is 20150622 and a submitted value must at a minimum match the 8-digit date portion of the data.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 		
@@ -1173,19 +1172,13 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Expected result: 
 		//   No error as a match
 		// 
-		//  The next 3 occurrences are the same as the 1st
-
-		// The result(s) we do NOT expect is/are:
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario date portion of Author Provenance (Time: Value) is 20150622, "
-				+ "but the date portion of the submitted C-CDA is ";
-		// we are only doing a partial check of the message since the dates match
-		// because we can't guess at what the incorrect date might be. So, as long as it
-		// doesn't return an error in relation to the date in general, it passes. See
-		// commented out end example of a possible date ahead:
-		// 19990215, which does not match.";
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		//  Note: The next 3 occurrences are the same as the 1st
+		// 
+		// We can't check for a specific error to not be fired as that error would match one we do want fired in this same test.
+		// Therefore, we must check the count. Currently, these is only 1 error we expect. 
+		// However, in the future, if another UNRELATED error is appropriate due to an update, we will have to modify the document so it does not fire.
+		// If the error is related, then it is a valid fail and breakdown of our logic, which must be addressed in our source code.		
+		assertTrue("Results should not have contained more tha 1 error but did", results.size() < 2);	
 	}
 	
 	@Test
