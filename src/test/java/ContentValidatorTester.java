@@ -67,7 +67,6 @@ public class ContentValidatorTester {
 		return sb.toString();
 	}
 	
-//
 //	public static ScenarioLoader setupAndReturnScenarioLoader(CCDAParser ccdaParser, String scenarioDirectory) {
 //		ScenarioLoader scenarioLoader;
 //		File file = new File(scenarioDirectory);

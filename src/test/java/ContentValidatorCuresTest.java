@@ -1063,14 +1063,26 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// in ref:
 		// <time value="20150622"/>
 		// in sub:
-		// <time value="20210317101614-0500"/> // Note: This also is an invalid time (extra digit), but caught by date mismatch first
+		// <time value="20210317101614-0500"/> // Note: This also is an invalid time (2 extra digits '10'), shown in next test, caught by validation
 		// There is NO orgName in either the ref or the sub (TODO: does there need to be orgName at doc level, I think NOT)
 		// Expected result: The following Error should be produced:		
-		String message = "The scenario requires Provenance data of Time at the Document Level: "
-				+ "The scenario date portion of Author Provenance (Time: Value) is 20150622, "
-				+ "but the date portion of the submitted C-CDA is 20210317, which does not match"; 
+		String message = "The scenario requires Document Level (Time: Value) Provenance data "
+				+ "which was not found in the submitted data. The scenario value is 20150622 "
+				+ "and a submitted value must at a minimum match the 8-digit date portion of the data."; 
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		
+		// Provenance at the document level (does not match in any way (date or time)):
+		// in ref:
+		// <time value="20150622"/>
+		// in sub:
+		// <time value="20210317101614-0500"/> // invalid time (2 extra digits '10')
+		// Expected result: The following Error should be produced:
+		message = "The submitted Provenance (Time: Value) 20210317101614-0500 at Document Level is invalid. "
+				+ "Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', "
+				+ "and finally, a 4-digit time-zone. The invalid time and time-zone portion of the value is 101614-0500"; 
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 		
 		// 4: If the scenario includes a date only (no time), then the submitted file must match the exact date, 
 		// but is allowed to have time as well, which matches any point in time, but also matches the required C-CDA format.
@@ -1120,10 +1132,11 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// Note: No further organizers contain an author in the ref, 
 		// therefore, no more potential relevant errors can/should be created
 		// The result(s) we do NOT expect is/are:
-		// errorPrefix + "/VitalSignsOrganizer/VitalSignsObservation: The scenario Author Provenance (Time: Value ) is 20150622, but the submitted C-CDA time value 201506221100-0500 " +		
-		message = "is either not as precise as the scenario or otherwise formatted improperly.";		
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		// We can't check for a specific error to not be fired as that error would match on we do want fired in this same test.
+		// Therefore, we must check the count. Currently, these are the only 2 errors we expect. 
+		// However, in the future, if another UNRELATED error is appropriate due to an update, we will have to modify the document so it does not fire.
+		// If the error is related, then it is a valid fail and breakdown of our logic, which must be addressed in our source code.
+		assertTrue("Results should not have contained more tha 2 errors but did", results.size() < 3);
 	}
 	
 	@Test

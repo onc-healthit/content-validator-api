@@ -162,25 +162,15 @@ public class ParserUtilities {
 		}
 	}
 	
-	public static void compareTimeEnforceDateValueAndTimePrecision(CCDAEffTime refTime, CCDAEffTime subTime,
-			ArrayList<ContentValidationResult> results, String localElName, String parentElName) {	
-		if ((refTime != null) && (subTime != null)) {
-			log.info(
-					" Effective Times are not null in both Ref and Submitted models, so compare value attributes for them. ");
-			refTime.compareValueElementEnforceExactDateButOnlyPrecisionForTime(subTime, results, localElName, parentElName);
-		} else if ((refTime == null) && (subTime != null && subTime.hasValidData())) {
-			log.info(" Submitted C-CDA File can have time values even if not present in the Ref C-CDA ");
-		} else if ((refTime != null && refTime.hasValidData()) && (subTime == null)) {
-			final String error = parentElName + " " + localElName 
-					+ " (value time element) is required, but the submitted C-CDA does not contain the (value time element) in one of its "
-					+ parentElName + "s.";
-			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
-					"/ClinicalDocument", "0");
-			results.add(rs);
-		} else {
-			// do nothing since both are null
-			log.info(" Both Submitted and Ref times are null for " + localElName);
-		}	
+	public static void validateTimeValueLengthDateTimeAndTimezoneDependingOnPrecision(CCDAEffTime effTime,
+			ArrayList<ContentValidationResult> results, String localElName, String parentElName, int index,
+			boolean isSub) {
+		log.info("!! Enter validateTimeValueLengthDateTimeAndTimezoneDependingOnPrecision");
+		if (effTime != null && effTime.hasValidData()) {
+			log.info("!! effTime != null && effTime.hasValidData()");
+			effTime.validateValueLengthDateTimeAndTimezoneDependingOnPrecision(results, localElName, parentElName,
+					index, isSub);
+		}
 	}
 	
 	public static Boolean compareCodesAndTranlations(CCDACode refCode, CCDACode submittedCode) {

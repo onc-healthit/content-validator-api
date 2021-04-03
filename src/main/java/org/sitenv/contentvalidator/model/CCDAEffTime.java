@@ -237,140 +237,95 @@ public class CCDAEffTime {
 		}
 	}
 	
-	public void compareValueElementEnforceExactDateButOnlyPrecisionForTime(CCDAEffTime subTime,
-			ArrayList<ContentValidationResult> results, String elementName, String parentElName) {
-		System.out.println("!!: ENTER compareValueElementEnforceExactDateButOnlyPrecisionForTime");
-		// Enforces the following
-		// 1: If the scenario includes a date, then the submitted file must match that date exactly
-		// 2: If the scenario also includes a time, then the submitted file must match the precision and format of that time, but not the exact values (reg ex)
-		// 3: If the scenario does not include a date, then the submitted file would not need to include a date. Of course, we won't likely have a scenario without a date.
-		// 4: If the scenario includes a date only (no time), then the submitted file must match the exact date, 
-		// but is allowed to have time as well, which matches any point in time, but also matches the required C-CDA format.
-		// 5: If the scenario does not include a date, but the sub does, that is not an error, as more data is acceptable
-		// 6: If the scenario contains any value at all, and the sub does not, an error is produced
-		// 7: If the scenario includes a time, then the sub must include a time (in general)
-		String tempRefTime;
-		String tempSubTime;
-		final String errorPrefix = "The scenario requires Provenance data of Time at the ";
-		log.info(" Comparing Times for " + elementName);
-	
-		// Compare Time value element
-		if (valuePresent && subTime.getValuePresent()) {
-			
-			System.out.println("!!: actualRefTime < 9: " + value.getValue() != null ? value.getValue() : "null");
-			System.out.println("!!: actualSubTime < 9: " + subTime.getValue().getValue() != null ? subTime.getValue().getValue() : "null");
+	public void validateValueLengthDateTimeAndTimezoneDependingOnPrecision(ArrayList<ContentValidationResult> results,
+			String localElName, String parentElName, int index, boolean isSub) {
+		System.out.println("!!: ENTER validateValueLengthDateTimeAndTimezoneDependingOnPrecision");				
+					
+		if (valuePresent) {
+			log.info(" Validating Times for " + localElName);
+			final String timeDocType = isSub ? "submitted" : "scenario";
+			final String errorPrefix = "The " + timeDocType + " Provenance (Time: Value) ";
+			final boolean isParentElNameDocLevel = parentElName.equalsIgnoreCase("Document Level");
 
-			// check first 8 chars (date) first
+			// validate date only in first 8 chars so we can have more specific errors returned
+			// This validation fails for letters, symbols, or being too short. Too long ends up in the next validation.
+			// instead of one big RegEx with an or condition and one mixed less-specific error
+			String dateOnly8CharTime;
 			if (value.getValue().length() > 8) {
-				log.info("ref time is > 8 characters long");
-				// limit comparison to date only, first 8 characters
-				tempRefTime = value.getValue().substring(0, 8);
+				log.info("!!: time > 8: " + value.getValue() != null ? value.getValue() : "null");
+				// we only have > 8 characters, store only the 1st 8
+				dateOnly8CharTime = value.getValue().substring(0, 8);
 			} else {
-				log.info("ref time is < 9 characters long");
-				// date is even less specific than the day, so compare what's there
-				tempRefTime = value.getValue();
+				log.info("!!: time < 9: " + value.getValue() != null ? value.getValue() : "null");
+				// we only have 8 characters, store them all
+				dateOnly8CharTime = value.getValue();
 			}			
-			
-			System.out.println("!!: tempRefTime < 9: " + tempRefTime);
-
-			if (subTime.getValue().getValue().length() > 8) {
-				log.info("sub time is > 8 characters long");
-				tempSubTime = subTime.getValue().getValue().substring(0, 8);
+			System.out.println("!!: stored dateOnly8CharTime: " + dateOnly8CharTime);
+			// validate dateOnly8CharTime with RegEx for 1st 8 chars
+//			^[0-9]{8}$
+//			^ asserts position at start of a line
+//			Match a single character present in the list below [0-9]
+//			{8} matches the previous token exactly 8 times
+//			0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
+//			$ asserts position at the end of a line			
+			Pattern baseDatePattern = Pattern.compile("^[0-9]{8}$");
+			Matcher baseDateMatcher = baseDatePattern.matcher(dateOnly8CharTime);
+			if (baseDateMatcher.find()) {
+				log.info("We have a validly formatted base 8 character date");
 			} else {
-				log.info("sub time is < 9 characters long");
-				tempSubTime = subTime.getValue().getValue();
+				log.info("!! The date portion of the " + timeDocType + " time element value " + dateOnly8CharTime + " is invalid data as per RegEx");
+				String error = errorPrefix + value.getValue() + " at " + parentElName + (!isParentElNameDocLevel ? " index " + (index + 1) : "")
+						+ ", is invalid. Please ensure the value starts with an 8-digit date. "
+						+ "The invalid date portion of the value is " + baseDateMatcher;
+
+				ContentValidationResult rs = new ContentValidationResult(error,
+						ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+				results.add(rs);						
 			}
 						
-			System.out.println("!!: tempSubTime < 9: " + tempSubTime);
-
-			if (tempRefTime.equalsIgnoreCase(tempSubTime)) {
-				log.info("Value Time element matches");
-			} else {
-				log.info("Value Time element does not match");
-				// 1: If the scenario includes a date, then the submitted file must match that date exactly
-				// 4: If the scenario includes a date only (no time), then the submitted file must match the exact date
-				String error = errorPrefix + parentElName + ": The scenario date portion of " + elementName
-						+ " (Time: Value) is " + tempRefTime + ", but the date portion of the submitted C-CDA is "
-						+ tempSubTime + ", which does not match.";
-				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
-						"/ClinicalDocument", "0");
-				results.add(rs);
-			}
-			
-			// check time (9th char and up)
+			// validate time and time-zone portions specifically
 			if (value.getValue().length() > 8) {
-				log.info("Starting logic for a ref time > 8 characters long");
-				// ref time has 9 chars or more
-				// ref has time so sub needs the full precision which is 4 more digits (time) followed by a + or - followed by 4 more digits (time-zone)
-				if (subTime.getValue().getValue().length() < 9) {
-					log.info("found sub time < 9 characters long when ref is > 8");
-					// sub time has 8 chars or less and therefore does not include a time at at all (or time-zone)
-					// 7: If the scenario includes a time, then the sub must include a time (in general)
-					String error = errorPrefix + parentElName + ": The scenario " + elementName + " (Time: Value) "
-							+ value.getValue() + " is more precise than the date,"
-							+ " but the submitted C-CDA (Time: Value) " + subTime.getValue().getValue()
-							+ " does not include time or time-zone data.";
-					ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
-							"/ClinicalDocument", "0");
-					results.add(rs);					
+				log.info("!!: time > 8 in time and time-zone validation: " + value.getValue() != null ? value.getValue() : "null");
+				String timeAndTimeZone = value.getValue().substring(8);
+				System.out.println("!!: stored timeAndTimeZone: " + timeAndTimeZone);
+				// validate timeAndTimeZone with RegEx for chars after first 8
+				// Note: If there is an issue where the base date > 8 chars, that error will show up in the time portion.
+				// This is a perfectly reasonable result as the time zone is supposed to start after 8 chars and if it does not it's invalid
+//				^([0-9]{4})(-|\+)([0-9]{4})$
+//				^ asserts position at start of a line
+//				1st Capturing Group ([0-9])
+//				Match a single character present in the list below [0-9]
+//				{4} matches the previous token exactly 4 times
+//				0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
+//				2nd Capturing Group (-|\+)
+//				1st Alternative -
+//				- matches the character - literally (case sensitive)
+//				2nd Alternative \+
+//				\+ matches the character + literally (case sensitive)
+//				3rd Capturing Group ([0-9])
+//				Match a single character present in the list below [0-9]
+//				{4} matches the previous token exactly 4 times
+//				0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
+//				$ asserts position at the end of a line
+				Pattern timeAndTimeZoneDatePattern = Pattern.compile("^([0-9]{4})(-|\\\\+)([0-9]{4})$");
+				Matcher timeAndTimeZoneDateMatcher = timeAndTimeZoneDatePattern.matcher(timeAndTimeZone);
+				if (timeAndTimeZoneDateMatcher.find()) {
+					log.info("We have a validly formatted base 8 character date");
 				} else {
-					log.info("sub and ref time > 8 characters long - applying RegEx to verify formatting");
-					// sub time has at least 9 chars and is therefore attempting to be more precise than the date level
-					// 2: If the scenario also includes a time, then the submitted file must match the precision and format of that time, but not the exact values (reg ex)					
-					// Pure un-escaped Reg Ex: /^([0-9]{8})([0-9]{4})(-|\+)([0-9]{4})$/gm
-//					^ asserts position at start of a line
-//					1st Capturing Group ([0-9])
-//					Match a single character present in the list below [0-9]
-//					{8} matches the previous token exactly 8 times
-//					0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
-//					2nd Capturing Group ([0-9])
-//					Match a single character present in the list below [0-9]
-//					{4} matches the previous token exactly 4 times
-//					0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
-//					3rd Capturing Group (-|\+)
-//					1st Alternative -
-//					- matches the character - literally (case sensitive)
-//					2nd Alternative \+
-//					\+ matches the character + literally (case sensitive)
-//					4th Capturing Group ([0-9])
-//					Match a single character present in the list below [0-9]
-//					{4} matches the previous token exactly 4 times
-//					0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
-//					$ asserts position at the end of a line
-//					Global pattern flags
-//					g modifier: global. All matches (don't return after first match)
-//					m modifier: multi line. Causes ^ and $ to match the begin/end of each line (not only begin/end of string)					
-					Pattern pattern = Pattern.compile("^([0-9]{8})([0-9]{4})(-|\\+)([0-9]{4})$");
-					Matcher matcher = pattern.matcher(subTime.getValue().getValue());
-					if (matcher.find()) {
-						log.info("We have a validly formatted date, time, and timestamp with complete and proper precision");
-					} else {
-						log.info("!! sub " + subTime.getValue().getValue() + " is invalid data as per RegEx");
-						String error = errorPrefix + parentElName + ": The scenario " + elementName + " (Time: Value) is " + value.getValue()
-								+ ", but the submitted C-CDA time value " + subTime.getValue().getValue()
-								+ " is either not as precise as the scenario or otherwise formatted improperly.";
-						ContentValidationResult rs = new ContentValidationResult(error,
-								ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
-						results.add(rs);						
-					}
-				}
+					log.info("!! The time and time-zone portion of the " + timeDocType + " time element value " + timeAndTimeZone + " is invalid data as per RegEx");
+					String error = errorPrefix + value.getValue() + " at " + parentElName + (!isParentElNameDocLevel ? " index " + (index + 1) : "") 
+							+ " is invalid. Please ensure the time and time-zone starts with a 4-digit time, "
+							+ "followed by a '+' or a '-', and finally, a 4-digit time-zone. "
+							+ "The invalid time and time-zone portion of the value is " + timeAndTimeZone;
+					ContentValidationResult rs = new ContentValidationResult(error,
+							ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+					results.add(rs);
+				}				
 			}
-
-		} else if (valuePresent && !subTime.getValuePresent()) {
-			// 6: If the scenario contains any value at all, and the sub does not, an error is produced
-			String error = errorPrefix + parentElName + ": The " + elementName
-					+ " (value time element) is required, but submitted C-CDA does not contain the (value time element) for "
-					+ elementName;
-			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
-					"/ClinicalDocument", "0");
-			results.add(rs);			
-		} else if (!valuePresent && subTime.getValuePresent()) {
-			// 5: If the scenario does not include a date, but the sub does, that is not an error, as more data is acceptable
-			log.info("It is OK to have author time even if it is not present in the Ref C-CDA");
-		} else {
-			log.info("Value Time elements absent in both refernce and submitted models ");
+		
 		}
-	}	
+		
+	}
 	
 	public void log() {
 		
