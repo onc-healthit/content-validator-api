@@ -1904,7 +1904,8 @@
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-										<time value="201506221100-0500"/>
+										<!-- base level date difference at 2nd instance of vital sign observation -->
+										<time value="200312121100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -1975,6 +1976,7 @@
 									</author>		
 								</observation>
 							</component>
+							<!-- 6 -->
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
@@ -1987,7 +1989,7 @@
 									<value xsi:type="PQ" value="95" unit="%"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>										
 										<time value="201506221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
@@ -1996,6 +1998,7 @@
 									</author>									
 								</observation>
 							</component>
+							<!-- 7 -->
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
@@ -2009,7 +2012,8 @@
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-										<time value="201506221100-0500"/>
+										<!-- 7th instance - making date year 9999 -->
+										<time value="999906221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2017,6 +2021,7 @@
 									</author>									
 								</observation>
 							</component>
+							<!-- 8 -->
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
@@ -2030,7 +2035,8 @@
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-										<time value="201506221100-0500"/>
+										<!-- 8th instance - making date year 3333 -->
+										<time value="333306221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2038,6 +2044,7 @@
 									</author>									
 								</observation>
 							</component>
+							<!-- 9 -->
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
@@ -2051,7 +2058,7 @@
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-										<time value="20150622"/>
+										<time value="44440622"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2059,6 +2066,7 @@
 									</author>									
 								</observation>
 							</component>
+							<!-- 10 -->
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
@@ -2072,7 +2080,7 @@
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-										<time value="201506221100-0500"/>
+										<time value="555506221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2082,6 +2090,7 @@
 							</component>
 							
 																					<!-- Expect Pass -->
+							<!-- 11 -->
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
@@ -2096,7 +2105,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 11 -->
-										<time value="201506221100-0500"/>
+										<time value="991106221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2118,8 +2127,8 @@
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-										<!-- -dbTest 11 -->
-										<time value="201506221100-0500"/>
+										<!-- -dbTest 12 -->
+										<time value="992206221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2141,8 +2150,8 @@
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-										<!-- -dbTest 11 -->
-										<time value="201506221100-0500"/>
+										<!-- -dbTest 13 -->
+										<time value="993306221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2164,8 +2173,8 @@
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-										<!-- -dbTest 11 -->
-										<time value="201506221100-0500"/>
+										<!-- -dbTest 14 -->
+										<time value="994406221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2188,7 +2197,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 15 -->
-										<time value="20150622"/>
+										<time value="99550622"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2208,7 +2217,7 @@
 									<effectiveTime value="201506221015-0500"/>
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
-						
+						<!-- -dbTest 16 -->
 								</observation>						
 							</component>
 							
@@ -2225,7 +2234,7 @@
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-
+<!-- -dbTest 17 -->
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2245,7 +2254,7 @@
 									<effectiveTime value="201506221015-0500"/>
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
-						
+<!-- -dbTest 18 -->						
 								</observation>						
 							</component>	
 							
@@ -2262,7 +2271,7 @@
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-
+<!-- -dbTest 19 -->
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2285,7 +2294,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 20 -->
-										<time value="20150622"/>
+										<time value="77110622"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2308,7 +2317,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 21 -->
-										<time value="201506221100-0500"/>
+										<time value="773306221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>

@@ -1264,13 +1264,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	@Test
 	public void cures_ProvenanceTimeComparison_DateAndTime_DocLvlNotPrecise_SecLvlNotPreciseAndMore_Site3241Test() {		
 		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
-		// 2: If the scenario also includes a time, then the submitted file must match the precision and format of that time, 
-		// but not the exact values (reg ex)
+		// If the scenario also includes a time, then the submitted file must match the precision and format of that time, 
+		// but not the exact values
 		// *Note: Since we can't compare by index, since the match can be anywhere, we can't say if the ref instance at some index has
 		// a full precision then the sub must match it.		
 		// We can only confirm that at least one match exists within the document somewhere that has full precision.
-		// For now, we are simply validating that the sub results have proper formatting. 
-		// TODO: Later we could check for at least one example at full precision in sub results if ref has one.
+		// For now, we are simply validating that the sub results have proper formatting for reg ex validation and for ref/sub matching that the base date matches somewhere. 
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
 				G9_APIACCESS_INP_VALIDATION_OBJECTIVE,
 				MOD_REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA_DOC_AUTH_PRECISE_TO_TIME,
@@ -1291,9 +1290,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 1100."; 
 		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 		
-/*		
 		
 		// ---- Section level below ----		
 		
@@ -1306,26 +1304,26 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   Has dash but no timezone 
 		//  Expected result: Fail
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario Author Provenance (Time: Value) is 201506221100-0500, but the submitted C-CDA time value "
-				+ "201506221100- is either not as precise as the scenario or otherwise formatted improperly.";
+		message = "The submitted Provenance (Time: Value) 201506221100- at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 1 "
+				+ "is invalid. Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', "
+				+ "and finally, a 4-digit time-zone. The invalid time and time-zone portion of the value is 1100-.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));				
 		
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S2
 		// in ref:
-		// <time value="201506221100-0500"/>
+		// <time value="200312121100-0500"/> // Note: used to be: <time value="201506221100-0500"/>
 		// in sub:
-		// <time value="201901111234-0500"/>
+		// <time value="201901113333-0500"/>
 		//  Comparison: 
-		//   Has different base level date 
+		//   Has different base level date (also has different time but that's not an error to have if valid format)
+		//   Therefore, we aren't expecting a validation error, but, a match error, if, the sub doesn't have at least one example of 20031212(any time/timezone)
 		//  Expected result: Fail
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario date portion of Author Provenance (Time: Value) is 20150622, "
-				+ "but the date portion of the submitted C-CDA is 20190111, which does not match.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found "
+				+ "in the submitted data. The scenario value is 200312121100-0500 and a submitted value must at a minimum match the 8-digit date portion of the data.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 		
 		// add has different timezone
 		// fix all these issues with sub times
@@ -1339,12 +1337,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   Has incorrect format (* instead of + or -)
 		//  Expected result: Fail
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario Author Provenance (Time: Value) is 201506221100-0500, but the submitted C-CDA time value "
-				+ "201506221100*0500 is either not as precise as the scenario or otherwise formatted improperly.";
+		message = "The submitted Provenance (Time: Value) 201506221100*0500 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 3 is invalid. "
+				+ "Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
+				+ "The invalid time and time-zone portion of the value is 1100*0500.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
-		
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
+
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S4
 		// in ref:
@@ -1354,12 +1352,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   Has too many characters in time-zone
 		//  Expected result: Fail
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario Author Provenance (Time: Value) is 201506221100-0500, but the submitted C-CDA time value "
-				+ "201506221100-06001234 is either not as precise as the scenario or otherwise formatted improperly.";
+		message = "The submitted Provenance (Time: Value) 201506221100-06001234 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 4 is invalid. "
+				+ "Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
+				+ "The invalid time and time-zone portion of the value is 1100-06001234.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
-		
+				
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S5
 		// in ref:
@@ -1369,12 +1367,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   Has too many characters in time
 		//  Expected result: Fail
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario Author Provenance (Time: Value) is 201506221100-0500, but the submitted C-CDA time value "
-				+ "20150622110078-0500 is either not as precise as the scenario or otherwise formatted improperly.";
+		message = "The submitted Provenance (Time: Value) 20150622110078-0500 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 5 is invalid. "
+				+ "Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
+				+ "The invalid time and time-zone portion of the value is 110078-0500.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
-		
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S6
 		// in ref:
@@ -1384,201 +1382,195 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   Missing time-zone separator
 		//  Expected result: Fail
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario Author Provenance (Time: Value) is 201506221100-0500, but the submitted C-CDA time value "
-				+ "2015062211000500 is either not as precise as the scenario or otherwise formatted improperly.";
+		message = "The submitted Provenance (Time: Value) 2015062211000500 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 6 is invalid. "
+				+ "Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
+				+ "The invalid time and time-zone portion of the value is 11000500.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
-		
+
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S7
 		// in ref:
-		// <time value="201506221100-0500"/>
+		// <time value="999906221100-0500"/>
 		// in sub:
 		// <time value="292906221100+1234"/>
 		//  Comparison: 
 		//   Year is wrong and has random time-zone but that part is OK, and uses plus vs minus, also OK, so fails date portion only
 		//  Expected result: Fail
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario date portion of Author Provenance (Time: Value) is 20150622, "
-				+ "but the date portion of the submitted C-CDA is 29290622, which does not match.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found "
+				+ "in the submitted data. The scenario value is 999906221100-0500 and a submitted value must at a minimum match the 8-digit date portion of the data.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		// 2nd test
+		message = "The submitted Provenance (Time: Value) 292906221100+1234 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 7 is invalid. "
+				+ "Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
+				+ "The invalid time and time-zone portion of the value is 1100+1234.";
+		assertFalse("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 		
-		// 7: If the scenario includes a time, then the sub must include a time (in general) (has it's own specific error)
+/*
+		// If the scenario includes a time, then the sub must include a time (in general) (has it's own specific error)
+		// TODO: Is the above req even possible to enforce? See note at top of method for reasoning (can't compare 1to1 by index, only looking for one sub instance to match)
+		// -Maybe we could write some logic to check that at least one of the subs with that matching date, has a full precision version (with any digits) somewhere... 
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S8
 		// in ref:
-		// <time value="201506221100-0500"/>
+		// <time value="333306221100-0500"/>
 		// in sub:
-		// <time value="29290622"/>
+		// <time value="33330622"/>
 		//  Comparison: 
-		//   Sub has date only, but needs a time since ref has one
+		//   Sub has date only, which matches, but needs a time since ref has one.
 		//  Expected result: Fail
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario Author Provenance (Time: Value) 201506221100-0500 is more precise than the date, "
-				+ "but the submitted C-CDA (Time: Value) 29290622 does not include time or time-zone data.";
+//		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
+//				+ "The scenario Author Provenance (Time: Value) 201506221100-0500 is more precise than the date, "
+//				+ "but the submitted C-CDA (Time: Value) 29290622 does not include time or time-zone data.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found "
+				+ "in the submitted data. The scenario value is 333306221100-0500 and a submitted value must at a minimum match the 8-digit date portion of the data.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
-
-		// 6: If the scenario contains any value at all, and the sub does not, an error is produced
+*/				
+				
+		// If the scenario contains any value at all, and the sub does not, an error is produced
+		// Note, this can only be kicked off if the sub doesn't containt that time value elsewhere...since we can't do index comparison
+		// So for example, had the ref value been 20150622, there would be no error, even when sub has no element, as there are plenty of matches for that.
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
-		// S9
+		// S9		
 		// in ref:
-		// <time value="20150622"/>
+		// <time value="44440622"/>
 		// in sub:
 		// NO TIME ELEMENT
 		//  Comparison: 
 		//   Sub has no time element but needs one since ref has one. Refs time element is precise to day
 		//  Expected result: Fail
-		message = "Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Author Provenance (value time element) is required, "
-				+ "but the submitted C-CDA does not contain the (value time element) "
-				+ "in one of its Vital Signs Section/VitalSignsOrganizer/VitalSignsObservations.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the submitted data. "
+				+ "The scenario value is 44440622 and a submitted value must at a minimum match the 8-digit date portion of the data.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
-		
-		// 6: If the scenario contains any value at all, and the sub does not, an error is produced
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+
+		// If the scenario contains any value at all, and the sub does not, an error is produced
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S10
 		// in ref:
-		// <time value="201506221100-0500"/>
+		// <time value="555506221100-0500"/>
 		// in sub:
 		// NO TIME ELEMENT
 		//  Comparison: 
 		//   Sub has no time element but needs one since ref has one. Refs time element is precise to time-zone
 		//  Expected result: Fail
-		message = "Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Author Provenance (value time element) is required, "
-				+ "but the submitted C-CDA does not contain the (value time element) "
-				+ "in one of its Vital Signs Section/VitalSignsOrganizer/VitalSignsObservations.";
-		int noTimeElementMessageCount = 0;
-		for (ContentValidationResult r : results) {
-			if (r.getMessage().contains(message)) {
-				noTimeElementMessageCount++;
-			}
-		}
-		assertTrue("Results should have contained at least 2 instances of the following message but did not: " + message,
-				noTimeElementMessageCount > 1);		
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the submitted data. "
+				+ "The scenario value is 555506221100-0500 and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
+
 		
 		/// EXPECT pass
 		
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S11
 		// in ref:
-		// <time value="201506221100-0500"/>
+		// <time value="991106221100-0500"/>
 		// in sub:
-		// <time value="201506221100-0500"/>
+		// <time value="991106221100-0500"/>
 		//  Comparison: 
 		//   perfect match
 		//  Expected result: Pass
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario Author Provenance (Time: Value) 201506221100-0500 is more precise than the date, "
-				+ "but the submitted C-CDA (Time: Value) 201506221100-0500 does not include time or time-zone data.";
-		// Since prior error is identical, ensuring that the latest error matches specifically
+		message = "The submitted Provenance (Time: Value) 991106221100-0500 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 11 is invalid. "
+				+ "Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
+				+ "The invalid time and time-zone portion of the value is 991106221100-0500.";
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
-		
+
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S12
 		// in ref:
-		// <time value="201506221100-0500"/>
+		// <time value="992206221100-0500"/>
 		// in sub:
-		// <time value="201506229999-0500"/>
+		// <time value="992206229999-0500"/>
 		//  Comparison: 
 		//   match to ref date but has dif time (9999)
 		//  Expected result: Pass
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario Author Provenance (Time: Value) 201506221100-0500 is more precise than the date, "
-				+ "but the submitted C-CDA (Time: Value) 201506229999-0500 does not include time or time-zone data.";
-		// Since prior error is identical, ensuring that the latest error matches specifically
+		message = "The submitted Provenance (Time: Value) 992206229999-0500 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 12 is invalid. "
+				+ "Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
+				+ "The invalid time and time-zone portion of the value is 992206229999-0500.";		
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
-		
+
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S13
 		// in ref:
-		// <time value="201506221100-0500"/>
+		// <time value="993306221100-0500"/>
 		// in sub:
-		// <time value="201506221100-6666"/>
+		// <time value="993306221100-6666"/>
 		//  Comparison: 
 		//   match to ref date but has dif time-zone (6666)
 		//  Expected result: Pass
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario Author Provenance (Time: Value) 201506221100-0500 is more precise than the date, "
-				+ "but the submitted C-CDA (Time: Value) 201506221100-6666 does not include time or time-zone data.";
-		// Since prior error is identical, ensuring that the latest error matches specifically
+		message = "The submitted Provenance (Time: Value) 993306221100-6666 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 13 is invalid. "
+				+ "Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
+				+ "The invalid time and time-zone portion of the value is 993306221100-6666.";
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 		
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S14
 		// in ref:
-		// <time value="201506221100-0500"/>
+		// <time value="994406221100-0500"/>
 		// in sub:
-		// <time value="201506221100+0500"/>
+		// <time value="994406221100+0500"/>
 		//  Comparison: 
 		//   match to ref date but has dif time-zone separator plus vs minus which is OK
 		//  Expected result: Pass
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario Author Provenance (Time: Value) 201506221100-0500 is more precise than the date, "
-				+ "but the submitted C-CDA (Time: Value) 201506221100+0500 does not include time or time-zone data.";
-		// Since prior error is identical, ensuring that the latest error matches specifically
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
-				
+		message = "The submitted Provenance (Time: Value) 994406221100+0500 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 14 is invalid. "
+				+ "Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
+				+ "The invalid time and time-zone portion of the value is 1100+0500.";
+		assertFalse("Results should not have contained the following message but did: " + message,
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S15
 		// in ref:
-		// <time value="20150622"/>
+		// <time value="99550622"/>
 		// in sub:
-		// <time value="20150622"/>
+		// <time value="99550622"/>
 		//  Comparison: 
 		//   scenario doesn't have precision past date, so sub doesn't need to either
 		//  Expected result: Pass
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario date portion of Author Provenance (Time: Value) is 20150622, "
-				+ "but the date portion of the submitted C-CDA is 20150622, which does not match.";
-		// Since prior error is identical, ensuring that the latest error matches specifically
+		message = "The submitted Provenance (Time: Value) 99550622 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 15 is invalid. "
+				+ "Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
+				+ "The invalid time and time-zone portion of the value is 99550622.";
 		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
-		
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 
-		// 5: If the scenario does not include a date, but the sub does, that is not an error, as more data is acceptable
+		// If the scenario does not include a date, but the sub does, that is not an error, as more data is acceptable
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S16
 		// in ref:
 		// no author at all
 		// in sub:
-		// <time value="20150622"/>
+		// <time value="99660622"/>
 		//  Comparison: 
 		//   scenario doesn't have an author at all, ref has date level precision on time
 		//  Expected result: Pass
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario date portion of Author Provenance (Time: Value) is 20150622, "
-				+ "but the date portion of the submitted C-CDA is 20150622, which does not match.";
-		// Since prior error is identical, ensuring that the latest error matches specifically
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the submitted data. "
+				+ "The scenario value is null and a submitted value must at a minimum match the 8-digit date portion of the data.";
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
-		
-		// 5: If the scenario does not include a date, but the sub does, that is not an error, as more data is acceptable
+					
+		// If the scenario does not include a date, but the sub does, that is not an error, as more data is acceptable
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S17
 		// in ref:
 		// no time at all
 		// in sub:
-		// <time value="20150622"/>
+		// <time value="99770622"/>
 		//  Comparison: 
-		//   scenario doesn't have an time at all, ref has date level precision on time
+		//   scenario doesn't have a time at all, ref has date level precision on time
 		//  Expected result: Pass
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario date portion of Author Provenance (Time: Value) is 20150622, "
-				+ "but the date portion of the submitted C-CDA is 20150622, which does not match.";
-		// Since prior error is identical, ensuring that the latest error matches specifically
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the submitted data. "
+				+ "The scenario value is null and a submitted value must at a minimum match the 8-digit date portion of the data.";
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 
-		
-
-		// 3: If the scenario does not include a date, then the sub file would not need to include a date.
+		// If the scenario does not include a date, then the sub file would not need to include a date.
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S18
 		// in ref:
@@ -1588,14 +1580,13 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   scenario doesn't have an author at all, nor does ref
 		//  Expected result: Pass
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario date portion of Author Provenance (Time: Value) is 20150622, "
-				+ "but the date portion of the submitted C-CDA is 20150622, which does not match.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the submitted data. "
+				+ "The scenario value is null and a submitted value must at a minimum match the 8-digit date portion of the data.";
 		// Since prior error is identical, ensuring that the latest error matches specifically
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
-		
-		// 3: If the scenario does not include a date, then the sub file would not need to include a date.
+				
+		// If the scenario does not include a date, then the sub file would not need to include a date.
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S19
 		// in ref:
@@ -1605,54 +1596,49 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   scenario doesn't have an time at all, nor does ref
 		//  Expected result: Pass
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario date portion of Author Provenance (Time: Value) is 20150622, "
-				+ "but the date portion of the submitted C-CDA is 20150622, which does not match.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the submitted data. "
+				+ "The scenario value is null and a submitted value must at a minimum match the 8-digit date portion of the data.";
 		// Since prior error is identical, ensuring that the latest error matches specifically
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+			
 		
 		// More Expect Fail
 		
-		// 6: If the scenario contains any value at all, and the sub does not, an error is produced
+		// If the scenario contains any value at all, and the sub does not, an error is produced
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S20
 		// in ref:
-		// <time value="20150622"/>
+		// <time value="77110622"/>
 		// in sub:
 		// NO AUTHOR ELEMENT
 		//  Comparison: 
-		//   Sub has no author element but needs one since ref has one and a time. Refs time element is precise to day
+		//   Sub has no author element but needs one since ref has one and a time element. Refs time element value is precise to day
 		//  Expected result: Fail
-		message = "Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Author Provenance (value time element) is required, "
-				+ "but the submitted C-CDA does not contain the (value time element) "
-				+ "in one of its Vital Signs Section/VitalSignsOrganizer/VitalSignsObservations.";
-		noTimeElementMessageCount = 0;
-		for (ContentValidationResult r : results) {
-			if (r.getMessage().contains(message)) {
-				noTimeElementMessageCount++;
-			}
-		}
-		assertTrue("Results should have contained at least 3 instances of the following message but did not: " + message,
-				noTimeElementMessageCount > 2);
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the "
+				+ "submitted data. The scenario value is 77110622 and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 		
-		// 6: If the scenario contains any value at all, and the sub does not, an error is produced
+		// If the scenario contains any value at all, and the sub does not, an error is produced
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S21
 		// in ref:
-		// <time value="201506221100-0500"/>
+		// <time value="773306221100-0500"/>
 		// in sub:
 		// NO AUTHOR ELEMENT
 		//  Comparison: 
 		//   Sub has no time element but needs one since ref has one. Refs time element is precise to time-zone
 		//  Expected result: Fail
-		// This one triggers the author entry count req - because it's the entire author missing vs just a time
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the "
+				+ "submitted data. The scenario value is 773306221100-0500 and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		// This one also triggers the author entry count req - because it's the entire author missing vs just a time
 		// Note this is 18 instead of 21 because some of the observations are missing authors in ref
 		message = "The scenario requires a total of 19 Author Entries for Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation, "
 				+ "however the submitted data had only 18 entries.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
-				
-		*/
 	}
 }

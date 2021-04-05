@@ -1908,7 +1908,8 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 2 -->
-										<time value="201901111234-0500"/>
+										<!-- base level date difference index 1 (2 in Xpath/output)-->
+										<time value="201901113333-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2019,7 +2020,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 7 -->
-										<time value="292906221100-1234"/>
+										<time value="292906221100+1234"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2041,7 +2042,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 8 -->
-										<time value="29290622"/>
+										<time value="33330622"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2109,7 +2110,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 11 -->
-										<time value="201506221100-0500"/>
+										<time value="991106221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2132,7 +2133,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 12 -->
-										<time value="201506229999-0500"/>
+										<time value="992206229999-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2155,7 +2156,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 13 -->
-										<time value="201506221100-6666"/>
+										<time value="993306221100-6666"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2178,7 +2179,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 14 -->
-										<time value="201506221100+0500"/>
+										<time value="994406221100+0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2201,7 +2202,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 15 -->
-										<time value="20150622"/>
+										<time value="99550622"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2224,7 +2225,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 16 -->
-										<time value="20150622"/>
+										<time value="99660622"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
@@ -2247,7 +2248,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 17 -->
-										<time value="20150622"/>
+										<time value="99770622"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
