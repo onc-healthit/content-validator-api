@@ -307,7 +307,7 @@ public class CCDAEffTime {
 //				{4} matches the previous token exactly 4 times
 //				0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
 //				$ asserts position at the end of a line
-				Pattern timeAndTimeZoneDatePattern = Pattern.compile("^([0-9]{4})(-|\\\\+)([0-9]{4})$");
+				Pattern timeAndTimeZoneDatePattern = Pattern.compile("^([0-9]{4})(-|\\+)([0-9]{4})$");
 				Matcher timeAndTimeZoneDateMatcher = timeAndTimeZoneDatePattern.matcher(timeAndTimeZone);
 				if (timeAndTimeZoneDateMatcher.find()) {
 					log.info("We have a validly formatted base 8 character date");
