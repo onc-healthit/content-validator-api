@@ -1189,21 +1189,22 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				G9_APIACCESS_INP_VALIDATION_OBJECTIVE, REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA,
 				SUBMITTED_CCDA[SUB_HAS_DATE_ONLY_INVERSE_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241], SeverityLevel.ERROR);
 		printResults(results);
-
+		
 		// Provenance at the document level (matches):
 		// in ref:
 		// <time value="20150622"/>
 		// in sub:
 		// <time value="20150622"/>	
 		// Expected result: The following Error should be produced:
-		String message = "The scenario requires Provenance data of Time at the Document Level: "
-				+ "The scenario date portion of Author Provenance (Time: Value) is 20150622, "
-				+ "but the date portion of the submitted C-CDA is "; 
-		// 20210317, which does not match.";
+		String message = "The scenario requires Document Level (Time: Value) Provenance data which was not found in the submitted data. "
+				+ "The scenario value is 20150622 and a submitted value must at a minimum match the 8-digit date portion of the data."; 
 		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 		
 		// 1: If the scenario includes a date, then the submitted file must match that date exactly
+		// *Note: We can't compare one to one. We can only prove that at least one exists in the sub that matches the ref.
+		// So, the following rule is really more like, If the scenario includes a time wth a date, then the sub must include
+		// at least one example of a time with that exact date as well.		
 		//
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		//
@@ -1217,9 +1218,9 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//   Error as does not match
 		// 
 		//  The next 3 occurrences are the same as the 1st
-		message = "The scenario requires Provenance data of Time at the Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation: "
-				+ "The scenario date portion of Author Provenance (Time: Value) is 20150622, "
-				+ "but the date portion of the submitted C-CDA is 19990215, which does not match.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data "
+				+ "which was not found in the submitted data. The scenario value is 20150622 and a submitted value must at a minimum "
+				+ "match the 8-digit date portion of the data.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 	}
@@ -1233,6 +1234,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				MOD_REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA_DOC_AUTH_PRECISE_TO_TIME,
 				SUBMITTED_CCDA[SUB_HAS_ACCURATE_DATE_AND_TIME_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241],
 				SeverityLevel.ERROR);
+		removeBirthSexError(results);
 		printResults(results);
 		
 		// Provenance at the document level
@@ -1262,7 +1264,13 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	@Test
 	public void cures_ProvenanceTimeComparison_DateAndTime_DocLvlNotPrecise_SecLvlNotPreciseAndMore_Site3241Test() {		
 		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
-		// 2: If the scenario also includes a time, then the submitted file must match the precision and format of that time, but not the exact values (reg ex)
+		// 2: If the scenario also includes a time, then the submitted file must match the precision and format of that time, 
+		// but not the exact values (reg ex)
+		// *Note: Since we can't compare by index, since the match can be anywhere, we can't say if the ref instance at some index has
+		// a full precision then the sub must match it.		
+		// We can only confirm that at least one match exists within the document somewhere that has full precision.
+		// For now, we are simply validating that the sub results have proper formatting. 
+		// TODO: Later we could check for at least one example at full precision in sub results if ref has one.
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
 				G9_APIACCESS_INP_VALIDATION_OBJECTIVE,
 				MOD_REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA_DOC_AUTH_PRECISE_TO_TIME,
@@ -1271,7 +1279,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		removeBirthSexError(results);
 		printResults(results);
 
-		// Provenance at the document level (does not match in any way (date or time)):
+		// Provenance at the document level (sub does not include time-zone):
 		// in ref:
 		// <time value="201506221100-0500"/>
 		// in sub:
@@ -1279,11 +1287,13 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   Has no time-zone (has time only)
 		//  Expected result: fail		
-		String message = "The scenario requires Provenance data of Time at the Document Level: "
-				+ "The scenario Author Provenance (Time: Value) is 201506221100-0500, but the submitted C-CDA time value "
-				+ "201506221100 is either not as precise as the scenario or otherwise formatted improperly."; 
+		String message = "The submitted Provenance (Time: Value) 201506221100 at Document Level is invalid. "
+				+ "Please ensure the time and time-zone starts with a 4-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
+				+ "The invalid time and time-zone portion of the value is 1100."; 
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		
+/*		
 		
 		// ---- Section level below ----		
 		
@@ -1642,5 +1652,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "however the submitted data had only 18 entries.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+				
+		*/
 	}
 }

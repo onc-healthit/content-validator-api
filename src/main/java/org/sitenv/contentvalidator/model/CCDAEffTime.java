@@ -276,7 +276,7 @@ public class CCDAEffTime {
 				log.info("!! The date portion of the " + timeDocType + " time element value " + dateOnly8CharTime + " is invalid data as per RegEx");
 				String error = errorPrefix + value.getValue() + " at " + parentElName + (!isParentElNameDocLevel ? " index " + (index + 1) : "")
 						+ ", is invalid. Please ensure the value starts with an 8-digit date. "
-						+ "The invalid date portion of the value is " + baseDateMatcher;
+						+ "The invalid date portion of the value is " + baseDateMatcher + ".";
 
 				ContentValidationResult rs = new ContentValidationResult(error,
 						ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
@@ -316,7 +316,7 @@ public class CCDAEffTime {
 					String error = errorPrefix + value.getValue() + " at " + parentElName + (!isParentElNameDocLevel ? " index " + (index + 1) : "") 
 							+ " is invalid. Please ensure the time and time-zone starts with a 4-digit time, "
 							+ "followed by a '+' or a '-', and finally, a 4-digit time-zone. "
-							+ "The invalid time and time-zone portion of the value is " + timeAndTimeZone;
+							+ "The invalid time and time-zone portion of the value is " + timeAndTimeZone + ".";
 					ContentValidationResult rs = new ContentValidationResult(error,
 							ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 					results.add(rs);
