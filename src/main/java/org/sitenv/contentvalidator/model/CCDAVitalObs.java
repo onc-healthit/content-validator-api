@@ -23,6 +23,13 @@ public class CCDAVitalObs {
 	
 	private CCDAAuthor author;
 	
+	public static final String LOINC_CODE_SYSTEM = "2.16.840.1.113883.6.1";
+	
+	public static final CCDACode bmiPercentileCode = new CCDACode("59576-9", LOINC_CODE_SYSTEM);
+	public static final CCDACode weightPercentileCode = new CCDACode("77606-2", LOINC_CODE_SYSTEM);
+	public static final CCDACode headOccipitalPercentileCode = new CCDACode("8289-1", LOINC_CODE_SYSTEM);
+	public static final Double   toleranceLimit = 0.1;
+	
 	public static void compareVitalObsData(HashMap<String, CCDAVitalObs> refVitals, 
 			HashMap<String, CCDAVitalObs> subVitals, 	ArrayList<ContentValidationResult> results) {
 
@@ -61,7 +68,7 @@ public class CCDAVitalObs {
 	public void compare(CCDAVitalObs refVital, ArrayList<ContentValidationResult> results , String context) {
 		
 		log.info("Comparing Vital Signs ");
-		
+				
 		// Handle Template Ids
 		ParserUtilities.compareTemplateIds(refVital.getTemplateIds(), templateIds, results, context);
 		
@@ -69,15 +76,26 @@ public class CCDAVitalObs {
 		String elementNameTime = "Effective Time for " + context;
 		//ParserUtilities.compareEffectiveTime(refResult.getMeasurementTime(), measurementTime, results, elementNameTime);
 		
-		// Compare Lab Codes 
+		// Compare Vital Codes 
 		String elementNameVal = "Vital Sign Observation code element for " + context;
 		ParserUtilities.compareCode(refVital.getVsCode(), vsCode, results, elementNameVal);
 		
 		String statusCodeElem = "Vital Sign Observation Status code element for " + context;
 		ParserUtilities.justCompareCode(refVital.getStatusCode(), statusCode, results, statusCodeElem);
 		
-		String valPQ = "Vital Sign Observation Value (Quantity - PQ) Comparison for " + context;
-		ParserUtilities.compareQuantity(refVital.getVsResult(), vsResult, results, valPQ);
+		if(vsCode.codeEquals(bmiPercentileCode) || vsCode.codeEquals(weightPercentileCode) || vsCode.codeEquals(headOccipitalPercentileCode))
+		{
+			log.info(" The code being compared is one of the percentile codes, which needs tolerance based comparison");
+			String valPQ = "Vital Sign Observation Value (Quantity - PQ) Comparison for " + context;
+			ParserUtilities.compareQuantityWithTolerance(refVital.getVsResult(), vsResult, results, valPQ, toleranceLimit);
+		}
+		else 
+		{
+			log.info(" The code being compared is not one of the percentile codes ");
+			String valPQ = "Vital Sign Observation Value (Quantity - PQ) Comparison for " + context;
+			ParserUtilities.compareQuantity(refVital.getVsResult(), vsResult, results, valPQ);
+		}
+		
 		
 	}
 

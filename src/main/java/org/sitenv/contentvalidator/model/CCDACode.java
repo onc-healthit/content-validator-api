@@ -137,6 +137,14 @@ public class CCDACode extends CCDADataElement {
 		super();
 		translations = new ArrayList<CCDACode>();
 	}
+	
+	public CCDACode(String cd, String cs)
+	{
+		super();
+		this.code = cd;
+		this.codeSystem = cs;
+		translations = new ArrayList<CCDACode>();
+	}
 
 	public String getValueSetOid() {
 		return valueSetOid;

@@ -312,6 +312,32 @@ public class ParserUtilities {
 		}
 	}
 	
+	public static void compareQuantityWithTolerance(CCDAPQ refQuantity, CCDAPQ subQuantity,
+			   ArrayList<ContentValidationResult> results, String elementName, Double tolerancePercentage) {
+
+		// handle section code.
+		if((refQuantity != null) && (subQuantity != null) ) {
+
+			if(refQuantity.compareWithTolerance(subQuantity, results, elementName, tolerancePercentage)) {
+				// 	do nothing since both match.
+				log.info(" Both Submitted and Ref quantities match for " + elementName);
+			}
+
+		}
+		else if ((refQuantity == null) && (subQuantity != null)) {
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else if((refQuantity != null) && (subQuantity == null)){
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		} 
+		else {
+			// do nothing since both are null.
+			log.info(" Both Submitted and Ref quantity are null for " + elementName);
+		}
+	}
+	
 	public static void compareQuantityWithString(CCDAPQ quantity, String val,
 			   ArrayList<ContentValidationResult> results, String elementName, Boolean refPQ) {
 
