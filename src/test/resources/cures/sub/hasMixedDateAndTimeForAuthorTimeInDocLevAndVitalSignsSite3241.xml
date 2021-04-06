@@ -1976,7 +1976,7 @@
 									<author typeCode="AUT">
 										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
 										<!-- -dbTest 5 -->
-										<time value="20150622110078-0500"/>
+										<time value="2015062211007878-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
 											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>

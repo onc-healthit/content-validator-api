@@ -291,11 +291,16 @@ public class CCDAEffTime {
 				// validate timeAndTimeZone with RegEx for chars after first 8
 				// Note: If there is an issue where the base date > 8 chars, that error will show up in the time portion.
 				// This is a perfectly reasonable result as the time zone is supposed to start after 8 chars and if it does not it's invalid
-//				^([0-9]{4})(-|\+)([0-9]{4})$
+//				^([0-9]{4}|[0-9]{6})(-|\+)([0-9]{4})$
 //				^ asserts position at start of a line
-//				1st Capturing Group ([0-9])
+//				1st Capturing Group ([0-9]|[0-9])
+//				1st Alternative [0-9]
 //				Match a single character present in the list below [0-9]
 //				{4} matches the previous token exactly 4 times
+//				0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
+//				2nd Alternative [0-9]
+//				Match a single character present in the list below [0-9]
+//				{6} matches the previous token exactly 6 times
 //				0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
 //				2nd Capturing Group (-|\+)
 //				1st Alternative -
@@ -307,14 +312,14 @@ public class CCDAEffTime {
 //				{4} matches the previous token exactly 4 times
 //				0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
 //				$ asserts position at the end of a line
-				Pattern timeAndTimeZoneDatePattern = Pattern.compile("^([0-9]{4})(-|\\+)([0-9]{4})$");
+				Pattern timeAndTimeZoneDatePattern = Pattern.compile("^([0-9]{4}|[0-9]{6})(-|\\+)([0-9]{4})$");
 				Matcher timeAndTimeZoneDateMatcher = timeAndTimeZoneDatePattern.matcher(timeAndTimeZone);
 				if (timeAndTimeZoneDateMatcher.find()) {
 					log.info("We have a validly formatted base 8 character date");
 				} else {
 					log.info("!! The time and time-zone portion of the " + timeDocType + " time element value " + timeAndTimeZone + " is invalid data as per RegEx");
 					String error = errorPrefix + value.getValue() + " at " + parentElName + (!isParentElNameDocLevel ? " index " + (index + 1) : "") 
-							+ " is invalid. Please ensure the time and time-zone starts with a 4-digit time, "
+							+ " is invalid. Please ensure the time and time-zone starts with a 4 or 6-digit time, "
 							+ "followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 							+ "The invalid time and time-zone portion of the value is " + timeAndTimeZone + ".";
 					ContentValidationResult rs = new ContentValidationResult(error,
