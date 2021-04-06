@@ -760,7 +760,7 @@ public class CCDARefModel {
 			(subAuths != null && subAuths.size() > 0)  ) {
 			
 			log.info("Authors present in both models ");
-			String elName = "Document Level.";
+			String elName = "Document Level";
 			CCDAAuthor.compareAuthors(refAuths, subAuths, results, elName);
 			
 		} 	
@@ -775,7 +775,7 @@ public class CCDARefModel {
 		}else if ((refAuths == null || refAuths.size() == 0) && 
 				(subAuths != null && subAuths.size() > 0) ) {
 		
-			log.info("Model does not have Authors for comparison, it is ok for submitted CCDA to include Authors for all occasions");
+			log.info("Model does not have Authors for comparison, it is OK for submitted CCDA to include Authors for all occasions");
 			
 		} else {
 			

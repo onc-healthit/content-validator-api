@@ -151,7 +151,7 @@ public class CCDAAuthor {
 
 		// Compare Effective Times
 		elementName = "Comparing Author Time for " + elName; 
-		ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, subAuthor.getEffTime(), results, elementName);
+		ParserUtilities.compareEffectiveTimeValueWithExactMatchFullPrecision(effTime, subAuthor.getEffTime(), results, elementName);
 		
 		// Compare Org Name 
 		elementName = "Comparing Author Organization Name for " + elName;
@@ -165,20 +165,28 @@ public class CCDAAuthor {
 		log.info(" Sub Model Auth Size = " + (subAuths != null ? subAuths.size() : 0));    	
     	
     	if (refAuths != null && refAuths.size() != 0) { // If no authors in scenario (ref) file, skip the comparison 			
-			for(CCDAAuthor auth : refAuths) {
+			for (CCDAAuthor auth : refAuths) {
 				
 				log.info("Checking Ref Author with Sub Authors ");
 				if(auth.getEffTime() != null && 
-						auth.getEffTime().getValuePresent() && !isProvenancePresent(auth.getEffTime(), auth.getOrgName(), subAuths)) {
+						auth.getEffTime().getValuePresent()
+						&& !isProvenancePresent(auth.getEffTime(), auth.getOrgName(), subAuths)) {
 					
-					String orgName = "";
-					if(auth.getOrgName() != null && auth.getOrgName().getValue() != null)
-						orgName = auth.getOrgName().getValue();
+					// TODO: Ensure orgName enforcement is being applied at the level required (may be elsewhere already)
+//					String orgName = "";
+//					if(auth.getOrgName() != null && auth.getOrgName().getValue() != null)
+//						orgName = auth.getOrgName().getValue();
 					
-					ContentValidationResult rs = new ContentValidationResult(
-							"The scenario requires Provenance data of Time  : " + auth.getEffTime().getValue().getValue()
-									+ " and an Organization Name of : " + orgName + " at the " + elName
-									+ ", which was not found in the submitted data. ",
+					// Note: This is the only result that is actually reported.
+					// Many errors are generated in isProvenancePresent sub-routines but there's no way to connect them
+					// to a specific sub which actually had the issue (since match can be in any location) so instead the results
+					// generated externally are used as a reference for a boolean result which triggers this error 
+					// vs adding the unique errors themselves
+					String message = "The scenario requires " + elName
+							+ " (Time: Value) Provenance data which was not found in the submitted data. The scenario value is "
+							+ auth.getEffTime().getValue().getValue()
+							+ " and a submitted value must at a minimum match the 8-digit date portion of the data.";
+					ContentValidationResult rs = new ContentValidationResult(message,
 							ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 					results.add(rs);
 				}
@@ -187,16 +195,38 @@ public class CCDAAuthor {
 				}
 			}
 			
+			// Validate time value in sub author time value instances specifically (not a comparison)
+			// Results are added as individual errors
+			if (subAuths != null && subAuths.size() > 0) {
+				log.info("starting subAuth validation routine");
+				final String localElName = "Author Provenance";
+				final boolean isSub = true;
+				int subAuthIndex = -1;
+				for (CCDAAuthor subAuth : subAuths) {
+					subAuthIndex++;
+					if (subAuth.getEffTime() != null) {
+						log.info("validating subauth at index " + subAuthIndex);
+						ParserUtilities.validateTimeValueLengthDateTimeAndTimezoneDependingOnPrecision(
+								subAuth.getEffTime(), results, localElName, elName, subAuthIndex, isSub);
+					} else {
+						log.info("subAuth at index " + subAuthIndex + " is null" );
+					}
+				}
+			} else {
+				log.info("subAuths is null or empty");
+			}
+			
 			// Compare Author Sizes			
 			// It's invalid to fire an error if ref is less than or equal to sub auth size
-			if(refAuths != null && subAuths != null && 
+			if (refAuths != null && subAuths != null && 
 					!(refAuths.size() <= subAuths.size())) {
 				ContentValidationResult rs = new ContentValidationResult(
 						"The scenario requires a total of " + refAuths.size() + " Author Entries for " + elName
 								+ ", however the submitted data had only " + subAuths.size() + " entries.",
 						ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 						results.add(rs);
-			}			
+			}
+			
     	} else {
     		log.info("Skipping compareAuthors due to empty refAuths.");
     	}		
@@ -212,7 +242,7 @@ public class CCDAAuthor {
     		log.info("subAuths is null, skipping: " + elName);
     	} else {
 	    	for(CCDAAuthor auth : subAuths) {
-	    		ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, auth.getEffTime(), res, elName);
+	    		ParserUtilities.compareEffectiveTimeValue(effTime, auth.getEffTime(), res, elName);
 	    		
 	    		ParserUtilities.compareDataElementText(name, auth.getOrgName(), res, elName);
 	    		
@@ -229,15 +259,16 @@ public class CCDAAuthor {
 		}
     	
     	return retVal;
-    }
+    }    
     
+    // This does not seem to be used....
     public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement name, CCDAAuthor subAuth) {
     	
     	boolean retVal = false;
     	String elName = "Comparing Author Provenance Data";
     	ArrayList<ContentValidationResult> res = new ArrayList<ContentValidationResult>();   	
     	
-    	ParserUtilities.compareEffectiveTimeValueWithFullPrecision(effTime, subAuth.getEffTime(), res, elName);
+    	ParserUtilities.compareEffectiveTimeValueWithExactMatchFullPrecision(effTime, subAuth.getEffTime(), res, elName);
     		
     	ParserUtilities.compareDataElementText(name, subAuth.getOrgName(), res, elName);
     		

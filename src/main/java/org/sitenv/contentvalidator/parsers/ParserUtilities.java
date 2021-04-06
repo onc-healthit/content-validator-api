@@ -138,14 +138,14 @@ public class ParserUtilities {
 		}
 	}
 	
-	public static void compareEffectiveTimeValueWithFullPrecision(CCDAEffTime refTime, CCDAEffTime submittedTime,
+	public static void compareEffectiveTimeValueWithExactMatchFullPrecision(CCDAEffTime refTime, CCDAEffTime submittedTime,
 			ArrayList<ContentValidationResult> results, String elementName) {
 
 		// handle nulls.
 		if((refTime != null) && (submittedTime != null) ) {
 		
 			log.info(" Effective Times are not null in both Ref and Submitted models, so compare value attributes for them. ");
-			refTime.compareValueElementWithFullPrecision(submittedTime, results, elementName);
+			refTime.compareValueElementWithExactMatchFullPrecision(submittedTime, results, elementName);
 		
 		}
 		else if ((refTime == null) && (submittedTime != null && submittedTime.hasValidData()) ) {
@@ -159,6 +159,17 @@ public class ParserUtilities {
 		else {
 			// do nothing since both are null.
 			log.info(" Both Submitted and Ref times are null for " + elementName);
+		}
+	}
+	
+	public static void validateTimeValueLengthDateTimeAndTimezoneDependingOnPrecision(CCDAEffTime effTime,
+			ArrayList<ContentValidationResult> results, String localElName, String parentElName, int index,
+			boolean isSub) {
+		log.info("!! Enter validateTimeValueLengthDateTimeAndTimezoneDependingOnPrecision");
+		if (effTime != null && effTime.hasValidData()) {
+			log.info("!! effTime != null && effTime.hasValidData()");
+			effTime.validateValueLengthDateTimeAndTimezoneDependingOnPrecision(results, localElName, parentElName,
+					index, isSub);
 		}
 	}
 	
@@ -282,6 +293,32 @@ public class ParserUtilities {
 		if((refQuantity != null) && (subQuantity != null) ) {
 
 			if(refQuantity.compare(subQuantity, results, elementName)) {
+				// 	do nothing since both match.
+				log.info(" Both Submitted and Ref quantities match for " + elementName);
+			}
+
+		}
+		else if ((refQuantity == null) && (subQuantity != null)) {
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else if((refQuantity != null) && (subQuantity == null)){
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		} 
+		else {
+			// do nothing since both are null.
+			log.info(" Both Submitted and Ref quantity are null for " + elementName);
+		}
+	}
+	
+	public static void compareQuantityWithTolerance(CCDAPQ refQuantity, CCDAPQ subQuantity,
+			   ArrayList<ContentValidationResult> results, String elementName, Double tolerancePercentage) {
+
+		// handle section code.
+		if((refQuantity != null) && (subQuantity != null) ) {
+
+			if(refQuantity.compareWithTolerance(subQuantity, results, elementName, tolerancePercentage)) {
 				// 	do nothing since both match.
 				log.info(" Both Submitted and Ref quantities match for " + elementName);
 			}

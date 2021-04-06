@@ -105,6 +105,79 @@ public class CCDAPQ extends CCDADataElement {
 		
 	}
 	
+	public Boolean compareWithTolerance(CCDAPQ subValue, ArrayList<ContentValidationResult> results, String elementName, Double tolerancePercentage) {
+		
+		Boolean exception = false;
+		
+		Boolean valueComp = false;
+		Boolean unitComp = false;
+		
+		//Compare Values by converting to doubles.
+		if( (value != null) && (subValue.getValue() != null) ){
+			
+			try {
+				Double refval = Double.parseDouble(value);
+				Double subval = Double.parseDouble(subValue.getValue());
+				log.info(" Ref Val = " + refval);
+				log.info(" Sub Val = " + subval);
+				
+				Double toleranceLimit = refval * tolerancePercentage;
+				
+				if(Math.abs(refval-subval) < toleranceLimit) {
+					log.info(" Values Match with actual values");
+					valueComp = true;
+				}
+				
+			}
+			catch(NumberFormatException e) {
+				exception = true;
+			}
+			
+		}
+		else if ( (value == null) && (subValue.getValue() == null)) {
+			log.info(" Values are null and match ");
+			valueComp = true;
+		}
+		
+		// Compare units accounting for "unity"
+		if( (units != null) && (subValue.getUnits() != null) ){
+			
+			log.info(" Units = " + units);
+			log.info(" Sub Units = " + units);
+			if(units.equalsIgnoreCase(subValue.getUnits())) {
+				log.info(" Units Match with actual units ");
+				unitComp = true;
+			}
+			else if( (units.equalsIgnoreCase("1") || units.equalsIgnoreCase("")) &&
+					 (subValue.getUnits().equalsIgnoreCase("1") || subValue.getUnits().equalsIgnoreCase("")) )
+			{
+				log.info(" Units Match with default units ");
+				unitComp = true;
+			}
+			
+		}
+		else if( (units == null) && (subValue.getUnits() == null) ) {
+			log.info(" Units are null and match ");
+			unitComp = true;
+		}
+		
+		if(!valueComp || !unitComp) {
+			log.info(" Value and/or Units did not match ");
+			String error = "The " + elementName + " : Value PQ - value = " + ((value != null)?value:"None Specified") 
+				       + " and Units = " + ((units != null)?units:"None Specified")
+				       + "  , do not match the submitted CCDA : Value PQ - value = " + ((subValue.getValue() != null)?subValue.getValue():"None Specified") 
+				       + " , and Units = " + ((subValue.getUnits() != null)?subValue.getUnits():"None Specified") + ".";
+
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			return false;
+			
+		}
+				
+		return true;
+		
+	}
+	
 	public void log() {
 		
 		log.info(" Value = " + value);
