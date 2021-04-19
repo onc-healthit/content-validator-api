@@ -173,7 +173,8 @@ public class CCDANotesActivity {
 					(subNotesActs == null || subNotesActs.size() == 0) ) {
 				
 				// handle the case where the Notes section does not exist in the submitted CCDA
-				ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Notes Activity Entry, but the submitted C-CDA does not contain Notes Activity Entry data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Notes Activity Entry, "
+						+ "but the submitted C-CDA does not contain Notes Activity Entry data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 				results.add(rs);
 				log.info(" Scenario requires Notes Activity Entry but submitted document does not contain Notes Activity Entrydata");
 				
@@ -211,9 +212,9 @@ public class CCDANotesActivity {
 		
 	}
 	
-	public void compare(CCDANotesActivity refNote, ArrayList<ContentValidationResult> results , String context, boolean parentComparison) {
-		
-		
+	public void compare(CCDANotesActivity refNote, ArrayList<ContentValidationResult> results, String context,
+			boolean parentComparison) {
+				
 		log.info("Comparing Notes Activity Entry ");
 		
 		// Handle Template Ids
@@ -234,7 +235,7 @@ public class CCDANotesActivity {
 		
 		
 		// Comparing Author for Entry
-		String elementVal2 = " , Comparing Author Entry for : " + context;
+		String elementVal2 = " , Comparing Notes Activity Author Entry for : " + context;
 		ParserUtilities.compareAuthor(refNote.getAuthor(), author, results, elementVal2);
 		
 		if(parentComparison && (this.parent != null) && (refNote.parent != null)) {

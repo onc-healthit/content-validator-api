@@ -654,14 +654,18 @@ public class CCDARefModel {
 				(subNotes == null || subNotes.size() == 0) ) {
 			
 			// handle the case where the Notes section does not exist in the submitted CCDA
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Notes, but the submitted C-CDA does not contain Notes data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			// ref has Notes but sub does not
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Notes, "
+					+ "but the submitted C-CDA does not contain Notes data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info(" Scenario requires Notes data, but submitted document does not contain Notes data");
 			
 		}else if ((refNotes == null || refNotes.size() == 0) && 
 				(subNotes != null && subNotes.size() > 0) ) {
-		
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Notes, but the submitted C-CDA does contain Notes data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			
+			// ref doesn't have notes but sub does also results in an error
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Notes, "
+					+ "but the submitted C-CDA does contain Notes data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info("Model does not have Notes for comparison ");
 			

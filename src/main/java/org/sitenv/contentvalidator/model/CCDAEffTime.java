@@ -176,7 +176,9 @@ public class CCDAEffTime {
 				log.info("Value Time element matches");
 			}
 			else {
-				String error = "The " + elementName + " (Effective Time: Value ) is " + value.getValue() + " , but submitted CCDA (Effective Time: Value ) is " + subTime.getValue().getValue() + " which does not match ";
+				String error = "The " + elementName + " (Effective Time: Value ) is " + value.getValue()
+						+ " , but submitted CCDA (Effective Time: Value ) is " + subTime.getValue().getValue()
+						+ " which does not match ";
 				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 				results.add(rs);
 			}
@@ -184,13 +186,17 @@ public class CCDAEffTime {
 		}
 		else if(valuePresent && !subTime.getValuePresent()) {
 
-			String error = "The " + elementName + " (value time element ) is required, but submitted CCDA does not contain the (value time element) for " + elementName;
+			String error = "The " + elementName
+					+ " (value time element ) is required, but submitted CCDA does not contain the (value time element) for "
+					+ elementName;
 			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
 		else if(!valuePresent && subTime.getValuePresent()) {
 
-			String error = "The " + elementName + " (value time element) is not required, but submitted CCDA contains the (value time element) for " + elementName;
+			String error = "The " + elementName
+					+ " (value time element) is not required, but submitted CCDA contains the (value time element) for "
+					+ elementName;
 			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
@@ -216,16 +222,22 @@ public class CCDAEffTime {
 				log.info("Value Time element matches");
 			}
 			else {
-				String error = "The " + elementName + " (Effective Time: Value ) is " + value.getValue() + " , but submitted CCDA (Effective Time: Value ) is " + subTime.getValue().getValue() + " which does not match ";
-				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				String error = "The " + elementName + " (Effective Time: Value ) is " + value.getValue()
+						+ " , but submitted CCDA (Effective Time: Value ) is " + subTime.getValue().getValue()
+						+ " which does not match ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
+						"/ClinicalDocument", "0");
 				results.add(rs);
 			}
 
 		}
 		else if(valuePresent && !subTime.getValuePresent()) {
 
-			String error = "The " + elementName + " (value time element ) is required, but submitted CCDA does not contain the (value time element) for " + elementName;
-			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			String error = "The " + elementName
+					+ " (value time element ) is required, but submitted CCDA does not contain the (value time element) for "
+					+ elementName;
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
+					"/ClinicalDocument", "0");
 			results.add(rs);
 		}
 		else if(!valuePresent && subTime.getValuePresent()) {
@@ -245,7 +257,7 @@ public class CCDAEffTime {
 			log.info(" Validating Times for " + localElName);
 			final String timeDocType = isSub ? "submitted" : "scenario";
 			final String errorPrefix = "The " + timeDocType + " Provenance (Time: Value) ";
-			final boolean isParentElNameDocLevel = parentElName.equalsIgnoreCase("Document Level");
+			final boolean isDisplayIndex = index > -1 && !parentElName.equalsIgnoreCase("Document Level"); 
 
 			// validate date only in first 8 chars so we can have more specific errors returned
 			// This validation fails for letters, symbols, or being too short. Too long ends up in the next validation.
@@ -274,7 +286,7 @@ public class CCDAEffTime {
 				log.info("We have a validly formatted base 8 character date");
 			} else {
 				log.info("!! The date portion of the " + timeDocType + " time element value " + dateOnly8CharTime + " is invalid data as per RegEx");
-				String error = errorPrefix + value.getValue() + " at " + parentElName + (!isParentElNameDocLevel ? " index " + (index + 1) : "")
+				String error = errorPrefix + value.getValue() + " at " + parentElName + (isDisplayIndex ? " index " + (index + 1) : "")
 						+ ", is invalid. Please ensure the value starts with an 8-digit date. "
 						+ "The invalid date portion of the value is " + baseDateMatcher + ".";
 
@@ -318,7 +330,7 @@ public class CCDAEffTime {
 					log.info("We have a validly formatted base 8 character date");
 				} else {
 					log.info("!! The time and time-zone portion of the " + timeDocType + " time element value " + timeAndTimeZone + " is invalid data as per RegEx");
-					String error = errorPrefix + value.getValue() + " at " + parentElName + (!isParentElNameDocLevel ? " index " + (index + 1) : "") 
+					String error = errorPrefix + value.getValue() + " at " + parentElName + (isDisplayIndex ? " index " + (index + 1) : "") 
 							+ " is invalid. Please ensure the time and time-zone starts with a 4 or 6-digit time, "
 							+ "followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 							+ "The invalid time and time-zone portion of the value is " + timeAndTimeZone + ".";

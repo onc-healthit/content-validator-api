@@ -18,6 +18,7 @@ import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.dto.enums.SeverityLevel;
 import org.sitenv.contentvalidator.model.CCDARefModel;
 import org.sitenv.contentvalidator.service.ContentValidatorService;
+import org.springframework.beans.factory.parsing.Problem;
 
 public class ContentValidatorCuresTest extends ContentValidatorTester {
 	
@@ -61,6 +62,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 			"ModRef_AddNotesActivityProcActProcEntryRel_b1TocAmbS1.xml";	
 	private static final String MOD_REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA_DOC_AUTH_PRECISE_TO_TIME = 
 			"ModRef_AccurateDateAndTimeForAuthor_DocLvl_VitalSection_g9AAInpS1.xml";
+	private static final String MOD_REF_UPDATE_NOTES_TIMES_CURES_B1_TOC_AMB_SAMPLE3_HAPPY = "ModRef_ChangeNotesTimes_b1TocAmbS3.xml";
+	private static final String MOD_REF_VITAL_SIGNS_SEC_VS_OBS_TIME_REPRO_SITE_3261 = "ModRef_b1TocAmbS3_prod0421_repro_Site3261.xml";
 	
 	
 	private static final int SUB_CURES_MISSING_AUTHOR_IN_HEADER = 0;
@@ -97,6 +100,11 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_HAS_DATE_ONLY_INVERSE_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241 = 29;
 	private static final int SUB_HAS_ACCURATE_DATE_AND_TIME_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241 = 30;
 	private static final int SUB_HAS_MIXED_DATE_AND_TIME_FOR_AUTHOR_TIME_IN_DOC_LEV_AND_VITAL_SIGNS_SITE_3241 = 31;
+	private static final int SUB_HAS_NOTES_SEC_NOTE_ACT_AUTHOR_TIME_TIMEZONE_0400_SITE_3252 = 32;
+	private static final int SUB_VITAL_SIGNS_SEC_VS_OBS_TIME_REPRO_HAPPY_413_SITE_3261 = 33;
+	private static final int SUB_VITAL_SIGNS_SEC_VS_OBS_TIME_REPRO_HAPPY_413_MATCH_NAME_SITE_3261 = 34;
+	private static final int SUB_MEDICATION_SEC_MED_ACT_PROV_TIME_MISMATCHED_HAPPY_416_SITE_3262 = 35;
+	private static final int SUB_MEDICATION_SEC_MED_ACT_PROV_TIME_FIX_TO_MATCH_HAPPY_416_SITE_3262 = 36;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -133,7 +141,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/sub/hasDateOnlyForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/hasDateOnlyInverseForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/ref/ModRef_AccurateDateAndTimeForAuthor_DocLvl_VitalSection_g9AAInpS1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/hasMixedDateAndTimeForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI()					
+					ContentValidatorCuresTest.class.getResource("cures/sub/hasMixedDateAndTimeForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3252_b1TocAmbS3.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/VitalSignsSecVSObsTime_happy413_repro_Site3261.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/VitalSignsSecVSObsTime_happy413_repro_match_name_Site3261.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/MedicationSecMedActProvTimeMismatched_happy416_Site3262.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/MedicationSecMedActProvTimeFixToMatch_happy416_Site3262.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -1047,8 +1060,6 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 	}	
-
-	// TODO: Still test for blank org in any way?	
 	
 	@Test
 	public void cures_ProvenanceTimeComparison_DocLevDatesDoNotMatch_SecLevDatesMatchTimeDoesNot_ETTGGFileFix_Site3241Test() {
@@ -1066,10 +1077,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// <time value="20210317101614-0500"/>
 		// Note: This is 10:16 and 14 seconds for the time, we allow seconds so it's a valid format
 		// There is NO orgName in either the ref or the sub (TODO: does there need to be orgName at doc level, I think NOT)
+		// Notice how since there is no orgName, the message does not mention the missing name as an option for the error -
+		// It is filtered out in CCDAAuthor.compareAuthors as expected
 		// Expected result: The following Error should be produced:		
-		String message = "The scenario requires Document Level (Time: Value) Provenance data "
-				+ "which was not found in the submitted data. The scenario value is 20150622 "
-				+ "and a submitted value must at a minimum match the 8-digit date portion of the data."; 
+		String message = "The scenario requires Document Level Provenance data of time "
+				+ "which was not found in the submitted data. The scenario time value is 20150622 "
+				+ "and a submitted time value should at a minimum match the 8-digit date portion of the data.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 		
@@ -1156,8 +1169,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// in sub:
 		// <time value="20210317"/>	
 		// Expected result: The following Error should be produced:		
-		String message = "The scenario requires Document Level (Time: Value) Provenance data which was not found in the submitted data. "
-				+ "The scenario value is 20150622 and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		String message = "The scenario requires Document Level Provenance data of time which was not found in the submitted data. "
+				+ "The scenario time value is 20150622 and a submitted time value should at a minimum match the 8-digit date portion of the data.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 		
@@ -1197,9 +1210,10 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// <time value="20150622"/>
 		// in sub:
 		// <time value="20150622"/>	
-		// Expected result: The following Error should be produced:
-		String message = "The scenario requires Document Level (Time: Value) Provenance data which was not found in the submitted data. "
-				+ "The scenario value is 20150622 and a submitted value must at a minimum match the 8-digit date portion of the data."; 
+		// Expected result: The following Error should NOT be produced:
+		String message = "The scenario requires Document Level Provenance data of time "
+				+ "which was not found in the submitted data. The scenario time value is 20150622 and a submitted time value should "
+				+ "at a minimum match the 8-digit date portion of the data.";
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 		
@@ -1220,9 +1234,9 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//   Error as does not match
 		// 
 		//  The next 3 occurrences are the same as the 1st (so we expect 4 of these errors...)
-		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data "
-				+ "which was not found in the submitted data. The scenario value is 20150622 and a submitted value must at a minimum "
-				+ "match the 8-digit date portion of the data.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time "
+				+ "which was not found in the submitted data. The scenario time value is 20150622 and a submitted time value should "
+				+ "at a minimum match the 8-digit date portion of the data.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 	}
@@ -1321,10 +1335,10 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//   Has different base level date (also has different time but that's not an error to have if valid format)
 		//   Therefore, we aren't expecting a validation error, but, a match error, if, the sub doesn't have at least one example of 20031212(any time/timezone)
 		//  Expected result: Fail
-		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found "
-				+ "in the submitted data. The scenario value is 200312121100-0500 and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
+				+ "The scenario time value is 200312121100-0500 and a submitted time value should at a minimum match the 8-digit date portion of the data.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
 
 		// add has different timezone
 		// fix all these issues with sub times
@@ -1398,8 +1412,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   Year is wrong and has random time-zone but that part is OK, and uses plus vs minus, also OK, so fails date portion only
 		//  Expected result: Fail
-		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found "
-				+ "in the submitted data. The scenario value is 999906221100-0500 and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
+				+ "The scenario time value is 999906221100-0500 and a submitted time value should at a minimum match the 8-digit date portion of the data.";		
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 		// 2nd test
@@ -1430,8 +1444,6 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 */
-		
-
 				
 		// If the scenario contains any value at all, and the sub does not, an error is produced
 		// Note, this can only be kicked off if the sub doesn't containt that time value elsewhere...since we can't do index comparison
@@ -1445,8 +1457,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   Sub has no time element but needs one since ref has one. Refs time element is precise to day
 		//  Expected result: Fail
-		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the submitted data. "
-				+ "The scenario value is 44440622 and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
+				+ "The scenario time value is 44440622 and a submitted time value should at a minimum match the 8-digit date portion of the data.";		
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 
@@ -1460,8 +1472,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   Sub has no time element but needs one since ref has one. Refs time element is precise to time-zone
 		//  Expected result: Fail
-		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the submitted data. "
-				+ "The scenario value is 555506221100-0500 and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
+				+ "The scenario time value is 555506221100-0500 and a submitted time value should at a minimum match the 8-digit date portion of the data.";		
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
 
@@ -1553,8 +1565,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   scenario doesn't have an author at all, ref has date level precision on time
 		//  Expected result: Pass
-		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the submitted data. "
-				+ "The scenario value is null and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
+				+ "The scenario time value is null and a submitted time value should at a minimum match the 8-digit date portion of the data.";		
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 					
@@ -1568,8 +1580,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   scenario doesn't have a time at all, ref has date level precision on time
 		//  Expected result: Pass
-		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the submitted data. "
-				+ "The scenario value is null and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
+				+ "The scenario time value is null and a submitted time value should at a minimum match the 8-digit date portion of the data.";
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 
@@ -1583,8 +1595,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   scenario doesn't have an author at all, nor does ref
 		//  Expected result: Pass
-		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the submitted data. "
-				+ "The scenario value is null and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
+				+ "The scenario time value is null and a submitted time value should at a minimum match the 8-digit date portion of the data.";
 		// Since prior error is identical, ensuring that the latest error matches specifically
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
@@ -1599,8 +1611,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   scenario doesn't have an time at all, nor does ref
 		//  Expected result: Pass
-		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the submitted data. "
-				+ "The scenario value is null and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
+				+ "The scenario time value is null and a submitted time value should at a minimum match the 8-digit date portion of the data.";
 		// Since prior error is identical, ensuring that the latest error matches specifically
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
@@ -1618,8 +1630,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   Sub has no author element but needs one since ref has one and a time element. Refs time element value is precise to day
 		//  Expected result: Fail
-		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the "
-				+ "submitted data. The scenario value is 77110622 and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
+				+ "The scenario time value is 77110622 and a submitted time value should at a minimum match the 8-digit date portion of the data.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 		
@@ -1633,8 +1645,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//   Sub has no time element but needs one since ref has one. Refs time element is precise to time-zone
 		//  Expected result: Fail
-		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found in the "
-				+ "submitted data. The scenario value is 773306221100-0500 and a submitted value must at a minimum match the 8-digit date portion of the data.";
+		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
+				+ "The scenario time value is 773306221100-0500 and a submitted time value should at a minimum match the 8-digit date portion of the data.";		
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 		// This one also triggers the author entry count req - because it's the entire author missing vs just a time
@@ -1642,6 +1654,264 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The scenario requires a total of 19 Author Entries for Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation, "
 				+ "however the submitted data had only 18 entries.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+	}
+	
+	@Test
+	public void cures_NotesSectionNoteActivityAuthorTime_DoNotEnforceTimeZoneDifSite3252Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// https://groups.google.com/g/edge-test-tool/c/0S-BHfJDgUY
+		// "...getting the error for the clinical notes (Happy Kid for the b1) that is requiring ET time 
+		// but not considering daylight saving. Here is the error"
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_UPDATE_NOTES_TIMES_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
+				SUBMITTED_CCDA[SUB_HAS_NOTES_SEC_NOTE_ACT_AUTHOR_TIME_TIMEZONE_0400_SITE_3252],
+				SeverityLevel.ERROR);
+		removeBirthSexError(results);
+		printResults(results);
+		
+		// T1
+        // Notes Section/Note Activity entry 1/author/time
+		//
+		// ref
+        // <author>
+        // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//					<time value="202006221100-0500" />		
+		// sub
+        // <author>
+        // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//					<time value="202006221100-0400" />
+		//  Comparison: 
+		//  time zone is 0400 in sub vs 0500 in ref
+		//  Expected result: Pass (since we don't care if time-zone is different only that it is valid)
+		String message = "The Comparing Author Time for  , Comparing Author Entry for : Notes Section "
+				+ "corresponding to the code 11488-4 (Effective Time: Value ) is 202006221100-0500 , "
+				+ "but submitted CCDA (Effective Time: Value ) is 202006221100-0400 which does not match ";
+		assertFalse("Results should not have contained the following message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		
+		/*
+		 * TODO: Why isn't this failing? It seems we can only fail the final index entry. 
+		 * If there is only 1 entry, the final index will be the first. That doesn't seem right?
+		// T2
+		// Notes Section/Note Activity entry 2/author/time
+		//
+		// ref
+        // <author>
+        // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//					<time value="199906221100-0500" />		
+		// sub
+        // <author>
+        // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//					<time value="149206221100-0500" />
+		//  Comparison: 
+		//  base date is 1492 in sub vs expected 1999 in ref
+		//  Expected result: Fail (since we don't have an example of 19990622 but instead sub has 14920622)
+		message = "The Comparing Author Time for  , Comparing Notes Activity Author Entry for : Notes Section "
+				+ "corresponding to the code 11488-4 (Effective Time: Value ) is 199906221100-0500 , "
+				+ "but submitted CCDA (Effective Time: Value ) is 149206221100-0500 which does not match";
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		*/
+		
+		// T3
+		// Notes Section/Note Activity entry 2/author/time
+		//
+		// ref
+        // <author>
+        // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//					<time value="198506221100-0500" />		
+		// sub
+        // <author>
+        // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//					<time value="198506221100-05AB" />
+		//  Comparison: 
+		//  ref time zone is correct, 4 digits, sub time-zone is incorrect, has letters. 
+		//  Although since this is validation, comparison is irrelevant, only looking at sub, and sub fails alone
+		//  Expected result: Fail (invalid format on time-zone - has 04AB, not 4 digits)
+		message = "The submitted Provenance (Time: Value) 198506221100-05AB at Notes Activity Author Entry "
+				+ "for : Notes Section corresponding to the code 11488-4 is invalid. "
+				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, "
+				+ "followed by a '+' or a '-', and finally, a 4-digit time-zone. "
+				+ "The invalid time and time-zone portion of the value is 1100-05AB.";
+		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
 	}
+	
+	@Test
+	public void cures_VitalSignsSecVSObs_BasicRepro3261Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_VITAL_SIGNS_SEC_VS_OBS_TIME_REPRO_SITE_3261,
+				SUBMITTED_CCDA[SUB_VITAL_SIGNS_SEC_VS_OBS_TIME_REPRO_HAPPY_413_SITE_3261],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// Using original doc from Matt with EPIC name, run expect fail test.
+		// T1 entry 1 Obs 1
+		// Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation/author/assignedAuthor/representedOrganization
+		//
+		// ref
+		// 	<name>Neighborhood Physicians Practice</name>
+		// sub
+		// 	<name>Epic FACILITY</name>
+		// 
+		//  Comparison: 
+		//  name inner text value fails as does not match ref, and at least one must match
+		String message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation "
+				+ "Provenance data of time and/or representedOrganization/name which was not found in the "
+				+ "submitted data. The scenario time value is 202006221100-0500 and a submitted time value "
+				+ "should at a minimum match the 8-digit date portion of the data. "
+				+ "The scenario representedOrganization/name value is Neighborhood Physicians Practice and a "
+				+ "submitted name should match. One or all of the prior issues exist and must be resolved.";
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));			
+		
+//		passes, ref, original . Due to name matching.
+//		
+//		<author>
+//					<templateId root="2.16.840.1.113883.10.20.22.4.119" />
+//					<time value="202006221100-0500" />
+//					<assignedAuthor>
+//						<id extension="111111" root="2.16.840.1.113883.4.6"/>
+//						<assignedPerson>
+//				            <name>
+//				            	<prefix>Dr</prefix>
+//				                <given>Albert</given>
+//				                <family>Davis</family>
+//				            </name>
+//						</assignedPerson>
+//						<representedOrganization>
+//				            <id root="2.16.840.1.113883.19.5" />
+//				            <name>Neighborhood Physicians Practice</name>
+//				        </representedOrganization>
+//					</assignedAuthor>
+//				</author>		
+//		
+//		fails, sub, original. Due to name mismatch
+//
+//        <author>
+//          <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+//          <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+//          <time value="20200622110000-0500" />
+//          <assignedAuthor>
+//            <id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
+//            <addr nullFlavor="UNK" />
+//            <telecom nullFlavor="UNK" />
+//            <representedOrganization>
+//              <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+//              <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
+//              <name>Epic FACILITY</name>
+//              <addr use="WP">
+//                <streetAddressLine>123 Anywhere St.</streetAddressLine>
+//                <city>VERONA</city>
+//                <state>WI</state>
+//                <postalCode>53593-9179</postalCode>
+//              </addr>
+//            </representedOrganization>
+//          </assignedAuthor>
+//        </author>		
+	}
+	
+	@Test
+	public void cures_VitalSignsSecVSObs_UpdateReproTestFileNameToMatch3261Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		
+		// Using original doc from Matt, update it to match <name>Neighborhood Physicians Practice</name> and run expect pass test.
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_VITAL_SIGNS_SEC_VS_OBS_TIME_REPRO_SITE_3261,
+				SUBMITTED_CCDA[SUB_VITAL_SIGNS_SEC_VS_OBS_TIME_REPRO_HAPPY_413_MATCH_NAME_SITE_3261],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// Using original doc from Matt with EPIC name, run expect fail test.
+		// T1 entry 1 Obs 1
+		// Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation/author/assignedAuthor/representedOrganization
+		//
+		// ref
+		// 	<name>Neighborhood Physicians Practice</name>
+		// sub
+		//	<name>Neighborhood Physicians Practice</name>
+		// 
+		//  Comparison: 
+		//  name inner text value passes as matches ref and and at least one must match/does
+		String message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation "
+				+ "Provenance data of time and/or representedOrganization/name which was not found in the "
+				+ "submitted data. The scenario time value is 202006221100-0500 and a submitted time value "
+				+ "should at a minimum match the 8-digit date portion of the data. "
+				+ "The scenario representedOrganization/name value is Neighborhood Physicians Practice and a "
+				+ "submitted name should match. One or all of the prior issues exist and must be resolved.";
+		assertFalse("Results should not have contained the following message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_MedicationSectionMedicationActivity_BasicRepro3262Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// https://groups.google.com/g/edge-test-tool/c/wUtWOdf55dI/m/YlGHKa5WAQAJ
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
+				SUBMITTED_CCDA[SUB_MEDICATION_SEC_MED_ACT_PROV_TIME_MISMATCHED_HAPPY_416_SITE_3262],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// Using original doc from Jess, run expect fail test.
+		// T1 entry 1 Entry 1
+		// Medications Section/MedicationActivity/author/time
+		//
+		// ref
+		// 	  <time value="202006221100-0500" />
+		// sub
+		// 	  <time value="20201130155603-0600" />
+		// 
+		//  Comparison: 
+		//  value does not match in multiple ways. What triggers the error is the base level 8-digit date mismatch though.
+		String message = "The scenario requires Medications Section/MedicationActivity Provenance data of time"
+				+ " and/or representedOrganization/name which was not found in the submitted data."
+				+ " The scenario time value is 202006221100-0500 and a submitted time value should at a minimum "
+				+ "match the 8-digit date portion of the data. The scenario representedOrganization/name value is "
+				+ "Neighborhood Physicians Practice and a submitted name should match. "
+				+ "One or all of the prior issues exist and must be resolved.";
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_MedicationSectionMedicationActivity_FixSubTimeToMatchRef3262Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// https://groups.google.com/g/edge-test-tool/c/wUtWOdf55dI/m/YlGHKa5WAQAJ
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
+				SUBMITTED_CCDA[SUB_MEDICATION_SEC_MED_ACT_PROV_TIME_FIX_TO_MATCH_HAPPY_416_SITE_3262],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// Fix original doc from Jess, run expect pass test.
+		// T1 entry 1 Entry 1
+		// Medications Section/MedicationActivity/author/time
+		//
+		// ref
+		// 	  <time value="202006221100-0500" />
+		// sub
+		// 	  <time value="20200622155603-0600" />
+		// 
+		//  Comparison: 
+		//  base level date matches in at least one entry (the 1st) which passes our test
+		String message = "The scenario requires Medications Section/MedicationActivity Provenance data of time"
+				+ " and/or representedOrganization/name which was not found in the submitted data."
+				+ " The scenario time value is 202006221100-0500 and a submitted time value should at a minimum "
+				+ "match the 8-digit date portion of the data. The scenario representedOrganization/name value is "
+				+ "Neighborhood Physicians Practice and a submitted name should match. "
+				+ "One or all of the prior issues exist and must be resolved.";
+		assertFalse("Results should not have contained the following message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}	
+	
 }

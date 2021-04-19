@@ -15,7 +15,7 @@ public class CCDANotes {
 	
 	private ArrayList<CCDAII>       		sectionTemplateId;
 	private CCDACode                 		sectionCode;
-	private ArrayList<CCDANotesActivity>		notesActivity;
+	private ArrayList<CCDANotesActivity>	notesActivity;
 	
 	private CCDAAuthor author;
 	
@@ -134,8 +134,11 @@ public class CCDANotes {
 		String elementNameVal = "Comparing Notes Section code element for " + context;
 		ParserUtilities.compareCode(refNote.getSectionCode(), sectionCode, results, elementNameVal);
 		
-		// context += ", Comapring Notes Activity ";
+		// context += ", Comparing Notes Activity ";
 		CCDANotesActivity.compareNotesActivity(refNote.getNotesActivity(), this.getNotesActivity(), results, context);
+		
+		// TODO-db: Should we compare authors here/within compareNotesActivity for all NotesActivity entries, or do we only want to compare the first entry?
+		// It seems that right now only the final entry is compared (in this case, entry 3).
 	}
 
 
