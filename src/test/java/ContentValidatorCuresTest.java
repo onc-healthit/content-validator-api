@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
 
 import org.junit.Ignore;
@@ -1087,8 +1088,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		String message = "The scenario requires Document Level Provenance data of time "
 				+ "which was not found in the submitted data. The scenario time value is 20150622 "
 				+ "and a submitted time value should at a minimum match the 8-digit date portion of the data.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectError(message, results);
 		
 		// Provenance at the document level (does not match in any way (date or time)):
 		// in ref:
@@ -1100,8 +1100,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The submitted Provenance (Time: Value) 20210317101614-0500 at Document Level is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', "
 				+ "and finally, a 4-digit time-zone. The invalid time and time-zone portion of the value is 101614-0500"; 
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
+		expectNoError(message, results);
 		
 		// 4: If the scenario includes a date only (no time), then the submitted file must match the exact date, 
 		// but is allowed to have time as well, which matches any point in time, but also matches the required C-CDA format.
@@ -1175,8 +1174,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// Expected result: The following Error should be produced:		
 		String message = "The scenario requires Document Level Provenance data of time which was not found in the submitted data. "
 				+ "The scenario time value is 20150622 and a submitted time value should at a minimum match the 8-digit date portion of the data.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectError(message, results);
 		
 		// 1: If the scenario includes a date, then the submitted file must match that date exactly
 		//
@@ -1218,8 +1216,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		String message = "The scenario requires Document Level Provenance data of time "
 				+ "which was not found in the submitted data. The scenario time value is 20150622 and a submitted time value should "
 				+ "at a minimum match the 8-digit date portion of the data.";
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		expectNoError(message,results);
 		
 		// 1: If the scenario includes a date, then the submitted file must match that date exactly
 		// *Note: We can't compare one to one. We can only prove that at least one exists in the sub that matches the ref.
@@ -1241,8 +1238,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time "
 				+ "which was not found in the submitted data. The scenario time value is 20150622 and a submitted time value should "
 				+ "at a minimum match the 8-digit date portion of the data.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectError(message, results);
 	}
 	
 	@Test
@@ -1276,9 +1272,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//   Exact match full precision (except seconds)
 		//  Expected result: Pass
 		
-		String message = "Provenance";
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
+		expectNoError("Provenance", results);
 	}
 	
 	@Test
@@ -1309,8 +1303,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		String message = "The submitted Provenance (Time: Value) 201506221100 at Document Level is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 1100."; 
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		expectError(message, results);		
 		
 		// ---- Section level below ----		
 		
@@ -1326,8 +1319,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The submitted Provenance (Time: Value) 201506221100- at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 1 "
 				+ "is invalid. Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', "
 				+ "and finally, a 4-digit time-zone. The invalid time and time-zone portion of the value is 1100-.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));				
+		expectError(message, results);				
 	
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S2
@@ -1341,8 +1333,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Expected result: Fail
 		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
 				+ "The scenario time value is 200312121100-0500 and a submitted time value should at a minimum match the 8-digit date portion of the data.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
+		expectError(message, results);	
 
 		// add has different timezone
 		// fix all these issues with sub times
@@ -1359,8 +1350,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The submitted Provenance (Time: Value) 201506221100*0500 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 3 is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 1100*0500.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
+		expectError(message, results);	
 		
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S4
@@ -1374,8 +1364,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The submitted Provenance (Time: Value) 201506221100-06001234 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 4 is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 1100-06001234.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectError(message, results);
 				
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S5
@@ -1389,8 +1378,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The submitted Provenance (Time: Value) 2015062211007878-0500 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 5 is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 11007878-0500.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		expectError(message, results);		
 
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S6
@@ -1404,8 +1392,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The submitted Provenance (Time: Value) 2015062211000500 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 6 is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 11000500.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectError(message, results);
 
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S7
@@ -1418,14 +1405,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Expected result: Fail
 		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
 				+ "The scenario time value is 999906221100-0500 and a submitted time value should at a minimum match the 8-digit date portion of the data.";		
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectError(message, results);
 		// 2nd test
 		message = "The submitted Provenance (Time: Value) 292906221100+1234 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 7 is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 1100+1234.";
-		assertFalse("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectNoError(message, results);
 
 /*
 		// If the scenario includes a time, then the sub must include a time (in general) (has it's own specific error)
@@ -1445,8 +1430,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 //				+ "but the submitted C-CDA (Time: Value) 29290622 does not include time or time-zone data.";
 		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation (Time: Value) Provenance data which was not found "
 				+ "in the submitted data. The scenario value is 333306221100-0500 and a submitted value must at a minimum match the 8-digit date portion of the data.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectError(message, results);
 */
 				
 		// If the scenario contains any value at all, and the sub does not, an error is produced
@@ -1463,8 +1447,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Expected result: Fail
 		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
 				+ "The scenario time value is 44440622 and a submitted time value should at a minimum match the 8-digit date portion of the data.";		
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectError(message, results);
 
 		// If the scenario contains any value at all, and the sub does not, an error is produced
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
@@ -1478,8 +1461,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Expected result: Fail
 		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
 				+ "The scenario time value is 555506221100-0500 and a submitted time value should at a minimum match the 8-digit date portion of the data.";		
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
+		expectError(message, results);	
 
 
 		/// EXPECT pass
@@ -1496,8 +1478,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The submitted Provenance (Time: Value) 991106221100-0500 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 11 is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 991106221100-0500.";
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectNoError(message, results);
 
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S12
@@ -1511,8 +1492,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The submitted Provenance (Time: Value) 992206229999-0500 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 12 is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 992206229999-0500.";		
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		expectNoError(message, results);		
 
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S13
@@ -1526,8 +1506,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The submitted Provenance (Time: Value) 993306221100-6666 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 13 is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 993306221100-6666.";
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectNoError(message, results);
 		
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S14
@@ -1541,8 +1520,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The submitted Provenance (Time: Value) 994406221100+0500 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 14 is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 1100+0500.";
-		assertFalse("Results should not have contained the following message but did: " + message,
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectNoError(message, results);
 
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
 		// S15
@@ -1556,8 +1534,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The submitted Provenance (Time: Value) 99550622 at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation index 15 is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 99550622.";
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		expectNoError(message, results);		
 
 		// If the scenario does not include a date, but the sub does, that is not an error, as more data is acceptable
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
@@ -1571,8 +1548,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Expected result: Pass
 		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
 				+ "The scenario time value is null and a submitted time value should at a minimum match the 8-digit date portion of the data.";		
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectNoError(message, results);
 					
 		// If the scenario does not include a date, but the sub does, that is not an error, as more data is acceptable
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
@@ -1586,8 +1562,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Expected result: Pass
 		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
 				+ "The scenario time value is null and a submitted time value should at a minimum match the 8-digit date portion of the data.";
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectNoError(message, results);
 
 		// If the scenario does not include a date, then the sub file would not need to include a date.
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
@@ -1602,8 +1577,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
 				+ "The scenario time value is null and a submitted time value should at a minimum match the 8-digit date portion of the data.";
 		// Since prior error is identical, ensuring that the latest error matches specifically
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));	
+		expectNoError(message, results);	
 				
 		// If the scenario does not include a date, then the sub file would not need to include a date.
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
@@ -1618,8 +1592,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
 				+ "The scenario time value is null and a submitted time value should at a minimum match the 8-digit date portion of the data.";
 		// Since prior error is identical, ensuring that the latest error matches specifically
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectNoError(message, results);
 			
 		
 		// More Expect Fail
@@ -1636,8 +1609,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Expected result: Fail
 		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
 				+ "The scenario time value is 77110622 and a submitted time value should at a minimum match the 8-digit date portion of the data.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectError(message, results);
 		
 		// If the scenario contains any value at all, and the sub does not, an error is produced
 		// Provenance at Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation:
@@ -1651,14 +1623,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Expected result: Fail
 		message = "The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance data of time which was not found in the submitted data. "
 				+ "The scenario time value is 773306221100-0500 and a submitted time value should at a minimum match the 8-digit date portion of the data.";		
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		expectError(message, results);	
 		// This one also triggers the author entry count req - because it's the entire author missing vs just a time
 		// Note this is 18 instead of 21 because some of the observations are missing authors in ref
 		message = "The scenario requires a total of 19 Author Entries for Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation, "
 				+ "however the submitted data had only 18 entries.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectError(message, results);
 	}
 	
 	@Test
@@ -1693,8 +1663,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		String message = "The Comparing Author Time for  , Comparing Author Entry for : Notes Section "
 				+ "corresponding to the code 11488-4 (Effective Time: Value ) is 202006221100-0500 , "
 				+ "but submitted CCDA (Effective Time: Value ) is 202006221100-0400 which does not match ";
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectNoError(message, results);
 		
 		/*
 		 * TODO: Why isn't this failing? It seems we can only fail the final index entry. 
@@ -1740,8 +1709,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, "
 				+ "followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 1100-05AB.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		expectError(message, results);	
 	}
 	
 	@Test
@@ -1772,8 +1740,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "should at a minimum match the 8-digit date portion of the data. "
 				+ "The scenario representedOrganization/name value is Neighborhood Physicians Practice and a "
 				+ "submitted name should match. One or all of the prior issues exist and must be resolved.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));			
+		expectError(message, results);			
 		
 //		passes, ref, original . Due to name matching.
 //		
@@ -1850,8 +1817,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "should at a minimum match the 8-digit date portion of the data. "
 				+ "The scenario representedOrganization/name value is Neighborhood Physicians Practice and a "
 				+ "submitted name should match. One or all of the prior issues exist and must be resolved.";
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		expectNoError(message, results);
 	}
 	
 	@Test
@@ -1882,8 +1848,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "match the 8-digit date portion of the data. The scenario representedOrganization/name value is "
 				+ "Neighborhood Physicians Practice and a submitted name should match. "
 				+ "One or all of the prior issues exist and must be resolved.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		expectError(message, results);
 	}
 	
 	@Test
@@ -1914,8 +1879,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "match the 8-digit date portion of the data. The scenario representedOrganization/name value is "
 				+ "Neighborhood Physicians Practice and a submitted name should match. "
 				+ "One or all of the prior issues exist and must be resolved.";
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		expectNoError(message, results);
 	}
 	
 	@Test
@@ -1960,15 +1924,13 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Base level time matches but name does not match since it does not exist in sub.
 		//  Neither the name element or its parent element, representedOrganization exist in assignedAuthor in sub.
 		//  At least one instance in sub must exist/match the ref repOrgName but does not.
-
-		String message = "The scenario requires Problem Section/ProblemConcern/ProblemObservation Provenance "
+		
+		expectError("The scenario requires Problem Section/ProblemConcern/ProblemObservation Provenance "
 				+ "data of time and/or representedOrganization/name which was not found in the submitted data. "
 				+ "The scenario time value is 202006221100-0500 and a submitted time value should at a minimum "
 				+ "match the 8-digit date portion of the data. The scenario representedOrganization/name value "
 				+ "is Neighborhood Physicians Practice and a submitted name should match. "
-				+ "One or all of the prior issues exist and must be resolved.";
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+				+ "One or all of the prior issues exist and must be resolved.", results);
 	}
 	
 	@Test
@@ -2024,15 +1986,13 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//  Base level time matches and representedOrganization/name matches
 		//  At least one instance in sub must exist/match the ref repOrgName, and does (the 1st instance in this case)
-
-		String message = "The scenario requires Problem Section/ProblemConcern/ProblemObservation Provenance "
+		
+		expectNoError("The scenario requires Problem Section/ProblemConcern/ProblemObservation Provenance "
 				+ "data of time and/or representedOrganization/name which was not found in the submitted data. "
 				+ "The scenario time value is 202006221100-0500 and a submitted time value should at a minimum "
 				+ "match the 8-digit date portion of the data. The scenario representedOrganization/name value "
 				+ "is Neighborhood Physicians Practice and a submitted name should match. "
-				+ "One or all of the prior issues exist and must be resolved.";
-		assertFalse("Results should not have contained the following message but did: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+				+ "One or all of the prior issues exist and must be resolved.", results);
 	}	
 	
 }
