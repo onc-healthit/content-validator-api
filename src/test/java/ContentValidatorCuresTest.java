@@ -105,6 +105,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_VITAL_SIGNS_SEC_VS_OBS_TIME_REPRO_HAPPY_413_MATCH_NAME_SITE_3261 = 34;
 	private static final int SUB_MEDICATION_SEC_MED_ACT_PROV_TIME_MISMATCHED_HAPPY_416_SITE_3262 = 35;
 	private static final int SUB_MEDICATION_SEC_MED_ACT_PROV_TIME_FIX_TO_MATCH_HAPPY_416_SITE_3262 = 36;
+	private static final int SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265 = 37;
+	private static final int SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265 = 38;	
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -146,7 +148,9 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/sub/VitalSignsSecVSObsTime_happy413_repro_Site3261.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/VitalSignsSecVSObsTime_happy413_repro_match_name_Site3261.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/MedicationSecMedActProvTimeMismatched_happy416_Site3262.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/MedicationSecMedActProvTimeFixToMatch_happy416_Site3262.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/sub/MedicationSecMedActProvTimeFixToMatch_happy416_Site3262.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -1741,7 +1745,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	}
 	
 	@Test
-	public void cures_VitalSignsSecVSObs_BasicRepro3261Test() {
+	public void cures_VitalSignsSecVSObs_BasicReproSite3261Test() {
 		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
 
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
@@ -1818,7 +1822,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	}
 	
 	@Test
-	public void cures_VitalSignsSecVSObs_UpdateReproTestFileNameToMatch3261Test() {
+	public void cures_VitalSignsSecVSObs_UpdateReproTestFileNameToMatchSite3261Test() {
 		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
 		
 		// Using original doc from Matt, update it to match <name>Neighborhood Physicians Practice</name> and run expect pass test.
@@ -1851,7 +1855,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	}
 	
 	@Test
-	public void cures_MedicationSectionMedicationActivity_BasicRepro3262Test() {
+	public void cures_MedicationSectionMedicationActivity_BasicReproSite3262Test() {
 		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
 		// https://groups.google.com/g/edge-test-tool/c/wUtWOdf55dI/m/YlGHKa5WAQAJ
 		
@@ -1862,7 +1866,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		printResults(results);
 		
 		// Using original doc from Jess, run expect fail test.
-		// T1 entry 1 Entry 1
+		// T1 entry 1
 		// Medications Section/MedicationActivity/author/time
 		//
 		// ref
@@ -1879,7 +1883,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "Neighborhood Physicians Practice and a submitted name should match. "
 				+ "One or all of the prior issues exist and must be resolved.";
 		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 	}
 	
 	@Test
@@ -1894,7 +1898,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		printResults(results);
 		
 		// Fix original doc from Jess, run expect pass test.
-		// T1 entry 1 Entry 1
+		// T1 entry 1
 		// Medications Section/MedicationActivity/author/time
 		//
 		// ref
@@ -1912,6 +1916,123 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "One or all of the prior issues exist and must be resolved.";
 		assertFalse("Results should not have contained the following message but did: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_ProblemSecProbConcProbObs_BasicReproMissingNameSite3265Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// SITE-3265 ETT GG NCC ContentVal "Problems data provenance error" User-error missing name
+		// https://groups.google.com/g/edge-test-tool/c/-kjLTnBuB00
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
+				SUBMITTED_CCDA[SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// Fix original doc from Jess, run expect fail test since the error is accurate.
+		// T1 entry 1
+		// Problem Section/ProblemConcern/ProblemObservation
+		//
+		// ref
+		//   <author>
+        //    <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//    <time value="202006221100-0500" />
+		//    <assignedAuthor>
+		//      ...
+		//      <representedOrganization>
+        //        <id root="2.16.840.1.113883.19.5" />
+        //        <name>Neighborhood Physicians Practice</name> <!-- *** requires name *** -->
+        //      </representedOrganization>
+        //    </assignedAuthor>
+        //   </author>
+		//
+		// sub
+		//   <author>
+        //    <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+        //    ...
+		//    <time value="20200622110000-0500" />
+		//      <assignedAuthor>
+		//      ...
+		//      <!-- Fails because it is missing a representedOrganization/name -->
+		//
+		//  Comparison: 
+		//  Base level time matches but name does not match since it does not exist in sub.
+		//  Neither the name element or its parent element, representedOrganization exist in assignedAuthor in sub.
+		//  At least one instance in sub must exist/match the ref repOrgName but does not.
+
+		String message = "The scenario requires Problem Section/ProblemConcern/ProblemObservation Provenance "
+				+ "data of time and/or representedOrganization/name which was not found in the submitted data. "
+				+ "The scenario time value is 202006221100-0500 and a submitted time value should at a minimum "
+				+ "match the 8-digit date portion of the data. The scenario representedOrganization/name value "
+				+ "is Neighborhood Physicians Practice and a submitted name should match. "
+				+ "One or all of the prior issues exist and must be resolved.";
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+	}
+	
+	@Test
+	public void cures_ProblemSecProbConcProbObs_AddMatchingNameSite3265Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// SITE-3265 ETT GG NCC ContentVal "Problems data provenance error" User-error missing name
+		// https://groups.google.com/g/edge-test-tool/c/-kjLTnBuB00
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
+				SUBMITTED_CCDA[SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// Fix original doc from Jess, run expect pass test 
+		// We have fixed the submitted document by adding a matching name
+		// T1 entry 1
+		// Problem Section/ProblemConcern/ProblemObservation
+		//
+		// ref
+		//   <author>
+        //    <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//    <time value="202006221100-0500" />
+		//    <assignedAuthor>
+		//      ...
+		//      <representedOrganization>
+        //        <id root="2.16.840.1.113883.19.5" />
+        //        <name>Neighborhood Physicians Practice</name> <!-- *** requires name *** -->
+        //      </representedOrganization>
+        //    </assignedAuthor>
+        //   </author>
+		//
+		// sub
+		//   <author>
+        //    <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+        //    ...
+		//    <time value="20200622110000-0500" />
+		//      <assignedAuthor>
+		//      	...
+		//			<assignedPerson>
+		//          <name>
+		//            	<prefix>Dr</prefix>
+		//              <given>Albert</given>
+		//              <family>Davis</family>
+		//          </name>
+		//   		</assignedPerson>
+		//	        <!-- Passes because it contains a representedOrganization with a matching name -dbTest -->	  					
+		//			<representedOrganization>
+		//	            <id root="2.16.840.1.113883.19.5" />
+		//	            <name>Neighborhood Physicians Practice</name>
+		//	        </representedOrganization>
+		//
+		//  Comparison: 
+		//  Base level time matches and representedOrganization/name matches
+		//  At least one instance in sub must exist/match the ref repOrgName, and does (the 1st instance in this case)
+
+		String message = "The scenario requires Problem Section/ProblemConcern/ProblemObservation Provenance "
+				+ "data of time and/or representedOrganization/name which was not found in the submitted data. "
+				+ "The scenario time value is 202006221100-0500 and a submitted time value should at a minimum "
+				+ "match the 8-digit date portion of the data. The scenario representedOrganization/name value "
+				+ "is Neighborhood Physicians Practice and a submitted name should match. "
+				+ "One or all of the prior issues exist and must be resolved.";
+		assertFalse("Results should not have contained the following message but did: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 	}	
 	
 }
