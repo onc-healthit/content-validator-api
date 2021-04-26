@@ -48,6 +48,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final String REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF = "170.315_b1_toc_amb_sample1_v1.pdf";
 	
 	private static final String REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY = "170.315_b1_toc_amb_sample3_v2.xml";
+	private static final String REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_V5 = "170.315_b1_toc_amb_sample3_v5.xml";
 	private static final String REF_CURES_B1_INP_AMB_SAMPLE3_JANE = "170.315_b1_toc_inp_sample3.xml";
 	
 	private static final String REF_CURES_E1_VDT_AMB_SAMPLE1_ALICE = "170.315_e1_vdt_amb_sample1.xml";
@@ -108,6 +109,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_MEDICATION_SEC_MED_ACT_PROV_TIME_FIX_TO_MATCH_HAPPY_416_SITE_3262 = 36;
 	private static final int SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265 = 37;
 	private static final int SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265 = 38;	
+	private static final int SUB_CARE_TEAM_SEC_PERF = 39;
+	private static final int SUB_CARE_TEAM_SEC_PERF_AND_PART = 40;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -151,7 +154,9 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/sub/MedicationSecMedActProvTimeMismatched_happy416_Site3262.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/MedicationSecMedActProvTimeFixToMatch_happy416_Site3262.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample3_ctp.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample3_ctpp.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -197,6 +202,32 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY, SUBMITTED_CCDA[SUB_EF],
 					SeverityLevel.ERROR);
 			printResults(results);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void cures_careTeamValidationTest() {
+		printHeader("cures_careTeamContentValidationTest");
+		try {
+			ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_V5, SUBMITTED_CCDA[SUB_CARE_TEAM_SEC_PERF],
+					SeverityLevel.ERROR);
+			printResults(results);
+			
+			if(results.size() > 1)
+				fail("There should not be any errrors");
+			
+			ArrayList<ContentValidationResult> addResults = validateDocumentAndReturnResultsCures(
+					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_V5, SUBMITTED_CCDA[SUB_CARE_TEAM_SEC_PERF_AND_PART],
+					SeverityLevel.ERROR);
+			printResults(addResults);
+			
+			if(addResults.size() > 1)
+				fail("There should not be any errrors");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

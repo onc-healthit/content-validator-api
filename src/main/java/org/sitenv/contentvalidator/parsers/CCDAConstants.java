@@ -135,6 +135,11 @@ public class CCDAConstants {
 	
 	// CTM
 	static public XPathExpression CARE_TEAM_EXPRESSION;
+	static public XPathExpression CARE_TEAM_SECTION_EXPRESSION;
+	static public XPathExpression REL_CARE_TEAM_ORG_EXPRESSION;
+	static public XPathExpression REL_CARE_TEAM_MEMBER_ACT_EXPRESSION;
+	static public XPathExpression REL_PERFORMER_EXP;
+	static public XPathExpression REL_PARTICIPANT_EXP;
 	
 	// Social history
 	static public XPathExpression SOCIAL_HISTORY_EXPRESSION;
@@ -294,7 +299,10 @@ public class CCDAConstants {
 		    REL_SCOPING_ENTITY_ID_EXP = CCDAConstants.CCDAXPATH.compile("./scopingEntity/id[not(@nullFlavor)]");
 		    
 		    CARE_TEAM_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/documentationOf/serviceEvent/performer[not(@nullFlavor)]");
-		    
+		    CARE_TEAM_SECTION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='85847-2']]");
+		    REL_CARE_TEAM_ORG_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/organizer[not(@nullFlavor)]");
+		    REL_CARE_TEAM_MEMBER_ACT_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./component/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.500.1']]");
+		    		    
 			REL_TEMPLATE_ID_EXP = CCDAConstants.CCDAXPATH.compile("./templateId[not(@nullFlavor)]");
 			REL_CODE_EXP = CCDAConstants.CCDAXPATH.compile("./code[not(@nullFlavor)]");
 			REL_CODE_WITH_TRANS_EXP = CCDAConstants.CCDAXPATH.compile("./code[not(@nullFlavor) or @nullFlavor='OTH']");
@@ -307,6 +315,8 @@ public class CCDAConstants {
 			REL_REF_RANGE_EXP = CCDAConstants.CCDAXPATH.compile("./referenceRange/observationRange/value[@type='IVL_PQ']");
 			REL_LOW_EXP = CCDAConstants.CCDAXPATH.compile("./low[not(@nullFlavor)]");
 			REL_HIGH_EXP = CCDAConstants.CCDAXPATH.compile("./high[not(@nullFlavor)]");
+			REL_PERFORMER_EXP = CCDAConstants.CCDAXPATH.compile("./performer[not(@nullFlavor)]");
+			REL_PARTICIPANT_EXP = CCDAConstants.CCDAXPATH.compile("./participant[not(@nullFlavor) and @typeCode='IND']");
 			
 			INTERVENTIONS_SECTION_V3_EXP = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component"
 					+ "/section[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.21.2.3' and @extension='2015-08-01']]");			
