@@ -17,6 +17,7 @@ public class CCDARefModel {
 	
 	private CCDAPatient        patient;
 	private CCDACareTeamMember members;
+	private CCDACareTeamMember careTeamSectionMembers;
 	private CCDACarePlanSections carePlanSections;
 	private CCDAEncounter      encounter;
 	private CCDAAdmissionDiagnosis admissionDiagnosis;
@@ -85,6 +86,14 @@ public class CCDARefModel {
 
 	public void setSocialHistory(CCDASocialHistory socialHistory) {
 		this.socialHistory = socialHistory;
+	}
+
+	public CCDACareTeamMember getCareTeamSectionMembers() {
+		return careTeamSectionMembers;
+	}
+
+	public void setCareTeamSectionMembers(CCDACareTeamMember sectionMembers) {
+		this.careTeamSectionMembers = sectionMembers;
 	}
 
 	public CCDARefModel() {
@@ -334,6 +343,9 @@ public class CCDARefModel {
 			
 			log.info(" Comparing Author ");
 			compareAuthorEntries(validationObjective, submittedCCDA, results, curesUpdate);
+			
+			log.info(" Comparing Care Team ");
+			compareCareTeamMembers(validationObjective, submittedCCDA, results, curesUpdate);
 		}
 
 		
@@ -654,20 +666,59 @@ public class CCDARefModel {
 				(subNotes == null || subNotes.size() == 0) ) {
 			
 			// handle the case where the Notes section does not exist in the submitted CCDA
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Notes, but the submitted C-CDA does not contain Notes data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			// ref has Notes but sub does not
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Notes, "
+					+ "but the submitted C-CDA does not contain Notes data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info(" Scenario requires Notes data, but submitted document does not contain Notes data");
 			
 		}else if ((refNotes == null || refNotes.size() == 0) && 
 				(subNotes != null && subNotes.size() > 0) ) {
-		
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Notes, but the submitted C-CDA does contain Notes data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			
+			// ref doesn't have notes but sub does also results in an error
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Notes, "
+					+ "but the submitted C-CDA does contain Notes data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info("Model does not have Notes for comparison ");
 			
 		} else {
 			
 			log.info("Model and Submitted CCDA do not have Notes for comparison ");
+		}
+	}
+	
+	public void compareCareTeamMembers(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, boolean curesUpdate) {
+		
+		log.info("Retrieving Care Team Section for comparison ");
+		HashMap<String, CCDACareTeamMemberAct> refCtm = this.getAllCareTeamMembers();
+		HashMap<String, CCDACareTeamMemberAct> subCtm = submittedCCDA.getAllCareTeamMembers();
+		
+		if( (refCtm != null && refCtm.size() > 0) &&  
+			(subCtm != null && subCtm.size() > 0)  ) {
+			
+			log.info("Notes present in both models ");
+			CCDACareTeamMemberAct.compareMembers(refCtm, subCtm, results);
+			
+		} 	
+		else if ( (refCtm != null && refCtm.size() > 0) && 
+				(subCtm == null || subCtm.size() == 0) ) {
+			
+			// handle the case where the Notes section does not exist in the submitted CCDA
+			// ref has Notes but sub does not
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to the patient's care Team Members "
+					+ "but the submitted C-CDA does not contain Care Team Member data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Care Team Member data, but submitted document does not contain Care Team Member data");
+			
+		}else if ((refCtm == null || refCtm.size() == 0) && 
+				(subCtm != null && subCtm.size() > 0) ) {
+			
+			
+			log.info("Model does not have Care Team Members for comparison, allow this to pass");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Care Team Members for comparison ");
 		}
 	}
 	
@@ -747,6 +798,16 @@ public class CCDARefModel {
 		
 		log.info(" Notes Activities Size = " + results.size());
 		return results;
+	}
+	
+	private HashMap<String, CCDACareTeamMemberAct> getAllCareTeamMembers() 
+	{
+		if(careTeamSectionMembers != null) {
+			
+			return careTeamSectionMembers.getAllCareTeamMembers();
+		}
+		
+		return null;
 	}
 	
 	public void compareAuthorEntries(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, boolean curesUpdate) {

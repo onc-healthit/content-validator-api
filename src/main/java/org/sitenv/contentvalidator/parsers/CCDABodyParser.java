@@ -58,6 +58,9 @@ public class CCDABodyParser {
 			// Not required by the spec but required by our scenarios due to them having authors in the header
 			log.info(" Parsing Doc Author ");
 			AuthorParser.parse(doc, model, curesUpdate);
+			
+			log.info(" Parsing Care Team Section ");
+			CareTeamMemberParser.parseCareTeamSection(doc,model,curesUpdate);
 		}
 		
 	}

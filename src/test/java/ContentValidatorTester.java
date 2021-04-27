@@ -120,6 +120,42 @@ public class ContentValidatorTester {
 			resultIndex++;
 		}
 	}
+	
+	public void expectNoError(String searchString, List<ContentValidationResult> results) {
+		expectNoResultLikeThis(searchString, results, ContentValidationResultLevel.ERROR);
+	}
+	
+	public void expectNoWarning(String searchString, List<ContentValidationResult> results) {
+		expectNoResultLikeThis(searchString, results, ContentValidationResultLevel.WARNING);
+	}
+	
+	public void expectNoInfo(String searchString, List<ContentValidationResult> results) {
+		expectNoResultLikeThis(searchString, results, ContentValidationResultLevel.INFO);
+	}	
+	
+	public void expectNoResultLikeThis(String searchString, List<ContentValidationResult> results,
+			ContentValidationResultLevel expectedSeverity) {
+		assertFalse("Results should NOT have contained the following message but did: " + searchString, 
+				resultsContainMessage(searchString, results, expectedSeverity));		
+	}
+	
+	public void expectError(String searchString, List<ContentValidationResult> results) {
+		expectResultLikeThis(searchString, results, ContentValidationResultLevel.ERROR);
+	}
+	
+	public void expectWarning(String searchString, List<ContentValidationResult> results) {
+		expectResultLikeThis(searchString, results, ContentValidationResultLevel.WARNING);
+	}
+	
+	public void expectInfo(String searchString, List<ContentValidationResult> results) {
+		expectResultLikeThis(searchString, results, ContentValidationResultLevel.INFO);
+	}	
+	
+	public void expectResultLikeThis(String searchString, List<ContentValidationResult> results,
+			ContentValidationResultLevel expectedSeverity) {
+		assertTrue("Results SHOULD have contained the following message but did not: " + searchString, 
+				resultsContainMessage(searchString, results, expectedSeverity));		
+	}	
 
 	public boolean resultsContainMessage(String searchString, List<ContentValidationResult> results) {
 		return resultsContainMessage(searchString, results, null);

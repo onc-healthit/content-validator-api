@@ -167,6 +167,8 @@ public class CCDAPQ extends CCDADataElement {
 				       + " and Units = " + ((units != null)?units:"None Specified")
 				       + "  , do not match the submitted CCDA : Value PQ - value = " + ((subValue.getValue() != null)?subValue.getValue():"None Specified") 
 				       + " , and Units = " + ((subValue.getUnits() != null)?subValue.getUnits():"None Specified") + ".";
+			
+			error += " If the CEHRT vendor believes the submitted C-CDA values are accurate, please work with your ATL to verify the values submitted explaining the reason for not matching.";
 
 			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);

@@ -17,7 +17,8 @@ public class ParserUtilities {
 	
 	private static Logger log = Logger.getLogger(ParserUtilities.class.getName());
 	
-	public static void compareAuthor(CCDAAuthor refAuthor, CCDAAuthor subAuthor, ArrayList<ContentValidationResult> results, String elementName) {		
+	public static void compareAuthor(CCDAAuthor refAuthor, CCDAAuthor subAuthor,
+			ArrayList<ContentValidationResult> results, String elementName) {		
 		// handle nulls.
 		if ((refAuthor != null) && (subAuthor != null)) {
 
@@ -47,7 +48,11 @@ public class ParserUtilities {
 				log.info(" Both Submitted and Ref codes match for " + elementName);
 			}
 			else {
-				ContentValidationResult rs = new ContentValidationResult("The scenario requires Provenance Org Name of : (" + refDe.getValue() + ") for: " + elementName + ", but submitted file contains Provenance Org Name of : (" + subDe.getValue() + ") which does not match ", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				ContentValidationResult rs = new ContentValidationResult(
+						"The scenario requires Provenance Org Name of : (" + refDe.getValue() + ") for: " + elementName
+								+ ", but submitted file contains Provenance Org Name of : (" + subDe.getValue()
+								+ ") which does not match ",
+						ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 				results.add(rs);
 			}
 		
@@ -56,7 +61,11 @@ public class ParserUtilities {
 			log.info(" The submitted file has Provenance Org Name which is ok ");
 		}
 		else if((refDe != null) && (subDe == null)){
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires Provenance Org Name as part of: " + elementName + " data, but submitted file does not contain Provenance Org Name as part of : " + elementName + " which does not match ", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult(
+					"The scenario requires Provenance Org Name as part of: " + elementName
+							+ " data, but submitted file does not contain Provenance Org Name as part of : "
+							+ elementName + " which does not match ",
+					ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 			results.add(rs);
 		} 
 		else {
@@ -125,11 +134,15 @@ public class ParserUtilities {
 		
 		}
 		else if ((refTime == null) && (submittedTime != null && submittedTime.hasValidData()) ) {
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName
+					+ " data, but submitted file does have " + elementName + " data",
+					ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 			results.add(rs);
 		}
 		else if((refTime != null && refTime.hasValidData()) && (submittedTime == null)){
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName
+					+ " data, but submitted file does not contain " + elementName + " data",
+					ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 			results.add(rs);
 		} 
 		else {

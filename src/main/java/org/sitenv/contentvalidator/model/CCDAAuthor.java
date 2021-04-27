@@ -145,13 +145,19 @@ public class CCDAAuthor {
 		elementName = "Comapring Author Ids for : " + elName; // Not mandatory so skipping
 		// ParserUtilities.compareTemplateIds(authorIds, subAuthor.getAuthorIds(), results, elementName);
 		
-		// Compare REp Ord Ids 		
+		// Compare Rep Org Ids 		
 		elementName = "Comapring Rep Org Ids for : " + elName; // Not mandatory so skipping
 		// ParserUtilities.compareTemplateIds(repOrgIds, subAuthor.getRepOrgIds(), results, elementName);
 
 		// Compare Effective Times
 		elementName = "Comparing Author Time for " + elName; 
-		ParserUtilities.compareEffectiveTimeValueWithExactMatchFullPrecision(effTime, subAuthor.getEffTime(), results, elementName);
+		ParserUtilities.compareEffectiveTimeValue(effTime, subAuthor.getEffTime(), results,
+				elementName);
+		// Validate Times
+		ParserUtilities.validateTimeValueLengthDateTimeAndTimezoneDependingOnPrecision(subAuthor.getEffTime(), results,
+				elementName, 
+				(elName != null && !elName.isEmpty()) ? elName.replaceFirst(" , Comparing ", "") : elName,
+				-1, true);
 		
 		// Compare Org Name 
 		elementName = "Comparing Author Organization Name for " + elName;
@@ -170,22 +176,27 @@ public class CCDAAuthor {
 				log.info("Checking Ref Author with Sub Authors ");
 				if(auth.getEffTime() != null && 
 						auth.getEffTime().getValuePresent()
-						&& !isProvenancePresent(auth.getEffTime(), auth.getOrgName(), subAuths)) {
-					
-					// TODO: Ensure orgName enforcement is being applied at the level required (may be elsewhere already)
-//					String orgName = "";
-//					if(auth.getOrgName() != null && auth.getOrgName().getValue() != null)
-//						orgName = auth.getOrgName().getValue();
+						&& !isProvenancePresent(auth.getEffTime(), auth.getOrgName(), subAuths)) {					
 					
 					// Note: This is the only result that is actually reported.
 					// Many errors are generated in isProvenancePresent sub-routines but there's no way to connect them
 					// to a specific sub which actually had the issue (since match can be in any location) so instead the results
 					// generated externally are used as a reference for a boolean result which triggers this error 
 					// vs adding the unique errors themselves
+//					String message = "The scenario requires " + elName
+//							+ " (Time: Value) Provenance data which was not found in the submitted data. The scenario value is "
+//							+ auth.getEffTime().getValue().getValue()
+//							+ " and a submitted value must at a minimum match the 8-digit date portion of the data.";
+					final boolean isOrgNameNonNullAndPopulated = 
+							auth.getOrgName() != null && auth.getOrgName().getValue() != null && !auth.getOrgName().getValue().isEmpty();
 					String message = "The scenario requires " + elName
-							+ " (Time: Value) Provenance data which was not found in the submitted data. The scenario value is "
-							+ auth.getEffTime().getValue().getValue()
-							+ " and a submitted value must at a minimum match the 8-digit date portion of the data.";
+							+ " Provenance data of time" + (isOrgNameNonNullAndPopulated ? " and/or representedOrganization/name" : "") 
+							+ " which was not found in the submitted data. "
+							+ "The scenario time value is " + auth.getEffTime().getValue().getValue()
+							+ " and a submitted time value should at a minimum match the 8-digit date portion of the data."
+							+ (isOrgNameNonNullAndPopulated ? " The scenario representedOrganization/name value is " + auth.getOrgName().getValue()
+							+ " and a submitted name should match. One or all of the prior issues exist and must be resolved." : "");																						
+							
 					ContentValidationResult rs = new ContentValidationResult(message,
 							ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 					results.add(rs);
