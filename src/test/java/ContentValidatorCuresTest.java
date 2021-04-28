@@ -109,8 +109,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_MEDICATION_SEC_MED_ACT_PROV_TIME_FIX_TO_MATCH_HAPPY_416_SITE_3262 = 36;
 	private static final int SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265 = 37;
 	private static final int SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265 = 38;	
-	private static final int SUB_CARE_TEAM_SEC_PERF = 39;
-	private static final int SUB_CARE_TEAM_SEC_PERF_AND_PART = 40;
+	private static final int SUB_CARE_TEAM_SEC_PERF_SITE_3259 = 39;
+	private static final int SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259 = 40;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -155,8 +155,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/sub/MedicationSecMedActProvTimeFixToMatch_happy416_Site3262.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample3_ctp.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample3_ctpp.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_CARE_TEAM_SEC_PERF_SITE_3259.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -213,16 +213,16 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		printHeader("cures_careTeamContentValidationTest");
 		try {
 			ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
-					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_V5, SUBMITTED_CCDA[SUB_CARE_TEAM_SEC_PERF],
-					SeverityLevel.ERROR);
+					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_V5,
+					SUBMITTED_CCDA[SUB_CARE_TEAM_SEC_PERF_SITE_3259], SeverityLevel.ERROR);
 			printResults(results);
 			
 			if(results.size() > 1)
 				fail("There should not be any errrors");
 			
 			ArrayList<ContentValidationResult> addResults = validateDocumentAndReturnResultsCures(
-					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_V5, SUBMITTED_CCDA[SUB_CARE_TEAM_SEC_PERF_AND_PART],
-					SeverityLevel.ERROR);
+					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_V5,
+					SUBMITTED_CCDA[SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259], SeverityLevel.ERROR);
 			printResults(addResults);
 			
 			if(addResults.size() > 1)
