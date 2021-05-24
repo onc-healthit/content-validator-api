@@ -88,4 +88,17 @@
             </plugin>
         </plugins>
     </build>
+    <!-- this is used to push artifacts to artifactory -->
+	<distributionManagement>
+		<repository>
+			<id>mdht-releases</id>
+			<name>ONCSITE-DEV-CCDA-releases</name>
+			<url>http://34.195.107.72:8081/artifactory/libs-release</url>
+		</repository>
+		<snapshotRepository>
+			<id>mdht-snapshots</id>
+			<name>ONCSITE-DEV-CCDA-snapshots</name>
+			<url>http://34.195.107.72:8081/artifactory/libs-snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
