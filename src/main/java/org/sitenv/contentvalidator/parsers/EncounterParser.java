@@ -47,6 +47,10 @@ public class EncounterParser {
 			
 			encounters.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(sectionElement, XPathConstants.NODE)));
+			
+			// Add Notes Activity if present in Results entry
+			encounters.setNotesActivity(ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_NOTES_ACTIVITY_EXPRESSION.
+								evaluate(sectionElement, XPathConstants.NODESET), null));
 		}
 		return encounters;
 	}

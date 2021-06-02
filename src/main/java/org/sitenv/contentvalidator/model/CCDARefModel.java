@@ -740,9 +740,20 @@ public class CCDARefModel {
 				(subNotesActs == null || subNotesActs.size() == 0) ) {
 			
 			// handle the case where the Notes section does not exist in the submitted CCDA
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Notes, but the submitted C-CDA does not contain Notes data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-			results.add(rs);
-			log.info(" Scenario requires Notes data, but submitted document does not contain Notes data");
+			
+			for(Map.Entry<String, CCDANotesActivity> entries : refNotesActs.entrySet() ) {
+				
+				
+				String errorMsg = "The scenario requires data related to patient's Notes for " + entries.getKey() 
+								+ " , but the submitted C-CDA does not contain corresponding clinical Notes data.";
+				
+				ContentValidationResult rs = new ContentValidationResult(errorMsg, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+				log.info(" Scenario requires Notes data, but submitted document does not contain Notes data");
+				
+			}
+			
+			
 			
 		}else if ((refNotesActs == null || refNotesActs.size() == 0) && 
 				(subNotesActs != null && subNotesActs.size() > 0) ) {

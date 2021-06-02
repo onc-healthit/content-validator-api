@@ -1041,10 +1041,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				SUBMITTED_CCDA[SUB_DUPLICATE_OF_B1_TOC_AMB_SAMPLE1_REF], SeverityLevel.ERROR);			
 		printResults(results);
 		
-		final String message = "The scenario requires data related to patient's Notes, "
-				+ "but the submitted C-CDA does not contain Notes data."; 
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		final String message1 = "The scenario requires data related to patient's Notes for ";
+		final String message2 = " , but the submitted C-CDA does not contain corresponding clinical Notes data";
+		assertTrue("Results should have contained the following message but did not: " + message1, 
+				resultsContainMessage(message1, results, ContentValidationResultLevel.ERROR));
+		assertTrue("Results should have contained the following message but did not: " + message2, 
+				resultsContainMessage(message2, results, ContentValidationResultLevel.ERROR));	
 	}
 	
 	@Test
@@ -1074,10 +1076,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				SUBMITTED_CCDA[SUB_DUPLICATE_OF_B1_TOC_AMB_SAMPLE1_REF], SeverityLevel.ERROR);
 		printResults(results);
 		
-		final String message = "The scenario requires data related to patient's Notes, "
-				+ "but the submitted C-CDA does not contain Notes data."; 
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		final String message1 = "The scenario requires data related to patient's Notes for ";
+		final String message2 = " , but the submitted C-CDA does not contain corresponding clinical Notes data";
+		assertTrue("Results should have contained the following message but did not: " + message1, 
+				resultsContainMessage(message1, results, ContentValidationResultLevel.ERROR));
+		assertTrue("Results should have contained the following message but did not: " + message2, 
+				resultsContainMessage(message2, results, ContentValidationResultLevel.ERROR));
 	}
 	
 	@Test
@@ -1692,8 +1696,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  time zone is 0400 in sub vs 0500 in ref
 		//  Expected result: Pass (since we don't care if time-zone is different only that it is valid)
 		String message = "The Comparing Author Time for  , Comparing Author Entry for : Notes Section "
-				+ "corresponding to the code 11488-4 (Effective Time: Value ) is 202006221100-0500 , "
-				+ "but submitted CCDA (Effective Time: Value ) is 202006221100-0400 which does not match ";
+				+ "corresponding to the code 11488-4 ( Time Value ) is : 202006221100-0500 , "
+				+ "but submitted CCDA ( Time Value ) is : 202006221100-0400 which does not match ";
 		expectNoError(message, results);
 		
 		/*

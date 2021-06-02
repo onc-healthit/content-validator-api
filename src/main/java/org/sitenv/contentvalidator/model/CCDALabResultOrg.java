@@ -15,6 +15,7 @@ public class CCDALabResultOrg {
 	private CCDACode						orgCode;
 	private CCDAEffTime						effTime;
 	private ArrayList<CCDALabResultObs>		resultObs;
+	private ArrayList<CCDANotesActivity>		notesActivity;
 	
 	private CCDAAuthor	author;
 	
@@ -57,6 +58,7 @@ public class CCDALabResultOrg {
 	{
 		templateIds = new ArrayList<CCDAII>();
 		resultObs = new ArrayList<CCDALabResultObs>();
+		notesActivity = new ArrayList<CCDANotesActivity>();
 	}
 
 	public ArrayList<CCDAII> getTemplateIds() {
@@ -109,6 +111,14 @@ public class CCDALabResultOrg {
 
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
+	}
+
+	public ArrayList<CCDANotesActivity> getNotesActivity() {
+		return notesActivity;
+	}
+
+	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
+		this.notesActivity = notesActivity;
 	}
 	
 	
