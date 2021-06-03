@@ -78,6 +78,11 @@ public class LabResultParser {
 			labResultOrg.setResultObs(readResultObservation((NodeList) CCDAConstants.REL_COMP_OBS_EXP.
 					evaluate(labResultOrgElement, XPathConstants.NODESET)));
 			
+			// Add Notes Activity if present in Lab Result Observtaion entryRelationship
+			labResultOrg.setNotesActivity(
+					ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_COMPONENT_ACTIVITY_EXPRESSION
+						.evaluate(labResultOrgElement, XPathConstants.NODESET), null));
+			
 			labResultOrg.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(labResultOrgElement, XPathConstants.NODE)));
 			labResultOrgList.add(labResultOrg);
@@ -110,6 +115,11 @@ public class LabResultParser {
 			
 			resultObservation.setInterpretationCode(ParserUtilities.readCode((Element) CCDAConstants.REL_INT_CODE_EXP.
 					evaluate(resultObservationElement, XPathConstants.NODE)));
+			
+			// Add Notes Activity if present in Lab Result Observtaion entryRelationship
+			resultObservation.setNotesActivity(
+								ParserUtilities.readNotesActivity((NodeList) CCDAConstants.REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION
+										.evaluate(resultObservationElement, XPathConstants.NODESET), null));
 			
 			resultObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(resultObservationElement, XPathConstants.NODE)));

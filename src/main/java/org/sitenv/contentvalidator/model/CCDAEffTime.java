@@ -176,8 +176,8 @@ public class CCDAEffTime {
 				log.info("Value Time element matches");
 			}
 			else {
-				String error = "The " + elementName + " (Effective Time: Value ) is " + value.getValue()
-						+ " , but submitted CCDA (Effective Time: Value ) is " + subTime.getValue().getValue()
+				String error = "The " + elementName + " ( Time Value ) is : " + value.getValue()
+						+ " , but submitted CCDA ( Time Value ) is : " + subTime.getValue().getValue()
 						+ " which does not match ";
 				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 				results.add(rs);

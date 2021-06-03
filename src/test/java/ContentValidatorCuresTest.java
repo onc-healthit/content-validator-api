@@ -109,8 +109,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_MEDICATION_SEC_MED_ACT_PROV_TIME_FIX_TO_MATCH_HAPPY_416_SITE_3262 = 36;
 	private static final int SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265 = 37;
 	private static final int SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265 = 38;	
-	private static final int SUB_CARE_TEAM_SEC_PERF = 39;
-	private static final int SUB_CARE_TEAM_SEC_PERF_AND_PART = 40;
+	private static final int SUB_CARE_TEAM_SEC_PERF_SITE_3259 = 39;
+	private static final int SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259 = 40;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -155,8 +155,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/sub/MedicationSecMedActProvTimeFixToMatch_happy416_Site3262.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample3_ctp.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample3_ctpp.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_CARE_TEAM_SEC_PERF_SITE_3259.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -213,16 +213,16 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		printHeader("cures_careTeamContentValidationTest");
 		try {
 			ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
-					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_V5, SUBMITTED_CCDA[SUB_CARE_TEAM_SEC_PERF],
-					SeverityLevel.ERROR);
+					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_V5,
+					SUBMITTED_CCDA[SUB_CARE_TEAM_SEC_PERF_SITE_3259], SeverityLevel.ERROR);
 			printResults(results);
 			
 			if(results.size() > 1)
 				fail("There should not be any errrors");
 			
 			ArrayList<ContentValidationResult> addResults = validateDocumentAndReturnResultsCures(
-					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_V5, SUBMITTED_CCDA[SUB_CARE_TEAM_SEC_PERF_AND_PART],
-					SeverityLevel.ERROR);
+					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_V5,
+					SUBMITTED_CCDA[SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259], SeverityLevel.ERROR);
 			printResults(addResults);
 			
 			if(addResults.size() > 1)
@@ -1041,10 +1041,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				SUBMITTED_CCDA[SUB_DUPLICATE_OF_B1_TOC_AMB_SAMPLE1_REF], SeverityLevel.ERROR);			
 		printResults(results);
 		
-		final String message = "The scenario requires data related to patient's Notes, "
-				+ "but the submitted C-CDA does not contain Notes data."; 
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		final String message1 = "The scenario requires data related to patient's Notes for ";
+		final String message2 = " , but the submitted C-CDA does not contain corresponding clinical Notes data";
+		assertTrue("Results should have contained the following message but did not: " + message1, 
+				resultsContainMessage(message1, results, ContentValidationResultLevel.ERROR));
+		assertTrue("Results should have contained the following message but did not: " + message2, 
+				resultsContainMessage(message2, results, ContentValidationResultLevel.ERROR));	
 	}
 	
 	@Test
@@ -1074,10 +1076,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				SUBMITTED_CCDA[SUB_DUPLICATE_OF_B1_TOC_AMB_SAMPLE1_REF], SeverityLevel.ERROR);
 		printResults(results);
 		
-		final String message = "The scenario requires data related to patient's Notes, "
-				+ "but the submitted C-CDA does not contain Notes data."; 
-		assertTrue("Results should have contained the following message but did not: " + message, 
-				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));		
+		final String message1 = "The scenario requires data related to patient's Notes for ";
+		final String message2 = " , but the submitted C-CDA does not contain corresponding clinical Notes data";
+		assertTrue("Results should have contained the following message but did not: " + message1, 
+				resultsContainMessage(message1, results, ContentValidationResultLevel.ERROR));
+		assertTrue("Results should have contained the following message but did not: " + message2, 
+				resultsContainMessage(message2, results, ContentValidationResultLevel.ERROR));
 	}
 	
 	@Test
@@ -1692,8 +1696,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  time zone is 0400 in sub vs 0500 in ref
 		//  Expected result: Pass (since we don't care if time-zone is different only that it is valid)
 		String message = "The Comparing Author Time for  , Comparing Author Entry for : Notes Section "
-				+ "corresponding to the code 11488-4 (Effective Time: Value ) is 202006221100-0500 , "
-				+ "but submitted CCDA (Effective Time: Value ) is 202006221100-0400 which does not match ";
+				+ "corresponding to the code 11488-4 ( Time Value ) is : 202006221100-0500 , "
+				+ "but submitted CCDA ( Time Value ) is : 202006221100-0400 which does not match ";
 		expectNoError(message, results);
 		
 		/*
