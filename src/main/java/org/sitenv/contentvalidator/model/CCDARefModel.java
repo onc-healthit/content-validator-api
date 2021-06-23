@@ -97,29 +97,7 @@ public class CCDARefModel {
 	}
 
 	public CCDARefModel() {
-		this(SeverityLevel.INFO);
-		udi = new ArrayList<CCDAUDI>();
-		notes = new ArrayList<CCDANotes>();
-		notesEntries = new ArrayList<CCDANotesActivity>();
-		authors = new ArrayList<CCDAAuthor>();
-		
-		ccdTemplates = new ArrayList<CCDAII>();
-		ccdTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-		ccdTemplates.add(new CCDAII(CCDAConstants.CCD_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-		
-		dsTemplates = new ArrayList<CCDAII>();
-		dsTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-		dsTemplates.add(new CCDAII(CCDAConstants.DS_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-
-		rnTemplates = new ArrayList<CCDAII>();
-		rnTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-		rnTemplates.add(new CCDAII(CCDAConstants.RN_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-
-		cpTemplates = new ArrayList<CCDAII>();
-		cpTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-		cpTemplates.add(new CCDAII(CCDAConstants.CP_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-		
-		
+		this(SeverityLevel.INFO);		
 	}
 	
 	public CCDARefModel(SeverityLevel severityLevel) {
@@ -144,7 +122,6 @@ public class CCDARefModel {
 		cpTemplates = new ArrayList<CCDAII>();
 		cpTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
 		cpTemplates.add(new CCDAII(CCDAConstants.CP_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-
 	}
 	
 	public ArrayList<ContentValidationResult> compare(String validationObjective, CCDARefModel submittedCCDA, boolean curesUpdate) {
