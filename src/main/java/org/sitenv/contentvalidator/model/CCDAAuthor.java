@@ -11,7 +11,7 @@ public class CCDAAuthor {
 	
 	private static Logger log = Logger.getLogger(CCDAAuthor.class.getName());
 	
-	private ArrayList<CCDAII>    			templateId;
+	private ArrayList<CCDAII>    			templateIds;
 	private CCDAEffTime          			effTime;
 	private ArrayList<CCDAII>    			authorIds;
 	private CCDADataElement					authorFirstName;
@@ -23,18 +23,18 @@ public class CCDAAuthor {
 	
 	public CCDAAuthor() {
 		
-		templateId = new ArrayList<CCDAII>();
+		templateIds = new ArrayList<CCDAII>();
 		authorIds = new ArrayList<CCDAII>();
 		repOrgIds = new ArrayList<CCDAII>();
 		telecoms = new ArrayList<CCDATelecom>();
 		
 	}
 	
-	public ArrayList<CCDAII> getTemplateId() {
-		return templateId;
+	public ArrayList<CCDAII> getTemplateIds() {
+		return templateIds;
 	}
-	public void setTemplateId(ArrayList<CCDAII> templateId) {
-		this.templateId = templateId;
+	public void setTemplateIds(ArrayList<CCDAII> templateId) {
+		this.templateIds = templateId;
 	}
 	public CCDAEffTime getEffTime() {
 		return effTime;
@@ -95,20 +95,32 @@ public class CCDAAuthor {
 		
 		log.info("***Author Entry ***");
 		
-		for(int j = 0; j < templateId.size(); j++) {
-			log.info(" Tempalte Id [" + j + "] = " + templateId.get(j).getRootValue());
-			log.info(" Tempalte Id Ext [" + j + "] = " + templateId.get(j).getExtValue());
+		if (templateIds != null) { 
+			for(int i = 0; i < templateIds.size(); i++) {
+				log.info(" Tempalte Id [" + i + "] = " + templateIds.get(i).getRootValue());
+				log.info(" Tempalte Id Ext [" + i + "] = " + templateIds.get(i).getExtValue());
+			}
 		}
 		
-		
-		for(int k = 0; k < authorIds.size(); k++) {
-			log.info(" Author Id [" + k + "] = " + templateId.get(k).getRootValue());
-			log.info(" Author Id Ext [" + k + "] = " + templateId.get(k).getExtValue());
+		if (authorIds != null) {		
+			for(int i = 0; i < authorIds.size(); i++) {
+				log.info(" Author Id [" + i + "] = " + authorIds.get(i).getRootValue());
+				log.info(" Author Id Ext [" + i + "] = " + authorIds.get(i).getExtValue());
+			}
 		}
 		
-		for(int l = 0; l < repOrgIds.size(); l++) {
-			log.info(" Rep Org Id [" + l + "] = " + templateId.get(l).getRootValue());
-			log.info(" Rep Org Id Ext [" + l + "] = " + templateId.get(l).getExtValue());
+		if (repOrgIds != null) {
+			for(int i = 0; i < repOrgIds.size(); i++) {
+				log.info(" Rep Org Id [" + i + "] = " + repOrgIds.get(i).getRootValue());
+				log.info(" Rep Org Id Ext [" + i + "] = " + repOrgIds.get(i).getExtValue());
+			}
+		}
+		
+		if (telecoms != null ) {
+			for(int i = 0; i < telecoms.size(); i++) {
+				log.info(" Telecom use [" + i + "] = " + telecoms.get(i).getUseAttribute());
+				log.info(" Telecom value [" + i + "] = " + telecoms.get(i).getValueAttribute());
+			}
 		}
 		
 		
@@ -124,12 +136,12 @@ public class CCDAAuthor {
 		}
 		
 		if(authorName != null) {
-			log.info(" Author  Name = " + authorName.getValue());
+			log.info(" Author Name = " + authorName.getValue());
 		}
 		
 		if(orgName != null) {
-			log.info(" Rep Org  Name = " + orgName.getValue());
-		}
+			log.info(" Rep Org Name = " + orgName.getValue());
+		}		
 		
 	}	
 	
@@ -317,6 +329,6 @@ public class CCDAAuthor {
 		} else {
 			log.info("Author is null in the reference data, nothing to do");
 		}		
-	}    
+	}
 
 }
