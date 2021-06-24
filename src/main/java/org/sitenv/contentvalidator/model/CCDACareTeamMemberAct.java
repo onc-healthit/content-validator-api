@@ -143,7 +143,7 @@ public class CCDACareTeamMemberAct {
 				// Error
 				String error = "The scenario contains Care Team Member data with name " + ent.getKey() +
 						" , however there is no matching data in the submitted CCDA. ";
-				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 				results.add(rs);
 			}
 		}
