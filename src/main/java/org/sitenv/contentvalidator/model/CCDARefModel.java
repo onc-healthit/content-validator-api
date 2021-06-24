@@ -683,7 +683,7 @@ public class CCDARefModel {
 			// handle the case where the Notes section does not exist in the submitted CCDA
 			// ref has Notes but sub does not
 			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to the patient's care Team Members "
-					+ "but the submitted C-CDA does not contain Care Team Member data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+					+ "but the submitted C-CDA does not contain Care Team Member data.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info(" Scenario requires Care Team Member data, but submitted document does not contain Care Team Member data");
 			
