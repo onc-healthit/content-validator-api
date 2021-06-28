@@ -761,28 +761,8 @@ public class CCDARefModel {
 	{
 		HashMap<String,CCDANotesActivity> results = new HashMap<String,CCDANotesActivity>();
 		
-		if(notes != null) {
-			
-			for(CCDANotes note : notes) {				
-				log.info(" Found Notes Sections");
-				note.getAllNotesActivities(results);				
-			}
-		}
+		ParserUtilities.populateNotesActiviteis(notesEntries, results);
 		
-		if(encounter != null) {
-			log.info("Retrieving notes activities from encounter ");			
-			encounter.getAllNotesActivities(results);
-		}
-		
-		if(labResults != null) {
-			log.info("Retrieving notes activities from lab results ");
-			labResults.getAllNotesActivities(results);
-		}
-		
-		if(procedure != null) {
-			log.info("Retrieving notes activities from procedure ");
-			procedure.getAllNotesActivities(results);
-		}
 		
 		log.info(" Notes Activities Size = " + results.size());
 		return results;
