@@ -19,8 +19,31 @@ private static Logger log = Logger.getLogger(NotesParser.class.getName());
 	
 	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
     	
-    	model.setNotes(retrieveNotesDetails(doc));	
+    	model.setNotes(retrieveNotesDetails(doc));
     	
+    	model.setNotesEntries(retrieveNotesActivities(doc));
+    	
+    	if(model.getNotesEntries() != null)
+    		log.info(" Notes Activity Entries found : " + model.getNotesEntries().size());
+    	
+	}
+	
+	public static ArrayList<CCDANotesActivity> retrieveNotesActivities(Document doc) throws XPathExpressionException {
+		
+		ArrayList<CCDANotesActivity> notesActivities = null;
+		NodeList notesActivityNodes = (NodeList) CCDAConstants.NOTES_ACTIVITY_EXPRESSION.evaluate(doc, XPathConstants.NODESET);
+		
+		if( !ParserUtilities.isNodeListEmpty(notesActivityNodes)) {		
+		
+			log.info(" Found Notes Activities Entries ");
+			
+			
+			// Grab the notes activities
+			notesActivities = ParserUtilities.readNotesActivity(notesActivityNodes, null);
+				
+		}
+		
+		return notesActivities;
 	}
 	
 	public static ArrayList<CCDANotes> retrieveNotesDetails(Document doc) throws XPathExpressionException {

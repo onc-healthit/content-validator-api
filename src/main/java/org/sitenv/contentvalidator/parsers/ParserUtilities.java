@@ -503,7 +503,7 @@ public class ParserUtilities {
 			log.info(" Found Author ");
 			author = new CCDAAuthor();
 			
-			author.setTemplateId(readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+			author.setTemplateIds(readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 					evaluate(auth, XPathConstants.NODESET)));
 			
 			author.setEffTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_TIME_EXP.

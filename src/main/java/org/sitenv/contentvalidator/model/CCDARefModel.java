@@ -97,29 +97,7 @@ public class CCDARefModel {
 	}
 
 	public CCDARefModel() {
-		this(SeverityLevel.INFO);
-		udi = new ArrayList<CCDAUDI>();
-		notes = new ArrayList<CCDANotes>();
-		notesEntries = new ArrayList<CCDANotesActivity>();
-		authors = new ArrayList<CCDAAuthor>();
-		
-		ccdTemplates = new ArrayList<CCDAII>();
-		ccdTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-		ccdTemplates.add(new CCDAII(CCDAConstants.CCD_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-		
-		dsTemplates = new ArrayList<CCDAII>();
-		dsTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-		dsTemplates.add(new CCDAII(CCDAConstants.DS_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-
-		rnTemplates = new ArrayList<CCDAII>();
-		rnTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-		rnTemplates.add(new CCDAII(CCDAConstants.RN_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-
-		cpTemplates = new ArrayList<CCDAII>();
-		cpTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-		cpTemplates.add(new CCDAII(CCDAConstants.CP_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-		
-		
+		this(SeverityLevel.INFO);		
 	}
 	
 	public CCDARefModel(SeverityLevel severityLevel) {
@@ -144,7 +122,6 @@ public class CCDARefModel {
 		cpTemplates = new ArrayList<CCDAII>();
 		cpTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
 		cpTemplates.add(new CCDAII(CCDAConstants.CP_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
-
 	}
 	
 	public ArrayList<ContentValidationResult> compare(String validationObjective, CCDARefModel submittedCCDA, boolean curesUpdate) {
@@ -706,7 +683,7 @@ public class CCDARefModel {
 			// handle the case where the Notes section does not exist in the submitted CCDA
 			// ref has Notes but sub does not
 			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to the patient's care Team Members "
-					+ "but the submitted C-CDA does not contain Care Team Member data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+					+ "but the submitted C-CDA does not contain Care Team Member data.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info(" Scenario requires Care Team Member data, but submitted document does not contain Care Team Member data");
 			
@@ -784,28 +761,8 @@ public class CCDARefModel {
 	{
 		HashMap<String,CCDANotesActivity> results = new HashMap<String,CCDANotesActivity>();
 		
-		if(notes != null) {
-			
-			for(CCDANotes note : notes) {				
-				log.info(" Found Notes Sections");
-				note.getAllNotesActivities(results);				
-			}
-		}
+		ParserUtilities.populateNotesActiviteis(notesEntries, results);
 		
-		if(encounter != null) {
-			log.info("Retrieving notes activities from encounter ");			
-			encounter.getAllNotesActivities(results);
-		}
-		
-		if(labResults != null) {
-			log.info("Retrieving notes activities from lab results ");
-			labResults.getAllNotesActivities(results);
-		}
-		
-		if(procedure != null) {
-			log.info("Retrieving notes activities from procedure ");
-			procedure.getAllNotesActivities(results);
-		}
 		
 		log.info(" Notes Activities Size = " + results.size());
 		return results;
