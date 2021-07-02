@@ -131,7 +131,8 @@ public class CCDAAllergy {
 		return allergies;
 	}
 	
-	public void compareAuthor(CCDAAllergy subAllergy, ArrayList<ContentValidationResult> results, boolean curesUpdate) {
+	public void compareAuthor(CCDAAllergy subAllergy, ArrayList<ContentValidationResult> results, boolean curesUpdate,
+			ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
 		String elName = "Allergy Section";
 		
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,
@@ -143,7 +144,7 @@ public class CCDAAllergy {
 				? subAllergy.getAllergyConcernAuthors()
 				: null;
 		elName += "/AllergyConcern";
-		CCDAAuthor.compareAuthors(refAllConcAuths, subAllConcAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllConcAuths, subAllConcAuths, results, elName, authorsWithLinkedReferenceData);
 
 		log.info("Comparing Authors for Allergy Observations");
 		ArrayList<CCDAAuthor> refAllObsAuths = this.getAllergyObsAuthors();
@@ -151,15 +152,15 @@ public class CCDAAllergy {
 				? subAllergy.getAllergyObsAuthors()
 				: null;
 		elName += "/AllergyObservation";
-		CCDAAuthor.compareAuthors(refAllObsAuths, subAllObsAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllObsAuths, subAllObsAuths, results, elName, authorsWithLinkedReferenceData);
 
 		log.info("Comparing Authors for Allergy Reactions");
 		ArrayList<CCDAAuthor> refAllReactAuths = this.getAllergyReactionAuthors();
 		ArrayList<CCDAAuthor> subAllReactAuths = subAllergy != null && subAllergy.getAllergyReactionAuthors() != null
-				? subAllergy.getAllergyReactionAuthors()
+				? subAllergy.getAllergyReactionAuthors() 
 				: null;			
 		elName += "/AllergyReaction";
-		CCDAAuthor.compareAuthors(refAllReactAuths, subAllReactAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllReactAuths, subAllReactAuths, results, elName, authorsWithLinkedReferenceData);
 	}
 	
 	public ArrayList<CCDAAuthor> getAllergyConcernAuthors() {
@@ -250,7 +251,5 @@ public class CCDAAllergy {
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
 	}
-	
-	
 	
 }

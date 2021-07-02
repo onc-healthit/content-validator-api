@@ -69,7 +69,7 @@ public class CCDALabResult {
 	}
 	
 	public void compareAuthor(CCDALabResult subResults, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
 		String elName = "Results Section";
 
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,
@@ -81,7 +81,7 @@ public class CCDALabResult {
 				? subResults.getResultOrganizerAuthors()
 				: null;
 		elName += "/ResultOrganizer";
-		CCDAAuthor.compareAuthors(refAllOrgsAuths, subAllOrgsAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllOrgsAuths, subAllOrgsAuths, results, elName, authorsWithLinkedReferenceData);
 
 		log.info("Comparing Authors for Result Observations");
 		ArrayList<CCDAAuthor> refAllObsAuths = this.getResultObsAuthors();
@@ -89,7 +89,7 @@ public class CCDALabResult {
 				? subResults.getResultObsAuthors()
 				: null;
 		elName += "/ResultObservation";
-		CCDAAuthor.compareAuthors(refAllObsAuths, subAllObsAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllObsAuths, subAllObsAuths, results, elName, authorsWithLinkedReferenceData);
 	}
 
 	public ArrayList<CCDAAuthor> getResultOrganizerAuthors() {

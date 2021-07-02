@@ -4,7 +4,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.sitenv.contentvalidator.model.CCDARefModel;
 import org.sitenv.contentvalidator.parsers.CCDAParser;
-import org.sitenv.contentvalidator.parsers.ParserUtilities;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.io.File;
@@ -40,8 +39,8 @@ public class ScenarioLoader implements InitializingBean {
         return refModelHashMap;
     }
 
-    public CCDARefModel getRefModel(String scnario){
-       return refModelHashMap.get(scnario);
+    public CCDARefModel getRefModel(String scenario){
+       return refModelHashMap.get(scenario);
     }
 
     private void loadScenarioFiles(String scenarioFilePath, CCDAParser ccdaParser) throws IOException{

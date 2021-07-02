@@ -44,20 +44,29 @@ public class CCDARefModel {
 	private ArrayList<CCDAII>  cpTemplates;
 	private SeverityLevel severityLevel;
 	
-	// Cures Update
-	private ArrayList<CCDAAuthor> authors;
+	// Cures Update changes for authors
+	private ArrayList<CCDAAuthor> authorsFromHeader; // header-level only
+	private ArrayList<CCDAAuthor> authorsWithLinkedReferenceData;
 	
 	// Cures Update changes for section level notes
 	private ArrayList<CCDANotes> notes;
 	private ArrayList<CCDANotesActivity> notesEntries;
 	
 	
-	public ArrayList<CCDAAuthor> getAuthors() {
-		return authors;
+	public ArrayList<CCDAAuthor> getAuthorsFromHeader() {
+		return authorsFromHeader;
 	}
 
-	public void setAuthors(ArrayList<CCDAAuthor> author) {
-		this.authors = author;
+	public void setAuthorsFromHeader(ArrayList<CCDAAuthor> author) {
+		this.authorsFromHeader = author;
+	}
+	
+	public ArrayList<CCDAAuthor> getAuthorsWithLinkedReferenceData() {
+		return authorsWithLinkedReferenceData;
+	}
+	
+	public void setAuthorsWithLinkedReferenceData(ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
+		this.authorsWithLinkedReferenceData = authorsWithLinkedReferenceData;		
 	}
 
 	public ArrayList<CCDANotesActivity> getNotesEntries() {
@@ -105,7 +114,8 @@ public class CCDARefModel {
 		udi = new ArrayList<CCDAUDI>();
 		notes = new ArrayList<CCDANotes>();
 		notesEntries = new ArrayList<CCDANotesActivity>();
-		authors = new ArrayList<CCDAAuthor>();
+		authorsFromHeader = new ArrayList<CCDAAuthor>();
+		authorsWithLinkedReferenceData = new ArrayList<CCDAAuthor>();
 		
 		ccdTemplates = new ArrayList<CCDAII>();
 		ccdTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
@@ -798,68 +808,93 @@ public class CCDARefModel {
 		return null;
 	}
 	
-	public void compareAuthorEntries(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, boolean curesUpdate) {
+	private void logSubmittedAuthorsWithLinkedReferenceData(ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
+		log.info("logSubmittedAuthorsWithLinkedReferenceData: ");
+		if (authorsWithLinkedReferenceData != null) { // since set in constructor to a new list, this should't happen
+			if (!authorsWithLinkedReferenceData.isEmpty()) {
+				int curAuth = 1;
+				for (CCDAAuthor auth : authorsWithLinkedReferenceData) {
+					log.info("Linked Sub Auth #" + curAuth);
+					auth.log();
+					curAuth++;
+				}
+			} else {
+				log.info("Submitted authorsWithLinkedReferenceData is empty");
+			}
+		} else {
+			log.info("Submitted authorsWithLinkedReferenceData is null");
+		}
+	}
+	
+	public void compareAuthorEntries(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate) {		
+		ArrayList<CCDAAuthor> refAuths = this.getAuthorsFromHeader();
+		ArrayList<CCDAAuthor> subAuths = submittedCCDA.getAuthorsFromHeader();
+
+		ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData = null;
+		submittedAuthorsWithLinkedReferenceData = submittedCCDA.getAuthorsWithLinkedReferenceData() != null
+				? submittedCCDA.getAuthorsWithLinkedReferenceData()
+				: null;
+		logSubmittedAuthorsWithLinkedReferenceData(submittedAuthorsWithLinkedReferenceData);
 		
-		log.info("Retrieving Author Entries for comparison ");
-		
-		ArrayList<CCDAAuthor> refAuths = this.getAuthors();
-		ArrayList<CCDAAuthor> subAuths = submittedCCDA.getAuthors();
-		
+		log.info("Retrieving Author Entries for comparison ");				
 		if( (refAuths != null && refAuths.size() > 0) &&  
 			(subAuths != null && subAuths.size() > 0)  ) {
-			
 			log.info("Authors present in both models ");
 			String elName = "Document Level";
-			CCDAAuthor.compareAuthors(refAuths, subAuths, results, elName);
-			
-		} 	
-		else if ( (refAuths != null && refAuths.size() > 0) && 
-				(subAuths == null || subAuths.size() == 0) ) {
-			
-			// handle the case where the Notes section does not exist in the submitted CCDA
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to Author (Provenance), but the submitted C-CDA does not contain Author data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			// Although very unlikely there would be a linked reference in the header level author, we offer support for it
+			CCDAAuthor.compareAuthors(refAuths, subAuths, results, elName, submittedAuthorsWithLinkedReferenceData);
+		} else if ( (refAuths != null && refAuths.size() > 0) && 
+				    (subAuths == null || subAuths.size() == 0) ) {
+			// Handle the case where the Notes section does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to Author (Provenance), "
+					+ "but the submitted C-CDA does not contain Author data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
-			log.info(" Scenario requires Author data, but submitted document does not contain Author data");
-			
-		}else if ((refAuths == null || refAuths.size() == 0) && 
-				(subAuths != null && subAuths.size() > 0) ) {
-		
-			log.info("Model does not have Authors for comparison, it is OK for submitted CCDA to include Authors for all occasions");
-			
+			log.info(" Scenario requires Author data, but submitted document does not contain Author data");			
+		} else if ( (refAuths == null || refAuths.size() == 0) && 
+				    (subAuths != null && subAuths.size() > 0) ) {
+			log.info("Model does not have Authors for comparison, it is OK for submitted CCDA to include Authors for all occasions");			
 		} else {
-			
 			log.info("Model and Submitted CCDA do not have Authors for comparison ");
 		}
 		
-		compareSectionAndEntryLevelProvenance(validationObjective, submittedCCDA, results, curesUpdate);
+		// Links to linked author references are most likely located in these locations
+		// Note: Section level provenance requirements for author only check if author exists at all.
+		// So, no linked reference check is required for Section Level.
+		// This is why CCDAAuthor.compareSectionLevelAuthor is not passed submittedAuthorsWithLinkedReferenceData.
+		// And, why CCDAAuthor.compareAuthors, is, since, more details are required for entry and below 
+		// to pass provenance requirements, such as repOrg name (and time, but no need for a link there).
+		compareSectionAndEntryLevelProvenance(validationObjective, submittedCCDA, results, curesUpdate,
+				submittedAuthorsWithLinkedReferenceData);
 	}
 	
 	public void compareSectionAndEntryLevelProvenance(String validationObjective, CCDARefModel submittedCCDA,
-			ArrayList<ContentValidationResult> results, boolean curesUpdate) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate,
+			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData) {				
 		if (allergy != null)
 			allergy.compareAuthor(submittedCCDA.getAllergy() != null ? submittedCCDA.getAllergy() : null, 
-					results, curesUpdate);
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData);
 		if (problem != null)
 			problem.compareAuthor(submittedCCDA.getProblem() != null ? submittedCCDA.getProblem() : null, 
-					results, curesUpdate);
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData);
 		if (procedure != null)
 			procedure.compareAuthor(submittedCCDA.getProcedure() != null ? submittedCCDA.getProcedure() : null, 
-					results, curesUpdate); // TODO-db: Finish if required: PAP/UDI, PAP/Notes, PAAct?, PAObs?
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData); // TODO-db: Finish if required: PAP/UDI, PAP/Notes, PAAct?, PAObs?
 		if (medication != null)
 			medication.compareAuthor(submittedCCDA.getMedication() != null ? submittedCCDA.getMedication() : null,
-					results, curesUpdate); // TODO-db: Look at parser, may be more authors to collect
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData); // TODO-db: Look at parser, may be more authors to collect
 		if (immunization != null)
 			immunization.compareAuthor(submittedCCDA.getImmunization() != null ? submittedCCDA.getImmunization() : null,
-					results, curesUpdate);
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData);
 		if (labResults != null)
 			labResults.compareAuthor(submittedCCDA.getLabResults() != null ? submittedCCDA.getLabResults() : null,
-					results, curesUpdate);
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData);
 		if (vitalSigns != null)
 			vitalSigns.compareAuthor(submittedCCDA.getVitalSigns() != null ? submittedCCDA.getVitalSigns() : null,
-					results, curesUpdate);
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData);
 		if (encounter != null)
 			encounter.compareAuthor(submittedCCDA.getEncounter() != null ? submittedCCDA.getEncounter() : null, 
-					results, curesUpdate); // TODO-db: Consider adding remaining items in EncounterParser (multiple problem observations, see retrieveAdmissionDiagnosisDetails and below)		
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData); // TODO-db: Consider adding remaining items in EncounterParser (multiple problem observations, see retrieveAdmissionDiagnosisDetails and below)
 	}
 	
 	private HashMap<String, CCDALabResultObs> getAllLabResultObs() 
