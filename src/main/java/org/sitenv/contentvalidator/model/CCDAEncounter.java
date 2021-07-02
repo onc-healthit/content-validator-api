@@ -90,7 +90,7 @@ public class CCDAEncounter {
 	}
 	
 	public void compareAuthor(CCDAEncounter subEncounter, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
 		final String encSec = "Encounters Section";
 		String elName = encSec;
 
@@ -103,7 +103,7 @@ public class CCDAEncounter {
 				? subEncounter.getEncounterActivityAuthors()
 				: null;
 		elName += "/EncounterActivity";
-		CCDAAuthor.compareAuthors(refAllEncActAuths, subAllEncActAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllEncActAuths, subAllEncActAuths, results, elName, authorsWithLinkedReferenceData);
 
 		log.info("Comparing Authors for Encounter Diagnoses");
 		ArrayList<CCDAAuthor> refAllEncDiagAuths = this.getEncounterDiagnosesAuthors();
@@ -111,7 +111,7 @@ public class CCDAEncounter {
 				? subEncounter.getEncounterDiagnosesAuthors()
 				: null;
 		elName += "/EncounterDiagnoses";
-		CCDAAuthor.compareAuthors(refAllEncDiagAuths, subAllEncDiagAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllEncDiagAuths, subAllEncDiagAuths, results, elName, authorsWithLinkedReferenceData);
 
 		log.info("Comparing Authors for Encounter Diagnoses/Problem Observation");
 		ArrayList<CCDAAuthor> refAllEncDiagProbObsAuths = this.getEncounterDiagnosesProblemObservationAuthors();
@@ -120,7 +120,8 @@ public class CCDAEncounter {
 				? subEncounter.getEncounterDiagnosesProblemObservationAuthors()
 				: null;
 		elName += "/ProblemObservation";
-		CCDAAuthor.compareAuthors(refAllEncDiagProbObsAuths, subAllEncDiagProbObsAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllEncDiagProbObsAuths, subAllEncDiagProbObsAuths, results, elName,
+				authorsWithLinkedReferenceData);
 
 		log.info("Comparing Authors for Encounter Activity/Indication");
 		ArrayList<CCDAAuthor> refAllEncActIndicationAuths = this.getEncounterActivityIndicationAuthors();
@@ -129,7 +130,7 @@ public class CCDAEncounter {
 				? subEncounter.getEncounterActivityIndicationAuthors()
 				: null;
 		CCDAAuthor.compareAuthors(refAllEncActIndicationAuths, subAllEncActIndicationAuths, results,
-				encSec + "/EncounterActivity/Indication");
+				encSec + "/EncounterActivity/Indication", authorsWithLinkedReferenceData);
 	}
 
 	public ArrayList<CCDAAuthor> getEncounterActivityAuthors() {

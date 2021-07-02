@@ -59,7 +59,7 @@ public class CCDAMedication {
 	}
 	
 	public void compareAuthor(CCDAMedication subMedication, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
 		String elName = "Medications Section";
 
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,
@@ -71,7 +71,7 @@ public class CCDAMedication {
 				? subMedication.getMedicationActivityAuthors()
 				: null;
 		elName += "/MedicationActivity";
-		CCDAAuthor.compareAuthors(refAllMedActAuths, subAllMedActAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllMedActAuths, subAllMedActAuths, results, elName, authorsWithLinkedReferenceData);
 	}
 
 	public ArrayList<CCDAAuthor> getMedicationActivityAuthors() {

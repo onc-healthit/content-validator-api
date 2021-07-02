@@ -34,7 +34,7 @@ public class CCDAImmunization {
 	}
 	
 	public void compareAuthor(CCDAImmunization subImmunization, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
 		String elName = "Immunizations Section";
 
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,
@@ -47,7 +47,7 @@ public class CCDAImmunization {
 				? subImmunization.getImmunizationActivityAuthors()
 				: null;
 		elName += "/ImmunizationActivity";
-		CCDAAuthor.compareAuthors(refAllImmActAuths, subAllImmActAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllImmActAuths, subAllImmActAuths, results, elName, authorsWithLinkedReferenceData);
 	}
 
 	public ArrayList<CCDAAuthor> getImmunizationActivityAuthors() {

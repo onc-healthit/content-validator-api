@@ -22,12 +22,10 @@ public class CCDAAuthor {
 	private CCDADataElement					orgName;
 	
 	public CCDAAuthor() {
-		
 		templateIds = new ArrayList<CCDAII>();
 		authorIds = new ArrayList<CCDAII>();
 		repOrgIds = new ArrayList<CCDAII>();
 		telecoms = new ArrayList<CCDATelecom>();
-		
 	}
 	
 	public ArrayList<CCDAII> getTemplateIds() {
@@ -141,8 +139,7 @@ public class CCDAAuthor {
 		
 		if(orgName != null) {
 			log.info(" Rep Org Name = " + orgName.getValue());
-		}		
-		
+		}
 	}	
 	
 	public void matches(CCDAAuthor subAuthor, ArrayList<ContentValidationResult> results, String elName) {
@@ -177,19 +174,33 @@ public class CCDAAuthor {
 	}
 	
     public static void compareAuthors(ArrayList<CCDAAuthor> refAuths, ArrayList<CCDAAuthor> subAuths, 
-    		ArrayList<ContentValidationResult> results, String elName) {
+    		ArrayList<ContentValidationResult> results, String elName, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
 		log.info(" Comparing data for Author.");
 		log.info(" Ref Model Auth Size = " + (refAuths != null ? refAuths.size() : 0));
-		log.info(" Sub Model Auth Size = " + (subAuths != null ? subAuths.size() : 0));    	
+		log.info(" Sub Model Auth Size = " + (subAuths != null ? subAuths.size() : 0));
+
+		// TODO: Can remove this log after code is proven in production
+		// (already logged once which we can reference by CCDARefModel.logSubmittedAuthorsWithLinkedReferenceData 
+		// as opposed to every comparison encountered here
+		if (authorsWithLinkedReferenceData != null) {
+			for ( CCDAAuthor auth : authorsWithLinkedReferenceData) {
+				log.info(" authorsWithLinkedReferenceData: " );
+				auth.log();
+			}
+		}
     	
     	if (refAuths != null && refAuths.size() != 0) { // If no authors in scenario (ref) file, skip the comparison 			
-			for (CCDAAuthor auth : refAuths) {
+			for (CCDAAuthor curRefAuth : refAuths) {
 				
 				log.info("Checking Ref Author with Sub Authors ");
-				if(auth.getEffTime() != null && 
-						auth.getEffTime().getValuePresent()
-						&& !isProvenancePresent(auth.getEffTime(), auth.getOrgName(), subAuths)) {					
+				if(curRefAuth.getEffTime() != null && 
+						curRefAuth.getEffTime().getValuePresent()
+						&& !isProvenancePresent(curRefAuth.getEffTime(), curRefAuth.getOrgName(), subAuths)) {
 					
+					// Now that we know there is a failure inline, check the linked references. 
+					// The reason we wait is for performance, that way we only check the limited cases vs every case regardless beforehand
+					if (!isProvenancePresentInReferencesWithData(curRefAuth.getEffTime(), curRefAuth.getOrgName(),
+							subAuths, authorsWithLinkedReferenceData)) {
 					// Note: This is the only result that is actually reported.
 					// Many errors are generated in isProvenancePresent sub-routines but there's no way to connect them
 					// to a specific sub which actually had the issue (since match can be in any location) so instead the results
@@ -199,21 +210,26 @@ public class CCDAAuthor {
 //							+ " (Time: Value) Provenance data which was not found in the submitted data. The scenario value is "
 //							+ auth.getEffTime().getValue().getValue()
 //							+ " and a submitted value must at a minimum match the 8-digit date portion of the data.";
-					final boolean isOrgNameNonNullAndPopulated = 
-							auth.getOrgName() != null && auth.getOrgName().getValue() != null && !auth.getOrgName().getValue().isEmpty();
-					String message = "The scenario requires " + elName
-							+ " Provenance data of time" + (isOrgNameNonNullAndPopulated ? " and/or representedOrganization/name" : "") 
-							+ " which was not found in the submitted data. "
-							+ "The scenario time value is " + auth.getEffTime().getValue().getValue()
-							+ " and a submitted time value should at a minimum match the 8-digit date portion of the data."
-							+ (isOrgNameNonNullAndPopulated ? " The scenario representedOrganization/name value is " + auth.getOrgName().getValue()
-							+ " and a submitted name should match. One or all of the prior issues exist and must be resolved." : "");																						
+						final boolean isOrgNameNonNullAndPopulated = curRefAuth.getOrgName() != null
+								&& curRefAuth.getOrgName().getValue() != null
+								&& !curRefAuth.getOrgName().getValue().isEmpty();
+						String message = "The scenario requires " + elName
+								+ " Provenance data of time" + (isOrgNameNonNullAndPopulated ? " and/or representedOrganization/name" : "") 
+								+ " which was not found in the submitted data. "
+								+ "The scenario time value is " + curRefAuth.getEffTime().getValue().getValue()
+								+ " and a submitted time value should at a minimum match the 8-digit date portion of the data."
+								+ (isOrgNameNonNullAndPopulated ? " The scenario representedOrganization/name value is " + curRefAuth.getOrgName().getValue()
+								+ " and a submitted name should match. One or all of the prior issues exist and must be resolved." : "");																						
 							
-					ContentValidationResult rs = new ContentValidationResult(message,
-							ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
-					results.add(rs);
-				}
-				else {
+						ContentValidationResult rs = new ContentValidationResult(message,
+								ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+						results.add(rs);
+					} else {
+						log.info(
+								" Found Provenance data in submitted authorsWithLinkedReferenceData, nothing else to do ..");
+					}
+					
+				} else {
 					log.info(" Found Provenance data, nothing else to do ..");
 				}
 			}
@@ -255,34 +271,105 @@ public class CCDAAuthor {
     	}		
 	}
     
-    public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement name, ArrayList<CCDAAuthor> subAuths) {
+    public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement refOrgName, ArrayList<CCDAAuthor> subAuths) {
+    	log.info("enter isProvenancePresent(...)");
     	
-    	boolean retVal = false;
+    	boolean isProvenanceMatched = false;
     	String elName = "Comparing Author Provenance Data";
-    	ArrayList<ContentValidationResult> res = new ArrayList<ContentValidationResult>();
+    	ArrayList<ContentValidationResult> contentValidationResults = new ArrayList<ContentValidationResult>();
     	
     	if (subAuths == null) {
     		log.info("subAuths is null, skipping: " + elName);
     	} else {
-	    	for(CCDAAuthor auth : subAuths) {
-	    		ParserUtilities.compareEffectiveTimeValue(effTime, auth.getEffTime(), res, elName);
+	    	for(CCDAAuthor curSubAuth : subAuths) {
+	    		ParserUtilities.compareEffectiveTimeValue(effTime, curSubAuth.getEffTime(), contentValidationResults, elName);	    		
+	    		ParserUtilities.compareDataElementText(refOrgName, curSubAuth.getOrgName(), contentValidationResults, elName);
 	    		
-	    		ParserUtilities.compareDataElementText(name, auth.getOrgName(), res, elName);
-	    		
-	    		if(res != null && res.size() == 0 ) {
-	    			
+	    		if(contentValidationResults != null && contentValidationResults.size() == 0 ) {	    			
 	    			log.info(" Matched Provenance Data ");
-	    			retVal = true;
+	    			isProvenanceMatched = true;
 	    			break;
 	    		}
 	    		else {
-	    			res.clear();
+	    			contentValidationResults.clear();
 	    		}
 	    	}
 		}
     	
-    	return retVal;
-    }    
+    	return isProvenanceMatched;
+    }
+    
+	public static boolean isProvenancePresentInReferencesWithData(CCDAEffTime effTime, CCDADataElement curRefAuthOrgName,
+			ArrayList<CCDAAuthor> subAuths, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
+		log.info("Checking current author(s) have a link and the linked reference (in authorsWithLinkedReferenceData) has valid data");
+		
+    	boolean isProvenanceMatched = false;
+    	String elName = "Comparing Author Provenance Data and cross-checking references";
+    	ArrayList<ContentValidationResult> contentValidationResults = new ArrayList<ContentValidationResult>();
+    	
+		if (subAuths == null) {
+			log.info("subAuths is null, skipping: " + elName);
+		} else {
+			for (CCDAAuthor curSubAuth : subAuths) {
+				ParserUtilities.compareEffectiveTimeValue(effTime, curSubAuth.getEffTime(), contentValidationResults, elName);
+				
+				CCDAAuthor curLinkedSubAuth = findLinkedSubAuth(authorsWithLinkedReferenceData, curSubAuth);
+				// We still need to run this (compareDataElementText) a 2nd time because the time and name issues (among others) are not separated
+				// TODO: We could consider separating out the issues so that we can either cache the data element result instead of re-running,
+				// or, not have to because we return individual errors up front that can't be fixed by a link (like orgName can/time cannot).
+				// However, there are complications/reasons it is combined, where the increase in logic to adhere to the reqs 
+				// (only need at least one valid match from lists in sub to scenario) may make the performance improvement moot
+				ParserUtilities.compareDataElementText(curRefAuthOrgName, curLinkedSubAuth.getOrgName(), contentValidationResults, elName);
+
+				if (contentValidationResults != null && contentValidationResults.size() == 0) {
+					log.info(" Matched Provenance Data ");
+					isProvenanceMatched = true;
+					break;
+				} else {
+					contentValidationResults.clear();
+				}
+			}
+		}
+    	
+    	return isProvenanceMatched;
+    }
+	
+	/**
+	 * @return A populated linked submitted author (matches root and ext), or, an empty instantiated author if no match exists 
+	 */
+	public static CCDAAuthor findLinkedSubAuth(ArrayList<CCDAAuthor> authorsWithLinkedReferenceData,
+			CCDAAuthor curSubAuth) {
+		CCDAAuthor linkedSubAuth = new CCDAAuthor();
+		
+		if (curSubAuth != null && curSubAuth.getAuthorIds() != null && authorsWithLinkedReferenceData != null) {
+			for (CCDAII curSubAuthId : curSubAuth.getAuthorIds()) {
+				if (curSubAuthId.getRootValue() != null && curSubAuthId.getExtValue() != null) {
+
+					for (CCDAAuthor curLinkableAuth : authorsWithLinkedReferenceData) {
+						if (curLinkableAuth.getAuthorIds() != null) {
+							for (CCDAII curLinkableAuthId : curLinkableAuth.getAuthorIds()) {
+								
+								if (curLinkableAuthId.getRootValue() != null && curLinkableAuthId.getExtValue() != null) {
+									if (curSubAuthId.getRootValue().equals(curLinkableAuthId.getRootValue())
+											&& curSubAuthId.getExtValue().equals(curLinkableAuthId.getExtValue())) {
+										log.info("Found a linked author match. "
+												+ "Returning the linked author to compare instead of the inline one.");
+										log.info("Linked author: ");
+										curLinkableAuth.log();
+										return curLinkableAuth;
+									}
+								}
+								
+							}
+						}
+					}
+
+				}
+			}
+		}
+		
+		return linkedSubAuth;
+	}
     
     // This does not seem to be used....
     public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement name, CCDAAuthor subAuth) {

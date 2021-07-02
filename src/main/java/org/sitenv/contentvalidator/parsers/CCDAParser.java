@@ -54,33 +54,20 @@ public class CCDAParser {
 			
 			return model;
 		} catch (ParserConfigurationException e1) {
-			
 			System.out.println("Caught Parser config Excep");
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (SAXException e1) {
-			
 			System.out.println("Caught SAX Excep");
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (IOException e1) {
-			
 			System.out.println("Caught IO  Excep");
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (XPathExpressionException e) {
-			
 			System.out.println("Caught Xpath Expression ");
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
 		
 		return null;
 	}
 	
-	
-
 }

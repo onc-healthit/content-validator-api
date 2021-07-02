@@ -139,19 +139,19 @@ public class CCDAProblem {
 		return pobs;
 	}
 	
-	public void compareAuthor(CCDAProblem subProblem, ArrayList<ContentValidationResult> results, boolean curesUpdate) {
+	public void compareAuthor(CCDAProblem subProblem, ArrayList<ContentValidationResult> results, boolean curesUpdate,
+			ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
 		String elName = "Problem Section";
-		
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,
-				subProblem != null && subProblem.getAuthor() != null ? subProblem.getAuthor() : null, results);
-
+				subProblem != null && subProblem.getAuthor() != null ? subProblem.getAuthor() : null, results);		
+		
 		log.info("Comparing Authors for Problem Concerns");
 		ArrayList<CCDAAuthor> refAllConcAuths = this.getProblemConcernAuthors();
 		ArrayList<CCDAAuthor> subAllConcAuths = subProblem != null && subProblem.getProblemConcernAuthors() != null
 				? subProblem.getProblemConcernAuthors()
 				: null;
 		elName += "/ProblemConcern";
-		CCDAAuthor.compareAuthors(refAllConcAuths, subAllConcAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllConcAuths, subAllConcAuths, results, elName, authorsWithLinkedReferenceData);
 		
 		log.info("Comparing Authors for Problem Observation in Problem Concern (problems)");
 		ArrayList<CCDAAuthor> refAllObsInProbConcAuths = this.getProblemObsInProblemConcAuthors();
@@ -159,7 +159,8 @@ public class CCDAProblem {
 				? subProblem.getProblemObsInProblemConcAuthors()
 				: null;
 		elName += "/ProblemObservation";
-		CCDAAuthor.compareAuthors(refAllObsInProbConcAuths, subAllObsInProbConcAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllObsInProbConcAuths, subAllObsInProbConcAuths, results, elName,
+				authorsWithLinkedReferenceData);
 		
 		log.info("Comparing Authors for Problem Observation in Past Medical History Section/Problem Observation (pastIllnessProblems)");
 		ArrayList<CCDAAuthor> refAllObsPastIllnessAuths = this.getProblemObsPastIllnessAuthors();
@@ -168,7 +169,7 @@ public class CCDAProblem {
 				: null;
 		// Providing elName directly for this one vs concatenating since part of a different section but stored in thie CCDAProblem model
 		CCDAAuthor.compareAuthors(refAllObsPastIllnessAuths, subAllObsPastIllnessAuths, results,
-				"Past Medical History Section (Past Illness)/ProblemObservation");
+				"Past Medical History Section (Past Illness)/ProblemObservation", authorsWithLinkedReferenceData);
 	}
 	
 	public ArrayList<CCDAAuthor> getProblemConcernAuthors() {
