@@ -810,7 +810,7 @@ public class CCDARefModel {
 	
 	private void logSubmittedAuthorsWithLinkedReferenceData(ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
 		log.info("logSubmittedAuthorsWithLinkedReferenceData: ");
-		if (authorsWithLinkedReferenceData != null) { // since set in constructor to a new list, this should't happen
+		if (authorsWithLinkedReferenceData != null) { // since set in constructor to a new list, this shouldn't happen
 			if (!authorsWithLinkedReferenceData.isEmpty()) {
 				int curAuth = 1;
 				for (CCDAAuthor auth : authorsWithLinkedReferenceData) {

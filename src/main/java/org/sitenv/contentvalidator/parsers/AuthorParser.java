@@ -61,7 +61,7 @@ public class AuthorParser {
 			Element authElement = (Element) bodyAuths.item(i);
 			auth = ParserUtilities.readAuthor(authElement);
 			if (auth != null) {
-				log.info(" Adding Author ");
+				log.info(" Adding author with linked reference data ");
 				auths.add(auth);
 			}
 		}

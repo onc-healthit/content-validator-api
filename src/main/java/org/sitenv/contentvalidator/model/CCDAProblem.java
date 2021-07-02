@@ -142,15 +142,8 @@ public class CCDAProblem {
 	public void compareAuthor(CCDAProblem subProblem, ArrayList<ContentValidationResult> results, boolean curesUpdate,
 			ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
 		String elName = "Problem Section";
-		
-		// TODO: do we need to check authorsWithLinkedReferenceData at the section level? No one ever adds author there right? So can skip, for now...
-		
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,
-				subProblem != null && subProblem.getAuthor() != null ? subProblem.getAuthor() : null, results);
-		
-		// TODO: we can either pass authorsWithLinkedReferenceData to every sub entry as a param,
-		// or, we can do the (reference id comparison check) work directly here (takes less method changes, then just pass the final data we need
-		// compare linked data  here? would work but no, cause for performance only want to do if it would be an error otherwise...
+				subProblem != null && subProblem.getAuthor() != null ? subProblem.getAuthor() : null, results);		
 		
 		log.info("Comparing Authors for Problem Concerns");
 		ArrayList<CCDAAuthor> refAllConcAuths = this.getProblemConcernAuthors();
