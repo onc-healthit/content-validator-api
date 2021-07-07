@@ -2474,6 +2474,7 @@
           </text>
           <entry>
             <act classCode="ACT" moodCode="EVN">
+              <!-- Note Activity -->
               <templateId root="2.16.840.1.113883.10.20.22.4.202" extension="2016-11-01" />
               <code code="34109-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Note">
                 <translation code="11488-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Consult note" />
@@ -2488,6 +2489,7 @@
                 <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
                 <time value="20201130163526-0600" />
                 <assignedAuthor>
+                  <!-- valid link, but need to add support for Note Activity -->
                   <id extension="236598153" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
                 </assignedAuthor>
               </author>
