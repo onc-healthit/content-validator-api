@@ -41,7 +41,7 @@ public class CCDAVitalSigns {
 	}
 	
 	public void compareAuthor(CCDAVitalSigns subVitalSigns, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
 		String elName = "Vital Signs Section";
 
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,
@@ -53,7 +53,7 @@ public class CCDAVitalSigns {
 				? subVitalSigns.getVitalSignsOrganizerAuthors()
 				: null;
 		elName += "/VitalSignsOrganizer";
-		CCDAAuthor.compareAuthors(refAllOrgsAuths, subAllOrgsAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllOrgsAuths, subAllOrgsAuths, results, elName, authorsWithLinkedReferenceData);
 
 		log.info("Comparing Authors for Vital Signs Observation");
 		ArrayList<CCDAAuthor> refAllObsAuths = this.getVitalSignsObsAuthors();
@@ -61,7 +61,7 @@ public class CCDAVitalSigns {
 				? subVitalSigns.getVitalSignsObsAuthors()
 				: null;
 		elName += "/VitalSignsObservation";
-		CCDAAuthor.compareAuthors(refAllObsAuths, subAllObsAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllObsAuths, subAllObsAuths, results, elName, authorsWithLinkedReferenceData);
 	}
 	
 	public ArrayList<CCDAAuthor> getVitalSignsOrganizerAuthors() {

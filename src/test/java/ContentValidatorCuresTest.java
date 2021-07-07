@@ -111,6 +111,9 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265 = 38;	
 	private static final int SUB_CARE_TEAM_SEC_PERF_SITE_3259 = 39;
 	private static final int SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259 = 40;
+	private static final int SUB_REBECCA621_SITE_3300 = 41;
+	private static final int SUB_REBECCA621_MATCHED_TIME_SITE_3300 = 42;
+	private static final int SUB_REBECCA621_MATCHED_TIME_BUT_MISSING_LINKED_REFERENCES_IN_DOCUMENT_SITE_3300 = 43;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -156,7 +159,10 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_CARE_TEAM_SEC_PERF_SITE_3259.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_SITE_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_MATCHED_TIME_SITE_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_MATCHED_TIME_BUT_MISSING_LINKED_REFERENCES_IN_DOCUMENT_SITE_3300.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -1918,9 +1924,9 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	}
 	
 	@Test
-	public void cures_ProblemSecProbConcProbObs_BasicReproMissingNameSite3265Test() {
+	public void cures_ProblemSecProbConcProbObs_BasicReproMissingNameInlineButHasInLinkedReferenceSite3265Test() {
 		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
-		// SITE-3265 ETT GG NCC ContentVal "Problems data provenance error" User-error missing name
+		// ETT GG, RefVal, ContentVal: Handle reference id "Problems data provenance error"
 		// https://groups.google.com/g/edge-test-tool/c/-kjLTnBuB00
 		
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
@@ -1929,7 +1935,6 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				SeverityLevel.ERROR);
 		printResults(results);
 		
-		// Fix original doc from Jess, run expect fail test since the error is accurate.
 		// T1 entry 1
 		// Problem Section/ProblemConcern/ProblemObservation
 		//
@@ -1937,6 +1942,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//   <author>
         //    <templateId root="2.16.840.1.113883.10.20.22.4.119" />
 		//    <time value="202006221100-0500" />
+		/* Note how this is inline non-referenced data... */
 		//    <assignedAuthor>
 		//      ...
 		//      <representedOrganization>
@@ -1952,15 +1958,61 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
         //    ...
 		//    <time value="20200622110000-0500" />
 		//      <assignedAuthor>
-		//      ...
-		//      <!-- Fails because it is missing a representedOrganization/name -->
-		//
+        //        <!--  This id's root and extension are used to match the referenced data elsewhere in the document -dbTest -->
+        //        <id extension="236598153" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+		//          <!-- Would normally fail due to missing a representedOrganization/name however, 
+		//               there is a reference linked via the id elements @root and @extension which returns
+		//               valid data elsewhere in the document (where the matching root and extension exists. 
+		//               Therefore, the provenance requirement is fulfilled via the linked data.
+		//      	     The fix for this (used to fail without inline data) is part of SITE-3265 -dbTest -->
+		/*
+	        <!-- This is the referenced author which contains the required provenance data -dbTest -->
+	        <author>
+	          <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+	          <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+	          <time value="20200622" />
+	          <assignedAuthor>
+	            <id extension="236598153" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+	            <id extension="21657" root="1.2.840.114350.1.13.51786.1.7.2.836982" />
+	            <id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
+	            <code code="207Q00000X" codeSystem="2.16.840.1.113883.6.101" displayName="Family Medicine Physician">
+	              <originalText>Family Medicine</originalText>
+	            </code>
+	            <addr use="WP">
+	              <streetAddressLine>1006 Healthcare Dr.</streetAddressLine>
+	              <city>Portland</city>
+	              <state>OR</state>
+	              <postalCode>97005</postalCode>
+	            </addr>
+	            <telecom use="WP" value="tel:+1-555-555-1006" />
+	            <assignedPerson>
+	              <name use="L">
+	                <given>Albert</given>
+	                <family>Davis</family>
+	                <suffix qualifier="AC"> MD</suffix>
+	              </name>
+	            </assignedPerson>
+	            <representedOrganization>
+	              <id extension="50" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
+	              <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
+	              <name>Neighborhood Physicians Practice</name>
+	              <addr use="WP">
+	                <streetAddressLine>1979 MILKY WAY</streetAddressLine>
+	                <city>Portland</city>
+	                <state>OR</state>
+	                <postalCode>97005</postalCode>
+	                <country>USA</country>
+	              </addr>
+	            </representedOrganization>
+	          </assignedAuthor>
+	        </author>
+	    */
 		//  Comparison: 
-		//  Base level time matches but name does not match since it does not exist in sub.
-		//  Neither the name element or its parent element, representedOrganization exist in assignedAuthor in sub.
-		//  At least one instance in sub must exist/match the ref repOrgName but does not.
+		//  Base level time matches and name matches. The name does not exist inline, but it exists in a linked reference.
+		//  The linked reference has a representedOrganization/name.
+		//  At least one instance in sub must exist/match the ref repOrgName, and it exists in the reference.		
 		
-		expectError("The scenario requires Problem Section/ProblemConcern/ProblemObservation Provenance "
+		expectNoError("The scenario requires Problem Section/ProblemConcern/ProblemObservation Provenance "
 				+ "data of time and/or representedOrganization/name which was not found in the submitted data. "
 				+ "The scenario time value is 202006221100-0500 and a submitted time value should at a minimum "
 				+ "match the 8-digit date portion of the data. The scenario representedOrganization/name value "
@@ -1969,7 +2021,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	}
 	
 	@Test
-	public void cures_ProblemSecProbConcProbObs_AddMatchingNameSite3265Test() {
+	public void cures_ProblemSecProbConcProbObs_AddMatchingNameInlineSite3265Test() {
 		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
 		// SITE-3265 ETT GG NCC ContentVal "Problems data provenance error" User-error missing name
 		// https://groups.google.com/g/edge-test-tool/c/-kjLTnBuB00
@@ -2028,6 +2080,283 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "match the 8-digit date portion of the data. The scenario representedOrganization/name value "
 				+ "is Neighborhood Physicians Practice and a submitted name should match. "
 				+ "One or all of the prior issues exist and must be resolved.", results);
+	}
+	
+	@Test
+	public void cures_ProblemSecProbConcProbObsAndManyMore_FailsMismatchedTimeInlineSite3300Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// ETT GG, ContentVal: "Provenance error for Rebecca patient"
+		// https://groups.google.com/g/edge-test-tool/c/GVOQgl1YlCo
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
+				SUBMITTED_CCDA[SUB_REBECCA621_SITE_3300],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// T1 entry 1
+		// Problem Section/ProblemConcern/ProblemObservation
+		//
+		// ref
+		//   <author>
+        //    <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//    <time value="202006221100-0500" />
+		/* Note how this is inline non-referenced data... */
+		//    <assignedAuthor>
+		//      ...
+		//      <representedOrganization>
+        //        <id root="2.16.840.1.113883.19.5" />
+        //        <name>Neighborhood Physicians Practice</name> <!-- *** requires name *** -->
+        //      </representedOrganization>
+        //    </assignedAuthor>
+        //   </author>
+		//
+		// sub
+        /*
+        <!-- prob sec / prob conc / Problem Observation author with a link (no inline data) -->
+        <author>
+          <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+          <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+          <!-- Invalid time on the original file does not match sub -dbTest -->
+          <time value="20201130175429-0600" />
+          <!-- this time WOULD pass as matches sub -->
+          <!-- <time value="20200622" />  -->                    
+          <assignedAuthor>
+            <!--  This id's root and extension are used to match the referenced data elsewhere in the document -dbTest 
+            A match DOES exist -->
+            <id extension="299935226" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+          </assignedAuthor>
+        </author>
+        
+        ...
+        
+        linked reference:
+				<author>
+                    <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+                    <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+                    <!-- time does not match 1st 8 digits of sub time of 20200622 so this error is correct: 
+                    The scenario requires Allergy Section/AllergyConcern/AllergyObservation Provenance data of time 
+                    and/or representedOrganization/name which was not found in the submitted data. The scenario time value 
+                    is 202006221100-0500 and a submitted time value should at a minimum match the 8-digit date portion of the 
+                    data. The scenario representedOrganization/name value is Neighborhood Physicians Practice and a submitted 
+                    name should match. One or all of the prior issues exist and must be resolved. -->                    
+                    <time value="20201130" />
+                    <assignedAuthor>
+                      <id extension="299935226" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+                      <id extension="10" root="1.2.840.114350.1.13.51786.1.7.2.836982" />
+                      <id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
+                      <addr use="WP">
+                        <streetAddressLine>1002 Healthcare Dr</streetAddressLine>
+                        <city>Portland</city>
+                        <state>OR</state>
+                        <postalCode>97266</postalCode>
+                      </addr>
+                      <telecom use="WP" value="tel:+1-555-555-1002" />
+                      <assignedPerson>
+                        <name use="L">
+                          <given>Henry</given>
+                          <family>Seven</family>
+                        </name>
+                      </assignedPerson>
+                      <representedOrganization>
+                        <id extension="50" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
+                        <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
+                        <name>Neighborhood Physicians Practice</name>
+                        <addr use="WP">
+                          <streetAddressLine>1979 MILKY WAY</streetAddressLine>
+                          <city>Portland</city>
+                          <state>OR</state>
+                          <postalCode>97005</postalCode>
+                          <country>USA</country>
+                        </addr>
+                      </representedOrganization>
+                    </assignedAuthor>
+                  </author>        
+        
+        */
+		//  Comparison: 
+		//  Base level time does not match, name does match (in reference). Expect fail.		
+		//  Above is the Problem Section/Problem Concern/ Problem Observaation example, but there are many more, see errors below
+		
+		//  These errors are partial messages...		
+		expectError("The scenario requires Allergy Section/AllergyConcern/AllergyObservation Provenance", results); // x2
+		expectError("The scenario requires Problem Section/ProblemConcern/ProblemObservation Provenance", results); // x1
+		expectError("The scenario requires Medications Section/MedicationActivity Provenance", results); // x3
+		expectError("The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance", results); //x10
+	}
+	
+	@Test
+	public void cures_ProblemSecProbConcProbObsAndManyMore_MatchedTimeInlineSite3300Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// ETT GG, ContentVal: "Provenance error for Rebecca patient"
+		// https://groups.google.com/g/edge-test-tool/c/GVOQgl1YlCo
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
+				SUBMITTED_CCDA[SUB_REBECCA621_MATCHED_TIME_SITE_3300],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// T1 entry 1
+		// Problem Section/ProblemConcern/ProblemObservation
+		//
+		// ref
+		//   <author>
+        //    <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//    <time value="202006221100-0500" />
+		/* Note how this is inline non-referenced data... */
+		//    <assignedAuthor>
+		//      ...
+		//      <representedOrganization>
+        //        <id root="2.16.840.1.113883.19.5" />
+        //        <name>Neighborhood Physicians Practice</name> <!-- *** requires name *** -->
+        //      </representedOrganization>
+        //    </assignedAuthor>
+        //   </author>
+		//
+		// sub
+        /*
+	      <!-- prob sec / prob conc / Problem Observation author with a link (no inline data) -->
+	      <author>
+	        <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+	        <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+	        <!-- !FIXED! Invalid time on the original file does not match sub -dbTest -->
+	        <!-- <time value="20201130175429-0600" /> -->
+	        <!-- this time WOULD pass as matches sub -->
+	        <time value="20200622" />          
+	        <assignedAuthor>
+	          <!--  This id's root and extension are used to match the referenced data elsewhere in the document -dbTest 
+	          A match DOES exist and is correct and is required since the name is not here inline -->
+	          <id extension="299935226" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+	        </assignedAuthor>
+	      </author>
+        
+        ...
+        
+        linked reference:
+                  <!--  Allergy Observation 1  -dbTest -->
+                  <author>
+                    <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+                    <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+                    <!-- !FIXED! time does not match 1st 8 digits of sub time of 20200622 so this error is correct: 
+                    The scenario requires Allergy Section/AllergyConcern/AllergyObservation Provenance data of time and/or representedOrganization/name which was not found in the submitted data. The scenario time value is 202006221100-0500 and a submitted time value should at a minimum match the 8-digit date portion of the data. The scenario representedOrganization/name value is Neighborhood Physicians Practice and a submitted name should match. One or all of the prior issues exist and must be resolved. -->                    
+                    <!-- <time value="20201130" /> -->
+                    <!-- Note: This doesn't use a reference, the data is inline. And, even though there are other allergies sections with missing data
+                    we were only looking for 1 in the scenario that matched, so they can be erroneous without triggering a content error.
+                    BTW, the REASON this is inline, is because the IS the reference that other links are using... -dbTest -->
+                    <time value="20200622" />
+                    <assignedAuthor>
+                      <id extension="299935226" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+                      <id extension="10" root="1.2.840.114350.1.13.51786.1.7.2.836982" />
+                      <id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
+                      <addr use="WP">
+                        <streetAddressLine>1002 Healthcare Dr</streetAddressLine>
+                        <city>Portland</city>
+                        <state>OR</state>
+                        <postalCode>97266</postalCode>
+                      </addr>
+                      <telecom use="WP" value="tel:+1-555-555-1002" />
+                      <assignedPerson>
+                        <name use="L">
+                          <given>Henry</given>
+                          <family>Seven</family>
+                        </name>
+                      </assignedPerson>
+                      <representedOrganization>
+                        <id extension="50" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
+                        <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
+                        <name>Neighborhood Physicians Practice</name>
+                        <addr use="WP">
+                          <streetAddressLine>1979 MILKY WAY</streetAddressLine>
+                          <city>Portland</city>
+                          <state>OR</state>
+                          <postalCode>97005</postalCode>
+                          <country>USA</country>
+                        </addr>
+                      </representedOrganization>
+                    </assignedAuthor>
+                  </author>       
+        
+        */
+		//  Comparison: 
+		//  Base level time DOES match, name matches in linked reference in most cases, and in some cases, inline. Expect pass.	
+		//  Above is the Problem Section/Problem Concern/ Problem Observaation example, but there are many more, see errors below
+		
+		//  These errors are partial messages...		
+		expectNoError("The scenario requires Allergy Section/AllergyConcern/AllergyObservation Provenance", results); // x2
+		expectNoError("The scenario requires Problem Section/ProblemConcern/ProblemObservation Provenance", results); // x1
+		expectNoError("The scenario requires Medications Section/MedicationActivity Provenance", results); // x3
+		expectNoError("The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance", results); //x10		
+	}
+	
+	// NO linkedRefAUths in document AND doc has links that are looking for that variable	
+	@Test
+	public void cures_ProblemSecProbConcProbObsAndManyMore_AuthorLinksButNoMatchAsNoLinkedReferenceAuthorsExistSite3300Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// ETT GG, ContentVal: "Provenance error for Rebecca patient"
+		// https://groups.google.com/g/edge-test-tool/c/GVOQgl1YlCo
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
+				SUBMITTED_CCDA[SUB_REBECCA621_MATCHED_TIME_BUT_MISSING_LINKED_REFERENCES_IN_DOCUMENT_SITE_3300],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// T1 entry 1
+		// Problem Section/ProblemConcern/ProblemObservation
+		//
+		// ref
+		//   <author>
+        //    <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//    <time value="202006221100-0500" />
+		/* Note how this is inline non-referenced data... */
+		//    <assignedAuthor>
+		//      ...
+		//      <representedOrganization>
+        //        <id root="2.16.840.1.113883.19.5" />
+        //        <name>Neighborhood Physicians Practice</name> <!-- *** requires name *** -->
+        //      </representedOrganization>
+        //    </assignedAuthor>
+        //   </author>
+		//
+		// sub
+        /*
+	      <!-- prob sec / prob conc / Problem Observation author with a link (no inline data) -->
+	      <author>
+	        <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+	        <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+	        <!-- !FIXED! Invalid time on the original file does not match sub -dbTest -->
+	        <!-- <time value="20201130175429-0600" /> -->
+	        <!-- this time WOULD pass as matches sub -->
+	        <time value="20200622" />          
+	        <assignedAuthor>
+	          <!--  This id's root and extension are used to match the referenced data elsewhere in the document -dbTest 
+	          A match DOES exist and is correct and is required since the name is not here inline -->
+	          <id extension="299935226" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+	        </assignedAuthor>
+	      </author>
+        
+        ...
+        
+        linked reference:
+        N/A: Missing/doesn't exist - submitted authorsWithLinkedReferenceData is null or empty 
+        
+        */
+		//  Comparison: 
+		//  Base level time DOES match, nothing matches in linked references because they don't exist at all.
+		
+		//  These errors are partial messages...		
+		expectError("The scenario requires Allergy Section/AllergyConcern/AllergyObservation Provenance", results); // x2
+		expectError("The scenario requires Problem Section/ProblemConcern/ProblemObservation Provenance", results); // x1
+		expectError("The scenario requires Medications Section/MedicationActivity Provenance", results); // x3
+		expectError("The scenario requires Vital Signs Section/VitalSignsOrganizer/VitalSignsObservation Provenance", results); //x10
+		
+		// TODO: consider adding these tests for reference linking:
+		// cures_ProblemSecProbConcProbObs_AuthorLinksButNoMatchAsNoMatchingRootSite3300Test	
+		// cures_ProblemSecProbConcProbObs_AuthorLinksButNoMatchAsNoMatchingExtensionSite3300Test
+		// cures_ProblemSecProbConcProbObs_AuthorLinksButNoMatchAsNoMatchingRootOrExtensionSite3300Test
+		// missing root, missing extension, missing both
+		// nullFlavor in element with root and nullFlavor instead of ext, ext and nullFlavor instead of root, nullFlavor only
 	}	
 	
 }

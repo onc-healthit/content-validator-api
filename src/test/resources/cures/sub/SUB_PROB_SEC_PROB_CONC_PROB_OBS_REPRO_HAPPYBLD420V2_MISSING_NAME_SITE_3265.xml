@@ -77,6 +77,11 @@
     </patientRole>
   </recordTarget>
   <author>
+  	<!-- This error is correct because the tim is mismatched: -dbTest -->
+  	<!-- Message: The scenario requires Encounters Section/EncounterActivity/EncounterDiagnoses/ProblemObservation Provenance data of time 
+  	and/or representedOrganization/name which was not found in the submitted data. The scenario time value is 202006221100-0500 and a submitted time value 
+  	should at a minimum match the 8-digit date portion of the data. The scenario representedOrganization/name value is Neighborhood Physicians Practice and a 
+  	submitted name should match. One or all of the prior issues exist and must be resolved. -->
     <time value="20210420173404-0500" />
     <assignedAuthor>
       <id extension="9.7" root="1.2.840.114350.1.1" />
@@ -593,12 +598,19 @@
               </entryRelationship>
               <entryRelationship typeCode="SUBJ">
                 <act classCode="ACT" moodCode="EVN">
+                  <!-- Encounter Diagnosis -->
                   <templateId root="2.16.840.1.113883.10.20.22.4.80" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.80" extension="2015-08-01" />
                   <id extension="26754-244092-concern" root="1.2.840.114350.1.13.51786.1.7.1.1099.1" />
                   <code code="29308-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Diagnosis" />
                   <statusCode code="active" />
                   <entryRelationship typeCode="SUBJ" inversionInd="false">
+                    <!-- Problem Observation -->
+                    <!--  This error makes sense because there is no author at all... -dbTest: -->
+                    <!-- The scenario requires Encounters Section/EncounterActivity/EncounterDiagnoses/ProblemObservation Provenance data of time 
+                    and/or representedOrganization/name which was not found in the submitted data. The scenario time value is 202006221100-0500 
+                    and a submitted time value should at a minimum match the 8-digit date portion of the data. The scenario representedOrganization/name value 
+                    is Neighborhood Physicians Practice and a submitted name should match. One or all of the prior issues exist and must be resolved. -->
                     <observation classCode="OBS" moodCode="EVN">
                       <templateId root="2.16.840.1.113883.10.20.22.4.4" />
                       <templateId root="2.16.840.1.113883.10.20.22.4.4" extension="2015-08-01" />
@@ -714,10 +726,11 @@
                     <low value="20191201" />
                   </effectiveTime>
                   <value code="420134006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" xsi:type="CD" displayName="Propensity to adverse reactions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+                  <!-- This is the referenced author which contains the required provenance data -dbTest -->
                   <author>
                     <templateId root="2.16.840.1.113883.10.20.22.4.119" />
                     <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
-                    <time value="20200622" />
+                    <time value="20200622" /> <!-- time value 20200622 matches the first 8 digits of the sub time value -->
                     <assignedAuthor>
                       <id extension="236598153" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
                       <id extension="21657" root="1.2.840.114350.1.13.51786.1.7.2.836982" />
@@ -1433,6 +1446,7 @@
                 <low value="20201130" />
               </effectiveTime>
               <entryRelationship typeCode="SUBJ" inversionInd="false">
+               <!-- prob sec / prob conc / Problem Observation -->
                 <observation classCode="OBS" moodCode="EVN">
                   <templateId root="2.16.840.1.113883.10.20.22.4.4" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.4" extension="2015-08-01" />
@@ -1460,9 +1474,14 @@
                     <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
                     <time value="20200622110000-0500" />
                     <assignedAuthor>
-                      <id extension="236598153" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+                      <!--  This id's root and extension are used to match the referenced data elsewhere in the document -dbTest -->
+                      <id extension="236598153" root="1.2.840.114350.1.13.51786.1.7.1.1133" /> 
                       
-                      <!-- Fails because it is missing a representedOrganization/name -dbTest -->
+						<!-- Would normally fail due to missing a representedOrganization/name however, 
+							 there is a reference linked via the id elements @root and @extension which returns
+							 valid data elsewhere in the document (where the matching root and extension exists. 
+		             		 Therefore, the provenance requirement is fulfilled via the linked data.
+		             		 The fix for this (used to fail without inline data) is part of SITE-3265 -dbTest -->
                       
                     </assignedAuthor>
                   </author>
@@ -2455,6 +2474,7 @@
           </text>
           <entry>
             <act classCode="ACT" moodCode="EVN">
+              <!-- Note Activity -->
               <templateId root="2.16.840.1.113883.10.20.22.4.202" extension="2016-11-01" />
               <code code="34109-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Note">
                 <translation code="11488-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Consult note" />
@@ -2469,6 +2489,7 @@
                 <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
                 <time value="20201130163526-0600" />
                 <assignedAuthor>
+                  <!-- valid link, but need to add support for Note Activity -->
                   <id extension="236598153" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
                 </assignedAuthor>
               </author>

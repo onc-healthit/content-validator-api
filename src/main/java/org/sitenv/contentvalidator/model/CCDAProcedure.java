@@ -73,7 +73,7 @@ public class CCDAProcedure {
 	}
 	
 	public void compareAuthor(CCDAProcedure subProcedure, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
 		String elName = "Procedures Section";
 
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,
@@ -85,7 +85,7 @@ public class CCDAProcedure {
 				? subProcedure.getProcedureActivityProcedureAuthors()
 				: null;
 		elName += "/ProcedureActivityProcedure";
-		CCDAAuthor.compareAuthors(refAllPAPAuths, subAllPAPAuths, results, elName);
+		CCDAAuthor.compareAuthors(refAllPAPAuths, subAllPAPAuths, results, elName, authorsWithLinkedReferenceData);
 	}
 	
 	public ArrayList<CCDAAuthor> getProcedureActivityProcedureAuthors() {
