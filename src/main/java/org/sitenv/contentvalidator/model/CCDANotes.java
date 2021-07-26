@@ -83,8 +83,8 @@ public class CCDANotes {
 			author.log();
 	}	
 	
-	public static void compareNotes(HashMap<String, CCDANotes> refNotes, 
-			HashMap<String, CCDANotes> subNotes, 	ArrayList<ContentValidationResult> results) {
+	public static void compareNotes(HashMap<String, CCDANotes> refNotes, HashMap<String, CCDANotes> subNotes,
+			ArrayList<ContentValidationResult> results) {
 
 		log.info(" Start Comparing Notes Section level data ");
 		

@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,8 +29,9 @@ public class CCDANotesActivity {
 		
 	}
 
-	public static void compareNotesActivities(HashMap<String, CCDANotesActivity> refNotes, 
-			HashMap<String, CCDANotesActivity> subNotes, 	ArrayList<ContentValidationResult> results) {
+	public static void compareNotesActivities(HashMap<String, CCDANotesActivity> refNotes,
+			HashMap<String, CCDANotesActivity> subNotes, ArrayList<ContentValidationResult> results,
+			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData) {
 
 		log.info(" Start Comparing Notes Section level data ");
 		
@@ -37,12 +39,10 @@ public class CCDANotesActivity {
 		for(Map.Entry<String, CCDANotesActivity> ent: refNotes.entrySet()) {
 
 			if(subNotes.containsKey(ent.getKey())) {
-
 				log.info("Comparing Notes Activity since the section level matched ");
 				String context = "Notes Section corresponding to the code " + ent.getKey();
-				subNotes.get(ent.getKey()).compare(ent.getValue(), results, context, false);
-
-
+				subNotes.get(ent.getKey()).compare(ent.getValue(), results, context, false,
+						submittedAuthorsWithLinkedReferenceData);
 			} else {
 				// Error
 				String error = "The scenario contains Notes data with code " + ent.getKey() +
@@ -50,24 +50,17 @@ public class CCDANotesActivity {
 				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 				results.add(rs);
 			}
+			
 		}
 		
 	}
 	
-	
-	
 	public CCDANotes getParent() {
 		return parent;
 	}
-
-
-
 	public void setParent(CCDANotes parent) {
 		this.parent = parent;
 	}
-
-
-
 	public static Logger getLog() {
 		return log;
 	}
@@ -158,7 +151,7 @@ public class CCDANotesActivity {
 	public static void compareNotesActivity(ArrayList<CCDANotesActivity> refNotesActivity, 
 			ArrayList<CCDANotesActivity> subNotesActivity, 	ArrayList<ContentValidationResult> results, String context) {
 
-		log.info(" Start Comparing Notes Activity Entry level data ");
+		log.info(" Start Comparing Notes Activity ");
 		
 		HashMap<String, CCDANotesActivity> refNotesActs = getAllNotesActivities(refNotesActivity);
 		HashMap<String, CCDANotesActivity> subNotesActs = getAllNotesActivities(subNotesActivity);
@@ -167,7 +160,7 @@ public class CCDANotesActivity {
 				(subNotesActs != null && subNotesActs.size() > 0)  ) {
 				
 				log.info("Notes present in both models, Size of Ref Notes Activities = " + refNotesActs.size() + " : Size of Sub Notes Activities = " + subNotesActs.size());
-				CCDANotesActivity.compareNotesActivity(refNotesActs, subNotesActs, results, context);
+				CCDANotesActivity.compareNotesActivityEntryLevel(refNotesActs, subNotesActs, results, context);
 				
 			} else if ( (refNotesActs != null && refNotesActs.size() > 0) && 
 					(subNotesActs == null || subNotesActs.size() == 0) ) {
@@ -186,7 +179,7 @@ public class CCDANotesActivity {
 		
 	}
 	
-	public static void compareNotesActivity(HashMap<String, CCDANotesActivity> refNotes,
+	public static void compareNotesActivityEntryLevel(HashMap<String, CCDANotesActivity> refNotes,
 			HashMap<String, CCDANotesActivity> subNotes, ArrayList<ContentValidationResult> results, String context) {
 
 		log.info(" Start Comparing Notes Activity Entry level data ");
@@ -211,10 +204,14 @@ public class CCDANotesActivity {
 		}
 		
 	}
-	
+
 	public void compare(CCDANotesActivity refNote, ArrayList<ContentValidationResult> results, String context,
 			boolean parentComparison) {
-				
+		compare(refNote, results, context, parentComparison, null);
+	}
+	
+	public void compare(CCDANotesActivity refNote, ArrayList<ContentValidationResult> results, String context,
+			boolean parentComparison, ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData) {
 		log.info("Comparing Notes Activity Entry ");
 		
 		// Handle Template Ids
@@ -228,19 +225,18 @@ public class CCDANotesActivity {
 		String elementNameVal = " Comparing Notes Activity code element for " + context;
 		ParserUtilities.compareCode(refNote.getActivityCode(), activityCode, results, elementNameVal);
 		
-		
 		// Compare Status Codes 
 		String elementNameVal1 = " Comparing Notes Activity Status code element for " + context;
 		ParserUtilities.compareDataElement(refNote.getStatusCode(), statusCode, results, elementNameVal1);
 		
-		
 		// Comparing Author for Entry
-		String elementVal2 = " , Comparing Notes Activity Author Entry for : " + context;
-		ParserUtilities.compareAuthor(refNote.getAuthor(), author, results, elementVal2);
+		String elementVal2 = "Note Activity Author Entry for " + context;
+		ParserUtilities.compareAuthor(refNote.getAuthor(), author, results, elementVal2,
+				submittedAuthorsWithLinkedReferenceData);
 		
 		if(parentComparison && (this.parent != null) && (refNote.parent != null)) {
-			
 			log.info(" Comparing Parent Notes Section details ");
+			
 			// Handle Template Ids
 			String elementNameVal3 = "Comparing Notes Section tempalte Ids " + context;
 			ParserUtilities.compareTemplateIds(refNote.parent.getSectionTemplateId(), parent.getSectionTemplateId(), results, elementNameVal3);
@@ -250,9 +246,24 @@ public class CCDANotesActivity {
 			ParserUtilities.compareCode(refNote.parent.getSectionCode(), parent.getSectionCode(), results, elementNameVal3);
 		}
 		
-		// May be add check to comapre TEXT.
+		// Maybe add check to compare TEXT.
 		log.info(" TODO  :  Add Check for Text which only checks null ");
 	}
 	
+	// TODO: May want to send in data like: What section it's in (using code like
+	// old impl) so we can identify for the user and properly compare to like-items
+	// in the logic. The method which would call this, simply loops through, which is not going to be valid.
+	// It's just a proof of concept for now.
+	public void compareAuthor(CCDANotesActivity subNoteActivity, ArrayList<ContentValidationResult> results,
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
+		log.info("Comparing Authors for current Note Activity");
+		ArrayList<CCDAAuthor> refAllNoteActivityAuths = new ArrayList<CCDAAuthor>(Arrays.asList(this.getAuthor()));
+		ArrayList<CCDAAuthor> subAllNoteActivityAuths = new ArrayList<CCDAAuthor>(Arrays.asList(
+				  subNoteActivity != null && subNoteActivity.getAuthor() != null
+				? subNoteActivity.getAuthor()
+				: null));
+		CCDAAuthor.compareAuthors(refAllNoteActivityAuths, subAllNoteActivityAuths, results, "Note Activity",
+				authorsWithLinkedReferenceData);
+	}	
 	
 }

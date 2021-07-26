@@ -18,13 +18,12 @@ public class ParserUtilities {
 	private static Logger log = Logger.getLogger(ParserUtilities.class.getName());
 	
 	public static void compareAuthor(CCDAAuthor refAuthor, CCDAAuthor subAuthor,
-			ArrayList<ContentValidationResult> results, String elementName) {		
+			ArrayList<ContentValidationResult> results, String elementName,
+			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData) {		
 		// handle nulls.
 		if ((refAuthor != null) && (subAuthor != null)) {
-
-			refAuthor.matches(subAuthor, results, elementName);
+			refAuthor.matches(subAuthor, results, elementName, submittedAuthorsWithLinkedReferenceData);
 		} else if ((refAuthor == null) && (subAuthor != null)) {
-
 			log.info(" Getting additional author information which is allowed ");
 		} else if ((refAuthor != null) && (subAuthor == null)) {
 			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName
@@ -37,34 +36,100 @@ public class ParserUtilities {
 		}				
 	}
 	
-	public static void compareDataElementText(CCDADataElement refDe, CCDADataElement subDe,
-			  ArrayList<ContentValidationResult> results, String elementName) {
-
+	public static void compareProvenanceOrgName(CCDADataElement refDe, CCDAAuthor subAuthor,
+			ArrayList<ContentValidationResult> results, String elementName,
+			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData) {
 		// handle nulls.
-		if((refDe!= null) && (subDe != null) && (refDe.getValue() != null) && (subDe.getValue() != null)) {
-		
-			if(subDe.getValue().equalsIgnoreCase(refDe.getValue())){
+		if ((refDe != null) && (subAuthor.getOrgName() != null) && (refDe.getValue() != null)
+				&& (subAuthor.getOrgName().getValue() != null)) {
+			if (subAuthor.getOrgName().getValue().equalsIgnoreCase(refDe.getValue())) {
+				// do nothing since both match.
+				log.info(" Both Submitted and Ref codes match for " + elementName);
+			} else {
+				// both ref and sub not null and not equal - so for example, inline data exists,
+				// but is mismatched, triggers an error:
+				ContentValidationResult rs = new ContentValidationResult(
+						"The scenario requires Provenance Org Name of: (" + refDe.getValue() + ") for: " + elementName
+								+ ", but submitted file contains Provenance Org Name of: ("
+								+ subAuthor.getOrgName().getValue()
+								+ ") which does not match the inline author data.",
+						ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+				results.add(rs);
+			}
+		} else if ((refDe == null) && (subAuthor.getOrgName() != null)) {
+			log.info(" The submitted file has Provenance Org Name which is OK ");
+		} else if ((refDe != null) && (subAuthor.getOrgName() == null)) {
+			// ref not null and sub is null - so for example, inline data does not exist in
+			// sub, which means we need check for references before failing
+			// All we have to do is worry about linked ref check cause this is the situation
+			// where sub org name is null
+			// the non-null situation is covered and an error returned in first check. So we
+			// don't need a 2 step process.
+			CCDAAuthor curLinkedSubAuth = CCDAAuthor.findLinkedSubAuth(submittedAuthorsWithLinkedReferenceData,
+					subAuthor);
+			if (refDe.getValue() != null) {
+				if (curLinkedSubAuth.getOrgName() != null && curLinkedSubAuth.getOrgName().getValue() != null) {
+					final boolean isValidLinkedRefAndMatch = curLinkedSubAuth.getOrgName().getValue()
+							.equalsIgnoreCase(refDe.getValue());
+					// We only trigger the error if there's no link and no match. We'll know that as
+					// the value in the author will be empty if there wasn't a match as per findLinkedSubAuth
+					if (!isValidLinkedRefAndMatch) {
+						ContentValidationResult rs = new ContentValidationResult(
+								"The scenario requires Provenance Org Name as part of: " + elementName
+										+ " data, but submitted file does not contain Provenance Org Name as part of: "
+										+ elementName + " which does not match in the linked reference.",
+								ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+						results.add(rs);
+					} else {
+						log.info("Passed Note Activity Provenance Org Name due to linked reference match");
+					}
+				} else {
+					// if either of these are null then there's no way there could be a valid linked
+					// reference so it fails
+					ContentValidationResult rs = new ContentValidationResult(
+							"The scenario requires Provenance Org Name as part of: " + elementName
+									+ " data, but submitted file does not contain Provenance Org Name as part of: "
+									+ elementName
+									+ " which does not match since the linked reference or id link is missing or invalid.",
+							ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+					results.add(rs);
+				}
+			} else {
+				log.info("Can't fail if there is no scenario requirement as refDe.getValue() is null");
+			}
+		} else {
+			// do nothing since both are null.
+			log.info(" Both Submitted and Ref codes are null for " + elementName);
+		}
+	}
+	
+	public static void compareDataElementText(CCDADataElement refDe, CCDADataElement subDe,
+			  ArrayList<ContentValidationResult> results, String elementName) {		
+		// handle nulls.
+		if ((refDe != null) && (subDe != null) && (refDe.getValue() != null) && (subDe.getValue() != null)) {		
+			if (subDe.getValue().equalsIgnoreCase(refDe.getValue())) {
 				// do nothing since both match.
 				log.info(" Both Submitted and Ref codes match for " + elementName);
 			}
 			else {
+				// both ref and sub not null and not equal - so for example, inline data exists, but is mismatched, triggers an error:
 				ContentValidationResult rs = new ContentValidationResult(
-						"The scenario requires Provenance Org Name of : (" + refDe.getValue() + ") for: " + elementName
-								+ ", but submitted file contains Provenance Org Name of : (" + subDe.getValue()
-								+ ") which does not match ",
+						"The scenario requires Provenance Org Name of: (" + refDe.getValue() + ") for: " + elementName
+								+ ", but submitted file contains Provenance Org Name of: (" + subDe.getValue()
+								+ ") which does not match.",
 						ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
-				results.add(rs);
+				results.add(rs);				
 			}
-		
 		}
 		else if ((refDe == null) && (subDe != null)) {
 			log.info(" The submitted file has Provenance Org Name which is ok ");
 		}
-		else if((refDe != null) && (subDe == null)){
+		else if ((refDe != null) && (subDe == null)) {
+			// ref not null and sub is null
 			ContentValidationResult rs = new ContentValidationResult(
 					"The scenario requires Provenance Org Name as part of: " + elementName
-							+ " data, but submitted file does not contain Provenance Org Name as part of : "
-							+ elementName + " which does not match ",
+							+ " data, but submitted file does not contain Provenance Org Name as part of: "
+							+ elementName + " which does not match.",
 					ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 			results.add(rs);
 		} 
@@ -76,7 +141,6 @@ public class ParserUtilities {
 
 	public static void compareDataElement(CCDADataElement refCode, CCDADataElement submittedCode,
 										  ArrayList<ContentValidationResult> results, String elementName) {
-		
 		// handle nulls.
 		if((refCode != null) && (submittedCode != null) ) {
 
@@ -87,14 +151,16 @@ public class ParserUtilities {
 
 		}
 		else if ((refCode == null) && (submittedCode != null)) {
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName
+					+ " data, but submitted file does have " + elementName + " data",
+					ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 			results.add(rs);
-		}
-		else if((refCode != null) && (submittedCode == null)){
-			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+		} else if ((refCode != null) && (submittedCode == null)) {
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName
+					+ " data, but submitted file does not contain " + elementName + " data",
+					ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 			results.add(rs);
-		} 
-		else {
+		} else {
 			// do nothing since both are null.
 			log.info(" Both Submitted and Ref codes are null for " + elementName);
 		}
@@ -988,7 +1054,8 @@ public class ParserUtilities {
 					// Already size has been checked.
 					if(actTransCodes.get(0).getCode() != null) {
 						
-						log.info(" Adding the activity by code itslef and not translation " + actTransCodes.get(0).getCode() );
+						log.info(" Adding the activity using translation instead of base-level code "
+								+ actTransCodes.get(0).getCode());
 						results.put(actTransCodes.get(0).getCode(), act);
 					}
 				}

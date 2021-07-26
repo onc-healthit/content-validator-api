@@ -46,6 +46,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final String REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA = "170.315_g9_api_access_inp_sample1.xml";
 	
 	private static final String REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF = "170.315_b1_toc_amb_sample1_v1.pdf";
+	private static final String REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2 = "170.315_b1_toc_amb_sample1_v2.pdf";
 	
 	private static final String REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY = "170.315_b1_toc_amb_sample3_v2.xml";
 	private static final String REF_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_V5 = "170.315_b1_toc_amb_sample3_v5.xml";
@@ -114,6 +115,13 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_REBECCA621_SITE_3300 = 41;
 	private static final int SUB_REBECCA621_MATCHED_TIME_SITE_3300 = 42;
 	private static final int SUB_REBECCA621_MATCHED_TIME_BUT_MISSING_LINKED_REFERENCES_IN_DOCUMENT_SITE_3300 = 43;
+	private static final int SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_3300 = 44;
+	private static final int SUB_REBECCA621_ONE_NOTE_ACT_VALID_INLINE_3300 = 45;
+	private static final int SUB_REBECCA621_ONE_NOTE_ACT_BAD_LINK_BAD_EXT_AND_ROOT_3300 = 46;
+	private static final int SUB_REBECCA621_ONE_NOTE_ACT_EMPTY_ASSIGNED_AUTHOR_3300 = 47;
+	private static final int SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_BAD_NAME_3300 = 48;
+	private static final int SUB_REBECCA621_ONE_NOTE_ACT_NO_LINKED_REF_IN_DOC_3300 = 49;
+	private static final int SUB_REBECCA621_ONE_NOTE_ACT_INLINE_AUTH_MISMATCHED_NAME_3300 = 50;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -162,7 +170,14 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_SITE_3300.xml").toURI(),
 					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_MATCHED_TIME_SITE_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_MATCHED_TIME_BUT_MISSING_LINKED_REFERENCES_IN_DOCUMENT_SITE_3300.xml").toURI()
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_MATCHED_TIME_BUT_MISSING_LINKED_REFERENCES_IN_DOCUMENT_SITE_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_VALID_INLINE_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_BAD_LINK_BAD_EXT_AND_ROOT_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_EMPTY_ASSIGNED_AUTHOR_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_BAD_NAME_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_NO_LINKED_REF_IN_DOC_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_INLINE_AUTH_MISMATCHED_NAME_3300.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -290,14 +305,12 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// Note: Even though the birthSexMessage implies birth sex is required because it is in the scenario, 
 		// we require it regardless of it being there or not - 
 		// the source code (CCDARefModel.validateBirthSex ) purposely does not even reference the scenario, only the submitted file.
-		
 		String birthSexMessage = "The scenario requires patient's birth sex to be captured as part of social history data, "
 				+ "but submitted file does not have birth sex information";
 		
 		ArrayList<ContentValidationResult> results;
 		
 		// *** these tests are written in a future proof manner, knowing that birth sex will be added to all the scenarios ***
-		
 		printHeader("Ref has birth sex. Sub does not have birth sex. Expect birth sex error");
 		results = validateDocumentAndReturnResultsCures(B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF,
 				SUBMITTED_CCDA[SUB_NO_BIRTH_SEX], SeverityLevel.ERROR);
@@ -1041,7 +1054,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_NotesActivityInResultsParser_ExpectError_Site3153Test() {
 		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
 		
-		// Notes Activity Results entry
+		// Note Activity Results entry
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
 				B1_TOC_AMB_VALIDATION_OBJECTIVE, MOD_REF_ADD_NOTES_ACTIVITY_ENCOUNTER_ENTRY_B1_TOC_AMB_S1,
 				SUBMITTED_CCDA[SUB_DUPLICATE_OF_B1_TOC_AMB_SAMPLE1_REF], SeverityLevel.ERROR);			
@@ -1059,7 +1072,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_NotesActivityInResultsParser_ExpectNoError_Site3153Test() {
 		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
 		
-		// Notes Activity Results entry
+		// Note Activity Results entry
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
 				B1_TOC_AMB_VALIDATION_OBJECTIVE, MOD_REF_ADD_NOTES_ACTIVITY_ENCOUNTER_ENTRY_B1_TOC_AMB_S1,
 				SUBMITTED_CCDA[SUB_DUPLICATE_OF_MOD_REF_ADD_NOTES_ACTIVITY_ENCOUNTER_ENTRY_B1_TOC_AMB_S1],
@@ -1076,7 +1089,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_NotesActivityInProceudureParser_ExpectError_Site3153Test() {
 		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
 		
-		// Notes Activity in Procedures Procedure Activity Procedure entryRelationship
+		// Note Activity in Procedures Procedure Activity Procedure entryRelationship
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
 				B1_TOC_AMB_VALIDATION_OBJECTIVE, MOD_REF_ADD_NOTES_ACTIVITY_PAP_ENTRY_RELATIONSHIP_B1_TOC_AMB_S1,
 				SUBMITTED_CCDA[SUB_DUPLICATE_OF_B1_TOC_AMB_SAMPLE1_REF], SeverityLevel.ERROR);
@@ -1094,7 +1107,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	public void cures_NotesActivityInProceudureParser_ExpectNoError_Site3153Test() {
 		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
 		
-		// Notes Activity in Procedures Procedure Activity Procedure entryRelationship
+		// Note Activity in Procedures Procedure Activity Procedure entryRelationship
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
 				B1_TOC_AMB_VALIDATION_OBJECTIVE, MOD_REF_ADD_NOTES_ACTIVITY_PAP_ENTRY_RELATIONSHIP_B1_TOC_AMB_S1,
 				SUBMITTED_CCDA[SUB_DUPLICATE_OF_MOD_REF_ADD_NOTES_ACTIVITY_PAP_ENTRY_RELATIONSHIP_B1_TOC_AMB_S1],
@@ -1723,7 +1736,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  Comparison: 
 		//  base date is 1492 in sub vs expected 1999 in ref
 		//  Expected result: Fail (since we don't have an example of 19990622 but instead sub has 14920622)
-		message = "The Comparing Author Time for  , Comparing Notes Activity Author Entry for : Notes Section "
+		message = "The Comparing Author Time for Note Activity Author Entry for Notes Section "
 				+ "corresponding to the code 11488-4 (Effective Time: Value ) is 199906221100-0500 , "
 				+ "but submitted CCDA (Effective Time: Value ) is 149206221100-0500 which does not match";
 		assertTrue("Results should have contained the following message but did not: " + message, 
@@ -1745,8 +1758,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		//  ref time zone is correct, 4 digits, sub time-zone is incorrect, has letters. 
 		//  Although since this is validation, comparison is irrelevant, only looking at sub, and sub fails alone
 		//  Expected result: Fail (invalid format on time-zone - has 04AB, not 4 digits)
-		message = "The submitted Provenance (Time: Value) 198506221100-05AB at Notes Activity Author Entry "
-				+ "for : Notes Section corresponding to the code 11488-4 is invalid. "
+		message = "The submitted Provenance (Time: Value) 198506221100-05AB at Note Activity Author Entry "
+				+ "for Notes Section corresponding to the code 11488-4 is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, "
 				+ "followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 1100-05AB.";
@@ -2357,6 +2370,528 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// cures_ProblemSecProbConcProbObs_AuthorLinksButNoMatchAsNoMatchingRootOrExtensionSite3300Test
 		// missing root, missing extension, missing both
 		// nullFlavor in element with root and nullFlavor instead of ext, ext and nullFlavor instead of root, nullFlavor only
+	}
+	
+	// valid linked reference, expect pass
+	@Test
+	public void cures_NoteActivity_ExternallyLinkedReference_Site3300Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// ETT GG, ContentVal: "Provenance error for Rebecca patient"
+		// https://groups.google.com/g/edge-test-tool/c/GVOQgl1YlCo
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2,
+				SUBMITTED_CCDA[SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_3300],
+				SeverityLevel.ERROR);
+		printResults(results);
+				
+		// sub
+        /*
+          <!-- -dbTest-SITE-3300 caused invalid error before linked reference implementation - reference is valid -->
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <!-- Note Activity -->
+              <templateId root="2.16.840.1.113883.10.20.22.4.202" extension="2016-11-01" />
+              <code code="34109-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Note">
+                <translation code="11506-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Progress note" />
+              </code>
+              <text>
+                <reference value="#Note38" />
+              </text>
+              <statusCode code="completed" />
+              <effectiveTime value="20150622000000-0500" />
+              <author>
+                <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+                <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+                <time value="201506221100-0500" />
+                <assignedAuthor>
+                  <id extension="299935226" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+                </assignedAuthor>
+              </author>
+            </act>
+          </entry>
+        
+        ...
+        
+        linked reference:
+                  <!--  Allergy Observation 1  -dbTest -->
+                  <author>
+                    <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+                    <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+                    <time value="20200622" />
+                    <assignedAuthor>
+                      <id extension="299935226" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+                      <id extension="10" root="1.2.840.114350.1.13.51786.1.7.2.836982" />
+                      <id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
+                      <addr use="WP">
+                        <streetAddressLine>1002 Healthcare Dr</streetAddressLine>
+                        <city>Portland</city>
+                        <state>OR</state>
+                        <postalCode>97266</postalCode>
+                      </addr>
+                      <telecom use="WP" value="tel:+1-555-555-1002" />
+                      <assignedPerson>
+                        <name use="L">
+                          <given>Henry</given>
+                          <family>Seven</family>
+                        </name>
+                      </assignedPerson>
+                      <representedOrganization>
+                        <id extension="50" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
+                        <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
+                        <name>Neighborhood Physicians Practice</name>
+                        <addr use="WP">
+                          <streetAddressLine>1979 MILKY WAY</streetAddressLine>
+                          <city>Portland</city>
+                          <state>OR</state>
+                          <postalCode>97005</postalCode>
+                          <country>USA</country>
+                        </addr>
+                      </representedOrganization>
+                    </assignedAuthor>
+                  </author>       
+        
+        */
+		//  Comparison: 
+		//  Note Activity requires a matching author/assignedAuthor/representedOrganization/name to meet provenance requirements
+		//  This example has the name in a linked reference. 		
+		expectNoError("The scenario requires Provenance Org Name as part of", results);
+	}
+	
+	// inline, expect pass
+	@Test
+	public void cures_NoteActivity_TestInlineAuthorRepOrg_Site3300Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// ETT GG, ContentVal: "Provenance error for Rebecca patient"
+		// https://groups.google.com/g/edge-test-tool/c/GVOQgl1YlCo
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2,
+				SUBMITTED_CCDA[SUB_REBECCA621_ONE_NOTE_ACT_VALID_INLINE_3300],
+				SeverityLevel.ERROR);
+		printResults(results);
+				
+		// sub
+        /*   
+          <!-- -dbTest-SITE-3300 inline assignedAuthore is valid -->
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <!-- Note Activity -->
+              <templateId root="2.16.840.1.113883.10.20.22.4.202" extension="2016-11-01" />
+              <code code="34109-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Note">
+                <translation code="11506-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Progress note" />
+              </code>
+              <text>
+                <reference value="#Note38" />
+              </text>
+              <statusCode code="completed" />
+              <effectiveTime value="20150622000000-0500" />
+              <author>
+                <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+                <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+                <time value="201506221100-0500" />
+                  <!--  valid inline author -dbTest -->
+                  <assignedAuthor>
+                    <id extension="299935226" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+                    <id extension="10" root="1.2.840.114350.1.13.51786.1.7.2.836982" />
+                    <id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
+                    <addr use="WP">
+                      <streetAddressLine>1002 Healthcare Dr</streetAddressLine>
+                      <city>Portland</city>
+                      <state>OR</state>
+                      <postalCode>97266</postalCode>
+                    </addr>
+                    <telecom use="WP" value="tel:+1-555-555-1002" />
+                    <assignedPerson>
+                      <name use="L">
+                        <given>Henry</given>
+                        <family>Seven</family>
+                      </name>
+                    </assignedPerson>
+                    <representedOrganization>
+                      <id extension="50" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
+                      <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
+                      <name>Neighborhood Physicians Practice</name>
+                      <addr use="WP">
+                        <streetAddressLine>1979 MILKY WAY</streetAddressLine>
+                        <city>Portland</city>
+                        <state>OR</state>
+                        <postalCode>97005</postalCode>
+                        <country>USA</country>
+                      </addr>
+                    </representedOrganization>
+                  </assignedAuthor>
+              </author>
+            </act>
+          </entry>        
+        */
+		//  Comparison: 
+		//  Note Activity requires a matching author/assignedAuthor/representedOrganization/name to meet provenance requirements
+		//  This example has valid inline data which matches the name required
+		expectNoError("The scenario requires Provenance Org Name as part of", results);
+	}
+	
+	// bad extension and root, expect fail as no match
+	@Test
+	public void cures_NoteActivity_ExternallyLinkedButBadExtAndRoot_Site3300Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// ETT GG, ContentVal: "Provenance error for Rebecca patient"
+		// https://groups.google.com/g/edge-test-tool/c/GVOQgl1YlCo
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2,
+				SUBMITTED_CCDA[SUB_REBECCA621_ONE_NOTE_ACT_BAD_LINK_BAD_EXT_AND_ROOT_3300],
+				SeverityLevel.ERROR);
+		printResults(results);
+				
+		// sub
+        /*
+          <!-- -dbTest-SITE-3300 invalid reference due to bad link (mistmatched root and ext) -->
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <!-- Note Activity -->
+              <templateId root="2.16.840.1.113883.10.20.22.4.202" extension="2016-11-01" />
+              <code code="34109-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Note">
+                <translation code="11506-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Progress note" />
+              </code>
+              <text>
+                <reference value="#Note38" />
+              </text>
+              <statusCode code="completed" />
+              <effectiveTime value="20150622000000-0500" />
+              <author>
+                <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+                <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+                <time value="201506221100-0500" />
+                <assignedAuthor>
+                  <!--  invalid linked reference -dbTest -->
+                  <id extension="666" root="1.2.3.4.5.6.7.8.9" />
+                </assignedAuthor>
+              </author>
+            </act>
+          </entry>
+        
+        ...
+        
+        linked reference with the proper id that we are not referencing and thus failing:
+                  <!--  Allergy Observation 1  -dbTest -->
+                  <author>
+                    <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+                    <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+                    <time value="20200622" />
+                    <assignedAuthor>
+                      <id extension="299935226" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+                      <id extension="10" root="1.2.840.114350.1.13.51786.1.7.2.836982" />
+                      <id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
+                      <addr use="WP">
+                        <streetAddressLine>1002 Healthcare Dr</streetAddressLine>
+                        <city>Portland</city>
+                        <state>OR</state>
+                        <postalCode>97266</postalCode>
+                      </addr>
+                      <telecom use="WP" value="tel:+1-555-555-1002" />
+                      <assignedPerson>
+                        <name use="L">
+                          <given>Henry</given>
+                          <family>Seven</family>
+                        </name>
+                      </assignedPerson>
+                      <representedOrganization>
+                        <id extension="50" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
+                        <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
+                        <name>Neighborhood Physicians Practice</name>
+                        <addr use="WP">
+                          <streetAddressLine>1979 MILKY WAY</streetAddressLine>
+                          <city>Portland</city>
+                          <state>OR</state>
+                          <postalCode>97005</postalCode>
+                          <country>USA</country>
+                        </addr>
+                      </representedOrganization>
+                    </assignedAuthor>
+                  </author>       
+        
+        */
+		//  Comparison: 
+		//  Note Activity requires a matching author/assignedAuthor/representedOrganization/name to meet provenance requirements
+		//  This example has a bad root and extension in the id attempting to point to the linked reference. It is only 'bad' because
+		//  it doeesn't match with the intended one (or any one) in the document. Therefore, the required data is missing.
+		expectError("The scenario requires Provenance Org Name as part of: Author Represented Organization Name "
+				+ "for Note Activity Author Entry for Notes Section corresponding to the code 11506-3 data, "
+				+ "but submitted file does not contain Provenance Org Name as part of: Author Represented Organization Name for "
+				+ "Note Activity Author Entry for Notes Section corresponding to the code 11506-3 which does not match "
+				+ "since the linked reference or id link is missing or invalid.", results);
+	}
+	
+	// null/deleted id, expect fail as no match
+	@Test
+	public void cures_NoteActivity_NoExternalLinkOrInlineAsMissingAssignedAuthorData_Site3300Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// ETT GG, ContentVal: "Provenance error for Rebecca patient"
+		// https://groups.google.com/g/edge-test-tool/c/GVOQgl1YlCo
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2,
+				SUBMITTED_CCDA[SUB_REBECCA621_ONE_NOTE_ACT_EMPTY_ASSIGNED_AUTHOR_3300],
+				SeverityLevel.ERROR);
+		printResults(results);
+				
+		// sub
+        /*
+          <!-- -dbTest-SITE-3300 invalid reference due to empty assigned author (has no id with reference id and ext) -->
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <!-- Note Activity -->
+              <templateId root="2.16.840.1.113883.10.20.22.4.202" extension="2016-11-01" />
+              <code code="34109-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Note">
+                <translation code="11506-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Progress note" />
+              </code>
+              <text>
+                <reference value="#Note38" />
+              </text>
+              <statusCode code="completed" />
+              <effectiveTime value="20150622000000-0500" />
+              <author>
+                <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+                <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+                <time value="201506221100-0500" />
+                <assignedAuthor>
+                  <!-- null/ invalid linked reference -dbTest -->
+                </assignedAuthor>
+              </author>
+            </act>
+          </entry>
+        */
+		//  Comparison: 
+		//  Note Activity requires a matching author/assignedAuthor/representedOrganization/name to meet provenance requirements
+		//  This example has an empty assigned author. It neither has an inline refernce via id/@root and @ext,
+		//  nor does it have an inline version of the requirements.
+		expectError("The scenario requires Provenance Org Name as part of: Author Represented Organization Name "
+				+ "for Note Activity Author Entry for Notes Section corresponding to the code 11506-3 data, "
+				+ "but submitted file does not contain Provenance Org Name as part of: Author Represented Organization Name for "
+				+ "Note Activity Author Entry for Notes Section corresponding to the code 11506-3 which does not match "
+				+ "since the linked reference or id link is missing or invalid.", results);
+	}
+	
+	// linked reference is valid, and linked correctly, but it has a mismatched org name, expect fail
+	@Test
+	public void cures_NoteActivity_ExternallyLinkedReferenceButMismatchedOrgName_Site3300Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// ETT GG, ContentVal: "Provenance error for Rebecca patient"
+		// https://groups.google.com/g/edge-test-tool/c/GVOQgl1YlCo
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2,
+				SUBMITTED_CCDA[SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_BAD_NAME_3300],
+				SeverityLevel.ERROR);
+		printResults(results);
+				
+		// sub
+        /*
+          <!-- -dbTest-SITE-3300 reference is a valid link by root and ext but has mismatched org name -->
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <!-- Note Activity -->
+              <templateId root="2.16.840.1.113883.10.20.22.4.202" extension="2016-11-01" />
+              <code code="34109-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Note">
+                <translation code="11506-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Progress note" />
+              </code>
+              <text>
+                <reference value="#Note38" />
+              </text>
+              <statusCode code="completed" />
+              <effectiveTime value="20150622000000-0500" />
+              <author>
+                <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+                <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+                <time value="201506221100-0500" />
+                <assignedAuthor>
+                  <id extension="299935226" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+                </assignedAuthor>
+              </author>
+            </act>
+          </entry>
+        
+        ...
+        
+        linked reference:
+                  <!--  Allergy Observation 1  -dbTest -->
+                  <author>
+                    <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+                    <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+                    <time value="20200622" />
+                    <assignedAuthor>
+                      <id extension="299935226" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+                      <id extension="10" root="1.2.840.114350.1.13.51786.1.7.2.836982" />
+                      <id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
+                      <addr use="WP">
+                        <streetAddressLine>1002 Healthcare Dr</streetAddressLine>
+                        <city>Portland</city>
+                        <state>OR</state>
+                        <postalCode>97266</postalCode>
+                      </addr>
+                      <telecom use="WP" value="tel:+1-555-555-1002" />
+                      <assignedPerson>
+                        <name use="L">
+                          <given>Henry</given>
+                          <family>Seven</family>
+                        </name>
+                      </assignedPerson>
+                      <representedOrganization>
+                        <id extension="50" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
+                        <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
+                        <name>Dan's Physicians Practice</name>
+                        <addr use="WP">
+                          <streetAddressLine>1979 MILKY WAY</streetAddressLine>
+                          <city>Portland</city>
+                          <state>OR</state>
+                          <postalCode>97005</postalCode>
+                          <country>USA</country>
+                        </addr>
+                      </representedOrganization>
+                    </assignedAuthor>
+                  </author>        
+        */
+		//  Comparison: 
+		//  Note Activity requires a matching author/assignedAuthor/representedOrganization/name to meet provenance requirements
+		//  This example has a valid linked reference, but the name in the linked reference does not match the requirements of the ref. 		
+		expectError("The scenario requires Provenance Org Name as part of: "
+				+ "Author Represented Organization Name for Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 11506-3 data, but submitted file does not contain Provenance Org Name as part of: "
+				+ "Author Represented Organization Name for Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 11506-3 which does not match in the linked reference.", results);
+	}
+	
+	// no linked reference at all in sub so it's id root and extension are pointing to nowhere
+	@Test
+	public void cures_NoteActivity_AttemptedExternallyLinkedReferenceButNoneInDoc_Site3300Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// ETT GG, ContentVal: "Provenance error for Rebecca patient"
+		// https://groups.google.com/g/edge-test-tool/c/GVOQgl1YlCo
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2,
+				SUBMITTED_CCDA[SUB_REBECCA621_ONE_NOTE_ACT_NO_LINKED_REF_IN_DOC_3300],
+				SeverityLevel.ERROR);
+		printResults(results);
+				
+		// sub
+        /*
+          <!-- -dbTest-SITE-3300 reference is a valid structure, but reference does not exist in document -->
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <!-- Note Activity -->
+              <templateId root="2.16.840.1.113883.10.20.22.4.202" extension="2016-11-01" />
+              <code code="34109-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Note">
+                <translation code="11506-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Progress note" />
+              </code>
+              <text>
+                <reference value="#Note38" />
+              </text>
+              <statusCode code="completed" />
+              <effectiveTime value="20150622000000-0500" />
+              <author>
+                <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+                <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
+                <time value="201506221100-0500" />
+                <assignedAuthor>
+                  <id extension="299935226" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+                </assignedAuthor>
+              </author>
+            </act>
+          </entry>
+        
+        ...
+        
+        linked reference:
+                DOES NOT EXIST!
+     			
+        */
+		//  Comparison: 
+		//  Note Activity requires a matching author/assignedAuthor/representedOrganization/name to meet provenance requirements
+		//  This example has a valid linked id stucture, but the linked reference does not exist in the document. 		
+		expectError("The scenario requires Provenance Org Name as part of: Author Represented Organization Name "
+				+ "for Note Activity Author Entry for Notes Section corresponding to the code 11506-3 data, "
+				+ "but submitted file does not contain Provenance Org Name as part of: Author Represented Organization Name for "
+				+ "Note Activity Author Entry for Notes Section corresponding to the code 11506-3 which does not match "
+				+ "since the linked reference or id link is missing or invalid.", results);
+	}
+	
+	// inline data is wrong (mimatched org name inline)
+	@Test
+	public void cures_NoteActivity_InlineAuthorDataMistmatchedName_Site3300Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// ETT GG, ContentVal: "Provenance error for Rebecca patient"
+		// https://groups.google.com/g/edge-test-tool/c/GVOQgl1YlCo
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2,
+				SUBMITTED_CCDA[SUB_REBECCA621_ONE_NOTE_ACT_INLINE_AUTH_MISMATCHED_NAME_3300],
+				SeverityLevel.ERROR);
+		printResults(results);
+				
+		// sub
+        /*
+          <!-- -dbTest-SITE-3300 inline data, mismatched name -->
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <!-- Note Activity -->
+              <templateId root="2.16.840.1.113883.10.20.22.4.202" extension="2016-11-01" />
+              <code code="34109-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Note">
+                <translation code="11506-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Progress note" />
+              </code>
+              <text>
+                <reference value="#Note38" />
+              </text>
+              <statusCode code="completed" />
+              <effectiveTime value="20150622000000-0500" />
+                    <assignedAuthor>
+                      <id extension="299935226" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
+                      <id extension="10" root="1.2.840.114350.1.13.51786.1.7.2.836982" />
+                      <id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
+                      <addr use="WP">
+                        <streetAddressLine>1002 Healthcare Dr</streetAddressLine>
+                        <city>Portland</city>
+                        <state>OR</state>
+                        <postalCode>97266</postalCode>
+                      </addr>
+                      <telecom use="WP" value="tel:+1-555-555-1002" />
+                      <assignedPerson>
+                        <name use="L">
+                          <given>Henry</given>
+                          <family>Seven</family>
+                        </name>
+                      </assignedPerson>
+                      <representedOrganization>
+                        <id extension="50" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
+                        <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
+                        <!-- ERROR: SUPPOSED TO BE: Neighborhood Physicians Practice< -dbTest-->
+                        <name>Dan's Physicians Practice</name>
+                        <addr use="WP">
+                          <streetAddressLine>1979 MILKY WAY</streetAddressLine>
+                          <city>Portland</city>
+                          <state>OR</state>
+                          <postalCode>97005</postalCode>
+                          <country>USA</country>
+                        </addr>
+                      </representedOrganization>
+                    </assignedAuthor>
+            </act>
+          </entry>
+        
+        ...
+        
+        linked reference:
+                DOES NOT EXIST (but not needed since data is inline)
+     			
+        */
+		//  Comparison: 
+		//  Note Activity requires a matching author/assignedAuthor/representedOrganization/name to meet provenance requirements
+		//  This example has a valid inline author structure, but the name does not match the ref 		
+		expectError("The scenario requires Provenance Org Name of: (Neighborhood Physicians Practice) for: "
+				+ "Author Represented Organization Name for Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 11506-3, but submitted file contains Provenance Org Name of: (Dan's Physicians Practice) "
+				+ "which does not match the inline author data.", results);
 	}	
 	
 }
