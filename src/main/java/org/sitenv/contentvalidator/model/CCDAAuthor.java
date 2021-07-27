@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.apache.log4j.Logger;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
@@ -140,37 +141,52 @@ public class CCDAAuthor {
 		if(orgName != null) {
 			log.info(" Rep Org Name = " + orgName.getValue());
 		}
-	}	
+	}
 	
 	public void matches(CCDAAuthor subAuthor, ArrayList<ContentValidationResult> results, String elName) {
-		
+		matches(subAuthor, results, elName, null);
+	}
+	
+	public void matches(CCDAAuthor subAuthor, ArrayList<ContentValidationResult> results, String elName,
+			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData) {
 		log.info(" Comparing data for Author Template Ids: ");
 
+		String elementName = "";
+		
+		// Not mandatory so skipping
 		// Compare template Ids 
-		String elementName = "Comapring Author Template Ids for : " + elName;		 // Not mandatory so skipping
+		// elementName = "Comapring Author Template Ids for : " + elName;
 		// ParserUtilities.compareTemplateIds(templateId, subAuthor.getTemplateId(), results, elementName);
 		
+		// Not mandatory so skipping
 		// Compare Author Ids 
-		elementName = "Comapring Author Ids for : " + elName; // Not mandatory so skipping
+		// elementName = "Comapring Author Ids for : " + elName;
 		// ParserUtilities.compareTemplateIds(authorIds, subAuthor.getAuthorIds(), results, elementName);
 		
+		// Not mandatory so skipping
 		// Compare Rep Org Ids 		
-		elementName = "Comapring Rep Org Ids for : " + elName; // Not mandatory so skipping
+		// elementName = "Comapring Rep Org Ids for : " + elName;
 		// ParserUtilities.compareTemplateIds(repOrgIds, subAuthor.getRepOrgIds(), results, elementName);
 
 		// Compare Effective Times
 		elementName = "Comparing Author Time for " + elName; 
 		ParserUtilities.compareEffectiveTimeValue(effTime, subAuthor.getEffTime(), results,
 				elementName);
+		
 		// Validate Times
 		ParserUtilities.validateTimeValueLengthDateTimeAndTimezoneDependingOnPrecision(subAuthor.getEffTime(), results,
 				elementName, 
 				(elName != null && !elName.isEmpty()) ? elName.replaceFirst(" , Comparing ", "") : elName,
 				-1, true);
 		
-		// Compare Org Name 
-		elementName = "Comparing Author Organization Name for " + elName;
-		ParserUtilities.compareDataElementText(orgName, subAuthor.getOrgName(), results, elementName);
+		// Compare RepOrg Name 
+		elementName = "Author Represented Organization Name for " + elName;					
+		if (submittedAuthorsWithLinkedReferenceData != null) {
+			ParserUtilities.compareProvenanceOrgName(orgName, subAuthor, results, elementName,
+					submittedAuthorsWithLinkedReferenceData);
+		} else {
+			ParserUtilities.compareDataElementText(orgName, subAuthor.getOrgName(), results, elementName);
+		}
 	}
 	
     public static void compareAuthors(ArrayList<CCDAAuthor> refAuths, ArrayList<CCDAAuthor> subAuths, 

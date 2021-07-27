@@ -288,8 +288,9 @@ public class CCDARefModel {
 		}
 	}
 	
-	public void compareCCDS(String validationObjective, CCDARefModel submittedCCDA,ArrayList<ContentValidationResult> results, boolean curesUpdate) 
-	{
+	public void compareCCDS(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate) {
+		
 		log.info("Comparing Patient Data ");
 		comparePatients(submittedCCDA, results, curesUpdate);
 		
@@ -325,18 +326,25 @@ public class CCDARefModel {
 		
 		
 		if(curesUpdate) {
+			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData = null;
+			submittedAuthorsWithLinkedReferenceData = submittedCCDA.getAuthorsWithLinkedReferenceData() != null
+					? submittedCCDA.getAuthorsWithLinkedReferenceData()
+					: null;
+			logSubmittedAuthorsWithLinkedReferenceData(submittedAuthorsWithLinkedReferenceData);			
+			
 			log.info(" Comparing Notes ");
-			compareNotesActivities(validationObjective, submittedCCDA, results, curesUpdate);
+			compareNotesActivities(validationObjective, submittedCCDA, results, curesUpdate,
+					submittedAuthorsWithLinkedReferenceData);
 			
 			log.info(" Comparing Author ");
-			compareAuthorEntries(validationObjective, submittedCCDA, results, curesUpdate);
+			compareAuthorEntries(validationObjective, submittedCCDA, results, curesUpdate,
+					submittedAuthorsWithLinkedReferenceData);
 			
 			log.info(" Comparing Care Team ");
 			compareCareTeamMembers(validationObjective, submittedCCDA, results, curesUpdate);
 		}
-
 		
-		log.info("Finished comparison , returning results");
+		log.info("Finished comparison, returning results");
 		
 	}
 	
@@ -709,7 +717,9 @@ public class CCDARefModel {
 		}
 	}
 	
-	public void compareNotesActivities(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, boolean curesUpdate) {
+	public void compareNotesActivities(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate,
+			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData) {
 		
 		log.info("Retrieving Notes Section for comparison ");
 		
@@ -720,36 +730,28 @@ public class CCDARefModel {
 			(subNotesActs != null && subNotesActs.size() > 0)  ) {
 			
 			log.info("Notes present in both models ");
-			CCDANotesActivity.compareNotesActivities(refNotesActs, subNotesActs, results);
+			CCDANotesActivity.compareNotesActivities(refNotesActs, subNotesActs, results,
+					submittedAuthorsWithLinkedReferenceData);
 			
 		} 	
 		else if ( (refNotesActs != null && refNotesActs.size() > 0) && 
 				(subNotesActs == null || subNotesActs.size() == 0) ) {
 			
 			// handle the case where the Notes section does not exist in the submitted CCDA
-			
 			for(Map.Entry<String, CCDANotesActivity> entries : refNotesActs.entrySet() ) {
-				
-				
 				String errorMsg = "The scenario requires data related to patient's Notes for " + entries.getKey() 
 								+ " , but the submitted C-CDA does not contain corresponding clinical Notes data.";
 				
 				ContentValidationResult rs = new ContentValidationResult(errorMsg, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 				results.add(rs);
 				log.info(" Scenario requires Notes data, but submitted document does not contain Notes data");
-				
 			}
 			
-			
-			
-		}else if ((refNotesActs == null || refNotesActs.size() == 0) && 
+		} else if ((refNotesActs == null || refNotesActs.size() == 0) && 
 				(subNotesActs != null && subNotesActs.size() > 0) ) {
-		
-			log.info("Model does not have Notes for comparison, it is ok for submitted CCDA to include notes for all occasions");
-			
+			log.info("Model does not have Notes for comparison, it is OK for submitted C-CDA to include notes for all occasions");
 		} else {
-			
-			log.info("Model and Submitted CCDA do not have Notes for comparison ");
+			log.info("Model and Submitted C-CDA do not have Notes for comparison ");
 		}
 	}
 	
@@ -769,11 +771,8 @@ public class CCDARefModel {
 	
 	private HashMap<String, CCDANotesActivity> getAllNotesActivities() 
 	{
-		HashMap<String,CCDANotesActivity> results = new HashMap<String,CCDANotesActivity>();
-		
+		HashMap<String, CCDANotesActivity> results = new HashMap<String, CCDANotesActivity>();
 		ParserUtilities.populateNotesActiviteis(notesEntries, results);
-		
-		
 		log.info(" Notes Activities Size = " + results.size());
 		return results;
 	}
@@ -807,15 +806,10 @@ public class CCDARefModel {
 	}
 	
 	public void compareAuthorEntries(String validationObjective, CCDARefModel submittedCCDA,
-			ArrayList<ContentValidationResult> results, boolean curesUpdate) {		
+			ArrayList<ContentValidationResult> results, boolean curesUpdate,
+			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData) {		
 		ArrayList<CCDAAuthor> refAuths = this.getAuthorsFromHeader();
 		ArrayList<CCDAAuthor> subAuths = submittedCCDA.getAuthorsFromHeader();
-
-		ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData = null;
-		submittedAuthorsWithLinkedReferenceData = submittedCCDA.getAuthorsWithLinkedReferenceData() != null
-				? submittedCCDA.getAuthorsWithLinkedReferenceData()
-				: null;
-		logSubmittedAuthorsWithLinkedReferenceData(submittedAuthorsWithLinkedReferenceData);
 		
 		log.info("Retrieving Author Entries for comparison ");				
 		if( (refAuths != null && refAuths.size() > 0) &&  
@@ -846,6 +840,30 @@ public class CCDARefModel {
 		// to pass provenance requirements, such as repOrg name (and time, but no need for a link there).
 		compareSectionAndEntryLevelProvenance(validationObjective, submittedCCDA, results, curesUpdate,
 				submittedAuthorsWithLinkedReferenceData);
+		
+		// Note Activity can be in many places and can have authors which must meet provenance reqs
+		// Disabling for now as using old Note Activity specific (compare) impl to hanlde
+		// Note: This version is a work in progress and should not be used unless finished and removing old impl 
+//		compareNoteActivityProvenance(validationObjective, submittedCCDA, results, curesUpdate,
+//				submittedAuthorsWithLinkedReferenceData);
+	}
+	
+	// WIP: The idea is for this to replace the current provenance org name checks specific to notes activities class
+	private void compareNoteActivityProvenance(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate,
+			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData) {
+		if (notesEntries != null) {
+			for (CCDANotesActivity noteActivity : notesEntries) {
+				if (submittedCCDA.getNotesEntries() != null) {
+					for (CCDANotesActivity subNoteActivity : submittedCCDA.getNotesEntries()) {
+						noteActivity.compareAuthor(subNoteActivity, results, curesUpdate,
+								submittedAuthorsWithLinkedReferenceData);
+					}
+				} else {
+					// error? some note activity is missing since there is at least one in ref...?
+				}
+			}
+		}
 	}
 	
 	public void compareSectionAndEntryLevelProvenance(String validationObjective, CCDARefModel submittedCCDA,
