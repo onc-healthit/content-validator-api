@@ -135,74 +135,70 @@ public class CCDANotesActivity {
 	public static HashMap<String, CCDANotesActivity> getAllNotesActivities(ArrayList<CCDANotesActivity> acts) {
 		
 		HashMap<String, CCDANotesActivity> allacts = new HashMap<String, CCDANotesActivity>();
-		
-		for(CCDANotesActivity act: acts) {
-			
-			if(act.getActivityCode() != null && act.getActivityCode().getCode() != null) {
-				
-				allacts.put(act.getActivityCode().getCode(),  act);
+
+		for (CCDANotesActivity act : acts) {
+			if (act.getActivityCode() != null && act.getActivityCode().getCode() != null) {
+				allacts.put(act.getActivityCode().getCode(), act);
 			}
 		}
-		
+
 		return allacts;
-		
 	}
 	
 	public static void compareNotesActivity(ArrayList<CCDANotesActivity> refNotesActivity, 
 			ArrayList<CCDANotesActivity> subNotesActivity, 	ArrayList<ContentValidationResult> results, String context) {
-
 		log.info(" Start Comparing Notes Activity ");
 		
 		HashMap<String, CCDANotesActivity> refNotesActs = getAllNotesActivities(refNotesActivity);
 		HashMap<String, CCDANotesActivity> subNotesActs = getAllNotesActivities(subNotesActivity);
-		
-		if( (refNotesActs != null && refNotesActs.size() > 0) &&  
-				(subNotesActs != null && subNotesActs.size() > 0)  ) {
-				
-				log.info("Notes present in both models, Size of Ref Notes Activities = " + refNotesActs.size() + " : Size of Sub Notes Activities = " + subNotesActs.size());
-				CCDANotesActivity.compareNotesActivityEntryLevel(refNotesActs, subNotesActs, results, context);
-				
-			} else if ( (refNotesActs != null && refNotesActs.size() > 0) && 
-					(subNotesActs == null || subNotesActs.size() == 0) ) {
-				
-				// handle the case where the Notes section does not exist in the submitted CCDA
-				ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's Notes Activity Entry, "
-						+ "but the submitted C-CDA does not contain Notes Activity Entry data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-				results.add(rs);
-				log.info(" Scenario requires Notes Activity Entry but submitted document does not contain Notes Activity Entrydata");
-				
-			}
-			else {
-				
-				log.info("Ref Model does not have Notes Activity Entries for comparison ");
-			}
-		
+
+		if ((refNotesActs != null && refNotesActs.size() > 0) && 
+			(subNotesActs != null && subNotesActs.size() > 0)) {
+
+			// we have note activities in ref and sub, compare them...
+			log.info("Notes present in both models, Size of Ref Notes Activities = " + refNotesActs.size()
+					+ " : Size of Sub Notes Activities = " + subNotesActs.size());
+			CCDANotesActivity.compareNotesActivityEntryLevel(refNotesActs, subNotesActs, results, context);
+
+		} else if ((refNotesActs != null && refNotesActs.size() > 0)
+				&& (subNotesActs == null || subNotesActs.size() == 0)) {
+
+			// handle the case where the Notes section does not exist in the submitted CCD
+			log.info(" Scenario requires Notes Activity Entry "
+					+ "but submitted document does not contain Notes Activity Entrydata");
+			ContentValidationResult rs = new ContentValidationResult(
+					"The scenario requires data related to patient's Notes Activity Entry, "
+							+ "but the submitted C-CDA does not contain Notes Activity Entry data.",
+					ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+			results.add(rs);
+
+		} else {
+			log.info("Ref Model does not have Notes Activity Entries for comparison ");
+		}
 	}
 	
 	public static void compareNotesActivityEntryLevel(HashMap<String, CCDANotesActivity> refNotes,
 			HashMap<String, CCDANotesActivity> subNotes, ArrayList<ContentValidationResult> results, String context) {
-
 		log.info(" Start Comparing Notes Activity Entry level data ");
-		
+
 		// For each Notes section in the Ref Model, check if it is present in the subCCDA Model.
-		for(Map.Entry<String, CCDANotesActivity> ent: refNotes.entrySet()) {
+		for (Map.Entry<String, CCDANotesActivity> ent : refNotes.entrySet()) {
 
-			if(subNotes.containsKey(ent.getKey())) {
-
+			if (subNotes.containsKey(ent.getKey())) {
+				// Compare
 				log.info("Comparing Notes Activity Entry since we found the entry with the code. " + ent.getKey());
 				context += ", Notes Activity Entry corresponding to the code " + ent.getKey();
 				subNotes.get(ent.getKey()).compare(ent.getValue(), results, context, true);
-
-
 			} else {
-				// Error
-				String error = "The scenario contains Notes Activity Entry data with code " + ent.getKey() +
-						" , however there is no matching data in the submitted CCDA. ";
-				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				// Fire Error
+				String error = "The scenario contains Notes Activity Entry data with code " + ent.getKey()
+						+ " , however there is no matching data in the submitted CCDA. ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
+						"/ClinicalDocument", "0");
 				results.add(rs);
 			}
+			
 		}
-		
 	}
 
 	public void compare(CCDANotesActivity refNote, ArrayList<ContentValidationResult> results, String context,

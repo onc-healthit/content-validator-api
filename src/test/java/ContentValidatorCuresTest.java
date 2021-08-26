@@ -35,6 +35,11 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	
 	private static final boolean LOG_RESULTS_TO_CONSOLE = true;
 	
+	private static final String S = "cures/sub/";
+	private static final String R = "cures/ref/";
+	private static final String PS = "preCures/sub/";
+	private static final String PR = "preCures/ref/";
+	
 	private static final String B1_TOC_AMB_VALIDATION_OBJECTIVE = "170.315_b1_ToC_Amb";
 	private static final String B1_TOC_INP_VALIDATION_OBJECTIVE = "170.315_b1_ToC_Inp";
 	
@@ -66,6 +71,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final String MOD_REF_CURES_G9_APIACCESS_INP_SAMPLE1_REBECCA_DOC_AUTH_PRECISE_TO_TIME = 
 			"ModRef_AccurateDateAndTimeForAuthor_DocLvl_VitalSection_g9AAInpS1.xml";
 	private static final String MOD_REF_UPDATE_NOTES_TIMES_CURES_B1_TOC_AMB_SAMPLE3_HAPPY = "ModRef_ChangeNotesTimes_b1TocAmbS3.xml";
+	private static final String MOD_REF_UPDATE_NOTES_TIMES_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_ONE_NOTE_ACT_ENT = 
+			"ModRef_ChangeNotesTimes_b1TocAmbS3_OneNoteActivityEntry.xml";
 	private static final String MOD_REF_VITAL_SIGNS_SEC_VS_OBS_TIME_REPRO_SITE_3261 = "ModRef_b1TocAmbS3_prod0421_repro_Site3261.xml";
 	
 	
@@ -122,62 +129,66 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_BAD_NAME_3300 = 48;
 	private static final int SUB_REBECCA621_ONE_NOTE_ACT_NO_LINKED_REF_IN_DOC_3300 = 49;
 	private static final int SUB_REBECCA621_ONE_NOTE_ACT_INLINE_AUTH_MISMATCHED_NAME_3300 = 50;
+	private static final int SUB_HAS_NOTES_SEC_NOTE_ACT_AUTHOR_TIME_TIMEZONE_0400_SWITCH_E2_AND_E3_FOR_SITE_3263 = 51;
+	private static final int SUB_HAS_NOTES_SEC_NOTE_ACT_AUTHOR_TIME_TIMEZONE_0400_SWITCH_E2_AND_E1_FOR_SITE_3263 = 52;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
 		try {
 			SUBMITTED_CCDA = new URI[] {
-					ContentValidatorCuresTest.class.getResource("cures/sub/RemoveAuthorInHeader_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/C-CDA_R2-1_CCD_EF.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample3.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("preCures/sub/170.315_b1_toc_amb_sample1_Submitted_T1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/AddNoteActivityWithAuthorToProcedures_b1_toc_amb_s1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/AddAuthorToProceduresProcedureActivityProcedure_b1_toc_amb_s1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/AddAuthorToResultsResultOrganizer_e1_vdt_amb_s1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/AddResultOrganizerWithoutAuthorToResults_e1_vdt_amb_s1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/HasNullFlavorOnResultOrganizerCode.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/DoesNotHaveNullFlavorOnResultOrganizerCode.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/DoesNotHaveNullFlavorOnResultOrganizerObservationCodes.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SocialHistoryWithoutBirthSexObsTemplateSite3094.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SocialHistoryWithBirthSexObsTemplateSite3094.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryFormerSmoker_b1_toc_amb_s3_Site3220.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryFormerSmoker_b1_inp_amb_s3_Site3220.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryUnknownSmoker_b1_toc_amb_s3_Site3220.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryUnknownSmoker_b1_inp_amb_s3_Site3220.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/AddSmokingStatusEntryFormerAndUnknownSmoker_b1_toc_amb_s3_Site3220.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/vitalSignsSectionWith5Organizers10Observations_10AuthorsTotal_rebecca_Site3232.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/vitalSignsSectionWith5Organizers10Observations_2AuthorsTotal_rebecca_Site3232.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/vitalSignsSectionWith5Organizers10Observations_4AuthorsTotal_rebecca_Site3232.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/vitalSignsSectionWith5Organizers10Observations_0AuthorsTotal_rebecca_Site3232.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/Add2AuthorsToProbSecConcObs_b1TocAmbCcdR21Sample1V13_Site3235.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/Has2AuthorsInHeader_b1TocAmbS1_Site3235.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/ref/170.315_b1_toc_amb_sample1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/ref/ModRef_AddNotesActivityEncounterEntry_b1TocAmbS1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/ref/ModRef_AddNotesActivityProcActProcEntryRel_b1TocAmbS1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/hasDateAndTimeForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/hasDateOnlyForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/hasDateOnlyInverseForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/ref/ModRef_AccurateDateAndTimeForAuthor_DocLvl_VitalSection_g9AAInpS1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/hasMixedDateAndTimeForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3252_b1TocAmbS3.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/VitalSignsSecVSObsTime_happy413_repro_Site3261.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/VitalSignsSecVSObsTime_happy413_repro_match_name_Site3261.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/MedicationSecMedActProvTimeMismatched_happy416_Site3262.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/MedicationSecMedActProvTimeFixToMatch_happy416_Site3262.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_CARE_TEAM_SEC_PERF_SITE_3259.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_SITE_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_MATCHED_TIME_SITE_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_MATCHED_TIME_BUT_MISSING_LINKED_REFERENCES_IN_DOCUMENT_SITE_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_VALID_INLINE_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_BAD_LINK_BAD_EXT_AND_ROOT_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_EMPTY_ASSIGNED_AUTHOR_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_BAD_NAME_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_NO_LINKED_REF_IN_DOC_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource("cures/sub/SUB_REBECCA621_ONE_NOTE_ACT_INLINE_AUTH_MISMATCHED_NAME_3300.xml").toURI()
+					ContentValidatorCuresTest.class.getResource(S+"RemoveAuthorInHeader_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"C-CDA_R2-1_CCD_EF.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(R+"170.315_b1_toc_amb_sample3.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(PS+"170.315_b1_toc_amb_sample1_Submitted_T1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"AddNoteActivityWithAuthorToProcedures_b1_toc_amb_s1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"AddAuthorToProceduresProcedureActivityProcedure_b1_toc_amb_s1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"AddAuthorToResultsResultOrganizer_e1_vdt_amb_s1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"AddResultOrganizerWithoutAuthorToResults_e1_vdt_amb_s1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"HasNullFlavorOnResultOrganizerCode.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"DoesNotHaveNullFlavorOnResultOrganizerCode.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"DoesNotHaveNullFlavorOnResultOrganizerObservationCodes.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SocialHistoryWithoutBirthSexObsTemplateSite3094.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SocialHistoryWithBirthSexObsTemplateSite3094.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryFormerSmoker_b1_toc_amb_s3_Site3220.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryFormerSmoker_b1_inp_amb_s3_Site3220.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryUnknownSmoker_b1_toc_amb_s3_Site3220.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryUnknownSmoker_b1_inp_amb_s3_Site3220.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryFormerAndUnknownSmoker_b1_toc_amb_s3_Site3220.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"vitalSignsSectionWith5Organizers10Observations_10AuthorsTotal_rebecca_Site3232.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"vitalSignsSectionWith5Organizers10Observations_2AuthorsTotal_rebecca_Site3232.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"vitalSignsSectionWith5Organizers10Observations_4AuthorsTotal_rebecca_Site3232.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"vitalSignsSectionWith5Organizers10Observations_0AuthorsTotal_rebecca_Site3232.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"Add2AuthorsToProbSecConcObs_b1TocAmbCcdR21Sample1V13_Site3235.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"Has2AuthorsInHeader_b1TocAmbS1_Site3235.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(R+"170.315_b1_toc_amb_sample1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(R+"ModRef_AddNotesActivityEncounterEntry_b1TocAmbS1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(R+"ModRef_AddNotesActivityProcActProcEntryRel_b1TocAmbS1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"hasDateAndTimeForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"hasDateOnlyForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"hasDateOnlyInverseForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(R+"ModRef_AccurateDateAndTimeForAuthor_DocLvl_VitalSection_g9AAInpS1.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"hasMixedDateAndTimeForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3252_b1TocAmbS3.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"VitalSignsSecVSObsTime_happy413_repro_Site3261.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"VitalSignsSecVSObsTime_happy413_repro_match_name_Site3261.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"MedicationSecMedActProvTimeMismatched_happy416_Site3262.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"MedicationSecMedActProvTimeFixToMatch_happy416_Site3262.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_CARE_TEAM_SEC_PERF_SITE_3259.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_SITE_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_MATCHED_TIME_SITE_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_MATCHED_TIME_BUT_MISSING_LINKED_REFERENCES_IN_DOCUMENT_SITE_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_VALID_INLINE_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_BAD_LINK_BAD_EXT_AND_ROOT_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_EMPTY_ASSIGNED_AUTHOR_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_BAD_NAME_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_NO_LINKED_REF_IN_DOC_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_INLINE_AUTH_MISMATCHED_NAME_3300.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3263_switchE2AndE3.xml").toURI(),
+					ContentValidatorCuresTest.class.getResource(S+"SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3263_switchE2AndE1.xml").toURI()
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -567,12 +578,9 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				resultsContainMessage(zeroAuthorsInRefOneOrMoreInSub, results, ContentValidationResultLevel.ERROR));			
 	}	
 	
-	// TODO: Analyze: Seems like a bug that this is being identified as Procedure Activity Procedure when it is Note Activity, check parser/check with dragon. Do we enforce author here too?
-	// To see the bug we must comment out 'if (refAuths != null && refAuths.size() != 0) {' compareAuthors in CCDAAuthore and run this test
-	// Try to find a way to repro with current code legitimately and go from there...
 	@Test
 	public void cures_ZeroAuthorsInRefOneOrMoreInSubProceduresNoteActivityTest() {
-		// SITE-3193 (done), SITE-3194 (not yet done, see todo above)		
+		// SITE-3193		
 		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
 				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF,
 				SUBMITTED_CCDA[SUB_HAS_NOTE_ACTIVITY_WITH_AUTHOR_IN_PROCEDURES], SeverityLevel.ERROR);
@@ -1686,7 +1694,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	}
 	
 	@Test
-	public void cures_NotesSectionNoteActivityAuthorTime_DoNotEnforceTimeZoneDifSite3252Test() {
+	public void cures_NotesSectionNoteActivityAuthorTime_DoNotEnforceTimeZoneDifSite3252And3263Test() {
 		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
 		// https://groups.google.com/g/edge-test-tool/c/0S-BHfJDgUY
 		// "...getting the error for the clinical notes (Happy Kid for the b1) that is requiring ET time 
@@ -1703,11 +1711,11 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		// T1
         // Notes Section/Note Activity entry 1/author/time
 		//
-		// ref
+		// ref | ModRef_ChangeNotesTimes_b1TocAmbS3.xml
         // <author>
         // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
 		//					<time value="202006221100-0500" />		
-		// sub
+		// sub | SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3252_b1TocAmbS3.xml
         // <author>
         // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
 		//					<time value="202006221100-0400" />
@@ -1720,37 +1728,56 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		expectNoError(message, results);
 		
 		/*
-		 * TODO: Why isn't this failing? It seems we can only fail the final index entry. 
-		 * If there is only 1 entry, the final index will be the first. That doesn't seem right?
+		 * As per SITE-3263, we could only fail the final index entry.
+		 * This test ensures we can fail an entry at at different index, in this case, the 2nd index in the array. 
+		 * Note: If there is only 1 entry, the final index will be the first. So it was possible, even with the bug,
+		 * to fail the 1st index, in that case. This is likely how the bug was left unnoticed for some time.
+		 * 
+		 * The bug defined in SITE-3263 is caused by:
+		 * 
+		 * However, due to the high risk (complexity and time)/low value (priority, user interest, and low chance of occurrence)
+		 * nature of resolving the bug defined in SITE-3263, 
+		 * tests T2, T4, T5, and T6, etc. are not yet expected to pass. And, have been commented out for now.
+		 * If we do resolve the issue, these tests should be uncommented, and would be expected to pass.
+		 * 
+		 * The bug which causes Note Entry to appear to only compare the final entry vs all of them is caused by: 
+		 * We use a map where the key is the code/translation/@code. But that key is not always unique. 
+		 * For example, if we have multiple entries with the same key. In that case, only the last entry will be compared, 
+		 * because when the map is created, it will continue to overwrite the key until it is only actually storing the last entry. 
+		 * This means that the sub will only ever appear to contain 1 entry, regardless of how many. And it can never fail, 
+		 * for any entry other than the last index.
+		 * See CCDANotesActivity.compareNotesActivityEntryLevel and note how the maps are created prior.
+		 */
 		// T2
 		// Notes Section/Note Activity entry 2/author/time
 		//
-		// ref
+		// ref | ModRef_ChangeNotesTimes_b1TocAmbS3.xml
         // <author>
         // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
 		//					<time value="199906221100-0500" />		
-		// sub
+		// sub | SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3252_b1TocAmbS3.xml
         // <author>
         // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
 		//					<time value="149206221100-0500" />
 		//  Comparison: 
 		//  base date is 1492 in sub vs expected 1999 in ref
 		//  Expected result: Fail (since we don't have an example of 19990622 but instead sub has 14920622)
+		/*
 		message = "The Comparing Author Time for Note Activity Author Entry for Notes Section "
-				+ "corresponding to the code 11488-4 (Effective Time: Value ) is 199906221100-0500 , "
-				+ "but submitted CCDA (Effective Time: Value ) is 149206221100-0500 which does not match";
+				+ "corresponding to the code 11488-4 ( Time Value ) is : 199906221100-0500 , "
+				+ "but submitted CCDA ( Time Value ) is : 149206221100-0500 which does not match"; 		
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
 		*/
 		
 		// T3
-		// Notes Section/Note Activity entry 2/author/time
+		// Notes Section/Note Activity entry 3/author/time
 		//
-		// ref
+		// ref | ModRef_ChangeNotesTimes_b1TocAmbS3.xml
         // <author>
         // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
 		//					<time value="198506221100-0500" />		
-		// sub
+		// sub | SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3252_b1TocAmbS3.xml
         // <author>
         // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
 		//					<time value="198506221100-05AB" />
@@ -1763,7 +1790,109 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, "
 				+ "followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 1100-05AB.";
-		expectError(message, results);	
+		expectError(message, results);
+
+		// T4
+		// Notes Section/Note Activity entry 3/author/time
+		//
+		// ref | ModRef_ChangeNotesTimes_b1TocAmbS3.xml
+        // <author>
+        // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//					<time value="199906221100-0500" />		
+		// sub | SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3252_switchE2AndE3.xml
+        // <author>
+        // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//					<time value="149206221100-0500" />
+		//  Comparison:
+		//  base date is 1492 in sub vs expected 1999 in ref
+		//  Expected result: Fail (since we don't have an example of 19990622 but instead sub has 14920622)
+		//
+		//  SITE-3263 ContentVal Provenance Notes Entry update to check all entries vs final only
+		//  Note: This test uses a modified file of test 2 where it switches the 2nd and 3rd Note Activity Entry.
+		//  There is a bug in the way Note Activity entries are parsed where only the last index will fail, 
+		//  due to a shared key (based on code/translation/@code) in the map getting overwritten each time
+		//  so that only the last index exists and is checked.
+		/*
+		results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_UPDATE_NOTES_TIMES_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
+				SUBMITTED_CCDA[SUB_HAS_NOTES_SEC_NOTE_ACT_AUTHOR_TIME_TIMEZONE_0400_SWITCH_E2_AND_E3_FOR_SITE_3263],
+				SeverityLevel.ERROR);
+		removeBirthSexError(results);
+		printResults(results);		
+		message = "The Comparing Author Time for Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 11488-4 ( Time Value ) is : 198506221100-0500 , "
+				+ "but submitted CCDA ( Time Value ) is : 149206221100-0500 which does not match";
+		// TODO: should the message above be looking for 1985 or 1999?
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		*/
+
+		
+		// T5
+		// Notes Section/Note Activity entry 1/author/time
+		//
+		// ref | ModRef_ChangeNotesTimes_b1TocAmbS3.xml
+        // <author>
+        // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//					<time value="199906221100-0500" />		
+		// sub | SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3252_switchE2AndE1.xml
+        // <author>
+        // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//					<time value="149206221100-0500" />
+		//  Comparison:
+		//  base date is 1492 in sub vs expected 1999 in ref
+		//  Expected result: Fail (since we don't have an example of 19990622 but instead sub has 14920622)
+		//
+		//  SITE-3263 ContentVal Provenance Notes Entry update to check all entries vs final only
+		//  Note: This test uses a modified file of test 2 where it switches the 2nd and 1st Note Activity Entry.
+		/*
+		results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_UPDATE_NOTES_TIMES_CURES_B1_TOC_AMB_SAMPLE3_HAPPY,
+				SUBMITTED_CCDA[SUB_HAS_NOTES_SEC_NOTE_ACT_AUTHOR_TIME_TIMEZONE_0400_SWITCH_E2_AND_E1_FOR_SITE_3263],
+				SeverityLevel.ERROR);
+		removeBirthSexError(results);
+		printResults(results);	
+		message = "The Comparing Author Time for Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 11488-4 ( Time Value ) is : 198506221100-0500 , "
+				+ "but submitted CCDA ( Time Value ) is : 149206221100-0500 which does not match";
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		*/
+		
+		
+		/*
+		 * This is just like T2, except the mod ref now has 1 entry instead of 3
+		 */
+		// T6
+		// Notes Section/Note Activity entry 2/author/time
+		//
+		// ref | ModRef_ChangeNotesTimes_b1TocAmbS3.xml
+        // <author>
+        // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//					<time value="199906221100-0500" />		
+		// sub | SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3252_b1TocAmbS3.xml
+        // <author>
+        // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
+		//					<time value="149206221100-0500" />
+		//  Comparison: 
+		//  base date is 1492 in sub vs expected 1999 in ref
+		//  Expected result: Fail (since we don't have an example of 19990622 but instead sub has 14920622)
+		/*
+		results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE,
+				MOD_REF_UPDATE_NOTES_TIMES_CURES_B1_TOC_AMB_SAMPLE3_HAPPY_ONE_NOTE_ACT_ENT,
+				SUBMITTED_CCDA[SUB_HAS_NOTES_SEC_NOTE_ACT_AUTHOR_TIME_TIMEZONE_0400_SWITCH_E2_AND_E1_FOR_SITE_3263],
+				SeverityLevel.ERROR);
+		removeBirthSexError(results);
+		printResults(results);		
+		message = "The Comparing Author Time for Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 11488-4 ( Time Value ) is : 199906221100-0500 , "
+				+ "but submitted CCDA ( Time Value ) is : 149206221100-0500 which does not match";		
+		assertTrue("Results should have contained the following message but did not: " + message, 
+				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
+		*/
 	}
 	
 	@Test
