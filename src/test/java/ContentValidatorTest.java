@@ -51,8 +51,8 @@ public class ContentValidatorTest extends ContentValidatorTester {
 	private static final String REF_CAREPLAN_AMBULATORY = "170.315_b9_cp_amb_sample1.xml";
 	private static final String REF_CAREPLAN_INPATIENT = "170.315_b9_cp_inp_sample1.xml";
 	private static final String REF_CAREPLAN_NO_INTERVENTION_OR_HEALTH_STATUS = REF_TOC_AMBULATORY;
-	private static final String REF_CAREPLAN_NO_INTERVENTION_HAS_HEALTH_STATUS = "cp_NoInterventionsHasHealthStatus.xml";
-	private static final String REF_CAREPLAN_NO_HEALTH_STATUS_HAS_INTERVENTION = "cp_NoHealthStatusHasIntervention.xml";
+//	private static final String REF_CAREPLAN_NO_INTERVENTION_HAS_HEALTH_STATUS = REF_TOC_AMBULATORY;
+//	private static final String REF_CAREPLAN_NO_HEALTH_STATUS_HAS_INTERVENTION = REF_TOC_AMBULATORY;
 	private static final String REF_E1_VDT_AMBULATORY = "170.315_e1_vdt_amb_sample1.xml";
 	private static final String REF_E1_VDT_INPATIENT = "170.315_e1_vdt_inp_sample2.xml";
 	
@@ -271,17 +271,15 @@ public class ContentValidatorTest extends ContentValidatorTester {
 		printHeader("ref is missing interventions but has health status / "
 				+ "submitted is missing interventions and is missing health status - " +
 				"since ref has no interventions, we only enforce the missing health status");
-		results = validateDocumentAndReturnResults(VO_CAREPLAN_INPATIENT, REF_CAREPLAN_NO_INTERVENTION_HAS_HEALTH_STATUS,
-				SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES]);
+		results = validateDocumentAndReturnResults(VO_CAREPLAN_INPATIENT, REF_CAREPLAN_AMBULATORY,
+				SUBMITTED_CCDA[SUB_MISSING_HEALTH_STATUS_AND_HAS_INTERVENTIONS_AND_IS_CP_AMB]);		
 		printResults(results);
-		
 		// TODO: debug the issue with this test
-		/*
+		
 		carePlanMessage = healthStatusWarning;
 		assertTrue("The results do not contain the expected message of: " + carePlanMessage, 
 				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
-		 */
-		
+		 
 		carePlanMessage = interventionsWarning;
 		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
 				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
@@ -289,16 +287,15 @@ public class ContentValidatorTest extends ContentValidatorTester {
 		printHeader("ref is missing health status but has interventions / "
 				+ "submitted is missing health status and is missing interventions - " +
 				"since ref has no health status, we only enforce the missing interventions");
-		results = validateDocumentAndReturnResults(VO_CAREPLAN_INPATIENT, REF_CAREPLAN_NO_HEALTH_STATUS_HAS_INTERVENTION,
-				SUBMITTED_CCDA[SUB_HAS_TELECOM_MISMATCHES]);
+		results = validateDocumentAndReturnResults(VO_CAREPLAN_INPATIENT, REF_CAREPLAN_AMBULATORY,
+				SUBMITTED_CCDA[SUB_MISSING_INTERVENTIONS_AND_HAS_HEALTH_STATUS_AND_IS_CP_AMB]);
 		printResults(results);
 
 		// TODO: debug the issue with this test
-		/*
+		
 		carePlanMessage = interventionsWarning;		
 		assertTrue("The results do not contain the expected message of: " + carePlanMessage, 
 				resultsContainMessage(carePlanMessage, results, ContentValidationResultLevel.WARNING));
-		 */
 		
 		carePlanMessage = healthStatusWarning;
 		assertFalse("The results contain the unexpected message of: " + carePlanMessage, 
@@ -341,14 +338,14 @@ public class ContentValidatorTest extends ContentValidatorTester {
 		printResults(results);
 		
 		// TODO: debug the issue with this test
-		/*
+		
 		// has an objective which validates encounter diagnosis, expect related error(s)
 		results = validateDocumentAndReturnResults(VO_TOC_AMBULATORY, REF_E1_VDT_AMBULATORY ,
 				SUBMITTED_CCDA[SUB_NT_CCDS_SAMPLE1_R21_HAS_ENCOUNTER_DIAGNOSIS]);
 		assertTrue("The results do not contain the expected message of: " + encounterDiagnosisMessage, 
-				resultsContainMessage(encounterDiagnosisMessage, results));
+				resultsContainMessage(encounterDiagnosisMessage, results,ContentValidationResultLevel.ERROR));
 		printResults(results);
-		*/
+		
 
 		// TODO: debug the issue with this test
 		/*
