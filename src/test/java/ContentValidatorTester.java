@@ -165,7 +165,12 @@ public class ContentValidatorTester {
 			ContentValidationResultLevel expectedSeverity) {
 		for (ContentValidationResult curResult : results) {
 			if (curResult.getMessage().contains(searchString)) {
-				return resultContainsSeverity(expectedSeverity, curResult);
+				if (expectedSeverity != null) {
+					// found result but need to verify severity as well
+					return resultContainsSeverity(expectedSeverity, curResult);
+				}
+				// found result irrelevant of severity
+				return true;
 			}
 		}
 		return false;
