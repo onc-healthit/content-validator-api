@@ -1882,7 +1882,9 @@
 									<value xsi:type="PQ" value="177" unit="cm"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- <templateId root="2.16.840.1.113883.10.20.22.4.119"/> -->
+										<!-- change to provenance vs prior author participation template -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01"/>
 										<!-- -dbTest 1 -->
 										<time value="201506221100-"/>
 										<!--<time value="201506221100-9999"/>-->

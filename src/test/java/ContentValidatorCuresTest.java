@@ -131,64 +131,76 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_REBECCA621_ONE_NOTE_ACT_INLINE_AUTH_MISMATCHED_NAME_3300 = 50;
 	private static final int SUB_HAS_NOTES_SEC_NOTE_ACT_AUTHOR_TIME_TIMEZONE_0400_SWITCH_E2_AND_E3_FOR_SITE_3263 = 51;
 	private static final int SUB_HAS_NOTES_SEC_NOTE_ACT_AUTHOR_TIME_TIMEZONE_0400_SWITCH_E2_AND_E1_FOR_SITE_3263 = 52;
+	private static final int SUB_VALID_PROVENANCE_TS_INVALID_AUTHOR_PARTICIPATION_TS_SITE_3331 = 53;
+	private static final int SUB_INVALID_PROVENANCE_TS_VALID_AUTHOR_PARTICIPATION_TS_SITE_3331 = 54;
+	private static final int SUB_INVALID_PROVENANCE_TS_VALID_AUTHOR_PARTICIPATION_TS_SWAP_AUTHORS_SITE_3331 = 55;
+	private static final int SUB_INVALID_PROVENANCE_TS_INVALID_AUTHOR_PARTICIPATION_TS_SITE_3331 = 56;
+	private static final int SUB_VALID_PROVENANCE_TS_VALID_AUTHOR_PARTICIPATION_TS_SITE_3331 = 57;
+	private static final int SUB_INVALID_PROVENANCE_TS_INVALID_AUTHOR_PARTICIPATION_TS_SWAP_AUTHORS_SITE_3331 = 58;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
 		try {
 			SUBMITTED_CCDA = new URI[] {
-					ContentValidatorCuresTest.class.getResource(S+"RemoveAuthorInHeader_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"C-CDA_R2-1_CCD_EF.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(R+"170.315_b1_toc_amb_sample3.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(PS+"170.315_b1_toc_amb_sample1_Submitted_T1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"AddNoteActivityWithAuthorToProcedures_b1_toc_amb_s1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"AddAuthorToProceduresProcedureActivityProcedure_b1_toc_amb_s1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"AddAuthorToResultsResultOrganizer_e1_vdt_amb_s1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"AddResultOrganizerWithoutAuthorToResults_e1_vdt_amb_s1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"HasNullFlavorOnResultOrganizerCode.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"DoesNotHaveNullFlavorOnResultOrganizerCode.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"DoesNotHaveNullFlavorOnResultOrganizerObservationCodes.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SocialHistoryWithoutBirthSexObsTemplateSite3094.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SocialHistoryWithBirthSexObsTemplateSite3094.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryFormerSmoker_b1_toc_amb_s3_Site3220.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryFormerSmoker_b1_inp_amb_s3_Site3220.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryUnknownSmoker_b1_toc_amb_s3_Site3220.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryUnknownSmoker_b1_inp_amb_s3_Site3220.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryFormerAndUnknownSmoker_b1_toc_amb_s3_Site3220.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"vitalSignsSectionWith5Organizers10Observations_10AuthorsTotal_rebecca_Site3232.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"vitalSignsSectionWith5Organizers10Observations_2AuthorsTotal_rebecca_Site3232.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"vitalSignsSectionWith5Organizers10Observations_4AuthorsTotal_rebecca_Site3232.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"vitalSignsSectionWith5Organizers10Observations_0AuthorsTotal_rebecca_Site3232.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"Add2AuthorsToProbSecConcObs_b1TocAmbCcdR21Sample1V13_Site3235.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"Has2AuthorsInHeader_b1TocAmbS1_Site3235.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(R+"170.315_b1_toc_amb_sample1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(R+"ModRef_AddNotesActivityEncounterEntry_b1TocAmbS1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(R+"ModRef_AddNotesActivityProcActProcEntryRel_b1TocAmbS1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"hasDateAndTimeForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"hasDateOnlyForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"hasDateOnlyInverseForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(R+"ModRef_AccurateDateAndTimeForAuthor_DocLvl_VitalSection_g9AAInpS1.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"hasMixedDateAndTimeForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3252_b1TocAmbS3.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"VitalSignsSecVSObsTime_happy413_repro_Site3261.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"VitalSignsSecVSObsTime_happy413_repro_match_name_Site3261.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"MedicationSecMedActProvTimeMismatched_happy416_Site3262.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"MedicationSecMedActProvTimeFixToMatch_happy416_Site3262.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_CARE_TEAM_SEC_PERF_SITE_3259.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_SITE_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_MATCHED_TIME_SITE_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_MATCHED_TIME_BUT_MISSING_LINKED_REFERENCES_IN_DOCUMENT_SITE_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_VALID_INLINE_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_BAD_LINK_BAD_EXT_AND_ROOT_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_EMPTY_ASSIGNED_AUTHOR_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_BAD_NAME_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_NO_LINKED_REF_IN_DOC_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_INLINE_AUTH_MISMATCHED_NAME_3300.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3263_switchE2AndE3.xml").toURI(),
-					ContentValidatorCuresTest.class.getResource(S+"SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3263_switchE2AndE1.xml").toURI()
+					ContentValidatorCuresTest.class.getResource(S+"RemoveAuthorInHeader_170.315_b1_toc_amb_ccd_r21_sample1_v13.xml").toURI(), // 0
+					ContentValidatorCuresTest.class.getResource(S+"C-CDA_R2-1_CCD_EF.xml").toURI(), // 1
+					ContentValidatorCuresTest.class.getResource(R+"170.315_b1_toc_amb_sample3.xml").toURI(), // 2
+					ContentValidatorCuresTest.class.getResource(PS+"170.315_b1_toc_amb_sample1_Submitted_T1.xml").toURI(), // 3
+					ContentValidatorCuresTest.class.getResource(S+"AddNoteActivityWithAuthorToProcedures_b1_toc_amb_s1.xml").toURI(), // 4
+					ContentValidatorCuresTest.class.getResource(S+"AddAuthorToProceduresProcedureActivityProcedure_b1_toc_amb_s1.xml").toURI(), // 5
+					ContentValidatorCuresTest.class.getResource(S+"AddAuthorToResultsResultOrganizer_e1_vdt_amb_s1.xml").toURI(), // 6
+					ContentValidatorCuresTest.class.getResource(S+"AddResultOrganizerWithoutAuthorToResults_e1_vdt_amb_s1.xml").toURI(), // 7
+					ContentValidatorCuresTest.class.getResource(S+"HasNullFlavorOnResultOrganizerCode.xml").toURI(), // 8
+					ContentValidatorCuresTest.class.getResource(S+"DoesNotHaveNullFlavorOnResultOrganizerCode.xml").toURI(), // 9
+					ContentValidatorCuresTest.class.getResource(S+"DoesNotHaveNullFlavorOnResultOrganizerObservationCodes.xml").toURI(), // 10
+					ContentValidatorCuresTest.class.getResource(S+"SocialHistoryWithoutBirthSexObsTemplateSite3094.xml").toURI(), // 11
+					ContentValidatorCuresTest.class.getResource(S+"SocialHistoryWithBirthSexObsTemplateSite3094.xml").toURI(), // 12
+					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryFormerSmoker_b1_toc_amb_s3_Site3220.xml").toURI(), // 13
+					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryFormerSmoker_b1_inp_amb_s3_Site3220.xml").toURI(), // 14
+					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryUnknownSmoker_b1_toc_amb_s3_Site3220.xml").toURI(), // 15
+					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryUnknownSmoker_b1_inp_amb_s3_Site3220.xml").toURI(), // 16
+					ContentValidatorCuresTest.class.getResource(S+"AddSmokingStatusEntryFormerAndUnknownSmoker_b1_toc_amb_s3_Site3220.xml").toURI(), // 17
+					ContentValidatorCuresTest.class.getResource(S+"vitalSignsSectionWith5Organizers10Observations_10AuthorsTotal_rebecca_Site3232.xml").toURI(), // 18
+					ContentValidatorCuresTest.class.getResource(S+"vitalSignsSectionWith5Organizers10Observations_2AuthorsTotal_rebecca_Site3232.xml").toURI(), // 19
+					ContentValidatorCuresTest.class.getResource(S+"vitalSignsSectionWith5Organizers10Observations_4AuthorsTotal_rebecca_Site3232.xml").toURI(), // 20
+					ContentValidatorCuresTest.class.getResource(S+"vitalSignsSectionWith5Organizers10Observations_0AuthorsTotal_rebecca_Site3232.xml").toURI(), // 21
+					ContentValidatorCuresTest.class.getResource(S+"Add2AuthorsToProbSecConcObs_b1TocAmbCcdR21Sample1V13_Site3235.xml").toURI(), // 22
+					ContentValidatorCuresTest.class.getResource(S+"Has2AuthorsInHeader_b1TocAmbS1_Site3235.xml").toURI(), // 23
+					ContentValidatorCuresTest.class.getResource(R+"170.315_b1_toc_amb_sample1.xml").toURI(), // 24
+					ContentValidatorCuresTest.class.getResource(R+"ModRef_AddNotesActivityEncounterEntry_b1TocAmbS1.xml").toURI(), // 25
+					ContentValidatorCuresTest.class.getResource(R+"ModRef_AddNotesActivityProcActProcEntryRel_b1TocAmbS1.xml").toURI(), // 26
+					ContentValidatorCuresTest.class.getResource(S+"hasDateAndTimeForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(), // 27
+					ContentValidatorCuresTest.class.getResource(S+"hasDateOnlyForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(), // 28
+					ContentValidatorCuresTest.class.getResource(S+"hasDateOnlyInverseForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(), // 29
+					ContentValidatorCuresTest.class.getResource(R+"ModRef_AccurateDateAndTimeForAuthor_DocLvl_VitalSection_g9AAInpS1.xml").toURI(), // 30
+					ContentValidatorCuresTest.class.getResource(S+"hasMixedDateAndTimeForAuthorTimeInDocLevAndVitalSignsSite3241.xml").toURI(), // 31
+					ContentValidatorCuresTest.class.getResource(S+"SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3252_b1TocAmbS3.xml").toURI(), // 32
+					ContentValidatorCuresTest.class.getResource(S+"VitalSignsSecVSObsTime_happy413_repro_Site3261.xml").toURI(), // 33
+					ContentValidatorCuresTest.class.getResource(S+"VitalSignsSecVSObsTime_happy413_repro_match_name_Site3261.xml").toURI(), // 34
+					ContentValidatorCuresTest.class.getResource(S+"MedicationSecMedActProvTimeMismatched_happy416_Site3262.xml").toURI(), // 35
+					ContentValidatorCuresTest.class.getResource(S+"MedicationSecMedActProvTimeFixToMatch_happy416_Site3262.xml").toURI(), // 36
+					ContentValidatorCuresTest.class.getResource(S+"SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_MISSING_NAME_SITE_3265.xml").toURI(), // 37
+					ContentValidatorCuresTest.class.getResource(S+"SUB_PROB_SEC_PROB_CONC_PROB_OBS_REPRO_HAPPYBLD420V2_ADD_MATCHING_NAME_SITE_3265.xml").toURI(), // 38
+					ContentValidatorCuresTest.class.getResource(S+"SUB_CARE_TEAM_SEC_PERF_SITE_3259.xml").toURI(), // 39
+					ContentValidatorCuresTest.class.getResource(S+"SUB_CARE_TEAM_SEC_PERF_AND_PART_SITE_3259.xml").toURI(), // 40
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_SITE_3300.xml").toURI(), // 41
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_MATCHED_TIME_SITE_3300.xml").toURI(), // 42
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_MATCHED_TIME_BUT_MISSING_LINKED_REFERENCES_IN_DOCUMENT_SITE_3300.xml").toURI(), // 43
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_3300.xml").toURI(), // 44
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_VALID_INLINE_3300.xml").toURI(), // 45
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_BAD_LINK_BAD_EXT_AND_ROOT_3300.xml").toURI(), // 46
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_EMPTY_ASSIGNED_AUTHOR_3300.xml").toURI(), // 47
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_VALID_LINK_BAD_NAME_3300.xml").toURI(), // 48
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_NO_LINKED_REF_IN_DOC_3300.xml").toURI(), // 49
+					ContentValidatorCuresTest.class.getResource(S+"SUB_REBECCA621_ONE_NOTE_ACT_INLINE_AUTH_MISMATCHED_NAME_3300.xml").toURI(), // 50
+					ContentValidatorCuresTest.class.getResource(S+"SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3263_switchE2AndE3.xml").toURI(), // 51
+					ContentValidatorCuresTest.class.getResource(S+"SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3263_switchE2AndE1.xml").toURI(), // 52
+					ContentValidatorCuresTest.class.getResource(S+"SUB_VALID_PROVENANCE_TS_INVALID_AUTHOR_PARTICIPATION_TS_SITE_3331.xml").toURI(), // 53
+					ContentValidatorCuresTest.class.getResource(S+"SUB_INVALID_PROVENANCE_TS_VALID_AUTHOR_PARTICIPATION_TS_SITE_3331.xml").toURI(), // 54
+					ContentValidatorCuresTest.class.getResource(S+"SUB_INVALID_PROVENANCE_TS_VALID_AUTHOR_PARTICIPATION_TS_SWAP_AUTHORS_SITE_3331.xml").toURI(), // 55
+					ContentValidatorCuresTest.class.getResource(S+"SUB_INVALID_PROVENANCE_TS_INVALID_AUTHOR_PARTICIPATION_TS_SITE_3331.xml").toURI(), // 56
+					ContentValidatorCuresTest.class.getResource(S+"SUB_VALID_PROVENANCE_TS_VALID_AUTHOR_PARTICIPATION_TS_SITE_3331.xml").toURI(), // 57
+					ContentValidatorCuresTest.class.getResource(S+"SUB_INVALID_PROVENANCE_TS_INVALID_AUTHOR_PARTICIPATION_TS_SWAP_AUTHORS_SITE_3331.xml").toURI() // 58
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -1365,7 +1377,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 		String message = "The submitted Provenance (Time: Value) 201506221100 at Document Level is invalid. "
 				+ "Please ensure the time and time-zone starts with a 4 or 6-digit time, followed by a '+' or a '-', and finally, a 4-digit time-zone. "
 				+ "The invalid time and time-zone portion of the value is 1100."; 
-		expectError(message, results);		
+		expectError(message, results);
 		
 		// ---- Section level below ----		
 		
@@ -1768,21 +1780,25 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "but submitted CCDA ( Time Value ) is : 149206221100-0500 which does not match"; 		
 		assertTrue("Results should have contained the following message but did not: " + message, 
 				resultsContainMessage(message, results, ContentValidationResultLevel.ERROR));
-		*/
+		*/		
 		
 		// T3
 		// Notes Section/Note Activity entry 3/author/time
 		//
+		// *Note: This is the only test which tests for the sub only, for an invalid TS (if provenance)
+		// As such, this test, and the sub, were updated to be provenance instead of author participation (as per SITE-3331)		
+		//
 		// ref | ModRef_ChangeNotesTimes_b1TocAmbS3.xml
+		// Note: The ref data is not relevant to how the error is produced in this case, but here it is regardless...
         // <author>
         // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
 		//					<time value="198506221100-0500" />		
 		// sub | SubHasNotesSecNoteActAuthorTimeTimezone0400_SITE-3252_b1TocAmbS3.xml
-        // <author>
-        // <templateId root="2.16.840.1.113883.10.20.22.4.119" />
-		//					<time value="198506221100-05AB" />
+		// <!-- Provenance = 5.6 -->
+        // <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01"/>
+		// 					<time value="198506221100-05AB" />		
 		//  Comparison: 
-		//  ref time zone is correct, 4 digits, sub time-zone is incorrect, has letters. 
+		//  ref time zone is correct, 4 digits, sub time-zone is incorrect, has letters.
 		//  Although since this is validation, comparison is irrelevant, only looking at sub, and sub fails alone
 		//  Expected result: Fail (invalid format on time-zone - has 04AB, not 4 digits)
 		message = "The submitted Provenance (Time: Value) 198506221100-05AB at Note Activity Author Entry "
@@ -3021,6 +3037,331 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				+ "Author Represented Organization Name for Note Activity Author Entry for Notes Section "
 				+ "corresponding to the code 11506-3, but submitted file contains Provenance Org Name of: (Dan's Physicians Practice) "
 				+ "which does not match the inline author data.", results);
+	}
+	
+	@Test
+	public void cures_NoteActivity_ValidProvenanceTS_InvalidAuthorParticipationTS_Repro_Site3331Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+				
+		// ETT GG, ContentVal: "Validator provenance timestamp errors when multiple author nodes present"
+		// https://groups.google.com/g/edge-test-tool/c/SHhXehxABZg/m/ZtdajeaQAgAJ
+		// https://oncprojectracking.healthit.gov/support/browse/SITE-3331
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2,
+				SUBMITTED_CCDA[SUB_VALID_PROVENANCE_TS_INVALID_AUTHOR_PARTICIPATION_TS_SITE_3331],
+				SeverityLevel.ERROR);
+		printResults(results);
+				
+		// sub
+        /* 
+        Error 1 in Procedures/Note Activity:
+        
+                    <entry>
+                        <act classCode="ACT" moodCode="EVN">
+							<!-- Note Activity -->
+                            <templateId root="2.16.840.1.113883.10.20.22.4.202"
+                                extension="2016-11-01"/>
+                            <code code="34109-9" displayName="Note"
+                                codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC">
+								<!-- relevant identifying code 28570-0 in error -->
+                                <translation code="28570-0" displayName="Procedure note"
+                                    codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
+                            </code>
+                            <text>
+                                <reference value="#clinNotes_Procedures_0"/>
+                            </text>
+                            <statusCode code="completed"/>
+                            <effectiveTime value="20210125"/>
+                            <author>
+								<!-- Author Participation (original) = 4.119 -->
+                                <templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+								<!-- -dbTest here is the location of the time which errors for provenance
+											 but it is actually the original Author Participation (see II, 4.119, NOT 5.6  -->                                
+                                <time value="20210125145611"/> <!-- this time is incorrectly reported as a 'provenance' error -->
+
+        */
+		//  Validation: 
+		//  Although the TS is invalid as per provenenace reqs (has no time-zone) for Author Participation, 
+		//  we do not expect an error for Author Participation time as it has looser regEx TS-only reqs, and, 
+		//  most importantly, it is not provenance. 
+		//  They are different templates with different IIs.
+		//  We are only enforcing TS validation for provenance within the content validator.
+		//  Non-provenance authors will be validated in the future by MDHT as per the schema regEx for TS.
+		//  Those regEx requirements are less strict than what we are applying for provenance.
+		//  There may be a duplication for provenance as well in MDHT.
+		expectNoError("The submitted Provenance (Time: Value) 20210125145611 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 28570-0 is invalid", results);
+		
+		/*
+		Error 2 in Progress Note/Note Activity
+		
+                    <entry>
+                        <act classCode="ACT" moodCode="EVN">
+                        	<!--  Note Activity -->
+                            <templateId root="2.16.840.1.113883.10.20.22.4.202"
+                                extension="2016-11-01"/>
+                            <code code="34109-9" displayName="Note"
+                                codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC">
+                                <translation code="11506-3" displayName="Progress note"
+                                    codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
+                            </code>
+                            <text>
+                                <reference value="#clinNotes_ProgressNoteNoteClinicalNotes_0"/>
+                            </text>
+                            <statusCode code="completed"/>
+                            <effectiveTime value="20210920"/>
+                            <author>
+                                <!-- Author Participation -->
+                                <templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+                                <!-- dbTest 2 
+                                 invalid TS as per provenance reqs, but is not provenance, so should not be content validation error
+                                 -->
+                                <time value="20210920144244"/>		
+		 
+		*/
+		// Validation:
+		// The same bug is happening in Progress Note/Note Activity/Author Participation.
+		// Although it is invalid, it is not provenance and therefore should not produce the error within the content validator.
+		// Has no time-zone
+		expectNoError("The submitted Provenance (Time: Value) 20210920144244 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 11506-3 is invalid", results);		
+	}
+	
+	@Test
+	@Ignore // ignore until we have fixed the index bug as provenance is the 2nd index, not 1st, and cannot fail yet
+	public void cures_NoteActivity_InvalidProvenanceTS_ValidAuthorParticipationTS_Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());				
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2,
+				SUBMITTED_CCDA[SUB_INVALID_PROVENANCE_TS_VALID_AUTHOR_PARTICIPATION_TS_SITE_3331],
+				SeverityLevel.ERROR);
+		printResults(results);
+				
+		// sub
+        /* 
+        Error 1 in Procedures/Note Activity:
+        
+                            <author>
+								<!-- Provenance Provenance - Author Participation = 5.6 -->
+                                <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01"/>
+								<!-- this time should now show up as a valid provenance error as is provenance and has no time-zone -->
+                                <time value="20210125145611"/>
+
+        */
+		expectError("The submitted Provenance (Time: Value) 20210125145611 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 28570-0 is invalid", results);
+		
+		/*
+		Error 2 in Progress Note/Note Activity
+		
+                            <author>
+                                <!--  Provenance -->
+                                <templateId root="2.16.840.1.113883.10.20.22.5.6"
+                                    extension="2019-10-01"/>
+                                <!-- Invalid time and should produce error (no time-zone) -->
+                                <time value="20210920144244"/>
+		 
+		*/
+		expectError("The submitted Provenance (Time: Value) 20210920144244 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 11506-3 is invalid", results);		
+	}
+	
+	@Test
+	public void cures_NoteActivity_InvalidProvenanceTS_ValidAuthorParticipationTS_SwapAuthorIndexes_Site3331Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+				
+		// ETT GG, ContentVal: "Validator provenance timestamp errors when multiple author nodes present"
+		// https://groups.google.com/g/edge-test-tool/c/SHhXehxABZg/m/ZtdajeaQAgAJ
+		// https://oncprojectracking.healthit.gov/support/browse/SITE-3331
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2,
+				SUBMITTED_CCDA[SUB_INVALID_PROVENANCE_TS_VALID_AUTHOR_PARTICIPATION_TS_SWAP_AUTHORS_SITE_3331],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// This test is the same as cures_NoteActivity_InvalidProvenanceTS_ValidAuthorParticipationTS_Site3331Test except that
+		// the indexes of the authors are swapped. The reason for this is that there is a bug where only the 1st author index will fail.
+		// Until we resolve that bug, we need to swap the provenance with the error to the first occurring author, so that it can fail for it's
+		// TS, and prove proper identification.
+		// After the index bug is fixed, this will remain as a regression test.
+				
+		// sub
+        /* 
+        Error 1 in Procedures/Note Activity:
+		Same as cures_NoteActivity_InvalidProvenanceTS_ValidAuthorParticipationTS_Site3331Test but now provenance is 1st author vs 2nd
+
+        */
+		expectError("The submitted Provenance (Time: Value) 20210125145611 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 28570-0 is invalid", results);
+		
+		/*
+		Error 2 in Progress Note/Note Activity
+		Same as cures_NoteActivity_InvalidProvenanceTS_ValidAuthorParticipationTS_Site3331Test but now provenance is 1st author vs 2nd
+		 
+		*/
+		expectError("The submitted Provenance (Time: Value) 20210920144244 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 11506-3 is invalid", results);		
+	}
+	
+	@Test
+	@Ignore // ignore until we have fixed the index bug as provenance is the 2nd index, not 1st, and cannot fail yet
+	public void cures_NoteActivity_InvalidProvenanceTS_InvalidAuthorParticipationTS_Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());				
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2,
+				SUBMITTED_CCDA[SUB_INVALID_PROVENANCE_TS_INVALID_AUTHOR_PARTICIPATION_TS_SITE_3331],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// sub
+		/*
+		Non-Error 1 in Procedures/Note Activity:
+ 		AuthorParticipation TS being invalid is irrelevant/not supposed to be enforced so not fired
+                            <author>
+								<!-- Author Participation (original) = 4.119 -->
+                                <templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+                                <time value="20660125145611"/> 					 
+		 */		
+		expectNoError("The submitted Provenance (Time: Value) 20660125145611 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 28570-0 is invalid", results);
+				
+		// sub
+        /* 
+        Error 1 in Procedures/Note Activity:
+        
+                            <author>
+								<!-- Provenance Provenance - Author Participation = 5.6 -->
+                                <templateId root="2.16.840.1.113883.10.20.22.5.6"
+                                    extension="2019-10-01"/>
+								<!-- this time should now show up as a valid provenance error as is provenance and has no time-zone -->
+                                <time value="20210125145611"/>
+
+        */
+		expectError("The submitted Provenance (Time: Value) 20210125145611 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 28570-0 is invalid", results);
+		
+		
+		/*
+		Non-Error 2 in Progress Note/Note Activity
+		
+                            <author>
+                                <!-- Author Participation -->
+                                <templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+                                <!-- dbTest 2 
+                                 INvalid TS as per provenance reqs, but is not provenance, so irrelevant, no error expected
+                                 -->
+                                <time value="20660920144244"/>
+		 
+		*/
+		expectNoError("The submitted Provenance (Time: Value) 20660920144244 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 11506-3 is invalid", results);		
+		
+		/*
+		Error 2 in Progress Note/Note Activity
+		
+                            <author>
+                                <!--  Provenance -->
+                                <templateId root="2.16.840.1.113883.10.20.22.5.6"
+                                    extension="2019-10-01"/>
+                                <!-- Invalid time and should produce error (no time-zone) -->
+                                <time value="20210920144244"/>
+		 
+		*/
+		expectError("The submitted Provenance (Time: Value) 20210920144244 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 11506-3 is invalid", results);
+	}
+	
+	@Test
+	public void cures_NoteActivity_ValidProvenanceTS_ValidAuthorParticipationTS_EpectPass_Site3331Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+				
+		// ETT GG, ContentVal: "Validator provenance timestamp errors when multiple author nodes present"
+		// https://groups.google.com/g/edge-test-tool/c/SHhXehxABZg/m/ZtdajeaQAgAJ
+		// https://oncprojectracking.healthit.gov/support/browse/SITE-3331
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2,
+				SUBMITTED_CCDA[SUB_VALID_PROVENANCE_TS_VALID_AUTHOR_PARTICIPATION_TS_SITE_3331],
+				SeverityLevel.ERROR);
+		printResults(results);
+				
+		// All times are valid, no provenance issues expected at all
+		// All 4 instances should pass. 
+		// The 2 Author Participation authors would never fail either way. 
+		// The 2 Provenance would if fail invalid, but are valid.
+		// Search dbTest to find the instances
+		expectNoError("The submitted Provenance (Time: Value) ", results);
+	}
+	
+	@Test
+	public void cures_NoteActivity_InvalidProvenanceTS_InvalidAuthorParticipationTS_SwapAuthorIndexes_Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());				
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE1_ALICE_DEF_V2,
+				SUBMITTED_CCDA[SUB_INVALID_PROVENANCE_TS_INVALID_AUTHOR_PARTICIPATION_TS_SWAP_AUTHORS_SITE_3331],
+				SeverityLevel.ERROR);
+		printResults(results);
+		
+		// sub
+        /* 
+        Error 1 in Procedures/Note Activity:
+        
+                            <author>
+								<!-- Provenance Provenance - Author Participation = 5.6 -->
+                                <templateId root="2.16.840.1.113883.10.20.22.5.6"
+                                    extension="2019-10-01"/>
+								<!-- this time should now show up as a valid provenance error as is provenance and has no time-zone -->
+                                <time value="20210125145611"/>
+
+        */
+		expectError("The submitted Provenance (Time: Value) 20210125145611 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 28570-0 is invalid", results);		
+		
+		// sub
+		/*
+		Non-Error 1 in Procedures/Note Activity:
+ 		AuthorParticipation TS being invalid is irrelevant/not supposed to be enforced so not fired
+                            <author>
+								<!-- Author Participation (original) = 4.119 -->
+                                <templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+                                <time value="20660125145611"/> 					 
+		 */		
+		expectNoError("The submitted Provenance (Time: Value) 20660125145611 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 28570-0 is invalid", results);
+
+		/*
+		Error 2 in Progress Note/Note Activity
+		
+                            <author>
+                                <!--  Provenance -->
+                                <templateId root="2.16.840.1.113883.10.20.22.5.6"
+                                    extension="2019-10-01"/>
+                                <!-- Invalid time and should produce error (no time-zone) -->
+                                <time value="20210920144244"/>
+		 
+		*/
+		expectError("The submitted Provenance (Time: Value) 20210920144244 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 11506-3 is invalid", results);		
+		
+		/*
+		Non-Error 2 in Progress Note/Note Activity
+		
+                            <author>
+                                <!-- Author Participation -->
+                                <templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+                                <!-- dbTest 2 
+                                 INvalid TS as per provenance reqs, but is not provenance, so irrelevant, no error expected
+                                 -->
+                                <time value="20660920144244"/>
+		 
+		*/
+		expectNoError("The submitted Provenance (Time: Value) 20660920144244 at Note Activity Author Entry for Notes Section "
+				+ "corresponding to the code 11506-3 is invalid", results);		
 	}	
 	
 }
