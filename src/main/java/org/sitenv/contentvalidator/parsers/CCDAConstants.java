@@ -184,6 +184,9 @@ public class CCDAConstants {
 	public static final String RN_CODE = "57133-1";
 	public static final String CP_TEMPLATE = "2.16.840.1.113883.10.20.22.1.15";
 	public static final String CP_CODE = "52521-2";
+
+	public static final String PROVENANCE_TEMPLATE_ID_ROOT = "2.16.840.1.113883.10.20.22.5.6";
+	public static final String PROVENANCE_TEMPLATE_ID_EXT = "2019-10-01";
 	
 	
 	private CCDAConstants()
