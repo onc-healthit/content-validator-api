@@ -1173,8 +1173,10 @@
 									<value xsi:type="PQ" value="85" unit="cm"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author>
-												<!-- Author Participation only (no provenance II) -->	
+												<!-- Author Participation -->	
 												<templateId root="2.16.840.1.113883.10.20.22.4.119" />
+							                    <!-- Provenance -->
+							                    <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />										
 		        								<time value="202006221100-0500" />
 		        								<assignedAuthor>
 		            								<id extension="111111" root="2.16.840.1.113883.4.6"/>

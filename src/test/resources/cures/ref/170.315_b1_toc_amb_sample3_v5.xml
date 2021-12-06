@@ -925,6 +925,7 @@
 									</effectiveTime>
 									<value xsi:type="CD" code="62067003" codeSystem="2.16.840.1.113883.6.96" displayName="Hypo Plastic Left Heart Syndrome" codeSystemName="SNOMED-CT"/>
 									<author>
+										<!-- Author Participation (original) = 4.119 -->
 										<templateId root="2.16.840.1.113883.10.20.22.4.119" />
         								<time value="202006221100-0500" />
         								<assignedAuthor>
