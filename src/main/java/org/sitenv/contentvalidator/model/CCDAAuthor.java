@@ -209,8 +209,7 @@ public class CCDAAuthor {
 			for (CCDAAuthor curRefAuth : refAuths) {
 				
 				log.info("Checking Ref Author with Sub Authors ");
-				// TODO: Consider if this check is appropriate, uncomment if so, and fix tests accordingly
-//				if (isAuthorOfTypeProvenance(curRefAuth)) {
+				if (isAuthorOfTypeProvenance(curRefAuth) || isAuthorOfTypeDocumentLevelProvenance(curRefAuth)) {
 					// If there's an effectiveTime with a value in the ref, and the ref has provenance but the sub does not...
 					if (curRefAuth.getEffTime() != null && curRefAuth.getEffTime().getValuePresent()
 							&& !isProvenancePresent(curRefAuth.getEffTime(), curRefAuth.getOrgName(), subAuths)) {
@@ -247,16 +246,16 @@ public class CCDAAuthor {
 					} else {
 						log.info(" Found Provenance data, nothing else to do ..");
 					}
-//				} else {
-//					log.info(" Since the author " 
-//							+ ((curRefAuth.getTemplateIds() != null
-//							&& curRefAuth.getTemplateIds().size() > 0
-//							&& curRefAuth.getTemplateIds().get(0).getRootValue() != null)
-//									? curRefAuth.getTemplateIds().get(0).getRootValue()
-//									: "null or empty II")
-//									+ " is not a provenance II, there is no reason to compare it with the submitted file"
-//									+ "/check for provenance within it");
-//				}
+				} else {
+					log.info(" Since the author " 
+							+ ((curRefAuth.getTemplateIds() != null
+							&& curRefAuth.getTemplateIds().size() > 0
+							&& curRefAuth.getTemplateIds().get(0).getRootValue() != null)
+									? curRefAuth.getTemplateIds().get(0).getRootValue()
+									: "null or empty II")
+									+ " is not a provenance II, there is no reason to compare it with the submitted file"
+									+ "/check for provenance within it");
+				}
 			}
 						
 			// Validate time value in sub author time value instances specifically (not a comparison)
@@ -305,12 +304,21 @@ public class CCDAAuthor {
     public static boolean isAuthorOfTypeProvenance(CCDAAuthor author) {
 		if (author.templateIds != null) {
 			return author.templateIds.stream()
-				.anyMatch(templateId -> 
-					(templateId.getRootValue() != null && templateId.getRootValue().equals(CCDAConstants.PROVENANCE_TEMPLATE_ID_ROOT))
-				 && (templateId.getRootValue() != null && templateId.getExtValue().equals(CCDAConstants.PROVENANCE_TEMPLATE_ID_EXT)));
+					.anyMatch(templateId -> 
+						(templateId.getRootValue() != null && templateId.getRootValue().equals(CCDAConstants.PROVENANCE_TEMPLATE_ID_ROOT))
+					 && (templateId.getExtValue() != null && templateId.getExtValue().equals(CCDAConstants.PROVENANCE_TEMPLATE_ID_EXT)));			
     	}
     	return false;
     }
+    
+    public static boolean isAuthorOfTypeDocumentLevelProvenance(CCDAAuthor author) {
+    	// TOOO: Can we be any more specific such as identifying that the author is in the doc level and not in a section?
+    	// Sure, all section authors should have IIs, but what if a there is a mistake? In that case, we don't want to identify
+    	// a section level author w/o an II as Provenance....
+    	// However, since this is a check on the ref, if there is a mistake, it's our mistake, and we should catch it and fix it.
+    	// Being less specific (as done here) will allow is to potentially find the mistake.
+		return author.templateIds == null || author.templateIds.isEmpty();
+    }    
     
     public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement refOrgName, ArrayList<CCDAAuthor> subAuths) {
     	log.info("enter isProvenancePresent(...)");
