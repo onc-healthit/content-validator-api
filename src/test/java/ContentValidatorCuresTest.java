@@ -3117,12 +3117,11 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
         */
 		//  Comparison: 
 		//  Note Activity requires a matching author/assignedAuthor/representedOrganization/name to meet provenance requirements
-		//  This example has a valid linked reference, but the name in the linked reference does not match the requirements of the ref. 		
-		expectError("The scenario requires Provenance Org Name as part of: "
+		//  This example has a valid linked reference, but the name in the linked reference does not match the requirements of the ref.
+		expectError("The scenario requires Provenance Org Name (Neighborhood Physicians Practice) as part of: "
 				+ "Author Represented Organization Name for Note Activity Author Entry for Notes Section "
-				+ "corresponding to the code 11506-3 data, but submitted file does not contain Provenance Org Name as part of: "
-				+ "Author Represented Organization Name for Note Activity Author Entry for Notes Section "
-				+ "corresponding to the code 11506-3 which does not match in the linked reference.", results);
+				+ "corresponding to the code 11506-3 data, but submitted file contains Provenance Org Name "
+				+ "(Dan's Physicians Practice) in the linked reference, which does not match.", results);
 	}
 	
 	// no linked reference at all in sub so it's id root and extension are pointing to nowhere
