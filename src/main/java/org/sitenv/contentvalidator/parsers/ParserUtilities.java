@@ -75,9 +75,10 @@ public class ParserUtilities {
 					// the value in the author will be empty if there wasn't a match as per findLinkedSubAuth
 					if (!isValidLinkedRefAndMatch) {
 						ContentValidationResult rs = new ContentValidationResult(
-								"The scenario requires Provenance Org Name as part of: " + elementName
-										+ " data, but submitted file does not contain Provenance Org Name as part of: "
-										+ elementName + " which does not match in the linked reference.",
+								"The scenario requires Provenance Org Name (" + refDe.getValue() + ") as part of: " + elementName
+										+ " data, but submitted file contains Provenance Org Name (" 
+										+ curLinkedSubAuth.getOrgName().getValue() 
+										+ ") in the linked reference, which does not match.",
 								ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
 						results.add(rs);
 					} else {

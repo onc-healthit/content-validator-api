@@ -147,6 +147,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	private static final int SUB_INVALID_PROVENANCE_TS_INVALID_AUTHOR_PARTICIPATION_TS_SWAP_AUTHORS_SITE_3331 = 58;
 	private static final int SUB_3354_REPRO_PROBLEMSEC_CONC_OBS_PROVENANCE = 59;
 	private static final int SUB_3362_IS_AUTHOR_OF_TYPE_PROVENANCE_NPE = 60;
+	private static final int SUB_3350_JEREMY_PROVENANCE_LINKED_REFERENCE = 61;
 
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	static {
@@ -212,7 +213,8 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 					ContentValidatorCuresTest.class.getResource(S+"SUB_VALID_PROVENANCE_TS_VALID_AUTHOR_PARTICIPATION_TS_SITE_3331.xml").toURI(), // 57
 					ContentValidatorCuresTest.class.getResource(S+"SUB_INVALID_PROVENANCE_TS_INVALID_AUTHOR_PARTICIPATION_TS_SWAP_AUTHORS_SITE_3331.xml").toURI(), // 58
 					ContentValidatorCuresTest.class.getResource(S+"SUB_3354_REPRO_PROBLEMSEC_CONC_OBS_PROVENANCE.xml").toURI(), // 59
-					ContentValidatorCuresTest.class.getResource(S+"SUB_3362_IS_AUTHOR_OF_TYPE_PROVENANCE_NPE.xml").toURI() // 60
+					ContentValidatorCuresTest.class.getResource(S+"SUB_3362_IS_AUTHOR_OF_TYPE_PROVENANCE_NPE.xml").toURI(), // 60
+					ContentValidatorCuresTest.class.getResource(S+"SUB_3350_JEREMY_PROVENANCE_LINKED_REFERENCE.xml").toURI() // 61 
 			};
 		} catch (URISyntaxException e) {
 			if(LOG_RESULTS_TO_CONSOLE) e.printStackTrace();
@@ -3117,12 +3119,11 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
         */
 		//  Comparison: 
 		//  Note Activity requires a matching author/assignedAuthor/representedOrganization/name to meet provenance requirements
-		//  This example has a valid linked reference, but the name in the linked reference does not match the requirements of the ref. 		
-		expectError("The scenario requires Provenance Org Name as part of: "
+		//  This example has a valid linked reference, but the name in the linked reference does not match the requirements of the ref.
+		expectError("The scenario requires Provenance Org Name (Neighborhood Physicians Practice) as part of: "
 				+ "Author Represented Organization Name for Note Activity Author Entry for Notes Section "
-				+ "corresponding to the code 11506-3 data, but submitted file does not contain Provenance Org Name as part of: "
-				+ "Author Represented Organization Name for Note Activity Author Entry for Notes Section "
-				+ "corresponding to the code 11506-3 which does not match in the linked reference.", results);
+				+ "corresponding to the code 11506-3 data, but submitted file contains Provenance Org Name "
+				+ "(Dan's Physicians Practice) in the linked reference, which does not match.", results);
 	}
 	
 	// no linked reference at all in sub so it's id root and extension are pointing to nowhere
@@ -3665,6 +3666,33 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE2_V2_JEREMY,
 				SUBMITTED_CCDA[SUB_3362_IS_AUTHOR_OF_TYPE_PROVENANCE_NPE], SeverityLevel.ERROR);
 		printResults(results);
-	}		
+	}
+	
+	@Test
+	public void cures_externallyLinkedReference_mimatchedNameInLink_Site3350Test() {
+		printHeader(new Object() {}.getClass().getEnclosingMethod().getName());
+		// SITE-3350 ETT GG, ContentVal: Note Activity linked reference consider update to messages linked vs not
+		// https://groups.google.com/u/1/g/edge-test-tool/c/-kjLTnBuB00
+		
+		ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsCures(
+				B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_CURES_B1_TOC_AMB_SAMPLE2_V2_JEREMY,
+				SUBMITTED_CCDA[SUB_3350_JEREMY_PROVENANCE_LINKED_REFERENCE], SeverityLevel.ERROR);
+		printResults(results);
+				
+		// Comparison: 
+		// linked reference in the sub is invalid due to incorrect/mismatched representedOrganization
+		// (Community Health Hospitals vs the expected Neighborhood Physicians Practice) 
+		// in linked reference, expect provenance failure		
+		expectError("The scenario requires Provenance Org Name (Neighborhood Physicians Practice) as part of: "
+		+ "Author Represented Organization Name for Note Activity Author Entry for Notes Section "
+		+ "corresponding to the code 34117-2 data, but submitted file contains Provenance Org Name "
+		+ "(Community Health Hospitals) in the linked reference, which does not match.", results);
+		
+		// Note: The old, less useful message before this fix in SITE-3350 was:
+		// The scenario requires Provenance Org Name as part of: Author Represented Organization Name for 
+		// Note Activity Author Entry for Notes Section corresponding to the code 34117-2 data, but submitted file does not 
+		// contain Provenance Org Name as part of: Author Represented Organization Name for Note Activity Author Entry for 
+		// Notes Section corresponding to the code 34117-2 which does not match in the linked reference.
+	}
 	
 }
