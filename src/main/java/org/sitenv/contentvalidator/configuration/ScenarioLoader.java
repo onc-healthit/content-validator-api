@@ -1,7 +1,8 @@
 package org.sitenv.contentvalidator.configuration;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.model.CCDARefModel;
 import org.sitenv.contentvalidator.parsers.CCDAParser;
 import org.springframework.beans.factory.InitializingBean;
@@ -20,7 +21,7 @@ public class ScenarioLoader implements InitializingBean {
     private CCDAParser ccdaParser;
     private HashMap<String, CCDARefModel> refModelHashMap = new HashMap<>();
     
-	private static Logger log = Logger.getLogger(ScenarioLoader.class.getName());
+	private static Logger log = LoggerFactory.getLogger(ScenarioLoader.class.getName());
 
     @Override
     public void afterPropertiesSet() throws Exception {

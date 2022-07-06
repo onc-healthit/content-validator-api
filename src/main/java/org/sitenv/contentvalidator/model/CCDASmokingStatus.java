@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 
@@ -10,7 +11,7 @@ import java.util.Map;
 
 public class CCDASmokingStatus {
 
-	private static Logger log = Logger.getLogger(CCDASmokingStatus.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDASmokingStatus.class.getName());
 	
 	private ArrayList<CCDAII>					smokingStatusTemplateIds;
 	private CCDACode							smokingStatusCode;

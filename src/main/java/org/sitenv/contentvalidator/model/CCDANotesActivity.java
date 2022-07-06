@@ -5,14 +5,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 public class CCDANotesActivity {
 
-	private static Logger log = Logger.getLogger(CCDANotesActivity.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDANotesActivity.class.getName());
 	
 	private ArrayList<CCDAII>    			templateId;
 	private CCDACode             			activityCode;

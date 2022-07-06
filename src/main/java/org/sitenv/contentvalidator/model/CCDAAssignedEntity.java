@@ -1,12 +1,13 @@
 package org.sitenv.contentvalidator.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public class CCDAAssignedEntity {
 	
-	private static Logger log = Logger.getLogger(CCDAAssignedEntity.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAAssignedEntity.class.getName());
 
 	private ArrayList<CCDATelecom>			telecom;
 	private ArrayList<CCDAAddress>			addresses;

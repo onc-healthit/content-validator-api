@@ -1,12 +1,13 @@
 package org.sitenv.contentvalidator.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public class CCDAConsumable {
 	
-	private static Logger log = Logger.getLogger(CCDAConsumable.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAConsumable.class.getName());
 
 	ArrayList<CCDAII> 			templateIds;
 	CCDACode					medcode;

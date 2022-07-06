@@ -3,14 +3,15 @@ package org.sitenv.contentvalidator.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 public class CCDAAuthor {
 	
-	private static Logger log = Logger.getLogger(CCDAAuthor.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAAuthor.class.getName());
 	
 	private ArrayList<CCDAII>    			templateIds;
 	private CCDAEffTime          			effTime;

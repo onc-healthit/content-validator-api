@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.parsers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.model.*;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 
 public class ParserUtilities {
 	
-	private static Logger log = Logger.getLogger(ParserUtilities.class.getName());
+	private static Logger log = LoggerFactory.getLogger(ParserUtilities.class.getName());
 	
 	public static void compareAuthor(CCDAAuthor refAuthor, CCDAAuthor subAuthor,
 			ArrayList<ContentValidationResult> results, String elementName,
