@@ -21,13 +21,11 @@ public class CCDANotes {
 	private CCDAAuthor author;
 	
 	public CCDANotes() { 
-		
 		sectionTemplateId = new ArrayList<CCDAII>();
 		notesActivity = new ArrayList<CCDANotesActivity>();
 	}
 	
 	public void getAllNotesActivities(HashMap<String, CCDANotesActivity> results) {
-		
 		if(notesActivity != null && notesActivity.size() > 0) {
 			
 			log.info(" Found non-null notes activity ");
@@ -38,12 +36,9 @@ public class CCDANotes {
 	public CCDAAuthor getAuthor() {
 		return author;
 	}
-
-
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
 	}
-
 
 	public ArrayList<CCDAII> getSectionTemplateId() {
 		return sectionTemplateId;
@@ -65,7 +60,6 @@ public class CCDANotes {
 	}
 	
 	public void log() {
-		
 		log.info(" *** Notes Section *** ");
 		
 		if(sectionCode != null)
@@ -86,7 +80,6 @@ public class CCDANotes {
 	
 	public static void compareNotes(HashMap<String, CCDANotes> refNotes, HashMap<String, CCDANotes> subNotes,
 			ArrayList<ContentValidationResult> results) {
-
 		log.info(" Start Comparing Notes Section level data ");
 		
 		// For each Notes section in the Ref Model, check if it is present in the subCCDA Model.
@@ -120,8 +113,7 @@ public class CCDANotes {
 		
 	}
 	
-	public void compare(CCDANotes refNote, ArrayList<ContentValidationResult> results , String context) {
-		
+	public void compare(CCDANotes refNote, ArrayList<ContentValidationResult> results, String context) {
 		log.info("Comparing Notes section level information ");
 		
 		// Handle Template Ids
@@ -137,9 +129,6 @@ public class CCDANotes {
 		
 		// context += ", Comparing Notes Activity ";
 		CCDANotesActivity.compareNotesActivity(refNote.getNotesActivity(), this.getNotesActivity(), results, context);
-		
-		// TODO-db: Should we compare authors here/within compareNotesActivity for all NotesActivity entries, or do we only want to compare the first entry?
-		// It seems that right now only the final entry is compared (in this case, entry 3).
 	}
 
 

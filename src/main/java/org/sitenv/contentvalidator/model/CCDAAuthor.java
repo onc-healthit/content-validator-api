@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.parsers.CCDAConstants;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 public class CCDAAuthor {
@@ -174,13 +175,15 @@ public class CCDAAuthor {
 		ParserUtilities.compareEffectiveTimeValue(effTime, subAuthor.getEffTime(), results,
 				elementName);
 		
-		// Validate Times
-		ParserUtilities.validateTimeValueLengthDateTimeAndTimezoneDependingOnPrecision(subAuthor.getEffTime(), results,
-				elementName, 
-				(elName != null && !elName.isEmpty()) ? elName.replaceFirst(" , Comparing ", "") : elName,
-				-1, true);
+		// Validate Times (only applies to sub, not a comparison)
+		if (isAuthorOfTypeProvenance(subAuthor)) { // This check fixes SITE-3331
+			ParserUtilities.validateTimeValueLengthDateTimeAndTimezoneDependingOnPrecision(subAuthor.getEffTime(), results,
+					elementName, 
+					(elName != null && !elName.isEmpty()) ? elName.replaceFirst(" , Comparing ", "") : elName,
+					-1, true);
+		}
 		
-		// Compare RepOrg Name 
+		// Compare RepOrg Name
 		elementName = "Author Represented Organization Name for " + elName;					
 		if (submittedAuthorsWithLinkedReferenceData != null) {
 			ParserUtilities.compareProvenanceOrgName(orgName, subAuthor, results, elementName,
@@ -196,61 +199,66 @@ public class CCDAAuthor {
 		log.info(" Ref Model Auth Size = " + (refAuths != null ? refAuths.size() : 0));
 		log.info(" Sub Model Auth Size = " + (subAuths != null ? subAuths.size() : 0));
 
-		// TODO: Can remove this log after code is proven in production
-		// (already logged once which we can reference by CCDARefModel.logSubmittedAuthorsWithLinkedReferenceData 
-		// as opposed to every comparison encountered here
-		if (authorsWithLinkedReferenceData != null) {
-			for ( CCDAAuthor auth : authorsWithLinkedReferenceData) {
-				log.info(" authorsWithLinkedReferenceData: " );
-				auth.log();
-			}
-		}
+//		if (authorsWithLinkedReferenceData != null) {
+//			for (CCDAAuthor auth : authorsWithLinkedReferenceData) {
+//				log.info(" authorsWithLinkedReferenceData: " );
+//				auth.log();
+//			}
+//		}
     	
     	if (refAuths != null && refAuths.size() != 0) { // If no authors in scenario (ref) file, skip the comparison 			
 			for (CCDAAuthor curRefAuth : refAuths) {
 				
 				log.info("Checking Ref Author with Sub Authors ");
-				if(curRefAuth.getEffTime() != null && 
-						curRefAuth.getEffTime().getValuePresent()
-						&& !isProvenancePresent(curRefAuth.getEffTime(), curRefAuth.getOrgName(), subAuths)) {
-					
-					// Now that we know there is a failure inline, check the linked references. 
-					// The reason we wait is for performance, that way we only check the limited cases vs every case regardless beforehand
-					if (!isProvenancePresentInReferencesWithData(curRefAuth.getEffTime(), curRefAuth.getOrgName(),
-							subAuths, authorsWithLinkedReferenceData)) {
-					// Note: This is the only result that is actually reported.
-					// Many errors are generated in isProvenancePresent sub-routines but there's no way to connect them
-					// to a specific sub which actually had the issue (since match can be in any location) so instead the results
-					// generated externally are used as a reference for a boolean result which triggers this error 
-					// vs adding the unique errors themselves
-//					String message = "The scenario requires " + elName
-//							+ " (Time: Value) Provenance data which was not found in the submitted data. The scenario value is "
-//							+ auth.getEffTime().getValue().getValue()
-//							+ " and a submitted value must at a minimum match the 8-digit date portion of the data.";
-						final boolean isOrgNameNonNullAndPopulated = curRefAuth.getOrgName() != null
-								&& curRefAuth.getOrgName().getValue() != null
-								&& !curRefAuth.getOrgName().getValue().isEmpty();
-						String message = "The scenario requires " + elName
-								+ " Provenance data of time" + (isOrgNameNonNullAndPopulated ? " and/or representedOrganization/name" : "") 
-								+ " which was not found in the submitted data. "
-								+ "The scenario time value is " + curRefAuth.getEffTime().getValue().getValue()
-								+ " and a submitted time value should at a minimum match the 8-digit date portion of the data."
-								+ (isOrgNameNonNullAndPopulated ? " The scenario representedOrganization/name value is " + curRefAuth.getOrgName().getValue()
-								+ " and a submitted name should match. One or all of the prior issues exist and must be resolved." : "");																						
-							
-						ContentValidationResult rs = new ContentValidationResult(message,
-								ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
-						results.add(rs);
+				if (isAuthorOfTypeProvenance(curRefAuth) || isAuthorOfTypeDocumentLevelProvenance(curRefAuth)) {
+					// If there's an effectiveTime with a value in the ref, and the ref has provenance but the sub does not...
+					if (curRefAuth.getEffTime() != null && curRefAuth.getEffTime().getValuePresent()
+							&& !isProvenancePresent(curRefAuth.getEffTime(), curRefAuth.getOrgName(), subAuths)) {
+						
+						// Now that we know there is a failure inline, check the linked references. 
+						// The reason we wait is for performance, that way we only check the limited cases vs every case regardless beforehand
+						if (!isProvenancePresentInReferencesWithData(curRefAuth.getEffTime(), curRefAuth.getOrgName(),
+								subAuths, authorsWithLinkedReferenceData)) {
+							// Note: This is the only result that is actually reported.
+							// Many errors are generated in isProvenancePresent sub-routines but there's no way to connect them
+							// to a specific sub which actually had the issue (since match can be in any location) so instead the results
+							// generated externally are used as a reference for a boolean result which triggers this error 
+							// vs adding the unique errors themselves
+							final boolean isOrgNameNonNullAndPopulated = curRefAuth.getOrgName() != null
+									&& curRefAuth.getOrgName().getValue() != null
+									&& !curRefAuth.getOrgName().getValue().isEmpty();
+							String message = "The scenario requires " + elName
+									+ " Provenance data of time" + (isOrgNameNonNullAndPopulated ? " and/or representedOrganization/name" : "") 
+									+ " which was not found in the submitted data. "
+									+ "The scenario time value is " + curRefAuth.getEffTime().getValue().getValue()
+									+ " and a submitted time value should at a minimum match the 8-digit date portion of the data."
+									+ (isOrgNameNonNullAndPopulated ? " The scenario representedOrganization/name value is " + curRefAuth.getOrgName().getValue()
+									+ " and a submitted name should match. One or all of the prior issues exist and must be resolved." : "");																						
+								
+							ContentValidationResult rs = new ContentValidationResult(message,
+									ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
+							results.add(rs);
+						} else {
+							log.info(
+									" Found Provenance data in submitted authorsWithLinkedReferenceData, nothing else to do ..");
+						}
+						
+						
 					} else {
-						log.info(
-								" Found Provenance data in submitted authorsWithLinkedReferenceData, nothing else to do ..");
+						log.info(" Found Provenance data, nothing else to do ..");
 					}
-					
 				} else {
-					log.info(" Found Provenance data, nothing else to do ..");
+					log.info(" Since the author " 
+							+ ((curRefAuth.getTemplateIds() != null
+							&& curRefAuth.getTemplateIds().size() > 0
+							&& curRefAuth.getTemplateIds().get(0).getRootValue() != null)
+									? curRefAuth.getTemplateIds().get(0).getRootValue()
+									: "null or empty II")
+									+ " is not a provenance II, there is no reason to compare it with the submitted file"
+									+ "/check for provenance within it");
 				}
 			}
-			
+						
 			// Validate time value in sub author time value instances specifically (not a comparison)
 			// Results are added as individual errors
 			if (subAuths != null && subAuths.size() > 0) {
@@ -260,13 +268,19 @@ public class CCDAAuthor {
 				int subAuthIndex = -1;
 				for (CCDAAuthor subAuth : subAuths) {
 					subAuthIndex++;
-					if (subAuth.getEffTime() != null) {
-						log.info("validating subauth at index " + subAuthIndex);
-						ParserUtilities.validateTimeValueLengthDateTimeAndTimezoneDependingOnPrecision(
-								subAuth.getEffTime(), results, localElName, elName, subAuthIndex, isSub);
-					} else {
-						log.info("subAuth at index " + subAuthIndex + " is null" );
-					}
+					// TODO: Consider adding check and updating tests to use provenance or otherwise if appropriate
+					// Note: Check causes Site3241Test(s) to fail due to that test (mistakenly?) using author participation II vs provenance
+//					if (isAuthorOfTypeProvenance(subAuth)) {
+						if (subAuth.getEffTime() != null) {
+							log.info("validating subauth at index " + subAuthIndex);
+							ParserUtilities.validateTimeValueLengthDateTimeAndTimezoneDependingOnPrecision(
+									subAuth.getEffTime(), results, localElName, elName, subAuthIndex, isSub);
+						} else {
+							log.info("subAuth effTime at index " + subAuthIndex + " is null" );
+						}
+//					} else {
+//						log.info("subAuth at index " + subAuthIndex + " does not contain the provenance II");
+//					}
 				}
 			} else {
 				log.info("subAuths is null or empty");
@@ -288,6 +302,25 @@ public class CCDAAuthor {
     	}		
 	}
     
+    public static boolean isAuthorOfTypeProvenance(CCDAAuthor author) {
+		if (author.templateIds != null) {
+			return author.templateIds.stream()
+					.anyMatch(templateId -> 
+						(templateId.getRootValue() != null && templateId.getRootValue().equals(CCDAConstants.PROVENANCE_TEMPLATE_ID_ROOT))
+					 && (templateId.getExtValue() != null && templateId.getExtValue().equals(CCDAConstants.PROVENANCE_TEMPLATE_ID_EXT)));			
+    	}
+    	return false;
+    }
+    
+    public static boolean isAuthorOfTypeDocumentLevelProvenance(CCDAAuthor author) {
+    	// TOOO: Can we be any more specific such as identifying that the author is in the doc level and not in a section?
+    	// Sure, all section authors should have IIs, but what if a there is a mistake? In that case, we don't want to identify
+    	// a section level author w/o an II as Provenance....
+    	// However, since this is a check on the ref, if there is a mistake, it's our mistake, and we should catch it and fix it.
+    	// Being less specific (as done here) will allow is to potentially find the mistake.
+		return author.templateIds == null || author.templateIds.isEmpty();
+    }    
+    
     public static boolean isProvenancePresent(CCDAEffTime effTime, CCDADataElement refOrgName, ArrayList<CCDAAuthor> subAuths) {
     	log.info("enter isProvenancePresent(...)");
     	
@@ -299,17 +332,19 @@ public class CCDAAuthor {
     		log.info("subAuths is null, skipping: " + elName);
     	} else {
 	    	for(CCDAAuthor curSubAuth : subAuths) {
-	    		ParserUtilities.compareEffectiveTimeValue(effTime, curSubAuth.getEffTime(), contentValidationResults, elName);	    		
-	    		ParserUtilities.compareDataElementText(refOrgName, curSubAuth.getOrgName(), contentValidationResults, elName);
-	    		
-	    		if(contentValidationResults != null && contentValidationResults.size() == 0 ) {	    			
-	    			log.info(" Matched Provenance Data ");
-	    			isProvenanceMatched = true;
-	    			break;
-	    		}
-	    		else {
-	    			contentValidationResults.clear();
-	    		}
+	    		// TODO: Consider adding check if appropriate and updating tests as needed
+//	    		if (isAuthorOfTypeProvenance(curSubAuth)) {
+		    		ParserUtilities.compareEffectiveTimeValue(effTime, curSubAuth.getEffTime(), contentValidationResults, elName);	    		
+		    		ParserUtilities.compareDataElementText(refOrgName, curSubAuth.getOrgName(), contentValidationResults, elName);
+		    		
+		    		if (contentValidationResults != null && contentValidationResults.size() == 0 ) {	    			
+		    			log.info(" Matched Provenance Data ");
+		    			isProvenanceMatched = true;
+		    			break;
+		    		} else {
+		    			contentValidationResults.clear();
+		    		}
+//	    		}
 	    	}
 		}
     	

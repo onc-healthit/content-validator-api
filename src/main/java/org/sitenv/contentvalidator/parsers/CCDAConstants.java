@@ -184,6 +184,9 @@ public class CCDAConstants {
 	public static final String RN_CODE = "57133-1";
 	public static final String CP_TEMPLATE = "2.16.840.1.113883.10.20.22.1.15";
 	public static final String CP_CODE = "52521-2";
+
+	public static final String PROVENANCE_TEMPLATE_ID_ROOT = "2.16.840.1.113883.10.20.22.5.6";
+	public static final String PROVENANCE_TEMPLATE_ID_EXT = "2019-10-01";
 	
 	
 	private CCDAConstants()
@@ -293,7 +296,7 @@ public class CCDAConstants {
 		    REL_PROCEDURE_UDI_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./participant[not(@nullFlavor) and @typeCode='DEV']/participantRole[not(@nullFlavor)]");
 		    REL_PROCEDURE_SDL_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./participant[not(@nullFlavor) and @typeCode='LOC']/participantRole[not(@nullFlavor)]");
 		    REL_PROC_ACT_PROC_EXP = CCDAConstants.CCDAXPATH.compile("./entry/procedure[not(@nullFlavor) and not(@negationInd='true')]");
-		    REL_PROC_ACT_ACT_EXP = CCDAConstants.CCDAXPATH.compile("./entry/act[not(@nullFlavor) and not(@negationInd='true')]");
+		    REL_PROC_ACT_ACT_EXP = CCDAConstants.CCDAXPATH.compile("./entry/act[not(@nullFlavor) and not(@negationInd='true') and templateId[@root='2.16.840.1.113883.10.20.22.4.12']]");
 		    REL_TARGET_SITE_CODE_EXP = CCDAConstants.CCDAXPATH.compile("./targetSiteCode[not(@nullFlavor)]");
 		    REL_PERF_ENTITY_EXP = CCDAConstants.CCDAXPATH.compile("./performer/assignedEntity[not(@nullFlavor)]");
 		    REL_PERF_ENTITY_ORG_EXP = CCDAConstants.CCDAXPATH.compile("./performer/assignedEntity/representedOrganization[not(@nullFlavor)]");

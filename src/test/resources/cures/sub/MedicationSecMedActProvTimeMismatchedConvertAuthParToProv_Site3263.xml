@@ -6,15 +6,15 @@
   <templateId root="2.16.840.1.113883.10.20.22.1.1" extension="2015-08-01" />
   <templateId root="2.16.840.1.113883.10.20.22.1.2" />
   <templateId root="2.16.840.1.113883.10.20.22.1.2" extension="2015-08-01" />
-  <id assigningAuthorityName="EPC" extension="ffe570fa-9c66-11eb-bb21-0050568b6b1a" root="1.2.840.114350.1.13.51786.1.7.1.1" />
+  <id assigningAuthorityName="EPC" extension="69525cd6-9eee-11eb-b1c4-0050568b6b1a" root="1.2.840.114350.1.13.51786.1.7.1.1" />
   <code code="34133-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Summarization of Episode Note" />
   <title>Summary of Care</title>
-  <effectiveTime value="20210413094615-0500" />
+  <effectiveTime value="20210416150037-0500" />
   <confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25" displayName="Normal" />
   <languageCode code="en-US" />
   <recordTarget>
     <patientRole>
-      <id extension="YYY0004100" root="1.2.840.114350.1.13.51786.1.7.3.688884.100" />
+      <id extension="YYY0004100" root="1.2.840.114350.1.13.4.1.7.3.688884.100" />
       <addr use="HP">
         <streetAddressLine>1357 Amber Dr</streetAddressLine>
         <county>WASHINGTON</county>
@@ -63,20 +63,21 @@
         </languageCommunication>
       </patient>
       <providerOrganization>
-        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
-        <name>Epic FACILITY</name>
+        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
+        <name>Neighborhood Physicians Practice</name>
         <telecom nullFlavor="NI" />
         <addr use="WP">
-          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-          <city>VERONA</city>
-          <state>WI</state>
-          <postalCode>53593-9179</postalCode>
+          <streetAddressLine>9147 Main St.</streetAddressLine>
+          <county>WINNEBAGO</county>
+          <city>ROCKFORD</city>
+          <state>IL</state>
+          <postalCode>61105</postalCode>
         </addr>
       </providerOrganization>
     </patientRole>
   </recordTarget>
   <author>
-    <time value="20210413094615-0500" />
+    <time value="20210416150037-0500" />
     <assignedAuthor>
       <id extension="9.7" root="1.2.840.114350.1.1" />
       <addr nullFlavor="NA" />
@@ -86,14 +87,15 @@
         <softwareName>Epic - Version 9.7</softwareName>
       </assignedAuthoringDevice>
       <representedOrganization>
-        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
-        <name>Epic FACILITY</name>
+        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
+        <name>Neighborhood Physicians Practice</name>
         <telecom nullFlavor="NI" />
         <addr use="WP">
-          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-          <city>VERONA</city>
-          <state>WI</state>
-          <postalCode>53593-9179</postalCode>
+          <streetAddressLine>9147 Main St.</streetAddressLine>
+          <county>WINNEBAGO</county>
+          <city>ROCKFORD</city>
+          <state>IL</state>
+          <postalCode>61105</postalCode>
         </addr>
       </representedOrganization>
     </assignedAuthor>
@@ -101,20 +103,21 @@
   <custodian>
     <assignedCustodian>
       <representedCustodianOrganization>
-        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
-        <name>Epic FACILITY</name>
+        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
+        <name>Neighborhood Physicians Practice</name>
         <telecom nullFlavor="NI" />
         <addr use="WP">
-          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-          <city>VERONA</city>
-          <state>WI</state>
-          <postalCode>53593-9179</postalCode>
+          <streetAddressLine>9147 Main St.</streetAddressLine>
+          <county>WINNEBAGO</county>
+          <city>ROCKFORD</city>
+          <state>IL</state>
+          <postalCode>61105</postalCode>
         </addr>
       </representedCustodianOrganization>
     </assignedCustodian>
   </custodian>
   <legalAuthenticator>
-    <time value="20210413094615-0500" />
+    <time value="20210416150037-0500" />
     <signatureCode code="S" />
     <assignedEntity>
       <id nullFlavor="UNK" />
@@ -172,7 +175,7 @@
     <serviceEvent classCode="PCPR">
       <effectiveTime>
         <low value="20200622" />
-        <high value="20210413" />
+        <high value="20210416" />
       </effectiveTime>
       <performer typeCode="PRF">
         <functionCode code="PCP" codeSystem="2.16.840.1.113883.5.88" codeSystemName="ParticipationFunction" displayName="Primary Care Provider">
@@ -203,14 +206,14 @@
             </name>
           </assignedPerson>
           <representedOrganization classCode="ORG">
-            <name>Epic University Hospital &amp; Clinics</name>
+            <name>Neighborhood Physicians Practice</name>
             <telecom nullFlavor="UNK" />
             <addr use="WP">
-              <streetAddressLine>1979 MILKY WAY</streetAddressLine>
-              <city>Portland</city>
-              <state>OR</state>
-              <postalCode>97005</postalCode>
-              <country>USA</country>
+              <streetAddressLine>9147 Main St.</streetAddressLine>
+              <county>WINNEBAGO</county>
+              <city>ROCKFORD</city>
+              <state>IL</state>
+              <postalCode>61105</postalCode>
             </addr>
           </representedOrganization>
         </assignedEntity>
@@ -243,7 +246,7 @@
             </name>
           </assignedPerson>
           <representedOrganization>
-            <name>Epic FACILITY</name>
+            <name>Neighborhood Physicians Practice</name>
           </representedOrganization>
         </assignedEntity>
       </responsibleParty>
@@ -324,7 +327,7 @@
             </addr>
             <asOrganizationPartOf>
               <wholeOrganization>
-                <name>Epic FACILITY</name>
+                <name>Neighborhood Physicians Practice</name>
                 <addr nullFlavor="NA" />
               </wholeOrganization>
             </asOrganizationPartOf>
@@ -511,14 +514,14 @@
                     </name>
                   </assignedPerson>
                   <representedOrganization classCode="ORG">
-                    <name>Epic University Hospital &amp; Clinics</name>
+                    <name>Neighborhood Physicians Practice</name>
                     <telecom nullFlavor="NI" />
                     <addr use="WP">
-                      <streetAddressLine>1979 MILKY WAY</streetAddressLine>
-                      <city>Portland</city>
-                      <state>OR</state>
-                      <postalCode>97005</postalCode>
-                      <country>USA</country>
+                      <streetAddressLine>9147 Main St.</streetAddressLine>
+                      <county>WINNEBAGO</county>
+                      <city>ROCKFORD</city>
+                      <state>IL</state>
+                      <postalCode>61105</postalCode>
                     </addr>
                   </representedOrganization>
                 </assignedEntity>
@@ -548,14 +551,14 @@
                     </name>
                   </assignedPerson>
                   <representedOrganization classCode="ORG">
-                    <name>Epic University Hospital &amp; Clinics</name>
+                    <name>Neighborhood Physicians Practice</name>
                     <telecom nullFlavor="NI" />
                     <addr use="WP">
-                      <streetAddressLine>1979 MILKY WAY</streetAddressLine>
-                      <city>Portland</city>
-                      <state>OR</state>
-                      <postalCode>97005</postalCode>
-                      <country>USA</country>
+                      <streetAddressLine>9147 Main St.</streetAddressLine>
+                      <county>WINNEBAGO</county>
+                      <city>ROCKFORD</city>
+                      <state>IL</state>
+                      <postalCode>61105</postalCode>
                     </addr>
                   </representedOrganization>
                 </assignedEntity>
@@ -639,7 +642,7 @@
           <templateId root="2.16.840.1.113883.10.20.22.2.6" extension="2015-08-01" />
           <templateId root="2.16.840.1.113883.10.20.22.2.6.1" />
           <templateId root="2.16.840.1.113883.10.20.22.2.6.1" extension="2015-08-01" />
-          <id root="FFEC339A-9C66-11EB-BB21-0050568B6B1A" />
+          <id root="6957A3E4-9EEE-11EB-B1C4-0050568B6B1A" />
           <code code="48765-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Allergies and adverse reactions Document" />
           <title>Allergies</title>
           <text>
@@ -680,7 +683,7 @@
                 </tr>
               </tbody>
             </table>
-            <footnote ID="subTitle4" styleCode="xSectionSubTitle">documented as of this encounter (statuses as of 04/13/2021)</footnote>
+            <footnote ID="subTitle4" styleCode="xSectionSubTitle">documented as of this encounter (statuses as of 04/16/2021)</footnote>
           </text>
           <entry>
             <act classCode="ACT" moodCode="EVN">
@@ -714,7 +717,7 @@
                   <author>
                     <templateId root="2.16.840.1.113883.10.20.22.4.119" />
                     <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
-                    <time value="20191201" />
+                    <time value="20200622" />
                     <assignedAuthor>
                       <id extension="236598153" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
                       <id extension="21657" root="1.2.840.114350.1.13.51786.1.7.2.836982" />
@@ -737,14 +740,15 @@
                         </name>
                       </assignedPerson>
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
@@ -837,7 +841,7 @@
                   <author>
                     <templateId root="2.16.840.1.113883.10.20.22.4.119" />
                     <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
-                    <time value="20191201" />
+                    <time value="20200622" />
                     <assignedAuthor>
                       <id extension="236598153" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
                     </assignedAuthor>
@@ -903,7 +907,7 @@
                       <effectiveTime>
                         <low value="20191201" />
                       </effectiveTime>
-                      <value code="44480006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" xsi:type="CD" displayName="MU Allergic Headache" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                      <value code="4448006" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" xsi:type="CD" displayName="MU Allergic Headache" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <originalText>
                           <reference value="#allergy6reaction1" />
                         </originalText>
@@ -934,7 +938,7 @@
           <templateId root="2.16.840.1.113883.10.20.22.2.1" extension="2014-06-09" />
           <templateId root="2.16.840.1.113883.10.20.22.2.1.1" />
           <templateId root="2.16.840.1.113883.10.20.22.2.1.1" extension="2014-06-09" />
-          <id root="FFEF9DF0-9C66-11EB-BB21-0050568B6B1A" />
+          <id root="695A3ECE-9EEE-11EB-B1C4-0050568B6B1A" />
           <code code="10160-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="History of Medication use Narrative" />
           <title>Medications</title>
           <text>
@@ -993,10 +997,11 @@
                 </tr>
               </tbody>
             </table>
-            <footnote ID="subTitle7" styleCode="xSectionSubTitle">documented as of this encounter (statuses as of 04/13/2021)</footnote>
+            <footnote ID="subTitle7" styleCode="xSectionSubTitle">documented as of this encounter (statuses as of 04/16/2021)</footnote>
           </text>
           <entry>
             <substanceAdministration classCode="SBADM" moodCode="INT">
+              <!-- ** Medication Activity (V2) ** 1 -->
               <templateId root="2.16.840.1.113883.10.20.22.4.16" />
               <templateId root="2.16.840.1.113883.10.20.22.4.16" extension="2014-06-09" />
               <id extension="1066774" root="1.2.840.114350.1.13.51786.1.7.2.798268" />
@@ -1032,7 +1037,7 @@
               <author>
                 <templateId root="2.16.840.1.113883.10.20.22.4.119" />
                 <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
-                <time value="20201130155603-0600" />
+				<time value="20201130155603-0600" /> <!-- The 8 didgit date for entry 1 does not match, it's supposed to be 20200622 but it is 20201130 -dbTest  -->
                 <assignedAuthor>
                   <id extension="555340420" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
                   <id extension="1101299992" root="2.16.840.1.113883.4.6" />
@@ -1055,14 +1060,15 @@
                     </name>
                   </assignedPerson>
                   <representedOrganization>
-                    <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                    <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                     <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                    <name>Epic FACILITY</name>
+                    <name>Neighborhood Physicians Practice</name> <!-- matches -->
                     <addr use="WP">
-                      <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                      <city>VERONA</city>
-                      <state>WI</state>
-                      <postalCode>53593-9179</postalCode>
+                      <streetAddressLine>9147 Main St.</streetAddressLine>
+                      <county>WINNEBAGO</county>
+                      <city>ROCKFORD</city>
+                      <state>IL</state>
+                      <postalCode>61105</postalCode>
                     </addr>
                   </representedOrganization>
                 </assignedAuthor>
@@ -1134,16 +1140,11 @@
                   </consumable>
                 </substanceAdministration>
               </entryRelationship>
-              <entryRelationship typeCode="SUBJ" inversionInd="true">
-                <observation classCode="OBS" moodCode="EVN">
-                  <code code="2200014" codeSystem="1.2.840.114350.1.13.51786.1.7.2.697081" />
-                  <value xsi:type="ST" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Twice A Day (Morning And Mid-Day)</value>
-                </observation>
-              </entryRelationship>
             </substanceAdministration>
           </entry>
           <entry>
             <substanceAdministration classCode="SBADM" moodCode="INT">
+              <!-- ** Medication Activity (V2) ** 2 -->
               <templateId root="2.16.840.1.113883.10.20.22.4.16" />
               <templateId root="2.16.840.1.113883.10.20.22.4.16" extension="2014-06-09" />
               <id extension="1066775" root="1.2.840.114350.1.13.51786.1.7.2.798268" />
@@ -1179,7 +1180,7 @@
               <author>
                 <templateId root="2.16.840.1.113883.10.20.22.4.119" />
                 <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
-                <time value="20201130155702-0600" />
+                <time value="20201130155702-0600" /> <!-- this also does not match the 8 digit base date -dbTest -->
                 <assignedAuthor>
                   <id extension="555340420" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
                 </assignedAuthor>
@@ -1251,16 +1252,11 @@
                   </consumable>
                 </substanceAdministration>
               </entryRelationship>
-              <entryRelationship typeCode="SUBJ" inversionInd="true">
-                <observation classCode="OBS" moodCode="EVN">
-                  <code code="200533" codeSystem="1.2.840.114350.1.13.51786.1.7.2.697081" />
-                  <value xsi:type="ST" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">As needed</value>
-                </observation>
-              </entryRelationship>
             </substanceAdministration>
           </entry>
           <entry>
             <substanceAdministration classCode="SBADM" moodCode="INT">
+              <!--  Med Act 3rd entry -->
               <templateId root="2.16.840.1.113883.10.20.22.4.16" />
               <templateId root="2.16.840.1.113883.10.20.22.4.16" extension="2014-06-09" />
               <id extension="1066776" root="1.2.840.114350.1.13.51786.1.7.2.798268" />
@@ -1295,7 +1291,7 @@
               <author>
                 <templateId root="2.16.840.1.113883.10.20.22.4.119" />
                 <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
-                <time value="20201130161958-0600" />
+                <time value="20201130161958-0600" /> <!-- this also does not match the 8 digit base date -dbTest -->
                 <assignedAuthor>
                   <id extension="555340420" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
                 </assignedAuthor>
@@ -1367,12 +1363,6 @@
                   </consumable>
                 </substanceAdministration>
               </entryRelationship>
-              <entryRelationship typeCode="SUBJ" inversionInd="true">
-                <observation classCode="OBS" moodCode="EVN">
-                  <code code="200924" codeSystem="1.2.840.114350.1.13.51786.1.7.2.697081" />
-                  <value xsi:type="ST" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Weekly</value>
-                </observation>
-              </entryRelationship>
             </substanceAdministration>
           </entry>
         </section>
@@ -1383,7 +1373,7 @@
           <templateId root="2.16.840.1.113883.10.20.22.2.5" extension="2015-08-01" />
           <templateId root="2.16.840.1.113883.10.20.22.2.5.1" />
           <templateId root="2.16.840.1.113883.10.20.22.2.5.1" extension="2015-08-01" />
-          <id root="FFF2A3EC-9C66-11EB-BB21-0050568B6B1A" />
+          <id root="695BBAE2-9EEE-11EB-B1C4-0050568B6B1A" />
           <code code="11450-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Problem list - Reported" />
           <title>Active Problems</title>
           <text>
@@ -1409,7 +1399,7 @@
                 </tr>
               </tbody>
             </table>
-            <footnote ID="subTitle11" styleCode="xSectionSubTitle">documented as of this encounter (statuses as of 04/13/2021)</footnote>
+            <footnote ID="subTitle11" styleCode="xSectionSubTitle">documented as of this encounter (statuses as of 04/16/2021)</footnote>
           </text>
           <entry>
             <act classCode="ACT" moodCode="EVN">
@@ -1450,7 +1440,7 @@
                   <author>
                     <templateId root="2.16.840.1.113883.10.20.22.4.119" />
                     <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
-                    <time value="20201130155850-0600" />
+                    <time value="20200622110000-0500" />
                     <assignedAuthor>
                       <id extension="236598153" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
                     </assignedAuthor>
@@ -1537,7 +1527,7 @@
           <templateId root="2.16.840.1.113883.10.20.22.2.2" extension="2015-08-01" />
           <templateId root="2.16.840.1.113883.10.20.22.2.2.1" />
           <templateId root="2.16.840.1.113883.10.20.22.2.2.1" extension="2015-08-01" />
-          <id root="FFF3611A-9C66-11EB-BB21-0050568B6B1A" />
+          <id root="695C4700-9EEE-11EB-B1C4-0050568B6B1A" />
           <code code="11369-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="History of Immunization Narrative" />
           <title>Immunizations</title>
           <text>
@@ -1553,7 +1543,7 @@
           <code code="29762-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Social history Narrative" />
           <title>Social History</title>
           <text>
-            <table ID="sochist20">
+            <table ID="sochist19">
               <colgroup>
                 <col span="2" width="25%" />
                 <col width="13%" />
@@ -1573,7 +1563,7 @@
                 <tr>
                   <td>Never Assessed</td>
                   <td />
-                  <td ID="sochist20packsperday" />
+                  <td ID="sochist19packsperday" />
                   <td />
                   <td />
                 </tr>
@@ -1591,13 +1581,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ID="BirthSex21">
-                  <td ID="BirthSex21Value">Female</td>
+                <tr ID="BirthSex20">
+                  <td ID="BirthSex20Value">Female</td>
                   <td>11/30/2020  3:52 PM CST</td>
                 </tr>
               </tbody>
             </table>
-            <footnote ID="subTitle19" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
+            <footnote ID="subTitle18" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
           </text>
           <entry>
             <observation classCode="OBS" moodCode="EVN">
@@ -1606,7 +1596,7 @@
               <id extension="Z6051^^72166-2" root="1.2.840.114350.1.13.51786.1.7.1.1040.1" />
               <code code="72166-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Tobacco smoking status NHIS" />
               <text>
-                <reference value="#sochist20" />
+                <reference value="#sochist19" />
               </text>
               <statusCode code="completed" />
               <effectiveTime value="20210105" />
@@ -1627,13 +1617,13 @@
               <id extension="Z6051" root="1.2.840.114350.1.13.51786.1.7.1.1040.20" />
               <code code="76689-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Sex Assigned At Birth" />
               <text>
-                <reference value="#BirthSex21" />
+                <reference value="#BirthSex20" />
               </text>
               <statusCode code="completed" />
               <effectiveTime value="20180601" />
               <value code="F" codeSystem="2.16.840.1.113883.5.1" xsi:type="CD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                 <originalText>
-                  <reference value="#BirthSex21Value" />
+                  <reference value="#BirthSex20Value" />
                 </originalText>
               </value>
               <author>
@@ -1721,13 +1711,13 @@
                 </tr>
                 <tr ID="wflPerc_5663744100" styleCode="xRowNormal">
                   <td styleCode="xcellHeader">Weight-for-Length Percentile</td>
-                  <td>63.16 %</td>
+                  <td>55.86 %</td>
                   <td>06/22/2020  9:15 AM CDT</td>
                   <td />
                 </tr>
                 <tr styleCode="xRowNormal xmergeUp">
                   <td colspan="4">
-                    <content ID="wflPerc5663744100GCSource3" styleCode="xIndent">Growth Chart: CDC (Girls, 0-36 Months)</content>
+                    <content ID="wflPerc5663744100GCSource5" styleCode="xIndent">Growth Chart: CDC (Girls, 2-20 Years)</content>
                   </td>
                 </tr>
                 <tr ID="circum_5663744100" styleCode="xRowAlt">
@@ -1766,9 +1756,8 @@
                 </tr>
               </tbody>
             </table>
-            <footnote ID="subTitle22" styleCode="xSectionSubTitle">documented in this encounter</footnote>
+            <footnote ID="subTitle21" styleCode="xSectionSubTitle">documented in this encounter</footnote>
           </text>
-          <!--  entry 1 -->
           <entry typeCode="DRIV">
             <organizer classCode="CLUSTER" moodCode="EVN">
               <templateId root="2.16.840.1.113883.10.20.22.4.26" />
@@ -1781,7 +1770,6 @@
               <effectiveTime value="20200622140800+0000" />
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 1 obs 1-->
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663743680-sysBP-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -1794,55 +1782,32 @@
                   <statusCode code="completed" />
                   <effectiveTime value="20200622140800+0000" />
                   <value xsi:type="PQ" unit="mm[Hg]" value="145" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
-									<author>
-					<!-- Author Participation -->									
+                  <author>
                     <templateId root="2.16.840.1.113883.10.20.22.4.119" />
-                    <!-- Provenance -->
                     <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
-		        								<time value="20200622110000-0500" />
-		        								<assignedAuthor>
-		            								<id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
-		            								<addr nullFlavor="UNK" />
-		            								<telecom nullFlavor="UNK" />
-		            								<assignedPerson>
-											            <name>
-											            	<prefix>Dr</prefix>
-											                <given>Albert</given>
-											                <family>Davis</family>
-											            </name>
-		        									</assignedPerson>
-		        									<!-- 
+                    <time value="20200622110000-0500" />
+                    <assignedAuthor>
+                      <id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
+                      <addr nullFlavor="UNK" />
+                      <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
-                      -->		        									
-													<representedOrganization>
-                        								<id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
-								                        <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-								                        <!-- dbTest -->
-											            <name>Epic FACILITY</name> <!-- fails as does not match ref -->
-											            <!--<name>Neighborhood Physicians Practice</name> --> <!-- pases as does match ref -->
-											        </representedOrganization>
-											        
-<!--													<representedOrganization>
-											            <id root="2.16.840.1.113883.19.5" />
-											            <name>Neighborhood Physicians Practice</name>
-											        </representedOrganization> -->											        
-		        								</assignedAuthor>
-    										</author>
+                    </assignedAuthor>
+                  </author>
                 </observation>
               </component>
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 1 obs 2-->
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663743680-diaBP-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -1864,14 +1829,15 @@
                       <addr nullFlavor="UNK" />
                       <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
@@ -1880,7 +1846,6 @@
               </component>
             </organizer>
           </entry>
-		  <!--  entry 2 -->          
           <entry typeCode="DRIV">
             <organizer classCode="CLUSTER" moodCode="EVN">
               <templateId root="2.16.840.1.113883.10.20.22.4.26" />
@@ -1893,7 +1858,6 @@
               <effectiveTime value="20200622141000+0000" />
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 2 obs 1-->      
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663743800-pulse-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -1915,14 +1879,15 @@
                       <addr nullFlavor="UNK" />
                       <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
@@ -1931,7 +1896,6 @@
               </component>
             </organizer>
           </entry>
-          <!--  entry 3-->      
           <entry typeCode="DRIV">
             <organizer classCode="CLUSTER" moodCode="EVN">
               <templateId root="2.16.840.1.113883.10.20.22.4.26" />
@@ -1944,7 +1908,6 @@
               <effectiveTime value="20200622141200+0000" />
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 3 obs 1-->
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663743920-SpO2-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -1966,14 +1929,15 @@
                       <addr nullFlavor="UNK" />
                       <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
@@ -1982,7 +1946,6 @@
               </component>
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 3 obs 2-->
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663743920-inhaled-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -2004,14 +1967,15 @@
                       <addr nullFlavor="UNK" />
                       <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
@@ -2020,7 +1984,6 @@
               </component>
             </organizer>
           </entry>
-          <!--  entry 4 -->
           <entry typeCode="DRIV">
             <organizer classCode="CLUSTER" moodCode="EVN">
               <templateId root="2.16.840.1.113883.10.20.22.4.26" />
@@ -2033,7 +1996,6 @@
               <effectiveTime value="20200622141500+0000" />
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 4 obs 1-->
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663744100-tempC83-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -2055,14 +2017,15 @@
                       <addr nullFlavor="UNK" />
                       <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
@@ -2071,7 +2034,6 @@
               </component>
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 4 obs 2-->
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663744100-resp-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -2093,14 +2055,15 @@
                       <addr nullFlavor="UNK" />
                       <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
@@ -2109,7 +2072,6 @@
               </component>
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 4 obs 3-->
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663744100-heightC83-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -2131,14 +2093,15 @@
                       <addr nullFlavor="UNK" />
                       <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
@@ -2147,7 +2110,6 @@
               </component>
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 4 obs 4-->
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663744100-weightC83-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -2169,14 +2131,15 @@
                       <addr nullFlavor="UNK" />
                       <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
@@ -2185,7 +2148,6 @@
               </component>
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 4 obs 5-->
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663744100-bmi-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -2207,14 +2169,15 @@
                       <addr nullFlavor="UNK" />
                       <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
@@ -2223,7 +2186,6 @@
               </component>
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 4 obs 6-->
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663744100-bmiPercC83-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -2245,14 +2207,15 @@
                       <addr nullFlavor="UNK" />
                       <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
@@ -2269,7 +2232,6 @@
               </component>
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 4 obs 7-->
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663744100-circumC83-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -2285,20 +2247,21 @@
                   <author>
                     <templateId root="2.16.840.1.113883.10.20.22.4.119" />
                     <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
-                    <time value="20200622110000-0500" />
+                    <time nullFlavor="UNK" />
                     <assignedAuthor>
                       <id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
                       <addr nullFlavor="UNK" />
                       <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
@@ -2307,7 +2270,6 @@
               </component>
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 4 obs 8-->
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663744100-circumPercC83-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -2323,20 +2285,21 @@
                   <author>
                     <templateId root="2.16.840.1.113883.10.20.22.4.119" />
                     <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
-                    <time value="20200622110000-0500" />
+                    <time nullFlavor="UNK" />
                     <assignedAuthor>
                       <id root="2.16.840.1.113883.4.6" nullFlavor="UNK" />
                       <addr nullFlavor="UNK" />
                       <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
@@ -2353,7 +2316,6 @@
               </component>
               <component>
                 <observation classCode="OBS" moodCode="EVN">
-                <!--  entry 4 obs 9-->
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" />
                   <templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09" />
                   <id extension="5663744100-wflPercC83-Z6051" root="1.2.840.114350.1.13.51786.1.7.1.2109.1" />
@@ -2365,7 +2327,7 @@
                   </text>
                   <statusCode code="completed" />
                   <effectiveTime value="20200622141500+0000" />
-                  <value xsi:type="PQ" unit="%" value="63.16" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+                  <value xsi:type="PQ" unit="%" value="55.86" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
                   <author>
                     <templateId root="2.16.840.1.113883.10.20.22.4.119" />
                     <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
@@ -2375,23 +2337,24 @@
                       <addr nullFlavor="UNK" />
                       <telecom nullFlavor="UNK" />
                       <representedOrganization>
-                        <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                        <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                         <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                        <name>Epic FACILITY</name>
+                        <name>Neighborhood Physicians Practice</name>
                         <addr use="WP">
-                          <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                          <city>VERONA</city>
-                          <state>WI</state>
-                          <postalCode>53593-9179</postalCode>
+                          <streetAddressLine>9147 Main St.</streetAddressLine>
+                          <county>WINNEBAGO</county>
+                          <city>ROCKFORD</city>
+                          <state>IL</state>
+                          <postalCode>61105</postalCode>
                         </addr>
                       </representedOrganization>
                     </assignedAuthor>
                   </author>
                   <referenceRange>
                     <observationRange>
-                      <text>CDC (Girls, 0-36 Months)<reference value="#wflPerc5663744100GCSource3" /></text>
+                      <text>CDC (Girls, 2-20 Years)<reference value="#wflPerc5663744100GCSource5" /></text>
                       <value xsi:type="ED" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                        <reference value="#wflPerc5663744100GCSource3" />
+                        <reference value="#wflPerc5663744100GCSource5" />
                       </value>
                     </observationRange>
                   </referenceRange>
@@ -2408,8 +2371,8 @@
           <code code="47420-5" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Functional Status" />
           <title>Functional Status</title>
           <text>
-            <content ID="nof24">Not on file</content>
-            <footnote ID="subTitle23" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
+            <content ID="nof23">Not on file</content>
+            <footnote ID="subTitle22" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
           </text>
         </section>
       </component>
@@ -2417,11 +2380,11 @@
         <section>
           <templateId root="2.16.840.1.113883.10.20.22.2.45" />
           <templateId root="2.16.840.1.113883.10.20.22.2.45" extension="2014-06-09" />
-          <id root="0000B3CE-9C67-11EB-BB21-0050568B6B1A" />
+          <id root="6960846E-9EEE-11EB-B1C4-0050568B6B1A" />
           <code code="69730-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Instructions" />
           <title>Patient Instructions</title>
           <text>
-            <list ID="Instructions30" styleCode="xTOC">
+            <list ID="Instructions29" styleCode="xTOC">
               <item>
                 <caption>Patient Instructions</caption>
                 <list>
@@ -2438,7 +2401,7 @@
                 </list>
               </item>
             </list>
-            <footnote ID="subTitle29" styleCode="xSectionSubTitle">documented in this encounter</footnote>
+            <footnote ID="subTitle28" styleCode="xSectionSubTitle">documented in this encounter</footnote>
           </text>
           <entry>
             <act classCode="ACT" moodCode="INT">
@@ -2446,7 +2409,7 @@
               <templateId root="2.16.840.1.113883.10.20.22.4.20" extension="2014-06-09" />
               <code code="311401005" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Patient Education" />
               <text>
-                <reference value="#Instructions30" />
+                <reference value="#Instructions29" />
               </text>
               <statusCode code="completed" />
             </act>
@@ -2459,7 +2422,7 @@
           <title>Miscellaneous Notes</title>
           <text>
             <list styleCode="xTOC">
-              <item ID="Note26">
+              <item ID="Note25">
                 <caption>Consults - Albert Davis, MD - 06/22/2020 11:59 PM CDT</caption>
                 <paragraph>
                   <content styleCode="xLabel">Formatting of this note might be different from the original.</content>
@@ -2467,7 +2430,7 @@
                 <paragraph styleCode="xLabel">Electronically signed by Albert Davis, MD at 11/30/2020  4:35 PM CST</paragraph>
               </item>
             </list>
-            <footnote ID="subTitle38" styleCode="xSectionSubTitle">documented in this encounter</footnote>
+            <footnote ID="subTitle37" styleCode="xSectionSubTitle">documented in this encounter</footnote>
           </text>
           <entry>
             <act classCode="ACT" moodCode="EVN">
@@ -2476,7 +2439,7 @@
                 <translation code="11488-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Consult note" />
               </code>
               <text>
-                <reference value="#Note26" />
+                <reference value="#Note25" />
               </text>
               <statusCode code="completed" />
               <effectiveTime value="20200622235900-0500" />
@@ -2499,7 +2462,7 @@
           <code code="18776-5" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Plan of care note" />
           <title>Plan of Treatment</title>
           <text>
-            <table ID="planOfCare40">
+            <table ID="planOfCare39">
               <caption>Instructions</caption>
               <colgroup>
                 <col width="25%" />
@@ -2512,7 +2475,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ID="instr41">
+                <tr ID="instr40">
                   <td styleCode="xcellHeader">Patient</td>
                   <td styleCode="xnoIndent">
                     <paragraph>i. Get an EKG done on 6/23/2020. <br />ii. Get a Chest X-ray done on 6/23/2020 showing the Lower Respiratory Tract Structure. <br />iii. Take Clindamycin 300mg three times a day as needed if pain does not subside/<br />iv. Schedule follow on visit with Neighborhood Physicians Practice on 7/1/2020.<br /></paragraph>
@@ -2538,18 +2501,18 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ID="procedure42">
+                <tr ID="procedure41">
                   <td>
-                    <content ID="procedure42name">Ambulatory referral to Internal Medicine</content>
+                    <content ID="procedure41name">Ambulatory referral to Internal Medicine</content>
                   </td>
                   <td>Outpatient Referral</td>
                   <td>Routine</td>
                   <td />
-                  <td ID="procedure42schedule">Expected: 12/15/2020 (Approximate), Expires: 06/15/2021</td>
+                  <td ID="procedure41schedule">Expected: 12/15/2020 (Approximate), Expires: 06/15/2021</td>
                 </tr>
               </tbody>
             </table>
-            <footnote ID="subTitle39" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
+            <footnote ID="subTitle38" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
           </text>
           <entry>
             <act classCode="ACT" moodCode="INT">
@@ -2557,7 +2520,7 @@
               <templateId root="2.16.840.1.113883.10.20.22.4.20" extension="2014-06-09" />
               <code nullFlavor="NI" />
               <text>
-                <reference value="#instr41" />
+                <reference value="#instr40" />
               </text>
               <statusCode code="completed" />
               <author>
@@ -2569,14 +2532,15 @@
                   <addr nullFlavor="UNK" />
                   <telecom nullFlavor="UNK" />
                   <representedOrganization>
-                    <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                    <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                     <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                    <name>Epic FACILITY</name>
+                    <name>Neighborhood Physicians Practice</name>
                     <addr use="WP">
-                      <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                      <city>VERONA</city>
-                      <state>WI</state>
-                      <postalCode>53593-9179</postalCode>
+                      <streetAddressLine>9147 Main St.</streetAddressLine>
+                      <county>WINNEBAGO</county>
+                      <city>ROCKFORD</city>
+                      <state>IL</state>
+                      <postalCode>61105</postalCode>
                     </addr>
                   </representedOrganization>
                 </assignedAuthor>
@@ -2633,7 +2597,7 @@
                 </tr>
               </tbody>
             </table>
-            <footnote ID="subTitle43" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
+            <footnote ID="subTitle42" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
           </text>
           <entry>
             <observation classCode="OBS" moodCode="GOL">
@@ -2653,16 +2617,6 @@
                   <id extension="236598153" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
                 </assignedAuthor>
               </author>
-              <entryRelationship typeCode="REFR">
-                <observation classCode="OBS" moodCode="EVN">
-                  <templateId root="1.2.840.114350.1.72.6.1" />
-                  <id extension="3424" root="1.2.840.114350.1.13.51786.1.7.2.737179" />
-                  <code nullFlavor="UNK" />
-                  <statusCode code="completed" />
-                  <effectiveTime nullFlavor="UNK" />
-                  <value code="8" codeSystem="1.2.840.114350.1.72.1.9" codeSystemName="X-GOAL" xsi:type="CD" displayName="General" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
-                </observation>
-              </entryRelationship>
             </observation>
           </entry>
           <entry>
@@ -2683,16 +2637,6 @@
                   <id extension="236598153" root="1.2.840.114350.1.13.51786.1.7.1.1133" />
                 </assignedAuthor>
               </author>
-              <entryRelationship typeCode="REFR">
-                <observation classCode="OBS" moodCode="EVN">
-                  <templateId root="1.2.840.114350.1.72.6.1" />
-                  <id extension="3425" root="1.2.840.114350.1.13.51786.1.7.2.737179" />
-                  <code nullFlavor="UNK" />
-                  <statusCode code="completed" />
-                  <effectiveTime nullFlavor="UNK" />
-                  <value code="8" codeSystem="1.2.840.114350.1.72.1.9" codeSystemName="X-GOAL" xsi:type="CD" displayName="General" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
-                </observation>
-              </entryRelationship>
             </observation>
           </entry>
         </section>
@@ -2704,8 +2648,8 @@
           <code code="46264-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="History of medical device use" />
           <title>Implants</title>
           <text>
-            <content ID="nof45">Not on file</content>
-            <footnote ID="subTitle44" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
+            <content ID="nof44">Not on file</content>
+            <footnote ID="subTitle43" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
           </text>
         </section>
       </component>
@@ -2715,12 +2659,12 @@
           <templateId root="2.16.840.1.113883.10.20.22.2.7" extension="2014-06-09" />
           <templateId root="2.16.840.1.113883.10.20.22.2.7.1" />
           <templateId root="2.16.840.1.113883.10.20.22.2.7.1" extension="2014-06-09" />
-          <id root="000598F8-9C67-11EB-BB21-0050568B6B1A" />
+          <id root="696475C4-9EEE-11EB-B1C4-0050568B6B1A" />
           <code code="47519-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="History of Procedures Document" />
           <title>Procedures</title>
           <text>
-            <content ID="nof47">Not on file</content>
-            <footnote ID="subTitle46" styleCode="xSectionSubTitle">documented in this encounter</footnote>
+            <content ID="nof46">Not on file</content>
+            <footnote ID="subTitle45" styleCode="xSectionSubTitle">documented in this encounter</footnote>
           </text>
         </section>
       </component>
@@ -2730,21 +2674,19 @@
           <templateId root="2.16.840.1.113883.10.20.22.2.3" extension="2015-08-01" />
           <templateId root="2.16.840.1.113883.10.20.22.2.3.1" />
           <templateId root="2.16.840.1.113883.10.20.22.2.3.1" extension="2015-08-01" />
-          <templateId root="1.2.840.114350.1.72.3.2" />
-          <templateId root="1.2.840.114350.1.72.3.2" extension="2017-04-01" />
-          <id root="0006818C-9C67-11EB-BB21-0050568B6B1A" />
+          <id root="696556CE-9EEE-11EB-B1C4-0050568B6B1A" />
           <code code="30954-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Relevant diagnostic tests/laboratory data Narrative" />
           <title>Results</title>
           <text>
-            <content ID="nof49">Not on file</content>
-            <footnote ID="subTitle48" styleCode="xSectionSubTitle">documented in this encounter</footnote>
+            <content ID="nof48">Not on file</content>
+            <footnote ID="subTitle47" styleCode="xSectionSubTitle">documented in this encounter</footnote>
           </text>
         </section>
       </component>
       <component>
         <section>
           <templateId root="2.16.840.1.113883.10.20.22.2.8" />
-          <id root="0006A504-9C67-11EB-BB21-0050568B6B1A" />
+          <id root="69657C62-9EEE-11EB-B1C4-0050568B6B1A" />
           <code code="51848-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Assessments" />
           <title>Visit Diagnoses</title>
           <text>
@@ -2771,7 +2713,7 @@
             </table>
             <br />
             <list styleCode="xTOC">
-              <item ID="Note28">
+              <item ID="Note27">
                 <caption>Assessment and Plan - Albert Davis, MD - 06/22/2020 11:59 PM CDT</caption>
                 <paragraph>
                   <content styleCode="xLabel">Formatting of this note might be different from the original.</content>
@@ -2779,7 +2721,7 @@
                 <paragraph styleCode="xLabel">Electronically signed by Albert Davis, MD at 11/30/2020  4:28 PM CST</paragraph>
               </item>
             </list>
-            <footnote ID="subTitle50" styleCode="xSectionSubTitle">documented in this encounter</footnote>
+            <footnote ID="subTitle49" styleCode="xSectionSubTitle">documented in this encounter</footnote>
           </text>
         </section>
       </component>
@@ -2787,12 +2729,12 @@
         <section nullFlavor="NI">
           <templateId root="2.16.840.1.113883.10.20.22.2.38" />
           <templateId root="2.16.840.1.113883.10.20.22.2.38" extension="2014-06-09" />
-          <id root="000710C0-9C67-11EB-BB21-0050568B6B1A" />
+          <id root="6965EDF0-9EEE-11EB-B1C4-0050568B6B1A" />
           <code code="29549-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="MEDICATIONS ADMINISTERED" />
           <title>Administered Medications</title>
           <text>
-            <content ID="nof52">Not on file</content>
-            <footnote ID="subTitle51" styleCode="xSectionSubTitle">documented in this encounter</footnote>
+            <content ID="nof51">Not on file</content>
+            <footnote ID="subTitle50" styleCode="xSectionSubTitle">documented in this encounter</footnote>
           </text>
         </section>
       </component>
@@ -2831,13 +2773,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ID="problem54" styleCode="xRowAlt">
-                  <td ID="problem54name">Essential hypertension</td>
+                <tr ID="problem53" styleCode="xRowAlt">
+                  <td ID="problem53name">Essential hypertension</td>
                   <td>06/22/2020</td>
                 </tr>
               </tbody>
             </table>
-            <footnote ID="subTitle53" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
+            <footnote ID="subTitle52" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
           </text>
           <entry>
             <observation classCode="OBS" moodCode="EVN">
@@ -2859,14 +2801,15 @@
                   <addr nullFlavor="UNK" />
                   <telecom nullFlavor="UNK" />
                   <representedOrganization>
-                    <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                    <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                     <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                    <name>Epic FACILITY</name>
+                    <name>Neighborhood Physicians Practice</name>
                     <addr use="WP">
-                      <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                      <city>VERONA</city>
-                      <state>WI</state>
-                      <postalCode>53593-9179</postalCode>
+                      <streetAddressLine>9147 Main St.</streetAddressLine>
+                      <county>WINNEBAGO</county>
+                      <city>ROCKFORD</city>
+                      <state>IL</state>
+                      <postalCode>61105</postalCode>
                     </addr>
                   </representedOrganization>
                 </assignedAuthor>
@@ -2897,7 +2840,7 @@
                     <translation code="75326-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Problem HL7.CCDAR2" />
                   </code>
                   <text>
-                    <reference value="#problem54name" />
+                    <reference value="#problem53name" />
                   </text>
                   <statusCode code="completed" />
                   <effectiveTime>
@@ -2905,7 +2848,7 @@
                   </effectiveTime>
                   <value code="59621000" codeSystem="2.16.840.1.113883.6.96" xsi:type="CD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <originalText>
-                      <reference value="#problem54name" />
+                      <reference value="#problem53name" />
                     </originalText>
                   </value>
                   <author>
@@ -2928,7 +2871,7 @@
           <code code="85847-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Patient Care team information" />
           <title>Care Teams</title>
           <text>
-            <table ID="ct57">
+            <table ID="ct56">
               <colgroup>
                 <col span="3" width="25%" />
                 <col width="13%" />
@@ -2958,7 +2901,7 @@
                 </tr>
               </tbody>
             </table>
-            <footnote ID="subTitle56" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
+            <footnote ID="subTitle55" styleCode="xSectionSubTitle">documented as of this encounter</footnote>
           </text>
           <entry>
             <organizer classCode="CLUSTER" moodCode="EVN">
@@ -2966,7 +2909,7 @@
               <id nullFlavor="NI" />
               <code code="86744-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Care Team">
                 <originalText>
-                  <reference value="#ct57" />
+                  <reference value="#ct56" />
                 </originalText>
               </code>
               <statusCode code="active" />
@@ -2982,14 +2925,15 @@
                   <addr nullFlavor="UNK" />
                   <telecom nullFlavor="UNK" />
                   <representedOrganization>
-                    <id extension="1" root="1.2.840.114350.1.13.51786.1.7.2.696570" />
+                    <id extension="4" root="1.2.840.114350.1.13.51786.1.7.2.688879" />
                     <id root="2.16.840.1.113883.4.2" nullFlavor="UNK" />
-                    <name>Epic FACILITY</name>
+                    <name>Neighborhood Physicians Practice</name>
                     <addr use="WP">
-                      <streetAddressLine>123 Anywhere St.</streetAddressLine>
-                      <city>VERONA</city>
-                      <state>WI</state>
-                      <postalCode>53593-9179</postalCode>
+                      <streetAddressLine>9147 Main St.</streetAddressLine>
+                      <county>WINNEBAGO</county>
+                      <city>ROCKFORD</city>
+                      <state>IL</state>
+                      <postalCode>61105</postalCode>
                     </addr>
                   </representedOrganization>
                 </assignedAuthor>

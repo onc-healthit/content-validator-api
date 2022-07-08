@@ -1882,7 +1882,8 @@
 									<value xsi:type="PQ" value="177" unit="cm"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<time value="201506221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
@@ -1903,7 +1904,8 @@
 									<value xsi:type="PQ" value="88" unit="kg"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<!-- base level date difference at 2nd instance of vital sign observation -->
 										<time value="200312121100-0500"/>
 										<assignedAuthor>
@@ -1925,7 +1927,8 @@
 									<value xsi:type="PQ" value="88" unit="mm[Hg]"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<time value="201506221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
@@ -1946,7 +1949,8 @@
 									<value xsi:type="PQ" value="145" unit="mm[Hg]"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<time value="201506221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
@@ -1967,7 +1971,8 @@
 									<value xsi:type="PQ" value="80" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<time value="201506221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
@@ -1989,7 +1994,8 @@
 									<value xsi:type="PQ" value="95" unit="%"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>										
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />										
 										<time value="201506221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
@@ -2011,7 +2017,8 @@
 									<value xsi:type="PQ" value="38" unit="Cel"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<!-- 7th instance - making date year 9999 -->
 										<time value="999906221100-0500"/>
 										<assignedAuthor>
@@ -2034,7 +2041,8 @@
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<!-- 8th instance - making date year 3333 -->
 										<time value="333306221100-0500"/>
 										<assignedAuthor>
@@ -2057,7 +2065,8 @@
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<time value="44440622"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
@@ -2079,7 +2088,8 @@
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<time value="555506221100-0500"/>
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
@@ -2103,7 +2113,8 @@
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<!-- -dbTest 11 -->
 										<time value="991106221100-0500"/>
 										<assignedAuthor>
@@ -2126,7 +2137,8 @@
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<!-- -dbTest 12 -->
 										<time value="992206221100-0500"/>
 										<assignedAuthor>
@@ -2149,7 +2161,8 @@
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<!-- -dbTest 13 -->
 										<time value="993306221100-0500"/>
 										<assignedAuthor>
@@ -2172,7 +2185,8 @@
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<!-- -dbTest 14 -->
 										<time value="994406221100-0500"/>
 										<assignedAuthor>
@@ -2195,7 +2209,8 @@
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<!-- -dbTest 15 -->
 										<time value="99550622"/>
 										<assignedAuthor>
@@ -2233,7 +2248,8 @@
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 <!-- -dbTest 17 -->
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
@@ -2270,7 +2286,8 @@
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 <!-- -dbTest 19 -->
 										<assignedAuthor>
 											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
@@ -2292,7 +2309,8 @@
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<!-- -dbTest 20 -->
 										<time value="77110622"/>
 										<assignedAuthor>
@@ -2315,7 +2333,8 @@
 									<value xsi:type="PQ" value="18" unit="/min"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
+										<!-- Provenance only -->
+										<templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01" />
 										<!-- -dbTest 21 -->
 										<time value="773306221100-0500"/>
 										<assignedAuthor>

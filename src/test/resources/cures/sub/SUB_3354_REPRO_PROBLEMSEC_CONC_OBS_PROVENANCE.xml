@@ -925,8 +925,9 @@
 									</effectiveTime>
 									<value xsi:type="CD" code="62067003" codeSystem="2.16.840.1.113883.6.96" displayName="Hypo Plastic Left Heart Syndrome" codeSystemName="SNOMED-CT"/>
 									<author>
+										<!-- Author Participation (original) = 4.119 -->
 										<templateId root="2.16.840.1.113883.10.20.22.4.119" />
-        								<time value="202006221100-0500" />
+        								<time value="20180601" /> <!-- changed to a different time than in scenario, but should not matter, as not provenance -dbTest -->
         								<assignedAuthor>
             								<id extension="111111" root="2.16.840.1.113883.4.6"/>
             								<assignedPerson>
@@ -942,6 +943,28 @@
 									        </representedOrganization>
         								</assignedAuthor>
     								</author>
+    								<!-- Add provenance author here to reproduce, even though it's not required here -dbTest -->
+    								 <author>
+    								 	<!-- Provenance -->
+                                        <templateId root="2.16.840.1.113883.10.20.22.5.6" extension="2019-10-01"/>
+                                        <time value="202006221100-0500"/>
+                                        <assignedAuthor>
+                                            <id nullFlavor="UNK"/>
+                                            <assignedPerson>
+                                                <name>
+                                                  <family>Admin</family>
+                                                  <given>NEXTGEN</given>
+                                                </name>
+                                            </assignedPerson>
+                                            <representedOrganization>
+                                                <id root="2.16.840.1.113883.4.2" extension="456745672"/>
+                                                <id root="2.16.840.1.113883.4.6" extension="1093929010"/>
+                                                <id root="1.3.6.1.4.1.21367.13.40.117" extension="0001"/>
+                                                <name>Neighborhood Physicians Practice</name>
+                                                <telecom value="5555551002"/>
+                                            </representedOrganization>
+                                        </assignedAuthor>
+                                    </author>
 								</observation>
 							</entryRelationship>
 						</act>
@@ -1143,8 +1166,6 @@
 							</tbody>
 						</table>
 					</text>
-					<!--  entry 1 (*only has 1), 12 total obs within, 
-							auth times all: 202006221100-0500 -dbTest-->
 					<entry typeCode="DRIV">
 						<organizer classCode="CLUSTER" moodCode="EVN">
 							<!-- ** Vital signs organizer (V3) ** -->
@@ -1162,7 +1183,6 @@
 							</effectiveTime>
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
-								<!--  entry 1 Obs 1-->
 									<!-- ** Vital sign observation (V2) ** -->
 									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
 									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
@@ -1173,7 +1193,6 @@
 									<value xsi:type="PQ" value="85" unit="cm"/>
 									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
 									<author>
-												<!-- Author Participation only (no provenance II) -->	
 												<templateId root="2.16.840.1.113883.10.20.22.4.119" />
 		        								<time value="202006221100-0500" />
 		        								<assignedAuthor>
@@ -1195,7 +1214,6 @@
 							</component>
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
-								<!--  entry 1 Obs 2-->
 									<!-- ** Vital sign observation ** -->
 									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
 									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
@@ -1228,7 +1246,6 @@
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation (V2) ** -->
-									<!--  entry 1 Obs 3-->
 									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
 									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
 									<id root="ed9589fd-fda0-41f7-a3d0-dc537554f5c2"/>
@@ -1260,7 +1277,6 @@
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
-									<!--  entry 1 Obs 4-->
 									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
 									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
 									<id root="f4e729e2-a97f-4a7e-8e23-c92f9b6b55cf"/>
@@ -1292,7 +1308,6 @@
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
-									<!--  entry 1 Obs 5-->
 									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
 									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
 									<id root="a0e39c70-9675-4b2a-9838-cdf74200d8d5"/>
@@ -1324,7 +1339,6 @@
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
-									<!--  entry 1 Obs 6-->
 									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
 									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
 									<id root="a0e39c70-9675-4b2a-9839-cdf74200d8d5"/>
@@ -1356,7 +1370,6 @@
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
-									<!--  entry 1 Obs 7-->
 									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
 									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
 									<id root="a0e39c70-9675-4b2a-9839-cdf74200d8d5"/>
@@ -1388,7 +1401,6 @@
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
-									<!--  entry 1 Obs 8-->
 									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
 									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
 									<id root="a0e39c70-9675-4b2a-9841-cdf74200d8d5"/>
@@ -1420,7 +1432,6 @@
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
-									<!--  entry 1 Obs 9-->
 									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
 									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
 									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
@@ -1452,7 +1463,6 @@
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
-									<!--  entry 1 Obs 10-->
 									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
 									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
 									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
@@ -1484,7 +1494,6 @@
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- ** Vital sign observation ** -->
-									<!--  entry 1 Obs 11-->
 									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
 									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
 									<id root="a0e39c70-9675-4b2a-9842-cdf74200d8d5"/>
@@ -1515,7 +1524,6 @@
 							</component>
 							<component>
 								<observation classCode="OBS" moodCode="EVN">
-								<!--  entry 1 Obs 12-->
 									<!-- ** Vital sign observation ** -->
 									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
 									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
@@ -2141,6 +2149,79 @@
 		        								</assignedAuthor>
                         </author>
                     </act>
+                </entry>
+            </section>
+        </component>
+
+        <!-- Care Team Section -->
+
+        <component>
+            <section>
+                <templateId root="2.16.840.1.113883.10.20.22.2.500" extension="2019-07-01"/>
+                <code code="85847-2" displayName="Care Team Section"
+                    codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
+                <title> Care Team section</title>
+                <text>
+                    <table>
+                        <colgroup>
+                            <col width="75%"/>
+                            <col width="10%"/>
+                            <col width="15%"/>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Performer Name</th>
+                                <th>Performer Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td ID="ctm_1">Dr Albert Davis </td>
+                                <td>PCP</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </text>
+                <!-- Care Team Organizer entry -->
+                <entry>
+                    <organizer classCode="CLUSTER" moodCode="EVN">
+                        <templateId root="2.16.840.1.113883.10.20.22.4.500" extension="2019-07-01"/>
+                        <id root="15C1B550-00D6-11E6-B041-0050568B0101"/>
+                        <code code="86744-0" displayName="Care Team"
+                            codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC">
+                            <originalText><reference value="#ctm_1"></reference></originalText>
+                        </code>
+                        <statusCode code="active"/>
+                        <effectiveTime>
+                        			<low value="20200601"/>
+                        </effectiveTime>
+                        <component>
+                        	<act classCode="PCPR" moodCode="EVN">
+                        		<templateId root="2.16.840.1.113883.10.20.22.4.500.1" extension="2019-07-01"/>
+                        		<id root="15C1B550-00D6-11E6-B041-0050568B1101"/>
+                        		<code code="85847-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Care Team Information"/>
+                        		<statusCode code="active"/>
+                        		<effectiveTime>
+                        			<low value="20200601"/>
+                        		</effectiveTime>
+                        		<performer typeCode="PRF">
+                        			<functionCode xmlns="urn:hl7-org:sdtc" code="PCP" displayName="primary care physician"
+										codeSystem="2.16.840.1.113883.5.88" codeSystemName="ParticipationFunction">	
+									</functionCode>
+									<assignedEntity>
+											<id root="B00B14E8-CDE4-48EA-8A09-01BC4945122A" extension="1"/>
+											<assignedPerson>
+												<name>
+													<given>Albert</given>
+													<family>Davis</family>
+												</name>
+											</assignedPerson>
+									</assignedEntity>	
+
+                        		</performer>
+                        	</act>
+                        </component>
+                    </organizer>
                 </entry>
             </section>
         </component>
