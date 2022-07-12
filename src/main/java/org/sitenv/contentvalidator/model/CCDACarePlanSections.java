@@ -2,14 +2,15 @@ package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.parsers.CCDAConstants;
 
 public class CCDACarePlanSections {
 	
-	private static Logger log = Logger.getLogger(CCDACarePlanSections.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDACarePlanSections.class.getName());
 	private static String INTERVENTIONS_SECTION_V3 = "Interventions Section (V3) 2.16.840.1.113883.10.20.21.2.3:2015-08-01";
 	private static String HEALTH_STATUS_EVALUATIONS_AND_OUTCOMES_SECTION = 
 			"Health Status Evaluations and Outcomes Section 2.16.840.1.113883.10.20.22.2.61";

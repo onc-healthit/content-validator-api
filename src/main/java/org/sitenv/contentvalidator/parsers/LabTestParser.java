@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.parsers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.model.CCDALabResult;
 import org.sitenv.contentvalidator.model.CCDARefModel;
 import org.w3c.dom.Document;
@@ -12,7 +13,7 @@ import javax.xml.xpath.XPathExpressionException;
 
 public class LabTestParser {
 	
-	private static Logger log = Logger.getLogger(LabTestParser.class.getName());
+	private static Logger log = LoggerFactory.getLogger(LabTestParser.class.getName());
 	
 	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
     	

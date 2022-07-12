@@ -2,11 +2,12 @@ package org.sitenv.contentvalidator.model;
  
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CCDAMedicalEquipment {
 
-	private static Logger log = Logger.getLogger(CCDAMedicalEquipment.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAMedicalEquipment.class.getName());
 
 	private ArrayList<CCDAII>       		sectionTemplateId;
 	private CCDACode                 		sectionCode;

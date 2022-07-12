@@ -1,12 +1,13 @@
 package org.sitenv.contentvalidator.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public class CCDAVitalOrg {
 	
-	private static Logger log = Logger.getLogger(CCDAVitalOrg.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAVitalOrg.class.getName());
 
 	private ArrayList<CCDAII>   			templateIds;
 	private CCDACode						statusCode;

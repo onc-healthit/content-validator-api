@@ -1,10 +1,11 @@
 package org.sitenv.contentvalidator.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CCDAFrequency {
 	
-	private static Logger log = Logger.getLogger(CCDAFrequency.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAFrequency.class.getName());
 	
 	private boolean institutionSpecified;
 	private String operator;

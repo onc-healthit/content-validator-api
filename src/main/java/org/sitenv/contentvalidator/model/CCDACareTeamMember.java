@@ -1,13 +1,14 @@
 package org.sitenv.contentvalidator.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CCDACareTeamMember {
 	
-	private static Logger log = Logger.getLogger(CCDACareTeamMember.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDACareTeamMember.class.getName());
 	
 	private ArrayList<CCDAII>       		sectionTemplateId;
 	private CCDACode                 		sectionCode;
