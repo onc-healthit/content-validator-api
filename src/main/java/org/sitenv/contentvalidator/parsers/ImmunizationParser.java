@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.parsers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.model.CCDAImmunization;
 import org.sitenv.contentvalidator.model.CCDAImmunizationActivity;
 import org.sitenv.contentvalidator.model.CCDAOrganization;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 
 public class ImmunizationParser {
 	
-	private static Logger log = Logger.getLogger(ImmunizationParser.class.getName());
+	private static Logger log = LoggerFactory.getLogger(ImmunizationParser.class.getName());
 	
     public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
     	

@@ -2,11 +2,12 @@ package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CCDAHeaderElements {
 	
-	private static Logger log = Logger.getLogger(CCDAHeaderElements.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAHeaderElements.class.getName());
 
 	ArrayList<CCDAII>   docTemplates;
 	CCDACode docCode;
