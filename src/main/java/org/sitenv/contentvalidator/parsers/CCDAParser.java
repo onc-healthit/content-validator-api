@@ -44,11 +44,24 @@ public class CCDAParser {
 		doc = builder.parse(new BOMInputStream(IOUtils.toInputStream(ccdaFile, StandardCharsets.UTF_8.name())));
 	}
 	
-	public CCDARefModel parse(String ccdaFile, boolean curesUpdate) {
-		return parse(ccdaFile, SeverityLevel.INFO, curesUpdate);
+	/*
+	 * Called by scenario loader on application start, parses scenarios themselves
+	 */
+	public CCDARefModel parse(String ccdaFile, boolean curesUpdate, boolean svap2022) {
+		return parse(ccdaFile, SeverityLevel.INFO, curesUpdate, svap2022);
 	}
 	
-	public CCDARefModel parse(String ccdaFile, SeverityLevel severityLevel, boolean curesUpdate) {
+	/*
+	 * Called by scenario loader on application start, parses scenarios themselves
+	 */
+//	public CCDARefModel parse(String ccdaFile) {
+//		return parse(ccdaFile, SeverityLevel.INFO, true, true);
+//	}
+	
+	/*
+	 * Called by each validation, on the users file
+	 */	
+	public CCDARefModel parse(String ccdaFile, SeverityLevel severityLevel, boolean curesUpdate, boolean svap2022) {
 		try {
 			//log.info(" Parsing File " + ccdaFile);
 			initDoc(ccdaFile);
@@ -59,7 +72,7 @@ public class CCDAParser {
 			
 			model.setPatient(CCDAHeaderParser.getPatient(doc, curesUpdate));
 			model.setHeader(CCDAHeaderParser.getHeaderElements(doc, curesUpdate));
-			CCDABodyParser.parseBody(doc, model, curesUpdate);
+			CCDABodyParser.parseBody(doc, model, curesUpdate, svap2022);
 		
 			log.info("Returning Parsed Model");
 			// model.log();

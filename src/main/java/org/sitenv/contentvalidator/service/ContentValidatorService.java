@@ -32,22 +32,23 @@ public class ContentValidatorService {
 		parser = new CCDAParser();
 	}
 	
-	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName, String ccdaFile) {
-		return validate(validationObjective, referenceFileName, ccdaFile, false, SeverityLevel.INFO);
+	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName,
+			String ccdaFile) {
+		return validate(validationObjective, referenceFileName, ccdaFile, false, false, SeverityLevel.INFO);
 	}
 	
 	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName,
-			String ccdaFile, boolean curesUpdate, SeverityLevel severityLevel) {
+			String ccdaFile, boolean curesUpdate, boolean svap2022, SeverityLevel severityLevel) {
 		log.info(" ***** CAME INTO THE REFERENCE VALIDATOR *****");
 		
 		ArrayList<ContentValidationResult> results = new ArrayList<>();
-		if(!isObjectiveValidForContentValidation(validationObjective)) {
+		if (!isObjectiveValidForContentValidation(validationObjective)) {
 			log.warn("Content Validation not performed for objective " + validationObjective);
-		}else{
+		} else {
 			log.info(" Val Obj " + validationObjective + " Ref File " + referenceFileName);
 
 			// Parse passed in File
-			CCDARefModel submittedCCDA = parser.parse(ccdaFile, severityLevel, curesUpdate);
+			CCDARefModel submittedCCDA = parser.parse(ccdaFile, severityLevel, curesUpdate, svap2022);
 
 			CCDARefModel ref = null;
 			if( (referenceFileName != null)

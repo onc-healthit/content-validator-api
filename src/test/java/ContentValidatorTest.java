@@ -105,7 +105,7 @@ public class ContentValidatorTest extends ContentValidatorTester {
 	
 	private ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String validationObjective, 
 			String referenceFileName, String ccdaFileAsString, SeverityLevel severityLevel) {
-		return validator.validate(validationObjective, referenceFileName, ccdaFileAsString, false, severityLevel);
+		return validator.validate(validationObjective, referenceFileName, ccdaFileAsString, false, false, severityLevel);
 	}
 
 	private ArrayList<ContentValidationResult> validateDocumentAndReturnResults(String referenceFileName, URI ccdaFileURI) {
