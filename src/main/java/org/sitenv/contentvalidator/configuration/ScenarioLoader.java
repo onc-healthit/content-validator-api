@@ -56,20 +56,17 @@ public class ScenarioLoader implements InitializingBean {
                 	
                 	log.info("Parsing File : " + file.getName());
                     byte[] encoded = Files.readAllBytes(Paths.get(file.toURI()));
-                    // TODO:                    
-                    // Add unique string to svapMatch that matches svap filenames and test 
-                    // May want to consider using separate folders instead to identify...
-                    // Proposed/now active/incomplete logic of least resistance using filenames to differentiate cures vs svap:
-                    // Since incomplete, it defaults to cures for all as the string match doesn't exist (nor do the svap files exist yet locally or in github)
+                    
                     boolean curesUpdate = false; 
-                    boolean svap2022 = false;
-                    final String svapMatch = "someUniqueIdentifierInSvapScenarioFiles";
+                    boolean svap2022 = false;                    
+                    final String svapMatch = "svap_uscdiv2";
                     String fileName = file.getName();
                     if (fileName.contains(svapMatch)) {
                     	svap2022 = true;
                     } else {
                     	curesUpdate = true;
                     }
+                    
                     // Note: This does NOT accommodate for 2015 Edition yet, but, as far as we know, we never have to rebuild 2015 (will sunset first)
                     // But, if we had to rebuild as is, we would need to hard code curesUpdate and svap2022 to false here...or finish the impl to handle that. 
                     // Right now though, the file names are identical, so we'd either have to change names, or use a different loading system (like directory, etc.)

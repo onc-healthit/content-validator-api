@@ -62,7 +62,8 @@ public class CCDABodyParser {
 			svap2022 = false;
 		}
 		
-		if (curesUpdate) {
+		// TODO Remove || svap2022 when implementing svap2022...
+		if (curesUpdate || svap2022) {
 			log.info(" Parsing Notes Section ");
 			NotesParser.parse(doc, model, curesUpdate);
 
