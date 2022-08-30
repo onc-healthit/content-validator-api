@@ -20,8 +20,8 @@ public class CCDAHeaderParser {
 	
 	private static Logger log = LoggerFactory.getLogger(CCDAHeaderParser.class.getName());
 
-	static public CCDAHeaderElements getHeaderElements(Document doc, boolean curesUpdate) throws XPathExpressionException {
-		
+	static public CCDAHeaderElements getHeaderElements(Document doc, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {	
 		CCDAHeaderElements header = new CCDAHeaderElements();
 		
 		header.setDocTemplates(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.DOC_TEMPLATE_EXP.
@@ -32,8 +32,8 @@ public class CCDAHeaderParser {
 		return header;
 	}
 	
-	static public CCDAPatient getPatient(Document doc, boolean curesUpdate) throws XPathExpressionException{
-		
+	static public CCDAPatient getPatient(Document doc, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {		
 		CCDAPatient patient = null;
 		
 		// Retrieve the patient role element.

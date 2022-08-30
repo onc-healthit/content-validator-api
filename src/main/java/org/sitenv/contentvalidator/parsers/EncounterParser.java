@@ -15,17 +15,18 @@ public class EncounterParser {
 	
 	private static Logger log = LoggerFactory.getLogger(EncounterParser.class.getName());
 	
-    public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {
     	
-    	model.setEncounter(retrieveEncounterDetails(doc, curesUpdate));	
+    	model.setEncounter(retrieveEncounterDetails(doc, curesUpdate, svap2022));	
     	
     	model.setAdmissionDiagnosis(retrieveAdmissionDiagnosisDetails(doc));
     	
     	model.setDischargeDiagnosis(retrieveDischargeDiagnosisDetails(doc));
 	}
     
-    public static CCDAEncounter retrieveEncounterDetails(Document doc, boolean curesUpdate) throws XPathExpressionException
-	{
+	public static CCDAEncounter retrieveEncounterDetails(Document doc, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {
 		Element sectionElement = (Element) CCDAConstants.ENCOUNTER_EXPRESSION.evaluate(doc, XPathConstants.NODE);
 		CCDAEncounter encounters = null;
 		
@@ -44,7 +45,7 @@ public class EncounterParser {
 			
 			// Get Entries
 			encounters.setEncActivities(readEncounterActivity((NodeList) CCDAConstants.REL_ENC_ENTRY_EXP.
-					evaluate(sectionElement, XPathConstants.NODESET), curesUpdate));
+					evaluate(sectionElement, XPathConstants.NODESET), curesUpdate, svap2022));
 			
 			encounters.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(sectionElement, XPathConstants.NODE)));
@@ -56,8 +57,8 @@ public class EncounterParser {
 		return encounters;
 	}
     
-	public static ArrayList<CCDAEncounterActivity> readEncounterActivity(NodeList encounterActivityNodeList, boolean curesUpdate) throws XPathExpressionException
-	{
+	public static ArrayList<CCDAEncounterActivity> readEncounterActivity(NodeList encounterActivityNodeList,
+			boolean curesUpdate, boolean svap2022) throws XPathExpressionException {
 		ArrayList<CCDAEncounterActivity> encounterActivityList = new ArrayList<>();
 		CCDAEncounterActivity encounterActivity;
 		for (int i = 0; i < encounterActivityNodeList.getLength(); i++) {

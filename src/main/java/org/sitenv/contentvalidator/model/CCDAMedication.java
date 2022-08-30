@@ -60,7 +60,7 @@ public class CCDAMedication {
 	}
 	
 	public void compareAuthor(CCDAMedication subMedication, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022) {
 		String elName = "Medications Section";
 
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,

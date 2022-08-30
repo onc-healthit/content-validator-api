@@ -18,15 +18,14 @@ public class NotesParser {
 
 private static Logger log = LoggerFactory.getLogger(NotesParser.class.getName());
 	
-	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
-    	
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {    	
     	model.setNotes(retrieveNotesDetails(doc));
     	
     	model.setNotesEntries(retrieveNotesActivities(doc));
     	
     	if(model.getNotesEntries() != null)
     		log.info(" Notes Activity Entries found : " + model.getNotesEntries().size());
-    	
 	}
 	
 	public static ArrayList<CCDANotesActivity> retrieveNotesActivities(Document doc) throws XPathExpressionException {

@@ -133,7 +133,7 @@ public class CCDAAllergy {
 	}
 	
 	public void compareAuthor(CCDAAllergy subAllergy, ArrayList<ContentValidationResult> results, boolean curesUpdate,
-			ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
+			ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022) {
 		String elName = "Allergy Section";
 		
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,

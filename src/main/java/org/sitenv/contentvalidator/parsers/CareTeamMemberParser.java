@@ -18,14 +18,14 @@ public class CareTeamMemberParser {
 	
 	private static Logger log = LoggerFactory.getLogger(CareTeamMemberParser.class.getName());
 	
-    public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
-    	
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {    	
     	log.info(" *** Parsing Care Team Members *** ");
     	model.setMembers(retrieveCTMDetails(doc));	
 	}
     
-    public static void parseCareTeamSection(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
-    	
+	public static void parseCareTeamSection(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {    	
     	log.info(" *** Parsing Care Team Section *** ");
     	model.setCareTeamSectionMembers(retrieveCareTeamSectionDetails(doc));	
 	}

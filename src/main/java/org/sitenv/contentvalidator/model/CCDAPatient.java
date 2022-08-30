@@ -383,12 +383,13 @@ public class CCDAPatient {
 		return false;
 	}	
 
-	public void compare(CCDAPatient patient, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA, boolean curesUpdate) {
+	public void compare(CCDAPatient patient, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA, 
+			boolean curesUpdate, boolean svap2022) {
 	
 		compareNames(patient, results, submittedCCDA);
 		compareMiscellaneous(patient, results);
 		compareRaceAndEthnicity(patient, results);
-		compareTelecoms(patient, results, submittedCCDA, curesUpdate);
+		compareTelecoms(patient, results, submittedCCDA, curesUpdate, svap2022);
 	}
 	
 	private void compareRaceAndEthnicity(CCDAPatient patient, ArrayList<ContentValidationResult> results) {
@@ -635,7 +636,7 @@ public class CCDAPatient {
 	}
 	
 	private void compareTelecoms(CCDAPatient patient, ArrayList<ContentValidationResult> results,
-			CCDARefModel submittedCCDA, boolean curesUpdate) {
+			CCDARefModel submittedCCDA, boolean curesUpdate, boolean svap2022) {
 
 		log.info("Comparing Patient's telecom/@use and telecom/@value");
 		for (CCDATelecom tel : telecom) {

@@ -141,7 +141,7 @@ public class CCDAProblem {
 	}
 	
 	public void compareAuthor(CCDAProblem subProblem, ArrayList<ContentValidationResult> results, boolean curesUpdate,
-			ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
+			ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022) {
 		String elName = "Problem Section";
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,
 				subProblem != null && subProblem.getAuthor() != null ? subProblem.getAuthor() : null, results);		

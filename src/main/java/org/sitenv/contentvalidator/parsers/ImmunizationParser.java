@@ -18,8 +18,8 @@ public class ImmunizationParser {
 	
 	private static Logger log = LoggerFactory.getLogger(ImmunizationParser.class.getName());
 	
-    public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
-    	
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {    	
     	log.info(" *** Parsing Immunizations *** ");
     	model.setImmunization(retrieveImmunizationDetails(doc));	
 	}

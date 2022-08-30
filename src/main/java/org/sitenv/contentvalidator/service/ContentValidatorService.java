@@ -59,7 +59,7 @@ public class ContentValidatorService {
 
 			if((ref != null) && (submittedCCDA != null)) {
 				log.info("Comparing the Ref Model to the Submitted Model ");
-				results = ref.compare(validationObjective, submittedCCDA, curesUpdate);
+				results = ref.compare(validationObjective, submittedCCDA, curesUpdate, svap2022);
 			}
 			else {
 				log.error(" Submitted Model = " + ((submittedCCDA==null)?" Model is null":submittedCCDA.toString()));

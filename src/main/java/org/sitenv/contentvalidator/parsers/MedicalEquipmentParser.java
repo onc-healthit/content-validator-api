@@ -18,11 +18,11 @@ public class MedicalEquipmentParser {
 
 	private static Logger log = LoggerFactory.getLogger(MedicalEquipmentParser.class.getName());
 	
-	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
-	    	
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {	    	
 	    	log.info(" *** Parsing Medical Equipments *** ");
 	    	model.setMedEquipments(retrieveMedicalEquipments(doc));	
-		}
+	}
 	
 	public static CCDAMedicalEquipment retrieveMedicalEquipments(Document doc) throws XPathExpressionException
 	{

@@ -16,8 +16,8 @@ public class VitalSignParser {
 	
 	private static Logger log = LoggerFactory.getLogger(VitalSignParser.class.getName());
 	
-	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
-    	
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {
     	log.info(" *** Parsing Vital Signs *** ");
     	model.setVitalSigns(retrieveVitalSigns(doc));	
 	}

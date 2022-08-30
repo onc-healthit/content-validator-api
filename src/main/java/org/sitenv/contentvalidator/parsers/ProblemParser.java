@@ -19,8 +19,8 @@ public class ProblemParser {
 	
 	private static Logger log = LoggerFactory.getLogger(ProblemParser.class.getName());
 	
-    public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
-    	
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {
     	log.info(" *** Parsing Problems *** ");
     	model.setProblem(retrieveProblemDetails(doc));	
     	if( model.getProblem() != null)

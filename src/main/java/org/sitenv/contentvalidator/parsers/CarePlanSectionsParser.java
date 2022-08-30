@@ -20,7 +20,8 @@ public class CarePlanSectionsParser {
 	private static final CCDAII HEALTH_STATUS_EVALUATIONS_AND_OUTCOMES_SECTION = 
 			new CCDAII("2.16.840.1.113883.10.20.22.2.61"); 
 	
-	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {
 		log.info(" *** Parsing CarePlan Sections *** ");
 		model.setCarePlanSections(getSuggestedSections(doc));		
 	}
