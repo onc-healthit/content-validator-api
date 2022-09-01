@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.parsers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.model.CCDACareTeamMember;
 import org.sitenv.contentvalidator.model.CCDACareTeamMemberAct;
 import org.sitenv.contentvalidator.model.CCDAParticipant;
@@ -15,16 +16,16 @@ import java.util.ArrayList;
 
 public class CareTeamMemberParser {
 	
-	private static Logger log = Logger.getLogger(CareTeamMemberParser.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CareTeamMemberParser.class.getName());
 	
-    public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
-    	
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {    	
     	log.info(" *** Parsing Care Team Members *** ");
     	model.setMembers(retrieveCTMDetails(doc));	
 	}
     
-    public static void parseCareTeamSection(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
-    	
+	public static void parseCareTeamSection(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {    	
     	log.info(" *** Parsing Care Team Section *** ");
     	model.setCareTeamSectionMembers(retrieveCareTeamSectionDetails(doc));	
 	}

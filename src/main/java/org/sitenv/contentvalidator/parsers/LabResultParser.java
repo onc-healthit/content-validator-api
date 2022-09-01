@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.parsers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.model.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -12,10 +13,10 @@ import java.util.ArrayList;
 
 public class LabResultParser {
 	
-	private static Logger log = Logger.getLogger(LabResultParser.class.getName());
+	private static Logger log = LoggerFactory.getLogger(LabResultParser.class.getName());
 	
-	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
-    	
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {    	
     	log.info(" *** Parsing Lab Results *** ");
     	model.setLabResults(retrieveLabResults(doc));	
 	}

@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model; 
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
@@ -11,7 +12,7 @@ import java.util.Map;
 
 public class CCDAProcActProc {
 	
-	private static Logger log = Logger.getLogger(CCDAProcActProc.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAProcActProc.class.getName());
 
 	private ArrayList<CCDAII>       		sectionTemplateId;
 	private CCDACode                 		procCode;
@@ -24,6 +25,7 @@ public class CCDAProcActProc {
 	private CCDACode							deviceCode;
 	private CCDAII								scopingEntityId;
 	private ArrayList<CCDANotesActivity>		notesActivity;
+	private ArrayList<AssessmentScaleObservation> assessmentScaleObservations;
 	
 	private CCDAAuthor author;
 	
@@ -134,6 +136,9 @@ public class CCDAProcActProc {
 			notesActivity.get(n).log();
 		}
 		
+		for(int p = 0; p < assessmentScaleObservations.size(); p++) {
+			assessmentScaleObservations.get(p).log();
+		}
 		if(author != null)
 			author.log();
 	}
@@ -256,6 +261,14 @@ public class CCDAProcActProc {
 
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
+	}
+
+	public ArrayList<AssessmentScaleObservation> getAssessmentScaleObservations() {
+		return assessmentScaleObservations;
+	}
+
+	public void setAssessmentScaleObservations(ArrayList<AssessmentScaleObservation> assessmentScaleObservations) {
+		this.assessmentScaleObservations = assessmentScaleObservations;
 	}
 	
 	

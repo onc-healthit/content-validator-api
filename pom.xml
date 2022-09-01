@@ -9,20 +9,15 @@
     <url>http://www.sitenv.org</url>
 
     <properties>
-		<java.version>1.8</java.version>    
+		<java.version>1.8</java.version>
+	    <logback.version>1.2.11</logback.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
-        </dependency>
-
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>apache-log4j-extras</artifactId>
-            <version>1.2.17</version>
+         <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
         </dependency>
         <!-- spring -->
         <dependency>

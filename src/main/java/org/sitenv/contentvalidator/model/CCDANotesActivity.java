@@ -5,14 +5,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 public class CCDANotesActivity {
 
-	private static Logger log = Logger.getLogger(CCDANotesActivity.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDANotesActivity.class.getName());
 	
 	private ArrayList<CCDAII>    			templateId;
 	private CCDACode             			activityCode;
@@ -251,7 +252,7 @@ public class CCDANotesActivity {
 	// in the logic. The method which would call this, simply loops through, which is not going to be valid.
 	// It's just a proof of concept for now.
 	public void compareAuthor(CCDANotesActivity subNoteActivity, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022) {
 		log.info("Comparing Authors for current Note Activity");
 		ArrayList<CCDAAuthor> refAllNoteActivityAuths = new ArrayList<CCDAAuthor>(Arrays.asList(this.getAuthor()));
 		ArrayList<CCDAAuthor> subAllNoteActivityAuths = new ArrayList<CCDAAuthor>(Arrays.asList(

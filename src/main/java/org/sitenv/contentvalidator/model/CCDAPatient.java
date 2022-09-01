@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 
@@ -8,12 +9,13 @@ import java.util.ArrayList;
 
 public class CCDAPatient {
 	
-	private static Logger log = Logger.getLogger(CCDAPatient.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAPatient.class.getName());
 	
 	private CCDADataElement firstName;
 	private CCDADataElement lastName;
 	private CCDADataElement middleName;
 	private CCDADataElement previousName;
+	private CCDAEffTime 	previousNamePeriod;
 	private CCDADataElement suffix;
 	private CCDADataElement dob;
 	private ArrayList<CCDAAddress> addresses;
@@ -232,6 +234,14 @@ public class CCDAPatient {
 		this.sex = sex;
 	}
 
+	public CCDAEffTime getPreviousNamePeriod() {
+		return previousNamePeriod;
+	}
+
+	public void setPreviousNamePeriod(CCDAEffTime previousNamePeriod) {
+		this.previousNamePeriod = previousNamePeriod;
+	}
+
 	public CCDAPatient()
 	{
 		addresses = new ArrayList<CCDAAddress>();
@@ -382,12 +392,13 @@ public class CCDAPatient {
 		return false;
 	}	
 
-	public void compare(CCDAPatient patient, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA, boolean curesUpdate) {
+	public void compare(CCDAPatient patient, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA, 
+			boolean curesUpdate, boolean svap2022) {
 	
 		compareNames(patient, results, submittedCCDA);
 		compareMiscellaneous(patient, results);
 		compareRaceAndEthnicity(patient, results);
-		compareTelecoms(patient, results, submittedCCDA, curesUpdate);
+		compareTelecoms(patient, results, submittedCCDA, curesUpdate, svap2022);
 	}
 	
 	private void compareRaceAndEthnicity(CCDAPatient patient, ArrayList<ContentValidationResult> results) {
@@ -634,7 +645,7 @@ public class CCDAPatient {
 	}
 	
 	private void compareTelecoms(CCDAPatient patient, ArrayList<ContentValidationResult> results,
-			CCDARefModel submittedCCDA, boolean curesUpdate) {
+			CCDARefModel submittedCCDA, boolean curesUpdate, boolean svap2022) {
 
 		log.info("Comparing Patient's telecom/@use and telecom/@value");
 		for (CCDATelecom tel : telecom) {

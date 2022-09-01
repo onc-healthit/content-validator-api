@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.dto.enums.SeverityLevel;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 public class CCDAAllergy {
 	
-	private static Logger log = Logger.getLogger(CCDAAllergy.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAAllergy.class.getName());
 
 	private ArrayList<CCDAII>       		sectionTemplateId;
 	private CCDACode                 		sectionCode;
@@ -132,7 +133,7 @@ public class CCDAAllergy {
 	}
 	
 	public void compareAuthor(CCDAAllergy subAllergy, ArrayList<ContentValidationResult> results, boolean curesUpdate,
-			ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
+			ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022) {
 		String elName = "Allergy Section";
 		
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,

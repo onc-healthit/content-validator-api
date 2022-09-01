@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.parsers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.model.CCDACode;
 import org.sitenv.contentvalidator.model.CCDADataElement;
 import org.sitenv.contentvalidator.model.CCDAHeaderElements;
@@ -17,10 +18,10 @@ import java.util.ArrayList;
 
 public class CCDAHeaderParser {
 	
-	private static Logger log = Logger.getLogger(CCDAHeaderParser.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAHeaderParser.class.getName());
 
-	static public CCDAHeaderElements getHeaderElements(Document doc, boolean curesUpdate) throws XPathExpressionException {
-		
+	static public CCDAHeaderElements getHeaderElements(Document doc, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {	
 		CCDAHeaderElements header = new CCDAHeaderElements();
 		
 		header.setDocTemplates(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.DOC_TEMPLATE_EXP.
@@ -31,8 +32,8 @@ public class CCDAHeaderParser {
 		return header;
 	}
 	
-	static public CCDAPatient getPatient(Document doc, boolean curesUpdate) throws XPathExpressionException{
-		
+	static public CCDAPatient getPatient(Document doc, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {		
 		CCDAPatient patient = null;
 		
 		// Retrieve the patient role element.

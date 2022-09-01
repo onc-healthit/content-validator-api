@@ -11,7 +11,8 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BOMInputStream;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.enums.SeverityLevel;
 import org.sitenv.contentvalidator.model.CCDARefModel;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ import org.xml.sax.SAXException;
 @Component
 public class CCDAParser {
 	
-	private static Logger log = Logger.getLogger(CCDAParser.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAParser.class.getName());
 	
 	private DocumentBuilder        builder;
 	private Document               doc;
@@ -43,11 +44,25 @@ public class CCDAParser {
 		doc = builder.parse(new BOMInputStream(IOUtils.toInputStream(ccdaFile, StandardCharsets.UTF_8.name())));
 	}
 	
-	public CCDARefModel parse(String ccdaFile, boolean curesUpdate) {
-		return parse(ccdaFile, SeverityLevel.INFO, curesUpdate);
+	/*
+	 * Called by scenario loader on application start, parses scenarios themselves
+	 */
+	public CCDARefModel parse(String ccdaFile, boolean curesUpdate, boolean svap2022) {
+		return parse(ccdaFile, SeverityLevel.INFO, curesUpdate, svap2022);
 	}
 	
-	public CCDARefModel parse(String ccdaFile, SeverityLevel severityLevel, boolean curesUpdate) {
+	/*
+	 * Called by scenario loader on application start, parses scenarios themselves
+	 */
+//	public CCDARefModel parse(String ccdaFile) {
+//		return parse(ccdaFile, SeverityLevel.INFO, true, true);
+//	}
+	
+	/*
+	 * Called by each validation, on the users file
+	 */	
+	public CCDARefModel parse(String ccdaFile, SeverityLevel severityLevel, boolean curesUpdate, boolean svap2022) {
+		
 		try {
 			//log.info(" Parsing File " + ccdaFile);
 			initDoc(ccdaFile);
@@ -56,9 +71,9 @@ public class CCDAParser {
 			log.info("Creating Model");
 			CCDARefModel model = new CCDARefModel(severityLevel);
 			
-			model.setPatient(CCDAHeaderParser.getPatient(doc, curesUpdate));
-			model.setHeader(CCDAHeaderParser.getHeaderElements(doc, curesUpdate));
-			CCDABodyParser.parseBody(doc, model, curesUpdate);
+			model.setPatient(CCDAHeaderParser.getPatient(doc, curesUpdate, svap2022));
+			model.setHeader(CCDAHeaderParser.getHeaderElements(doc, curesUpdate, svap2022));
+			CCDABodyParser.parseBody(doc, model, curesUpdate, svap2022);
 		
 			log.info("Returning Parsed Model");
 			// model.log();

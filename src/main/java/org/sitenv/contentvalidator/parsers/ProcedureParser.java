@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.parsers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.model.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -12,13 +13,13 @@ import java.util.ArrayList;
 
 public class ProcedureParser {
 	
-	private static Logger log = Logger.getLogger(ProcedureParser.class.getName());
+	private static Logger log = LoggerFactory.getLogger(ProcedureParser.class.getName());
 	
-	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
-	    	
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {
 	    	log.info(" *** Parsing Procedures *** ");
 	    	model.setProcedure(retrieveProcedureDetails(doc));	
-		}
+	}
 	
 	public static CCDAProcedure retrieveProcedureDetails(Document doc) throws XPathExpressionException
 	{
@@ -107,6 +108,8 @@ public class ProcedureParser {
 			
 			procedure.setSdLocs(readServiceDeliveryLocators(serviceDeliveryNodeList));
 			
+			procedure.setAssessmentScaleObservations(ParserUtilities.retrieveAssessmentScaleObservations((NodeList) CCDAConstants.REL_ASSESSMENT_SCALE_OBS_EXP.
+					evaluate(procedureElement, XPathConstants.NODESET)));
 			
 			proceduresList.add(procedure);
 		}

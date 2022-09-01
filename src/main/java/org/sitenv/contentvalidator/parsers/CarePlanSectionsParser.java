@@ -3,7 +3,8 @@ package org.sitenv.contentvalidator.parsers;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.model.CCDACarePlanSections;
 import org.sitenv.contentvalidator.model.CCDAII;
 import org.sitenv.contentvalidator.model.CCDARefModel;
@@ -12,14 +13,15 @@ import org.w3c.dom.Element;
 
 public class CarePlanSectionsParser {
 	
-	private static Logger log = Logger.getLogger(CarePlanSectionsParser.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CarePlanSectionsParser.class.getName());
 	
 	private static final CCDAII INTERVENTIONS_SECTION_V3 = 
 			new CCDAII("2.16.840.1.113883.10.20.21.2.3", "2015-08-01");
 	private static final CCDAII HEALTH_STATUS_EVALUATIONS_AND_OUTCOMES_SECTION = 
 			new CCDAII("2.16.840.1.113883.10.20.22.2.61"); 
 	
-	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate) throws XPathExpressionException {
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+			throws XPathExpressionException {
 		log.info(" *** Parsing CarePlan Sections *** ");
 		model.setCarePlanSections(getSuggestedSections(doc));		
 	}

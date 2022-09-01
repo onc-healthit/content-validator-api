@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.service;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.SeverityLevel;
 import org.sitenv.contentvalidator.model.CCDARefModel;
@@ -16,7 +17,7 @@ import java.util.Set;
 
 @Component
 public class ContentValidatorService {		
-	private static Logger log = Logger.getLogger(ContentValidatorService.class.getName());
+	private static Logger log = LoggerFactory.getLogger(ContentValidatorService.class.getName());
 	
 	@Autowired
 	private CCDAParser parser;
@@ -31,22 +32,23 @@ public class ContentValidatorService {
 		parser = new CCDAParser();
 	}
 	
-	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName, String ccdaFile) {
-		return validate(validationObjective, referenceFileName, ccdaFile, false, SeverityLevel.INFO);
+	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName,
+			String ccdaFile) {
+		return validate(validationObjective, referenceFileName, ccdaFile, false, false, SeverityLevel.INFO);
 	}
 	
 	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName,
-			String ccdaFile, boolean curesUpdate, SeverityLevel severityLevel) {
+			String ccdaFile, boolean curesUpdate, boolean svap2022, SeverityLevel severityLevel) {
 		log.info(" ***** CAME INTO THE REFERENCE VALIDATOR *****");
 		
 		ArrayList<ContentValidationResult> results = new ArrayList<>();
-		if(!isObjectiveValidForContentValidation(validationObjective)) {
+		if (!isObjectiveValidForContentValidation(validationObjective)) {
 			log.warn("Content Validation not performed for objective " + validationObjective);
-		}else{
+		} else {
 			log.info(" Val Obj " + validationObjective + " Ref File " + referenceFileName);
 
 			// Parse passed in File
-			CCDARefModel submittedCCDA = parser.parse(ccdaFile, severityLevel, curesUpdate);
+			CCDARefModel submittedCCDA = parser.parse(ccdaFile, severityLevel, curesUpdate, svap2022);
 
 			CCDARefModel ref = null;
 			if( (referenceFileName != null)
@@ -57,7 +59,7 @@ public class ContentValidatorService {
 
 			if((ref != null) && (submittedCCDA != null)) {
 				log.info("Comparing the Ref Model to the Submitted Model ");
-				results = ref.compare(validationObjective, submittedCCDA, curesUpdate);
+				results = ref.compare(validationObjective, submittedCCDA, curesUpdate, svap2022);
 			}
 			else {
 				log.error(" Submitted Model = " + ((submittedCCDA==null)?" Model is null":submittedCCDA.toString()));

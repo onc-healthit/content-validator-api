@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
@@ -9,7 +10,7 @@ import java.util.HashMap;
 
 public class CCDAEncounter {
 	
-	private static Logger log = Logger.getLogger(CCDAEncounter.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAEncounter.class.getName());
 
 	private ArrayList<CCDAII>    templateId;
 	private CCDACode  sectionCode;
@@ -90,7 +91,7 @@ public class CCDAEncounter {
 	}
 	
 	public void compareAuthor(CCDAEncounter subEncounter, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022) {
 		final String encSec = "Encounters Section";
 		String elName = encSec;
 

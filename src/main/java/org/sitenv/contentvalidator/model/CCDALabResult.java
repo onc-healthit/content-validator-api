@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
@@ -9,7 +10,7 @@ import java.util.HashMap;
 
 public class CCDALabResult {
 
-	private static Logger log = Logger.getLogger(CCDALabResult.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDALabResult.class.getName());
 	
 	private ArrayList<CCDAII>			resultSectionTempalteIds;
 	private CCDACode					sectionCode;
@@ -69,7 +70,7 @@ public class CCDALabResult {
 	}
 	
 	public void compareAuthor(CCDALabResult subResults, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022) {
 		String elName = "Results Section";
 
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,

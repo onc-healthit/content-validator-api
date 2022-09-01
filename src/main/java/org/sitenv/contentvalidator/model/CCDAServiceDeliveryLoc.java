@@ -1,12 +1,13 @@
 package org.sitenv.contentvalidator.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public class CCDAServiceDeliveryLoc {
 	
-	private static Logger log = Logger.getLogger(CCDAServiceDeliveryLoc.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDAServiceDeliveryLoc.class.getName());
 
 	private ArrayList<CCDAII>           templateId;
 	private CCDACode                    locationCode;

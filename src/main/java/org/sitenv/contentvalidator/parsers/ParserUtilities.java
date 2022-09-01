@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.parsers;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.model.*;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 
 public class ParserUtilities {
 	
-	private static Logger log = Logger.getLogger(ParserUtilities.class.getName());
+	private static Logger log = LoggerFactory.getLogger(ParserUtilities.class.getName());
 	
 	public static void compareAuthor(CCDAAuthor refAuthor, CCDAAuthor subAuthor,
 			ArrayList<ContentValidationResult> results, String elementName,
@@ -1066,6 +1067,153 @@ public class ParserUtilities {
 				}
 			} // For all Notes Activities
 		}		
+	}
+	
+	public static ArrayList<AssessmentScaleObservation> retrieveAssessmentScaleObservations(NodeList obsList) throws XPathExpressionException {
+		
+		ArrayList<AssessmentScaleObservation> assessmentObs = null;
+		
+		if(!ParserUtilities.isNodeListEmpty(obsList))
+		{
+			assessmentObs = new ArrayList<>();
+		}
+		
+		AssessmentScaleObservation assessment;
+		for (int i = 0; i < obsList.getLength(); i++) {
+			
+			log.info("Adding Sexual Orientation");
+			assessment = new AssessmentScaleObservation();
+			
+			Element assessmentObsElement = (Element) obsList.item(i);
+			
+			assessment.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+														evaluate(assessmentObsElement, XPathConstants.NODESET)));
+			
+			assessment.setAssessmentCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(assessmentObsElement, XPathConstants.NODE)));
+			
+			assessment.setStatusCode(ParserUtilities.readCode((Element) CCDAConstants.REL_STATUS_CODE_EXP.
+					evaluate(assessmentObsElement, XPathConstants.NODE)));
+			
+			assessment.setAssessmentTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+					evaluate(assessmentObsElement, XPathConstants.NODE)));
+			
+			assessment.setInterpretationCode(ParserUtilities.readCode((Element) CCDAConstants.REL_INT_CODE_EXP.
+					evaluate(assessmentObsElement, XPathConstants.NODE)));
+			
+			Element resultValue = (Element) CCDAConstants.REL_VAL_EXP.
+					evaluate(assessmentObsElement, XPathConstants.NODE);
+			
+			if(resultValue != null)
+			{
+				if(!ParserUtilities.isEmpty(resultValue.getAttribute("xsi:type")))
+				{
+					String xsiType = resultValue.getAttribute("xsi:type");
+					if ((xsiType.equalsIgnoreCase("ST") && (resultValue.getFirstChild()) != null) || 
+							(xsiType.equalsIgnoreCase("INT") && (resultValue.getFirstChild()) != null))
+					{
+						log.info("Assessment Value is ST or INT");
+						String value = resultValue.getFirstChild().getNodeValue();
+						assessment.setResultString(value);
+					}else if(xsiType.equalsIgnoreCase("PQ"))
+					{
+						log.info("Assessment Value is PQ ");
+						assessment.setResultQuantity(ParserUtilities.readQuantity(resultValue));
+					}
+					else if(xsiType.equalsIgnoreCase("CD"))
+					{
+						log.info("Assessment Value is CD ");
+						assessment.setResultCode(ParserUtilities.readCode(resultValue));
+					}
+					else
+					{
+						log.info("Unknown Lab Value");
+					}
+				}
+			}
+			
+			assessment.setSupportingObservations(ParserUtilities.retrieveAssessmentScaleSupportingObservations((NodeList) CCDAConstants.REL_ASSESSMENT_SCALE_SUP_OBS_EXP.
+					evaluate(assessmentObsElement, XPathConstants.NODESET)));
+			
+			assessment.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(assessmentObsElement, XPathConstants.NODE)));
+			
+			
+			
+			assessmentObs.add(assessment);
+		}
+		
+		
+		return assessmentObs;
+		
+	}
+	
+	public static ArrayList<AssessmentScaleSupportingObs> retrieveAssessmentScaleSupportingObservations(NodeList obsList) throws XPathExpressionException {
+		
+		ArrayList<AssessmentScaleSupportingObs> assessmentObs = null;
+		
+		if(!ParserUtilities.isNodeListEmpty(obsList))
+		{
+			assessmentObs = new ArrayList<>();
+		}
+		
+		AssessmentScaleSupportingObs assessment;
+		for (int i = 0; i < obsList.getLength(); i++) {
+			
+			log.info("Adding Sexual Orientation");
+			assessment = new AssessmentScaleSupportingObs();
+			
+			Element assessmentObsElement = (Element) obsList.item(i);
+			
+			assessment.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+														evaluate(assessmentObsElement, XPathConstants.NODESET)));
+			
+			assessment.setSupportingObsCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(assessmentObsElement, XPathConstants.NODE)));
+			
+			assessment.setStatusCode(ParserUtilities.readCode((Element) CCDAConstants.REL_STATUS_CODE_EXP.
+					evaluate(assessmentObsElement, XPathConstants.NODE)));
+			
+			assessment.setSupportingObsTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+					evaluate(assessmentObsElement, XPathConstants.NODE)));
+			
+			Element resultValue = (Element) CCDAConstants.REL_VAL_EXP.
+					evaluate(assessmentObsElement, XPathConstants.NODE);
+			
+			if(resultValue != null)
+			{
+				if(!ParserUtilities.isEmpty(resultValue.getAttribute("xsi:type")))
+				{
+					String xsiType = resultValue.getAttribute("xsi:type");
+					if ((xsiType.equalsIgnoreCase("ST") && (resultValue.getFirstChild()) != null) || 
+							(xsiType.equalsIgnoreCase("INT") && (resultValue.getFirstChild()) != null))
+					{
+						log.info("Assessment Value is ST or INT");
+						String value = resultValue.getFirstChild().getNodeValue();
+						assessment.setResultString(value);
+					}else if(xsiType.equalsIgnoreCase("PQ"))
+					{
+						log.info("Assessment Value is PQ ");
+						assessment.setResultQuantity(ParserUtilities.readQuantity(resultValue));
+					}
+					else if(xsiType.equalsIgnoreCase("CD"))
+					{
+						log.info("Assessment Value is CD ");
+						assessment.setResultCode(ParserUtilities.readCode(resultValue));
+					}
+					else
+					{
+						log.info("Unknown Lab Value");
+					}
+				}
+			}
+			
+			assessmentObs.add(assessment);
+		}
+		
+		
+		return assessmentObs;
+		
 	}
 	
 }

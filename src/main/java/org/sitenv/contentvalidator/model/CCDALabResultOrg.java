@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.HashMap;
 
 public class CCDALabResultOrg {
 
-	private static Logger log = Logger.getLogger(CCDALabResultOrg.class.getName());
+	private static Logger log = LoggerFactory.getLogger(CCDALabResultOrg.class.getName());
 	
 	private ArrayList<CCDAII>   			templateIds;
 	private CCDACode						statusCode;
