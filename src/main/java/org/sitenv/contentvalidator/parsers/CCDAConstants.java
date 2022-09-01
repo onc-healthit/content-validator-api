@@ -51,6 +51,7 @@ public class CCDAConstants {
 	static public XPathExpression REL_CODE_TRANS_EXP;
 	static public XPathExpression REL_TRANS_EXP;
 	static public XPathExpression REL_VAL_EXP;
+	static public XPathExpression REL_VAL_WITH_NF_EXP;
 	static public XPathExpression REL_VAL__WITH_TRANS_EXP;
 	static public XPathExpression REL_STATUS_CODE_EXP;
 	static public XPathExpression REL_INT_CODE_EXP;
@@ -344,6 +345,7 @@ public class CCDAConstants {
 			REL_CODE_TRANS_EXP = CCDAConstants.CCDAXPATH.compile("./code/translation[not(@nullFlavor)]");
 			REL_TRANS_EXP = CCDAConstants.CCDAXPATH.compile("./translation[not(@nullFlavor)]");
 			REL_VAL_EXP = CCDAConstants.CCDAXPATH.compile("./value[not(@nullFlavor)]");
+			REL_VAL_WITH_NF_EXP = CCDAConstants.CCDAXPATH.compile("./value");
 			REL_VAL__WITH_TRANS_EXP = CCDAConstants.CCDAXPATH.compile("./value[not(@nullFlavor) or @nullFlavor='OTH']");
 			REL_STATUS_CODE_EXP = CCDAConstants.CCDAXPATH.compile("./statusCode[not(@nullFlavor)]");
 			REL_INT_CODE_EXP = CCDAConstants.CCDAXPATH.compile("./interpretationCode[not(@nullFlavor)]");

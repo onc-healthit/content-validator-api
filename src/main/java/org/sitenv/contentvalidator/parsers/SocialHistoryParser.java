@@ -64,7 +64,7 @@ public class SocialHistoryParser {
 			socialHistory.setGenderIdentities(retrieveGenderIdentity(genderIdList));
 			
 			// Add Social History Observation 
-			NodeList socialHistoryObsList = (NodeList)CCDAConstants.REL_GENDER_IDENTITY_EXP.
+			NodeList socialHistoryObsList = (NodeList)CCDAConstants.REL_SOCIAL_HISTORY_OBS_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET);
 			socialHistory.setSocialHistoryObservations(retrieveSocialHistoryObs(socialHistoryObsList));
 		}
@@ -138,7 +138,7 @@ public class SocialHistoryParser {
 			sexOr.setSexualOrientationCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
 					evaluate(sexOrElement, XPathConstants.NODE)));
 			
-			sexOr.setSexualOrientationValue(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_EXP.
+			sexOr.setSexualOrientationValue(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_WITH_NF_EXP.
 					evaluate(sexOrElement, XPathConstants.NODE)));
 			
 			sexOr.setObservationTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
@@ -167,7 +167,7 @@ public class SocialHistoryParser {
 		CCDAGenderIdentityObs genderIdentity;
 		for (int i = 0; i < genderIdList.getLength(); i++) {
 			
-			log.info("Adding Gender Identity");
+			log.info("Adding Gender Identity from list {}", genderIdList.getLength());
 			genderIdentity = new CCDAGenderIdentityObs();
 			
 			Element genderIdElement = (Element) genderIdList.item(i);
@@ -178,7 +178,7 @@ public class SocialHistoryParser {
 			genderIdentity.setGenderIdentityObsCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
 					evaluate(genderIdElement, XPathConstants.NODE)));
 			
-			genderIdentity.setGenderIdentityValue(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_EXP.
+			genderIdentity.setGenderIdentityValue(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_WITH_NF_EXP.
 					evaluate(genderIdElement, XPathConstants.NODE)));
 			
 			genderIdentity.setObservationTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.

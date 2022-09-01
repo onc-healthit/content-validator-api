@@ -2,6 +2,8 @@ package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
 
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,6 +104,28 @@ public class AssessmentScaleSupportingObs {
 
 	public void setSupportingObsTime(CCDAEffTime supportingObsTime) {
 		this.supportingObsTime = supportingObsTime;
+	}
+
+	public void compare(AssessmentScaleSupportingObs submittedObs, ArrayList<ContentValidationResult> results,
+			String compContext) {
+		
+		String elementName = compContext + " , Template Id Comparison : ";
+
+		// Compare template Ids 
+		ParserUtilities.compareTemplateIds(templateIds, submittedObs.getTemplateIds(), results, elementName);
+
+		// Compare Assessment  Codes 
+		String elementNameCode = compContext + " , Supporting Assessment Code Element Comparison : ";
+		ParserUtilities.compareCode(supportingObsCode, submittedObs.getSupportingObsCode(), results, elementNameCode);
+		 
+		// Compare Assessment  Codes 
+		String elementStatus = compContext + " , Supporting Assessment Status Element Comparison : ";
+		// ParserUtilities.compareCode(statusCode, submittedObs.getStatusCode(), results, elementStatus);
+				 	 
+		// Compare Assessment Value 
+		String elementVal = compContext + " , Supporting Assessment Value Comparison : ";
+		ParserUtilities.compareString(resultString, submittedObs.getResultString(), results, elementVal);
+		
 	}
 	
 	

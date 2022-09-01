@@ -20,6 +20,34 @@ public class CCDACode extends CCDADataElement {
 	private String nullFlavor;
 	
 	
+	public Boolean matchesIncludingNullFlavor(CCDACode cd, ArrayList<ContentValidationResult> results, String elementName) {
+		
+		if( (code != null) && (cd.getCode() != null) &&
+			(codeSystem != null) && (cd.getCodeSystem() != null) &&
+			(code.equalsIgnoreCase(cd.getCode())) && 
+			(codeSystem.equalsIgnoreCase(cd.getCodeSystem()))) {
+			return true;
+		}
+		else if (nullFlavor != null && cd.getNullFlavor() != null 
+				&& nullFlavor.contentEquals(cd.getNullFlavor())) {
+			return true;
+		}
+		else
+		{
+			String error = "The " + elementName + " : Code = " + ((code != null)?code:"None Specified") 
+				       + " , CodeSystem = " + ((codeSystem != null)?codeSystem:"None Specified")
+				       + " , NullFlavor = " + ((nullFlavor != null)?nullFlavor:"None Specified")
+				       + " do not match the submitted CCDA : code = " + ((cd.getCode() != null)?cd.getCode():"None Specified") 
+				       + " , and CodeSystem = " + ((cd.getCodeSystem() != null)?cd.getCodeSystem():"None Specified")
+				       + " , and NullFlavor = " + ((cd.getNullFlavor() != null)?cd.getNullFlavor():"None Specified");
+
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			return false;
+		}
+		
+	}
+	
 	
 	public Boolean matches(CCDACode cd, ArrayList<ContentValidationResult> results, String elementName) {
 		

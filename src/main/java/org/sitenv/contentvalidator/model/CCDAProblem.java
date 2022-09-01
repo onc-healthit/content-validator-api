@@ -29,7 +29,7 @@ public class CCDAProblem {
 		this.pastIllnessProblems = pastIllnessProblems;
 	}
 
-	public void compare(CCDAProblem submittedProblem, ArrayList<ContentValidationResult> results) {
+	public void compare(CCDAProblem submittedProblem, ArrayList<ContentValidationResult> results, boolean svap2022) {
 	
 		// handle section code.
 		ParserUtilities.compareCode(sectionCode, submittedProblem.getSectionCode(), results, "Problem Section");
@@ -38,23 +38,23 @@ public class CCDAProblem {
 		ParserUtilities.compareTemplateIds(sectionTemplateId, submittedProblem.getSectionTemplateId(), results, "Problem Section");
 		
 		// Compare details
-		compareProblemData(submittedProblem, results);
+		compareProblemData(submittedProblem, results, svap2022);
 	}
 	
-	private void compareProblemData(CCDAProblem submittedProblem, ArrayList<ContentValidationResult> results) {
+	private void compareProblemData(CCDAProblem submittedProblem, ArrayList<ContentValidationResult> results, boolean svap2022) {
 		
 		HashMap<CCDAProblemObs, CCDAProblemConcern> probs = getProblemObservationsConcernMap();
 		
 		for(Map.Entry<CCDAProblemObs, CCDAProblemConcern> ent: probs.entrySet()) {
 			
 			// check to see if the ref data is part of the problem data submitted
-			submittedProblem.validateProblemData(ent.getKey(), ent.getValue(), results);
+			submittedProblem.validateProblemData(ent.getKey(), ent.getValue(), results, svap2022);
 			
 		}
 		
 	}
 	
-	private void validateProblemData(CCDAProblemObs refPo, CCDAProblemConcern refCo, ArrayList<ContentValidationResult> results ) {
+	private void validateProblemData(CCDAProblemObs refPo, CCDAProblemConcern refCo, ArrayList<ContentValidationResult> results, boolean svap2022) {
 	
 		HashMap<CCDAProblemObs, CCDAProblemConcern> probs = getProblemObservationsConcernMap();
 		
@@ -80,7 +80,7 @@ public class CCDAProblem {
 			
 			String probObsContext = ((refPo.getProblemCode() != null)?(refPo.getProblemCode().getDisplayName()):" Unknown Observation ");
 			refCo.compare(conc, probObsContext, results);
-			refPo.compare(subObs, probObsContext, results);
+			refPo.compare(subObs, probObsContext, results, svap2022);
 		}
 		else {
 			
@@ -108,7 +108,7 @@ public class CCDAProblem {
 			{
 				// Compare the problem observations
 				String probObsContext = ((refPo.getProblemCode() != null)?(refPo.getProblemCode().getDisplayName()):" Unknown Observation ");
-				refPo.compare(subObs, probObsContext, results);
+				refPo.compare(subObs, probObsContext, results, svap2022);
 			}
 			else 
 			{
@@ -278,5 +278,22 @@ public class CCDAProblem {
 		problemConcerns = new ArrayList<CCDAProblemConcern>();
 		sectionTemplateId = new ArrayList<CCDAII>();
 		pastIllnessProblems = new ArrayList<CCDAProblemObs>();
+	}
+	
+	public HashMap<String, AssessmentScaleObservation> getAllSdohData() {
+		
+		HashMap<String, AssessmentScaleObservation> assessments = new HashMap<>();
+		if(problemConcerns != null) {
+			for(CCDAProblemConcern obs: problemConcerns) {
+				
+				HashMap<String, AssessmentScaleObservation> probAssessments = obs.getAllSdohData();
+				
+				if(probAssessments != null && !probAssessments.isEmpty()) {
+					assessments.putAll(probAssessments);
+				}
+				
+			}
+		}		
+		return assessments;
 	}
 }

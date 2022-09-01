@@ -294,6 +294,10 @@ public class CCDARefModel {
 	public void compareCCDS(String validationObjective, CCDARefModel submittedCCDA,
 			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
 		
+		if(svap2022) {
+			curesUpdate = true;
+		}
+		
 		log.info("Comparing Patient Data ");
 		comparePatients(submittedCCDA, results, curesUpdate, svap2022);
 		
@@ -347,6 +351,27 @@ public class CCDARefModel {
 			compareCareTeamMembers(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
 		}
 		
+		if(svap2022) {
+			
+			log.info(" Comparing Sexual Orientation ");
+			compareSexOrientation(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			
+			log.info(" Comparing Gender Identity ");
+			compareGenderIdentity(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			
+			log.info(" Comparing SDOH Data ");
+			compareSdohData(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			
+			log.info(" Comparing Goals Data ");
+			compareGoalsData(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			
+			log.info(" Comparing HealthConcerns Data ");
+			compareHealthConcernsData(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			
+			log.info(" Comparing Plan of Treatment Data ");
+			comparePlanOfTreatmentData(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+		}
+		
 		log.info("Finished comparison, returning results");
 		
 	}
@@ -356,7 +381,7 @@ public class CCDARefModel {
 		
 		if((this.getProblem() != null) && (submittedCCDA.getProblem() != null) ) {
 			log.info("Start Problem Comparison ");
-			this.problem.compare(submittedCCDA.getProblem(), results);
+			this.problem.compare(submittedCCDA.getProblem(), results, svap2022);
 		}
 		else if ( (this.getProblem() != null) && (submittedCCDA.getProblem() == null) ) 
 		{
@@ -692,6 +717,302 @@ public class CCDARefModel {
 			log.info("Model and Submitted CCDA do not have Notes for comparison ");
 		}
 	}
+	
+	public void compareSexOrientation(String validationObjective, CCDARefModel submittedCCDA, 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+		
+		log.info("Retrieving Sexual Orientation for comparison ");
+		HashMap<String, CCDASexualOrientation> refSexOrientation = this.getAllSexualOrientations();
+		HashMap<String, CCDASexualOrientation> subSexOrientation = submittedCCDA.getAllSexualOrientations();
+		
+		if( (refSexOrientation != null && refSexOrientation.size() > 0) &&  
+			(subSexOrientation != null && subSexOrientation.size() > 0)  ) {
+			
+			log.info("Sexual Orientation present in both models ");
+			CCDASexualOrientation.compare(refSexOrientation, subSexOrientation, results);
+			
+		} 	
+		else if ( (refSexOrientation != null && refSexOrientation.size() > 0) && 
+				(subSexOrientation == null || subSexOrientation.size() == 0) ) {
+			
+			// handle the case where the Notes section does not exist in the submitted CCDA
+			// ref has Notes but sub does not
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to the patient's sexual orientation"
+					+ "but the submitted C-CDA does not contain sexual orientation data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires sexual orientation data, but submitted document does not contain sexual orientation data");
+			
+		}else if ((refSexOrientation == null || refSexOrientation.size() == 0) && 
+				(subSexOrientation != null && subSexOrientation.size() > 0) ) {
+			
+			
+			log.info("Model does not have Sexual Orientation data for comparison, allow this to pass");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Sexual Orientation data for comparison ");
+		}
+	}
+	
+	public void compareGenderIdentity(String validationObjective, CCDARefModel submittedCCDA, 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+		
+		log.info("Retrieving Gender Identities for comparison ");
+		HashMap<String, CCDAGenderIdentityObs> refGenders = this.getAllGenderIdentities();
+		HashMap<String, CCDAGenderIdentityObs> subGenders = submittedCCDA.getAllGenderIdentities();
+		
+		if( (refGenders != null && refGenders.size() > 0) &&  
+			(subGenders != null && subGenders.size() > 0)  ) {
+			
+			log.info("Gender Identity present in both models ");
+			CCDAGenderIdentityObs.compare(refGenders, subGenders, results);
+			
+		} 	
+		else if ( (refGenders != null && refGenders.size() > 0) && 
+				(subGenders == null || subGenders.size() == 0) ) {
+			
+			// handle the case where the Notes section does not exist in the submitted CCDA
+			// ref has Notes but sub does not
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to the patient's gender identity"
+					+ "but the submitted C-CDA does not contain gender identity data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires gender identity data, but submitted document does not contain gender identity data");
+			
+		}else if ((refGenders == null || refGenders.size() == 0) && 
+				(subGenders != null && subGenders.size() > 0) ) {
+			
+			
+			log.info("Model does not have Gender Identity data for comparison, allow this to pass");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Gender Identity data for comparison ");
+		}
+	}
+	
+	public void compareSdohData(String validationObjective, CCDARefModel submittedCCDA, 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+		
+		log.info("Retrieving SDOH Data for comparison ");
+		HashMap<String, AssessmentScaleObservation> refSdohData = this.getAllSdohData();
+		HashMap<String, AssessmentScaleObservation> subSdohData = submittedCCDA.getAllSdohData();
+		
+		if( (refSdohData != null && refSdohData.size() > 0) &&  
+			(subSdohData != null && subSdohData.size() > 0)  ) {
+			
+			log.info("SDOH Data present in both models ");
+			AssessmentScaleObservation.compare(refSdohData, subSdohData, results);
+			
+		} 	
+		else if ( (refSdohData != null && refSdohData.size() > 0) && 
+				(subSdohData == null || subSdohData.size() == 0) ) {
+			
+			// handle the case where the Notes section does not exist in the submitted CCDA
+			// ref has Notes but sub does not
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires Patient's SDOH data "
+					+ "but the submitted C-CDA does not contain SDOH data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires SDOH data, but submitted document does not contain SDOH data");
+			
+		}else if ((refSdohData == null || refSdohData.size() == 0) && 
+				(subSdohData != null && subSdohData.size() > 0) ) {
+			
+			
+			log.info("Model does not have SDOH Data for comparison, allow this to pass");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have SDOH data for comparison ");
+		}
+	}
+	
+
+	private void compareGoalsData(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+		
+		log.info("Retrieving Goal Observations for comparison ");
+		HashMap<String, GoalObservation> refGoals = this.getAllGoalObservations();
+		HashMap<String, GoalObservation> subGoals = submittedCCDA.getAllGoalObservations();
+		
+		if( (refGoals != null && refGoals.size() > 0) &&  
+			(subGoals != null && subGoals.size() > 0)  ) {
+			
+			log.info("Goal Observations present in both models ");
+			GoalObservation.compare(refGoals, subGoals, results);
+			
+		} 	
+		else if ( (refGoals != null && refGoals.size() > 0) && 
+				(subGoals == null || subGoals.size() == 0) ) {
+			
+			// handle the case where the Goals section does not exist in the submitted CCDA
+			// ref has Notes but sub does not
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires Goal Observation data "
+					+ "but the submitted C-CDA does not contain Goal Observation data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Goal Observation data, but submitted document does not contain gender identity data");
+			
+		}else if ((refGoals == null || refGoals.size() == 0) && 
+				(subGoals != null && subGoals.size() > 0) ) {
+			
+			
+			log.info("Model does not have Goal Observation data for comparison, allow this to pass");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Goal Observation data for comparison ");
+		}
+	}
+	
+	private void compareHealthConcernsData(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+		
+		log.info("Retrieving Health Concern Acts  for comparison ");
+		HashMap<String, CCDAProblemObs> refHcActs = this.getAllHealthConcernActs();
+		HashMap<String, CCDAProblemObs> subHcActs = submittedCCDA.getAllHealthConcernActs();
+		
+		if( (refHcActs != null && refHcActs.size() > 0) &&  
+			(subHcActs != null && subHcActs.size() > 0)  ) {
+			
+			log.info("Health Concern Acts present in both models ");
+			CCDAProblemObs.compareHcActs(refHcActs, subHcActs, results, svap2022);
+			
+		} 	
+		else if ( (refHcActs != null && refHcActs.size() > 0) && 
+				(subHcActs == null || subHcActs.size() == 0) ) {
+			
+			// handle the case where the Goals section does not exist in the submitted CCDA
+			// ref has Notes but sub does not
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires Health Concerns Act data "
+					+ "but the submitted C-CDA does not contain Health Concern Act data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Health Concern Act data, but submitted document does not contain Health Concern Act data");
+			
+		}else if ((refHcActs == null || refHcActs.size() == 0) && 
+				(subHcActs != null && subHcActs.size() > 0) ) {
+			
+			
+			log.info("Model does not have Health Concern Act data for comparison, allow this to pass");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Health Concern Act data for comparison ");
+		}
+	}
+	
+	private void comparePlanOfTreatmentData(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+		
+		log.info("Retrieving Planned Procedures for comparison ");
+		HashMap<String, PlannedProcedure> refProcs = this.getAllPlannedProcedures();
+		HashMap<String, PlannedProcedure> subProcs = submittedCCDA.getAllPlannedProcedures();
+		
+		if( (refProcs != null && refProcs.size() > 0) &&  
+			(subProcs != null && subProcs.size() > 0)  ) {
+			
+			log.info("Planned Procedures present in both models ");
+			PlannedProcedure.compare(refProcs, subProcs, results);
+			
+		} 	
+		else if ( (refProcs != null && refProcs.size() > 0) && 
+				(subProcs == null || subProcs.size() == 0) ) {
+			
+			// handle the case where the Goals section does not exist in the submitted CCDA
+			// ref has Notes but sub does not
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires Planned Procedure data "
+					+ "but the submitted C-CDA does not contain Planned Procedure data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Planned Procedure data, but submitted document does not contain Planned Procedure data");
+			
+		}else if ((refProcs == null || refProcs.size() == 0) && 
+				(subProcs != null && subProcs.size() > 0) ) {
+			
+			
+			log.info("Model does not have Planned Procedure data for comparison, allow this to pass");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Planned Procedure data for comparison ");
+		}
+	}
+	
+	public HashMap<String, PlannedProcedure> getAllPlannedProcedures() {
+		
+		if(this.getPlanOfTreatment() != null) {
+			return getPlanOfTreatment().getAllPlannedProcedures();
+		}
+		else 
+			return null;
+	}
+	
+	public HashMap<String, CCDAProblemObs> getAllHealthConcernActs() {
+		
+		if(this.getHcs() != null) {
+			return getHcs().getAllHealthConcernActs();
+		}
+		else 
+			return null;
+	}
+
+	
+	public HashMap<String, GoalObservation> getAllGoalObservations() {
+		
+		if(this.getGoals() != null) {
+			return getGoals().getAllGoalObservations();
+		}
+		else 
+			return null;
+	}
+	
+	public HashMap<String, CCDASexualOrientation> getAllSexualOrientations() {
+		
+		if(this.getSocialHistory() != null) {
+			return getSocialHistory().getAllSexualOrientations();
+		}
+		else 
+			return null;
+	}
+	
+	public HashMap<String, CCDAGenderIdentityObs> getAllGenderIdentities() {
+		
+		if(this.getSocialHistory() != null) {
+			log.info(" Social History Not null ");
+			return getSocialHistory().getAllGenderIdentities();
+		}
+		else 
+			return null;
+	}
+	
+	public HashMap<String, AssessmentScaleObservation> getAllSdohData() {
+		
+		HashMap<String, AssessmentScaleObservation> assessments = new HashMap<>();
+		if(this.getSocialHistory() != null) {
+			HashMap<String, AssessmentScaleObservation> socAssessments = new HashMap<>();
+			socAssessments = getSocialHistory().getAllSdohData();
+			if(socAssessments != null && socAssessments.size() > 0) {
+				assessments.putAll(socAssessments);
+			}
+		}
+		
+		if(this.getProblem() != null) {
+			HashMap<String, AssessmentScaleObservation> probAssessments = new HashMap<>();
+			probAssessments = this.getProblem().getAllSdohData();
+			if(probAssessments != null && probAssessments.size() > 0) {
+				assessments.putAll(probAssessments);
+			}
+		}
+		
+		if(this.getProcedure() != null) {
+			HashMap<String, AssessmentScaleObservation> procAssessments = new HashMap<>();
+			procAssessments = getProcedure().getAllSdohData();
+			if(procAssessments != null && procAssessments.size() > 0) {
+				assessments.putAll(procAssessments);
+			}
+		}
+		
+		return assessments;
+	}
+	
+	
 	
 	public void compareCareTeamMembers(String validationObjective, CCDARefModel submittedCCDA, 
 			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
@@ -1187,7 +1508,7 @@ public class CCDARefModel {
 		return diagnoses;
 	}
 	
-	private void compareEncounterDiagnosis(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results) {
+	private void compareEncounterDiagnosis(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, boolean svap2022) {
 		
 		if(!validationObjective.equalsIgnoreCase("170.315_e1_VDT_Amb") &&
 		   !validationObjective.equalsIgnoreCase("170.315_e1_VDT_Inp") ) {
@@ -1202,7 +1523,7 @@ public class CCDARefModel {
 				
 				String context = "Enounter Diagnosis Entry ";
 				// Iterate and verify that all reference diagnosis is present in submitted diagnosis
-				CCDAProblemObs.compareProblemObservationData(refDiags, subDiags, results, context);
+				CCDAProblemObs.compareProblemObservationData(refDiags, subDiags, results, context, svap2022);
 	
 	
 			} else if ( (refDiags != null && refDiags.size() > 0) && 
@@ -1724,7 +2045,7 @@ public class CCDARefModel {
 				valObj.equalsIgnoreCase("170.315_b6_DE_Inp") ) {
 			
 			log.info("Comparing Encounter Diagnosis for b1, b4, and b6 ");
-			compareEncounterDiagnosis(valObj, submittedCCDA, results);	
+			compareEncounterDiagnosis(valObj, submittedCCDA, results, svap2022);	
 		}
 	}
 

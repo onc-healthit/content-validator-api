@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,6 +95,20 @@ public class CCDASocialHistoryObs {
 
 	public void setAssessmentScaleObservations(ArrayList<AssessmentScaleObservation> assessmentScaleObservations) {
 		this.assessmentScaleObservations = assessmentScaleObservations;
+	}
+
+	public HashMap<String, AssessmentScaleObservation> getAllAssessmentScaleObservations() {
+		
+		HashMap<String, AssessmentScaleObservation> assessments = new HashMap<>();
+		if(assessmentScaleObservations != null && !assessmentScaleObservations.isEmpty()) { 
+			
+			for(AssessmentScaleObservation obs : assessmentScaleObservations) {
+				if(obs.getAssessmentCode() != null && obs.getAssessmentCode().getCode() != null) {
+					assessments.put(obs.getAssessmentCode().getCode(), obs);
+				}
+			}
+		}
+		return assessments;
 	}
 
 	

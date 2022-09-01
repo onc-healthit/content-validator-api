@@ -271,7 +271,21 @@ public class CCDAProcActProc {
 		this.assessmentScaleObservations = assessmentScaleObservations;
 	}
 	
-	
+	public HashMap<String, AssessmentScaleObservation> getAllSdohData() {
+		
+		HashMap<String, AssessmentScaleObservation> assessments = new HashMap<>();
+		if(assessmentScaleObservations != null) {
+			
+			for(AssessmentScaleObservation obs : assessmentScaleObservations) {
+			
+				if(obs.getAssessmentCode() != null && obs.getAssessmentCode().getCode() != null) {
+					assessments.put(obs.getAssessmentCode().getCode(), obs);
+				}
+				
+			}
+		}		
+		return assessments;
+	}
 	
 	
 }

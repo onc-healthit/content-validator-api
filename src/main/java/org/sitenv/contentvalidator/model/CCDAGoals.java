@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CCDAGoals {
 
@@ -85,5 +86,22 @@ public class CCDAGoals {
 		this.goalObservations = goalObservations;
 	}
 	
+	public HashMap<String, GoalObservation> getAllGoalObservations() {
+		
+		HashMap<String, GoalObservation> goalObs = new HashMap<>();
+		if(goalObservations != null) {
+			for(GoalObservation g : goalObservations) {
+				
+				if(g.getGoalCode() != null && 
+						g.getGoalCode().getCode() != null) {
+					
+					goalObs.put(g.getGoalCode().getCode(),
+							g);
+				}
+				
+			}
+		}		
+		return goalObs;
+	}
 	
 }
