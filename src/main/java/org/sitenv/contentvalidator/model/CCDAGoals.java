@@ -10,15 +10,30 @@ public class CCDAGoals {
 	private static Logger log = LoggerFactory.getLogger(CCDAGoals.class.getName());
 	
 	private ArrayList<CCDAII>     templateIds;
+	private CCDACode			  sectionCode;
+	private ArrayList<GoalObservation> goalObservations;
 	
 	private CCDAAuthor author;
 	
 	public CCDAGoals() {
 		templateIds = new ArrayList<CCDAII>();
+		goalObservations = new ArrayList<>();
 	}
 	
 	
 	
+	public CCDACode getSectionCode() {
+		return sectionCode;
+	}
+
+
+
+	public void setSectionCode(CCDACode sectionCode) {
+		this.sectionCode = sectionCode;
+	}
+
+
+
 	public ArrayList<CCDAII> getTemplateIds() {
 		return templateIds;
 	}
@@ -48,9 +63,27 @@ public class CCDAGoals {
 		for(int j = 0; j < templateIds.size(); j++) {
 			log.info(" Tempalte Id [" + j + "] = " + templateIds.get(j).getRootValue());
 			log.info(" Tempalte Id Ext [" + j + "] = " + templateIds.get(j).getExtValue());
+		}
+		
+		for(int k = 0; k < goalObservations.size(); k++) {
+			goalObservations.get(k).log();
 		}	
 		
 		if(author != null)
 			author.log();
 	}
+
+
+
+	public ArrayList<GoalObservation> getGoalObservations() {
+		return goalObservations;
+	}
+
+
+
+	public void setGoalObservations(ArrayList<GoalObservation> goalObservations) {
+		this.goalObservations = goalObservations;
+	}
+	
+	
 }

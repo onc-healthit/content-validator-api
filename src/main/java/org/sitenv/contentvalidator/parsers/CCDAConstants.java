@@ -83,6 +83,7 @@ public class CCDAConstants {
 	static public XPathExpression REL_PROBLEM_OBS_EXPRESSION;
 	static public XPathExpression PAST_ILLNESS_EXP;
 	static public XPathExpression PAST_ILLNESS_PROBLEM_OBS_EXPRESSION;
+	static public XPathExpression REL_DIAGNOSIS_DATE_ACT_EXP;
 	
 	//Medication stuff
 	static public XPathExpression MEDICATION_EXPRESSION;
@@ -134,6 +135,14 @@ public class CCDAConstants {
 	static public XPathExpression REL_ALLERGY_REACTION_EXPRESSION;
 	static public XPathExpression REL_ALLERGY_SEVERITY_EXPRESSION;
 	
+	// Goals and Health Concerns and Plan of Treatment
+	static public XPathExpression GOALS_EXPRESSION;
+	static public XPathExpression HEALTH_CONCERNS_EXPRESSION;
+	static public XPathExpression PLAN_OF_TREATMENT_EXPRESSION;
+	static public XPathExpression REL_GOAL_OBSERVATION_EXP;
+	static public XPathExpression REL_HEALTH_CONCERN_ACT_EXP;
+	static public XPathExpression REL_PLANNED_PROCEDURE_EXP;
+	
 	// CTM
 	static public XPathExpression CARE_TEAM_EXPRESSION;
 	static public XPathExpression CARE_TEAM_SECTION_EXPRESSION;
@@ -147,6 +156,11 @@ public class CCDAConstants {
 	static public XPathExpression REL_SMOKING_STATUS_EXP;
 	static public XPathExpression REL_TOBACCO_USE_EXP;
 	static public XPathExpression REL_BIRTHSEX_OBS_EXP;
+	static public XPathExpression REL_SEX_ORIENTATION_EXP;
+	static public XPathExpression REL_GENDER_IDENTITY_EXP;
+	static public XPathExpression REL_SOCIAL_HISTORY_OBS_EXP;
+	static public XPathExpression REL_ASSESSMENT_SCALE_OBS_EXP;
+	static public XPathExpression REL_ASSESSMENT_SCALE_SUP_OBS_EXP;
 	
 	// Care Plan
 	static public XPathExpression INTERVENTIONS_SECTION_V3_EXP;
@@ -256,6 +270,7 @@ public class CCDAConstants {
 			PAST_ILLNESS_EXP = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='11348-0']]");
 			PAST_ILLNESS_PROBLEM_OBS_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.4']]");			
 			REL_PROBLEM_OBS_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entryRelationship/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.4']]");
+			REL_DIAGNOSIS_DATE_ACT_EXP = CCDAConstants.CCDAXPATH.compile("./entryRelationship/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.502']]");
 			MEDICATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='10160-0']]");
 			ADM_MEDICATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='42346-7']]");
 			DM_MEDICATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='10183-2']]");
@@ -280,6 +295,11 @@ public class CCDAConstants {
 		    REL_SMOKING_STATUS_EXP = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.78']]");
 		    REL_TOBACCO_USE_EXP = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.85']]");
 		    REL_BIRTHSEX_OBS_EXP = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.200']]");
+		    REL_SEX_ORIENTATION_EXP = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.501']]");
+		    REL_GENDER_IDENTITY_EXP = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.34.3.45']]");
+		    REL_SOCIAL_HISTORY_OBS_EXP = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.38']]");
+		    REL_ASSESSMENT_SCALE_OBS_EXP = CCDAConstants.CCDAXPATH.compile("./entryRelationship/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.69']]");
+		    REL_ASSESSMENT_SCALE_SUP_OBS_EXP = CCDAConstants.CCDAXPATH.compile("./entryRelationship/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.86']]");
 		    
 		    RESULTS_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='30954-2']]");
 		    REL_LAB_RESULT_ORG_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/organizer[not(@nullFlavor) and statusCode[@code='completed']]");
@@ -311,6 +331,13 @@ public class CCDAConstants {
 		    REL_CARE_TEAM_ORG_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/organizer[not(@nullFlavor)]");
 		    REL_CARE_TEAM_MEMBER_ACT_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./component/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.500.1']]");
 		    		    
+		    GOALS_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='61146-7']]");
+		    HEALTH_CONCERNS_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='75310-3']]");
+		    PLAN_OF_TREATMENT_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='18776-5']]");
+		    REL_PLANNED_PROCEDURE_EXP = CCDAConstants.CCDAXPATH.compile("./entry/procedure[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.41']]");
+		    REL_GOAL_OBSERVATION_EXP = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.121']]");
+		    REL_HEALTH_CONCERN_ACT_EXP = CCDAConstants.CCDAXPATH.compile("./entry/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.132']]");
+		    
 			REL_TEMPLATE_ID_EXP = CCDAConstants.CCDAXPATH.compile("./templateId[not(@nullFlavor)]");
 			REL_CODE_EXP = CCDAConstants.CCDAXPATH.compile("./code[not(@nullFlavor)]");
 			REL_CODE_WITH_TRANS_EXP = CCDAConstants.CCDAXPATH.compile("./code[not(@nullFlavor) or @nullFlavor='OTH']");

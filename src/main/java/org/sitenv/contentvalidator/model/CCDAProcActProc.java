@@ -25,6 +25,7 @@ public class CCDAProcActProc {
 	private CCDACode							deviceCode;
 	private CCDAII								scopingEntityId;
 	private ArrayList<CCDANotesActivity>		notesActivity;
+	private ArrayList<AssessmentScaleObservation> assessmentScaleObservations;
 	
 	private CCDAAuthor author;
 	
@@ -135,6 +136,9 @@ public class CCDAProcActProc {
 			notesActivity.get(n).log();
 		}
 		
+		for(int p = 0; p < assessmentScaleObservations.size(); p++) {
+			assessmentScaleObservations.get(p).log();
+		}
 		if(author != null)
 			author.log();
 	}
@@ -257,6 +261,14 @@ public class CCDAProcActProc {
 
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
+	}
+
+	public ArrayList<AssessmentScaleObservation> getAssessmentScaleObservations() {
+		return assessmentScaleObservations;
+	}
+
+	public void setAssessmentScaleObservations(ArrayList<AssessmentScaleObservation> assessmentScaleObservations) {
+		this.assessmentScaleObservations = assessmentScaleObservations;
 	}
 	
 	

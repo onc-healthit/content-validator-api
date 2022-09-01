@@ -15,6 +15,7 @@ public class CCDAPatient {
 	private CCDADataElement lastName;
 	private CCDADataElement middleName;
 	private CCDADataElement previousName;
+	private CCDAEffTime 	previousNamePeriod;
 	private CCDADataElement suffix;
 	private CCDADataElement dob;
 	private ArrayList<CCDAAddress> addresses;
@@ -231,6 +232,14 @@ public class CCDAPatient {
 
 	public void setSex(CCDACode sex) {
 		this.sex = sex;
+	}
+
+	public CCDAEffTime getPreviousNamePeriod() {
+		return previousNamePeriod;
+	}
+
+	public void setPreviousNamePeriod(CCDAEffTime previousNamePeriod) {
+		this.previousNamePeriod = previousNamePeriod;
 	}
 
 	public CCDAPatient()

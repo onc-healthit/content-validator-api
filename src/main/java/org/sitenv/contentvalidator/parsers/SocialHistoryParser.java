@@ -23,38 +23,176 @@ public class SocialHistoryParser {
 	
 	public static CCDASocialHistory retrieveSmokingStatusDetails(Document doc) throws XPathExpressionException
 	{
-		CCDASocialHistory socailHistory = null;
+		CCDASocialHistory socialHistory = null;
 		Element sectionElement = (Element) CCDAConstants.SOCIAL_HISTORY_EXPRESSION.evaluate(doc, XPathConstants.NODE);
 		if(sectionElement != null)
 		{
 			log.info("Adding Social History ");
-			socailHistory = new CCDASocialHistory();
-			socailHistory.setSectionTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+			socialHistory = new CCDASocialHistory();
+			socialHistory.setSectionTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 						evaluate(sectionElement, XPathConstants.NODESET)));
 			
-			socailHistory.setSectionCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+			socialHistory.setSectionCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
 					evaluate(sectionElement, XPathConstants.NODE)));
 			
 			NodeList smokingStatusNodeList = (NodeList) CCDAConstants.REL_SMOKING_STATUS_EXP.
 				evaluate(sectionElement, XPathConstants.NODESET);
 		
-			socailHistory.setSmokingStatus(readSmokingStatus(smokingStatusNodeList));
+			socialHistory.setSmokingStatus(readSmokingStatus(smokingStatusNodeList));
 		
 			NodeList tobaccoUseNodeList = (NodeList) CCDAConstants.REL_TOBACCO_USE_EXP.
 				evaluate(sectionElement, XPathConstants.NODESET);
 		
-			socailHistory.setTobaccoUse(readTobaccoUse(tobaccoUseNodeList));
+			socialHistory.setTobaccoUse(readTobaccoUse(tobaccoUseNodeList));
 			
 			NodeList bsList = (NodeList) CCDAConstants.REL_BIRTHSEX_OBS_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET);
 			
-			socailHistory.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+			socialHistory.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(sectionElement, XPathConstants.NODE)));
 	
-			socailHistory.setBirthSex(readBirthSex(bsList));
+			socialHistory.setBirthSex(readBirthSex(bsList));
+			
+			// Add Sexual Orientation
+			NodeList sexOrList = (NodeList)CCDAConstants.REL_SEX_ORIENTATION_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET);
+			socialHistory.setSexualOrientations(retrieveSexualOrientation(sexOrList));
+			
+			// Add Gender Identity
+			NodeList genderIdList = (NodeList)CCDAConstants.REL_GENDER_IDENTITY_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET);
+			socialHistory.setGenderIdentities(retrieveGenderIdentity(genderIdList));
+			
+			// Add Social History Observation 
+			NodeList socialHistoryObsList = (NodeList)CCDAConstants.REL_GENDER_IDENTITY_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET);
+			socialHistory.setSocialHistoryObservations(retrieveSocialHistoryObs(socialHistoryObsList));
 		}
 		
-		return socailHistory;
+		return socialHistory;
+	}
+	
+	public static ArrayList<CCDASocialHistoryObs> retrieveSocialHistoryObs(NodeList socHisList) throws XPathExpressionException {
+		
+		ArrayList<CCDASocialHistoryObs> socObs = null;
+		
+		if(!ParserUtilities.isNodeListEmpty(socHisList))
+		{
+			socObs = new ArrayList<>();
+		}
+		
+		CCDASocialHistoryObs socObservation;
+		for (int i = 0; i < socHisList.getLength(); i++) {
+			
+			log.info("Adding Social History Observation");
+			socObservation = new CCDASocialHistoryObs();
+			
+			Element socObsElement = (Element) socHisList.item(i);
+			
+			socObservation.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+														evaluate(socObsElement, XPathConstants.NODESET)));
+			
+			socObservation.setSocialHistoryObsCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(socObsElement, XPathConstants.NODE)));
+			
+			socObservation.setSocialHistoryObsValue(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_EXP.
+					evaluate(socObsElement, XPathConstants.NODE)));
+			
+			socObservation.setObservationTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+					evaluate(socObsElement, XPathConstants.NODE)));
+			
+			socObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(socObsElement, XPathConstants.NODE)));
+			
+			socObservation.setAssessmentScaleObservations(ParserUtilities.retrieveAssessmentScaleObservations((NodeList) CCDAConstants.REL_ASSESSMENT_SCALE_OBS_EXP.
+					evaluate(socObsElement, XPathConstants.NODESET)));
+			
+			socObs.add(socObservation);
+		}
+		
+		
+		return socObs;
+		
+	}
+	
+	public static ArrayList<CCDASexualOrientation> retrieveSexualOrientation(NodeList sexOrList) throws XPathExpressionException {
+		
+		ArrayList<CCDASexualOrientation> sexOrs = null;
+		
+		if(!ParserUtilities.isNodeListEmpty(sexOrList))
+		{
+			sexOrs = new ArrayList<>();
+		}
+		
+		CCDASexualOrientation sexOr;
+		for (int i = 0; i < sexOrList.getLength(); i++) {
+			
+			log.info("Adding Sexual Orientation");
+			sexOr = new CCDASexualOrientation();
+			
+			Element sexOrElement = (Element) sexOrList.item(i);
+			
+			sexOr.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+														evaluate(sexOrElement, XPathConstants.NODESET)));
+			
+			sexOr.setSexualOrientationCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(sexOrElement, XPathConstants.NODE)));
+			
+			sexOr.setSexualOrientationValue(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_EXP.
+					evaluate(sexOrElement, XPathConstants.NODE)));
+			
+			sexOr.setObservationTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+					evaluate(sexOrElement, XPathConstants.NODE)));
+			
+			sexOr.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(sexOrElement, XPathConstants.NODE)));
+			
+			sexOrs.add(sexOr);
+		}
+		
+		
+		return sexOrs;
+		
+	}
+	
+	public static ArrayList<CCDAGenderIdentityObs> retrieveGenderIdentity(NodeList genderIdList) throws XPathExpressionException {
+		
+		ArrayList<CCDAGenderIdentityObs> genderIdentities = null;
+		
+		if(!ParserUtilities.isNodeListEmpty(genderIdList))
+		{
+			genderIdentities = new ArrayList<>();
+		}
+		
+		CCDAGenderIdentityObs genderIdentity;
+		for (int i = 0; i < genderIdList.getLength(); i++) {
+			
+			log.info("Adding Gender Identity");
+			genderIdentity = new CCDAGenderIdentityObs();
+			
+			Element genderIdElement = (Element) genderIdList.item(i);
+			
+			genderIdentity.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+														evaluate(genderIdElement, XPathConstants.NODESET)));
+			
+			genderIdentity.setGenderIdentityObsCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(genderIdElement, XPathConstants.NODE)));
+			
+			genderIdentity.setGenderIdentityValue(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_EXP.
+					evaluate(genderIdElement, XPathConstants.NODE)));
+			
+			genderIdentity.setObservationTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+					evaluate(genderIdElement, XPathConstants.NODE)));
+			
+			genderIdentity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(genderIdElement, XPathConstants.NODE)));
+			
+			genderIdentities.add(genderIdentity);
+		}
+		
+		
+		return genderIdentities;
+		
 	}
 	
 	public static CCDABirthSexObs readBirthSex(NodeList bsList) throws XPathExpressionException

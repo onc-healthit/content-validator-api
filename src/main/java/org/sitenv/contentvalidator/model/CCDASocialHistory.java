@@ -14,6 +14,9 @@ public class CCDASocialHistory {
 	private ArrayList<CCDASmokingStatus>		smokingStatus;
 	private ArrayList<CCDATobaccoUse>			tobaccoUse;
 	private CCDABirthSexObs						birthSex;
+	private ArrayList<CCDASexualOrientation>	sexualOrientations;
+	private ArrayList<CCDAGenderIdentityObs>		genderIdentities;
+	private ArrayList<CCDASocialHistoryObs>			socialHistoryObservations;
 	
 	private CCDAAuthor author;
 	
@@ -43,6 +46,18 @@ public class CCDASocialHistory {
 			tobaccoUse.get(l).log();
 		}
 		
+		for(int m = 0; m < sexualOrientations.size(); m++) {
+			sexualOrientations.get(m).log();
+		}
+		
+		for(int n = 0; n < genderIdentities.size(); n++) {
+			genderIdentities.get(n).log();
+		}
+		
+		for(int p = 0; p < socialHistoryObservations.size(); p++) {
+			genderIdentities.get(p).log();
+		}
+		
 		if(birthSex != null)
 			birthSex.log();
 		
@@ -55,6 +70,9 @@ public class CCDASocialHistory {
 		sectionTemplateIds = new ArrayList<CCDAII>();
 		smokingStatus = new ArrayList<CCDASmokingStatus>();
 		tobaccoUse = new ArrayList<CCDATobaccoUse>();
+		sexualOrientations = new ArrayList<CCDASexualOrientation>();
+		genderIdentities = new ArrayList<>();
+		socialHistoryObservations = new ArrayList<>();
 	}
 
 	
@@ -104,5 +122,31 @@ public class CCDASocialHistory {
 		if(tu != null)
 			this.tobaccoUse = tu;
 	}
+
+	public ArrayList<CCDASexualOrientation> getSexualOrientations() {
+		return sexualOrientations;
+	}
+
+	public void setSexualOrientations(ArrayList<CCDASexualOrientation> sexualOrientations) {
+		this.sexualOrientations = sexualOrientations;
+	}
+
+	public ArrayList<CCDAGenderIdentityObs> getGenderIdentities() {
+		return genderIdentities;
+	}
+
+	public void setGenderIdentities(ArrayList<CCDAGenderIdentityObs> genderIdentities) {
+		this.genderIdentities = genderIdentities;
+	}
+
+	public ArrayList<CCDASocialHistoryObs> getSocialHistoryObservations() {
+		return socialHistoryObservations;
+	}
+
+	public void setSocialHistoryObservations(ArrayList<CCDASocialHistoryObs> socialHistoryObservations) {
+		this.socialHistoryObservations = socialHistoryObservations;
+	}
+	
+	
 	
 }

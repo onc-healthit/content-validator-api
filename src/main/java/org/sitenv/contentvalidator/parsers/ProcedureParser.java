@@ -108,6 +108,8 @@ public class ProcedureParser {
 			
 			procedure.setSdLocs(readServiceDeliveryLocators(serviceDeliveryNodeList));
 			
+			procedure.setAssessmentScaleObservations(ParserUtilities.retrieveAssessmentScaleObservations((NodeList) CCDAConstants.REL_ASSESSMENT_SCALE_OBS_EXP.
+					evaluate(procedureElement, XPathConstants.NODESET)));
 			
 			proceduresList.add(procedure);
 		}

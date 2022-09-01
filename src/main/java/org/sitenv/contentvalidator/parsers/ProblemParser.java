@@ -6,6 +6,8 @@ import org.sitenv.contentvalidator.model.CCDAProblem;
 import org.sitenv.contentvalidator.model.CCDAProblemConcern;
 import org.sitenv.contentvalidator.model.CCDAProblemObs;
 import org.sitenv.contentvalidator.model.CCDARefModel;
+import org.sitenv.contentvalidator.model.DiagnosisActDate;
+import org.sitenv.contentvalidator.model.GoalObservation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -136,11 +138,39 @@ public class ProblemParser {
 			problemObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(problemObservationElement, XPathConstants.NODE)));
 			
+			problemObservation.setAssessmentScaleObservations(ParserUtilities.retrieveAssessmentScaleObservations((NodeList) CCDAConstants.REL_ASSESSMENT_SCALE_OBS_EXP.
+					evaluate(problemObservationElement, XPathConstants.NODESET)));
+			
+			Element ddActElement = (Element)(CCDAConstants.REL_DIAGNOSIS_DATE_ACT_EXP.
+				evaluate(problemObservationElement, XPathConstants.NODE));
+			problemObservation.setDateOfDiagnosis(retrieveDiagnosisDateAct(ddActElement));
+			
 			problemObservationList.add(problemObservation);
 		}
 		
 		return problemObservationList;
 		 
 	}
+	
 
+	public static DiagnosisActDate retrieveDiagnosisDateAct(Element ddActElement) throws XPathExpressionException
+	{
+		DiagnosisActDate ddAct = null;
+		if(ddActElement != null) {
+			ddAct = new DiagnosisActDate();
+		
+	        log.info("Adding Diagnosis Act Date  ");
+			
+	        ddAct.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+										evaluate(ddActElement, XPathConstants.NODESET)));
+			
+	        ddAct.setDiagnosisActCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(ddActElement, XPathConstants.NODE)));
+			
+	        ddAct.setEffTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+								evaluate(ddActElement, XPathConstants.NODE)));
+		
+		}
+		return ddAct;
+	}
 }

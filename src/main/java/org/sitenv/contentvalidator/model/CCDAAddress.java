@@ -14,6 +14,7 @@ public class CCDAAddress {
 	private CCDADataElement postalCode;
 	private CCDADataElement country;
 	private String postalAddressUse;
+	private CCDAEffTime	addressPeriod;
 	
 	public CCDAAddress(){}
 

@@ -10,15 +10,42 @@ public class CCDAHealthConcerns {
 	private static Logger log = LoggerFactory.getLogger(CCDAHealthConcerns.class.getName());
     
 	private ArrayList<CCDAII>     templateIds;
+	private CCDACode			  sectionCode;
+	private ArrayList<HealthConcernAct> healthConcernActs;
 	
 	private CCDAAuthor	author;
 	
 	public CCDAHealthConcerns() {
 		templateIds = new ArrayList<CCDAII>();
+		healthConcernActs = new ArrayList<>();
 	}
 	
 	
 	
+	public CCDACode getSectionCode() {
+		return sectionCode;
+	}
+
+
+
+	public void setSectionCode(CCDACode sectionCode) {
+		this.sectionCode = sectionCode;
+	}
+
+
+
+	public ArrayList<HealthConcernAct> getHealthConcernActs() {
+		return healthConcernActs;
+	}
+
+
+
+	public void setHealthConcernActs(ArrayList<HealthConcernAct> healthConcernActs) {
+		this.healthConcernActs = healthConcernActs;
+	}
+
+
+
 	public ArrayList<CCDAII> getTemplateIds() {
 		return templateIds;
 	}
@@ -49,6 +76,10 @@ public class CCDAHealthConcerns {
 			log.info(" Tempalte Id [" + j + "] = " + templateIds.get(j).getRootValue());
 			log.info(" Tempalte Id Ext [" + j + "] = " + templateIds.get(j).getExtValue());
 		}	
+		
+		for(int k = 0; k < templateIds.size(); k++) {
+			healthConcernActs.get(k).log();
+		}
 		
 		if(author != null)
 			author.log();

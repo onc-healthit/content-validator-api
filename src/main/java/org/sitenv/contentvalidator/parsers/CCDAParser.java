@@ -62,12 +62,6 @@ public class CCDAParser {
 	 * Called by each validation, on the users file
 	 */	
 	public CCDARefModel parse(String ccdaFile, SeverityLevel severityLevel, boolean curesUpdate, boolean svap2022) {
-		// TODO: REMOVE THIS FORCED curesUpdate when we are ready to check specifics with svap2022
-		// Note: This applies to both the scenario loader (AFTER the correct set of scenario files are loaded that is) and the validations
-		if (svap2022) {
-			curesUpdate = true;
-			svap2022 = false;
-		}
 		
 		try {
 			//log.info(" Parsing File " + ccdaFile);

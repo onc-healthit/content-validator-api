@@ -19,6 +19,8 @@ public class CCDAProblemObs {
 	private ArrayList<CCDACode>  translationProblemType;
 	private CCDAEffTime          effTime;
 	private CCDACode             problemCode;
+	private DiagnosisActDate	 dateOfDiagnosis;
+	private ArrayList<AssessmentScaleObservation> assessmentScaleObservations;
 	
 	private CCDAAuthor author;
 	
@@ -95,6 +97,10 @@ public class CCDAProblemObs {
 			log.info(" Tempalte Id Ext [" + j + "] = " + templateId.get(j).getExtValue());
 		}
 		
+		for(int k = 0; k < assessmentScaleObservations.size(); k++) {
+			assessmentScaleObservations.get(k).log();
+		}
+		
 		if(effTime != null)
 			effTime.log();
 		
@@ -103,6 +109,9 @@ public class CCDAProblemObs {
 		
 		if(author != null)
 			author.log();
+		
+		if(dateOfDiagnosis != null)
+			dateOfDiagnosis.log();
 	}
 	
 	public ArrayList<CCDAII> getTemplateId() {
@@ -113,6 +122,14 @@ public class CCDAProblemObs {
 		
 		if(ids != null)
 			this.templateId = ids;
+	}
+
+	public ArrayList<AssessmentScaleObservation> getAssessmentScaleObservations() {
+		return assessmentScaleObservations;
+	}
+
+	public void setAssessmentScaleObservations(ArrayList<AssessmentScaleObservation> assessmentScaleObservations) {
+		this.assessmentScaleObservations = assessmentScaleObservations;
 	}
 
 	public CCDACode getProblemType() {
@@ -152,6 +169,7 @@ public class CCDAProblemObs {
 	{
 		templateId = new ArrayList<CCDAII>();
 		translationProblemType = new ArrayList<CCDACode>();
+		assessmentScaleObservations = new ArrayList<>();
 	}
 
 	
@@ -161,6 +179,14 @@ public class CCDAProblemObs {
 
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
+	}
+
+	public DiagnosisActDate getDateOfDiagnosis() {
+		return dateOfDiagnosis;
+	}
+
+	public void setDateOfDiagnosis(DiagnosisActDate dateOfDiagnosis) {
+		this.dateOfDiagnosis = dateOfDiagnosis;
 	}
 
 	static Boolean checkCodeAndTrans(CCDAProblemObs refObs, HashMap<String, CCDAProblemObs> subProblems) {
