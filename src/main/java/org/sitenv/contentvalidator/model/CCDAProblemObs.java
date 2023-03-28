@@ -25,7 +25,7 @@ public class CCDAProblemObs {
 	private CCDAAuthor author;
 	
 	public static void compareProblemObservationData(HashMap<String, CCDAProblemObs> refProblems, 
-			HashMap<String, CCDAProblemObs> subProblems, 	ArrayList<ContentValidationResult> results, String context) {
+			HashMap<String, CCDAProblemObs> subProblems, 	ArrayList<ContentValidationResult> results, String context, boolean svap2022) {
 
 		log.info(" Start Comparing Problem Observations for " + context);
 		
@@ -36,7 +36,7 @@ public class CCDAProblemObs {
 
 				log.info("Comparing Problem Observation ");
 				String compContext = "Problem Observation Entry associated with " + context + " for code " + ent.getKey();
-				ent.getValue().compare(subProblems.get(ent.getKey()), compContext, results);
+				ent.getValue().compare(subProblems.get(ent.getKey()), compContext, results, svap2022);
 
 
 			} 
@@ -61,7 +61,7 @@ public class CCDAProblemObs {
 		
 	}
 	
-	public void compare(CCDAProblemObs subObs, String probObsContext, ArrayList<ContentValidationResult> results) {
+	public void compare(CCDAProblemObs subObs, String probObsContext, ArrayList<ContentValidationResult> results, boolean svap2022) {
 		
 		log.info(" Comparing data for problem observation Value element/code attribute: " + probObsContext);
 
@@ -78,7 +78,14 @@ public class CCDAProblemObs {
 		String elementNameVal = "Problem Observation Value element/code attribute: " + probObsContext;
 		ParserUtilities.compareCode(problemCode, subObs.getProblemCode(), results, elementNameVal);
 		
-		// Add negation indicator
+		// Compare Diagnosis Date Act
+		String diagnosisElement = "Problem Observation Diagnosis Element attribute: " + probObsContext;
+		
+		if(dateOfDiagnosis != null && svap2022) {
+			log.info(" Comparing Diagnosis Date ");
+			dateOfDiagnosis.compare(subObs.dateOfDiagnosis, diagnosisElement, results);
+		}
+		
 	}
 	
 	public void log() {
@@ -217,4 +224,47 @@ public class CCDAProblemObs {
 		
 		return ParserUtilities.compareCodesAndTranlations(refCode, this.getProblemCode()); 
 	}
+	
+	public HashMap<String, AssessmentScaleObservation> getAllSdohData() {
+		
+		HashMap<String, AssessmentScaleObservation> assessments = new HashMap<>();
+		if(assessmentScaleObservations != null) {
+			
+			for(AssessmentScaleObservation obs : assessmentScaleObservations) {
+			
+				if(obs.getAssessmentCode() != null && obs.getAssessmentCode().getCode() != null) {
+					assessments.put(obs.getAssessmentCode().getCode(), obs);
+				}
+				
+			}
+		}		
+		return assessments;
+	}
+
+	public static void compareHcActs(HashMap<String, CCDAProblemObs> refHcActs,
+			HashMap<String, CCDAProblemObs> subHcActs, ArrayList<ContentValidationResult> results, boolean svap2022) {
+		
+		// Check only the reference ones
+		for(Map.Entry<String,CCDAProblemObs> entry: refHcActs.entrySet()) {
+					
+					if(subHcActs.containsKey(entry.getKey())) {
+						
+						// Since the observation was found, compare other data elements.
+						log.info(" Comparing Health Concern Act Problem Observation");
+						String compContext = " Comparing Health Concern Act Problem Observation for code " + entry.getKey();
+						entry.getValue().compare(subHcActs.get(entry.getKey()), compContext, results, svap2022);
+						
+					}
+					else {
+						
+						String error = "The scenario contains Health Concern Act with Problem Observation data with code " + entry.getKey() + 
+								" , however there is no matching data in the submitted CCDA.";
+						ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+						results.add(rs);
+					}
+					
+				}
+	}
+	
+	
 }

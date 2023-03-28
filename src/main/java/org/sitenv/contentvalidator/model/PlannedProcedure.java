@@ -1,7 +1,12 @@
 package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +81,54 @@ private static Logger log = LoggerFactory.getLogger(PlannedProcedure.class.getNa
 
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
+	}
+
+	public static void compare(HashMap<String, PlannedProcedure> refProcs, HashMap<String, PlannedProcedure> subProcs,
+			ArrayList<ContentValidationResult> results) {
+		
+		// Check only the reference ones
+		for(Map.Entry<String,PlannedProcedure> entry: refProcs.entrySet()) {
+			
+			if(subProcs.containsKey(entry.getKey())) {
+				
+				// Since the observation was found, compare other data elements.
+				log.info(" Comparing Planned Procedure ");
+				String compContext = " Comparing Planned Procedure data for code " + entry.getKey();
+				entry.getValue().compare(subProcs.get(entry.getKey()), compContext, results);
+				
+			}
+			else {
+				
+				String error = "The scenario contains Planned Procedure data with code " + entry.getKey() + 
+						" , however there is no matching data in the submitted CCDA.";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+			
+		}
+		
+	}
+	
+	private void compare(PlannedProcedure subProc, String compContext,
+			ArrayList<ContentValidationResult> results) {
+		
+		String elementName = compContext + " , Template Id Comparison : ";
+
+		// Compare template Ids 
+		ParserUtilities.compareTemplateIds(templateIds, subProc.getTemplateIds(), results, elementName);
+
+		// Compare Assessment  Codes 
+		String elementNameCode = compContext + " , Assessment Code Element Comparison : ";
+		ParserUtilities.compareCode(procedureCode, subProc.getProcedureCode(), results, elementNameCode);
+		 
+		// Compare Assessment  Codes 
+		String elementStatus = compContext + " , Assessment Status Element Comparison : ";
+	//	ParserUtilities.compareCode(statusCode, subProc.getStatusCode(), results, elementStatus);
+				 	 
+		// Compare Assessment  Codes 
+		String elementTime = compContext + " , Assessment Time Comparison : ";
+		ParserUtilities.compareEffectiveTime(procedureTime, subProc.getProcedureTime(), results, elementTime);
+		
 	}
 	
 	

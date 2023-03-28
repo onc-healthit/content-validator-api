@@ -2,6 +2,9 @@ package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
 
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +61,30 @@ private static Logger log = LoggerFactory.getLogger(DiagnosisActDate.class.getNa
 
 	public void setEffTime(CCDAEffTime effTime) {
 		this.effTime = effTime;
+	}
+
+	public void compare(DiagnosisActDate subDateOfDiagnosis, String context,
+			ArrayList<ContentValidationResult> results) {
+		
+		if(subDateOfDiagnosis != null) {
+		
+		// Compare template Ids 
+				ParserUtilities.compareTemplateIds(templateId, subDateOfDiagnosis.getTemplateId(), results, context);
+
+				// Compare Effective Times
+				String elementNameTime = "Diagnosis Date Time  attribute: " + context;
+				ParserUtilities.compareEffectiveTime(effTime, subDateOfDiagnosis.getEffTime(), results, elementNameTime);
+				
+				// Compare PRoblem Codes 
+				String elementNameVal = "Diagnosis Act Code elementattribute: " + context;
+				ParserUtilities.compareCode(diagnosisActCode, subDateOfDiagnosis.getDiagnosisActCode(), results, elementNameVal);
+		}
+		else {
+			String error = "The scenario contains Date of Diagnosis Act data " + context + 
+					" , however there is no matching data in the submitted CCDA. ";
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
 	}
 	
 	

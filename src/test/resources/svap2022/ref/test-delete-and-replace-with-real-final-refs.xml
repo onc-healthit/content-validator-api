@@ -814,6 +814,15 @@
 										<!-- Absence of effectiveTime/high means the condition is not resolved -->
 									</effectiveTime>
 									<value xsi:type="CD" code="59621000" codeSystem="2.16.840.1.113883.6.96" displayName="Essential hypertension" codeSystemName="SNOMED-CT"/>
+									<entryRelationship typeCode="COMP">
+										<act classCode="ACT" moodCode="EVN">
+											<templateId root="2.16.840.1.113883.10.20.22.4.502" extension="2022-06-01"/> <code code="77975-1" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"
+											displayName="Earliest date of diagnosis"/>
+											<statusCode code="completed"/>
+											<!-- SHALL to the year (MAY be more specific) --> 
+											<effectiveTime value="20100901"/>
+										</act>
+									</entryRelationship>
 								</observation>
 							</entryRelationship>
 						</act>
@@ -1424,6 +1433,16 @@
 							</thead>
 							<tbody>
 								<tr>
+									<td>Gender Identity</td>
+									<td>Asked but Unknown</td>
+									<td>Unknown</td>
+								</tr>
+								<tr>
+									<td>Sexual Orientation</td>
+									<td>Unknown</td>
+									<td>Unknown</td>
+								</tr>
+								<tr>
 									<td>Smoking Status</td>
 									<td>Heavy tobacco smoker</td>
 									<td>May 1, 2005 - February 27, 2011</td>
@@ -1436,6 +1455,39 @@
 							</tbody>
 						</table>
 					</text>
+					
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<!-- ** Gender Identity** -->
+							<templateId root="2.16.840.1.113883.10.20.34.3.45" extension="2019-04-01"/>
+							<templateId root="2.16.840.1.113883.10.20.34.3.45" extension="2022-06-01" />
+							<id root="45efb604-7049-4a2e-ad33-d38556c7636c"/>
+							
+							<code code="76691-5" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Gender Identity"/>
+							<statusCode code="completed"/>
+							<effectiveTime nullFlavor="NI">
+								
+							</effectiveTime>
+							<value xsi:type="CD" nullFlavor="ASKU"/>
+						</observation>
+					</entry>
+
+					<entry typeCode="DRIV">
+						<observation classCode="OBS" moodCode="EVN">
+							<!-- ** Sexual Orientation ** -->
+							<templateId root="2.16.840.1.113883.10.20.22.4.501" extension="2022-06-01"/>
+							
+							<id root="45efb604-7049-4a2e-ad33-d38557c7636c"/>
+							<!-- code SHALL be 11367-0 for Tobacco use (V2) -db -->
+							<code code="76690-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Sexual Orientation"/>
+							<statusCode code="completed"/>
+							<effectiveTime nullFlavor="NI">
+								
+							</effectiveTime>
+							<!-- Consol Tobacco Use SHALL contain exactly one [1..1] value with @xsi:type="CD" (CONF:16562, R2.0=CONF:1098-16562), which SHALL be selected from ValueSet Tobacco Use 2.16.840.1.113883.11.20.9.41 DYNAMIC (CONF:16563, R2.0=CONF:1098-16563) -db -->
+							<value xsi:type="CD" nullFlavor="UNK"/>
+						</observation>
+					</entry>
 					<!-- Smoking Status - May 1, 2005 - February 27, 2011 -db -->
 					<entry typeCode="DRIV">
 						<observation classCode="OBS" moodCode="EVN">

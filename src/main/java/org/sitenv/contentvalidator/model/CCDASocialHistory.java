@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CCDASocialHistory {
 
@@ -145,6 +146,83 @@ public class CCDASocialHistory {
 
 	public void setSocialHistoryObservations(ArrayList<CCDASocialHistoryObs> socialHistoryObservations) {
 		this.socialHistoryObservations = socialHistoryObservations;
+	}
+
+	public HashMap<String, CCDASexualOrientation> getAllSexualOrientations() {
+		
+		HashMap<String, CCDASexualOrientation> orientations = new HashMap<>();
+		if(sexualOrientations != null) {
+			for(int i = 0; i < sexualOrientations.size(); i++) {
+				
+				if(sexualOrientations.get(i).getSexualOrientationValue() != null && 
+						sexualOrientations.get(i).getSexualOrientationValue().getCode() != null) {
+					
+					orientations.put(sexualOrientations.get(i).getSexualOrientationValue().getCode(),
+							sexualOrientations.get(i));
+				}
+				else if (sexualOrientations.get(i).getSexualOrientationValue() != null && 
+						sexualOrientations.get(i).getSexualOrientationValue().getNullFlavor() != null) {
+					
+					orientations.put(sexualOrientations.get(i).getSexualOrientationValue().getNullFlavor(),
+							sexualOrientations.get(i));
+				}
+				
+			}
+		}		
+		return orientations;
+	}
+	
+	public HashMap<String, CCDAGenderIdentityObs> getAllGenderIdentities() {
+		
+		HashMap<String, CCDAGenderIdentityObs> identities = new HashMap<>();
+		if(genderIdentities != null) {
+			for(int i = 0; i < genderIdentities.size(); i++) {
+				
+				log.info(" Found a Potential Gender Identity ");
+				if(genderIdentities.get(i).getGenderIdentityValue() != null && 
+						genderIdentities.get(i).getGenderIdentityValue().getCode() != null) {
+					log.info(" Adding Gender Identity based on code");
+					identities.put(genderIdentities.get(i).getGenderIdentityValue().getCode(),
+							genderIdentities.get(i));
+				}
+				else if (genderIdentities.get(i).getGenderIdentityValue() != null && 
+						genderIdentities.get(i).getGenderIdentityValue().getNullFlavor() != null) {
+					
+					log.info(" Adding Gender Identity based on NullFlavor");
+					identities.put(genderIdentities.get(i).getGenderIdentityValue().getNullFlavor(),
+							genderIdentities.get(i));
+				}
+				else {
+					log.info(" Gender Identity not added ");
+					log.info(" Value = ",genderIdentities.get(i).getGenderIdentityValue().getNullFlavor());
+					log.info(" Value = ",genderIdentities.get(i).getGenderIdentityValue().getCode());
+				}
+				
+			}
+		}		
+		return identities;
+	}
+	
+	public HashMap<String, AssessmentScaleObservation> getAllSdohData() {
+		
+		return getAllAssessmentScaleObservations();
+	}
+	
+	public HashMap<String, AssessmentScaleObservation> getAllAssessmentScaleObservations() {
+		
+		HashMap<String, AssessmentScaleObservation> assessments = new HashMap<>();
+		if(socialHistoryObservations != null) {
+			for(CCDASocialHistoryObs obs: socialHistoryObservations) {
+				
+				HashMap<String, AssessmentScaleObservation> observations = obs.getAllAssessmentScaleObservations();
+				
+				if(observations != null && !observations.isEmpty()) {
+					assessments.putAll(observations);
+				}
+				
+			}
+		}		
+		return assessments;
 	}
 	
 	

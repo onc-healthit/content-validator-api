@@ -195,4 +195,21 @@ public class CCDAProcedure {
 		}
 	}
 	
+	public HashMap<String, AssessmentScaleObservation> getAllSdohData() {
+		
+		HashMap<String, AssessmentScaleObservation> assessments = new HashMap<>();
+		if(procActsProcs != null) {
+			for(CCDAProcActProc proc: procActsProcs) {
+				
+				HashMap<String, AssessmentScaleObservation> procAssessments = proc.getAllSdohData();
+				
+				if(procAssessments != null && !procAssessments.isEmpty()) {
+					assessments.putAll(procAssessments);
+				}
+				
+			}
+		}		
+		return assessments;
+	}
+	
 }

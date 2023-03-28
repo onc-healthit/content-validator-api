@@ -41,7 +41,7 @@ private static Logger log = LoggerFactory.getLogger(CareTeamMemberParser.class.g
 			pot.setSectionCodePOT(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
 					evaluate(sectionElement, XPathConstants.NODE)));
 			
-			pot.setPlannedProcedures(readPlannedProcedures((NodeList) CCDAConstants.REL_GOAL_OBSERVATION_EXP.
+			pot.setPlannedProcedures(readPlannedProcedures((NodeList) CCDAConstants.REL_PLANNED_PROCEDURE_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET)));
 			
 			pot.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
@@ -56,7 +56,7 @@ private static Logger log = LoggerFactory.getLogger(CareTeamMemberParser.class.g
 		PlannedProcedure pp;
 		for (int i = 0; i < ppList.getLength(); i++) {
 			
-			log.info("Adding Goal Observation ");
+			log.info("Adding Planned Procedure ");
 			pp = new PlannedProcedure();
 			Element ppElement = (Element) ppList.item(i);
 			

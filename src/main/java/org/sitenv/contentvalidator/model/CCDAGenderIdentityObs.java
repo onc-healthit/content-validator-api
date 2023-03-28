@@ -1,7 +1,12 @@
 package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,6 +85,52 @@ public class CCDAGenderIdentityObs {
 
 	public void setGenderIdentityValue(CCDACode genderIdentityValue) {
 		this.genderIdentityValue = genderIdentityValue;
+	}
+
+	public static void compare(HashMap<String, CCDAGenderIdentityObs> refGenders,
+			HashMap<String, CCDAGenderIdentityObs> subGenders, ArrayList<ContentValidationResult> results) {
+		
+		String context = " Comparing Gender Identity Data ";
+		// Check only the reference ones
+		for(Map.Entry<String,CCDAGenderIdentityObs> entry: refGenders.entrySet()) {
+			
+			if(subGenders.containsKey(entry.getKey())) {
+				
+				// Since the observation was found, compare other data elements.
+				log.info(" Comparing Gender Identity Data Observation ");
+				String compContext = " Comparing Gender Identity data for code " + entry.getKey();
+				entry.getValue().compare(subGenders.get(entry.getKey()), compContext, results);
+				
+			}
+			else {
+				
+				String error = "The scenario contains gender identity data with code " + entry.getKey() + 
+						" , however there is no matching data in the submitted CCDA.";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+			
+		}
+		
+	}
+
+	private void compare(CCDAGenderIdentityObs subCcdaGenderIdentityObs, String compContext,
+			ArrayList<ContentValidationResult> results) {
+		
+		String elementName = compContext + " , Template Id Comparison : ";
+
+		// Compare template Ids 
+		ParserUtilities.compareTemplateIds(templateIds, subCcdaGenderIdentityObs.getTemplateIds(), results, elementName);
+
+		// Compare Gender Identity Codes 
+		String elementNameCode = compContext + " , Gender Identity Code Element Comparison : ";
+		ParserUtilities.compareCode(genderIdentityObsCode, subCcdaGenderIdentityObs.getGenderIdentityObsCode(), results, elementNameCode);
+		 
+		// Compare Gender Identity Codes 
+		String elementNameVal = compContext + " , Gender Identity Value Element Comparison : ";
+		ParserUtilities.compareCodeIncludingNullFlavor(genderIdentityValue, subCcdaGenderIdentityObs.getGenderIdentityValue(), results, elementNameVal);
+				 
+		
 	}
 	
 	

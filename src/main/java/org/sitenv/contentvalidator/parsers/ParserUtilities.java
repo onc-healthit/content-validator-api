@@ -313,6 +313,32 @@ public class ParserUtilities {
 			log.info(" Both Submitted and Ref codes are null for " + elementName);
 		}
 	}
+	
+	public static void compareCodeIncludingNullFlavor(CCDACode refCode, CCDACode submittedCode,
+			   ArrayList<ContentValidationResult> results, String elementName) {
+
+		// handle section code.
+		if((refCode != null) && (submittedCode != null) ) {
+		
+			if(refCode.matchesIncludingNullFlavor(submittedCode, results, elementName)) {
+			// do nothing since both match.
+			log.info(" Both Submitted and Ref codes match for " + elementName);
+			}
+		
+		}
+		else if ((refCode == null) && (submittedCode != null)) {
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else if((refCode != null) && (submittedCode == null)){
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires " + elementName + " data, but submitted file does not contain " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		} 
+		else {
+			// do nothing since both are null.
+			log.info(" Both Submitted and Ref codes are null for " + elementName);
+		}
+	}
 
 	public static void compareCode(CCDACode refCode, CCDACode submittedCode,
 								   ArrayList<ContentValidationResult> results, String elementName) {

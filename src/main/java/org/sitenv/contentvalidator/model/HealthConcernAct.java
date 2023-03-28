@@ -1,6 +1,7 @@
 package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,6 +94,24 @@ private static Logger log = LoggerFactory.getLogger(HealthConcernAct.class.getNa
 
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
+	}
+
+	public HashMap<String, CCDAProblemObs> getAllProblemObservations() {
+		
+		HashMap<String, CCDAProblemObs> probs = new HashMap<>();
+		if(problemObservations != null) {
+			for(CCDAProblemObs prob : problemObservations) {
+				
+				if(prob.getProblemCode() != null && 
+						prob.getProblemCode().getCode() != null) {
+					
+					probs.put(prob.getProblemCode().getCode(),
+							prob);
+				}
+				
+			}
+		}		
+		return probs;
 	}
 	
 	

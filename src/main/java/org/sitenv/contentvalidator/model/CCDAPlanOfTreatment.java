@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CCDAPlanOfTreatment {
 
@@ -92,5 +93,24 @@ public class CCDAPlanOfTreatment {
 		
 		if(author != null)
 			author.log();
+	}
+
+
+	public HashMap<String, PlannedProcedure> getAllPlannedProcedures() {
+		
+		HashMap<String, PlannedProcedure> plannedProcs = new HashMap<>();
+		if(plannedProcedures != null) {
+			for(PlannedProcedure proc : plannedProcedures) {
+				
+				if(proc.getProcedureCode() != null && 
+						proc.getProcedureCode().getCode() != null) {
+					
+					plannedProcs.put(proc.getProcedureCode().getCode(),
+							proc);
+				}
+				
+			}
+		}		
+		return plannedProcs;
 	}
 }

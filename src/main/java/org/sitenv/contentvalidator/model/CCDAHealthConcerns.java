@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CCDAHealthConcerns {
 
@@ -83,5 +84,26 @@ public class CCDAHealthConcerns {
 		
 		if(author != null)
 			author.log();
+	}
+	
+	public HashMap<String, CCDAProblemObs> getAllHealthConcernActs() {
+		
+		HashMap<String, CCDAProblemObs> hcActs = new HashMap<>();
+		
+		if(healthConcernActs != null) {
+			for(HealthConcernAct hc : healthConcernActs) {
+				
+				HashMap<String, CCDAProblemObs> hcProbs = new HashMap<>();
+				
+				hcProbs = hc.getAllProblemObservations();
+				
+				if(hcProbs != null && hcProbs.size() > 0) {
+				
+					hcActs.putAll(hcProbs);
+				}
+				
+			}
+		}		
+		return hcActs;
 	}
 }

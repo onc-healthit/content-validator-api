@@ -6,6 +6,7 @@ import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CCDAProblemConcern {
 	
@@ -123,6 +124,22 @@ public class CCDAProblemConcern {
 			this.problems = ps;
 	}
 
+	public HashMap<String, AssessmentScaleObservation> getAllSdohData() {
+		
+		HashMap<String, AssessmentScaleObservation> assessments = new HashMap<>();
+		if(problems != null) {
+			for(CCDAProblemObs obs: problems) {
+				
+				HashMap<String, AssessmentScaleObservation> probAssessments = obs.getAllSdohData();
+				
+				if(probAssessments != null && !probAssessments.isEmpty()) {
+					assessments.putAll(probAssessments);
+				}
+				
+			}
+		}		
+		return assessments;
+	}
 	
 	
 }

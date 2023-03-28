@@ -54,15 +54,7 @@ public class CCDABodyParser {
 		MedicalEquipmentParser.parse(doc, model, curesUpdate, svap2022);
 		
 		logUscdiTypesStatus(curesUpdate, svap2022);
-		
-		if (curesUpdate && svap2022) {
-			// Note: The UI should not allow this. It should only be able to happen via misuse of the API.
-			// TODO: consider throwing exception
-			log.error("We can't process curesUpdate and svap2022 at the same time. Defaulting to curesUpdate.");
-			svap2022 = false;
-		}
-		
-		if (curesUpdate) {
+	
 			log.info(" Parsing Notes Section ");
 			NotesParser.parse(doc, model, curesUpdate, svap2022);
 
@@ -72,10 +64,20 @@ public class CCDABodyParser {
 
 			log.info(" Parsing Care Team Section ");
 			CareTeamMemberParser.parseCareTeamSection(doc, model, curesUpdate, svap2022);
-		} /*else if (svap2022) { // TODO: Add this condition back when we have specifics - NOTE: cures is FORCED by CCDAParser.java for now, so we don't miss out on if (curesUPdate) checks for now...
-			// TODO: Add svap2022 (USCDI V2) specific parsing requirements
-		}*/
+
 		
+		log.info("Parsing Goals");
+		GoalParser.parse(doc, model, curesUpdate, svap2022);
+			
+			log.info(" Parsing Health Concerns ");
+			HealthConcernParser.parse(doc, model, curesUpdate, svap2022);
+			
+			log.info(" Parsing Plan of Treatment ");
+			PlanOfTreatmentParser.parse(doc, model, curesUpdate, svap2022);	
+			
+			if(svap2022)
+				curesUpdate = true;
+			
 	}
 	
 	private static void logUscdiTypesStatus(boolean curesUpdate, boolean svap2022) {
