@@ -65,12 +65,12 @@ public class CCDAEffTime {
 			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
-		else if(!lowPresent && subTime.getLowPresent()) {
+		/* Removed for ticket SITE-3611: else if(!lowPresent && subTime.getLowPresent()) {
 			
 			String error = "The " + elementName + " (low time value) is not required, but submitted CCDA contains the (low time value) for " + elementName;
 			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
-		}
+		} */
 		else {
 			log.info("Low value absent in both refernce and submitted models ");
 		}
@@ -104,54 +104,16 @@ public class CCDAEffTime {
 			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
-		else if(!highPresent && subTime.getHighPresent()) {
+		/* Removed for ticket SITE-3611: else if(!highPresent && subTime.getHighPresent()) {
 			
 			String error = "The " + elementName + " (high time value) is not required, but submitted CCDA contains the (high time value) for " + elementName;
 			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
-		}
+		} */
 		else {
 			log.info("High value absent in both refernce and submitted models ");
 		}
 	 
-		// Compare Time value element
-/*		if(valuePresent && subTime.getValuePresent() ) {
-
-			if(value.getValue().length() >= 8)
-				refTime = value.getValue().substring(0,8);
-			else 
-				refTime = value.getValue();
-
-			if(subTime.getValue().getValue().length() >= 8)
-				submittedtime = subTime.getValue().getValue().substring(0,8);
-			else 
-				submittedtime = subTime.getValue().getValue();
-
-			if(refTime.equalsIgnoreCase(submittedtime) ) {
-				log.info("Value Time element matches");
-			}
-			else {
-				String error = "The " + elementName + " (Effective Time: Value ) is " + value.getValue() + " , but submitted CCDA (Effective Time: Value ) is " + subTime.getValue().getValue() + " which does not match ";
-				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-				results.add(rs);
-			}
-
-		}
-		else if(valuePresent && !subTime.getValuePresent()) {
-
-			String error = "The " + elementName + " (value time element ) is required, but submitted CCDA does not contain the (value time element) for " + elementName;
-			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-			results.add(rs);
-		}
-		else if(!valuePresent && subTime.getValuePresent()) {
-
-			String error = "The " + elementName + " (value time element) is not required, but submitted CCDA contains the (value time element) for " + elementName;
-			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-			results.add(rs);
-		}
-		else {
-			log.info("Value Time elements absent in both refernce and submitted models ");
-		}*/
 	}
 	
 	public void compareValueElement(CCDAEffTime subTime, ArrayList<ContentValidationResult> results, String elementName) {

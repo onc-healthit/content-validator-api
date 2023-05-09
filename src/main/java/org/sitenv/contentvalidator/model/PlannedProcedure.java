@@ -118,15 +118,15 @@ private static Logger log = LoggerFactory.getLogger(PlannedProcedure.class.getNa
 		ParserUtilities.compareTemplateIds(templateIds, subProc.getTemplateIds(), results, elementName);
 
 		// Compare Assessment  Codes 
-		String elementNameCode = compContext + " , Assessment Code Element Comparison : ";
+		String elementNameCode = compContext + " , Planned Procedure Code Element Comparison : ";
 		ParserUtilities.compareCode(procedureCode, subProc.getProcedureCode(), results, elementNameCode);
 		 
 		// Compare Assessment  Codes 
-		String elementStatus = compContext + " , Assessment Status Element Comparison : ";
+		String elementStatus = compContext + " , Planned Procedure Element Comparison : ";
 	//	ParserUtilities.compareCode(statusCode, subProc.getStatusCode(), results, elementStatus);
 				 	 
 		// Compare Assessment  Codes 
-		String elementTime = compContext + " , Assessment Time Comparison : ";
+		String elementTime = compContext + " , Planned Procedure Comparison : ";
 		ParserUtilities.compareEffectiveTime(procedureTime, subProc.getProcedureTime(), results, elementTime);
 		
 	}

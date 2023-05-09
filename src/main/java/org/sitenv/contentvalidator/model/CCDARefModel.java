@@ -333,6 +333,9 @@ public class CCDARefModel {
 		
 		
 		if(curesUpdate) {
+			
+			log.info(" Comparing data for Cures Update (USCDI v1) specific entries ");
+			
 			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData = null;
 			submittedAuthorsWithLinkedReferenceData = submittedCCDA.getAuthorsWithLinkedReferenceData() != null
 					? submittedCCDA.getAuthorsWithLinkedReferenceData()
@@ -352,6 +355,8 @@ public class CCDARefModel {
 		}
 		
 		if(svap2022) {
+			
+			log.info(" Comparing data for Cures Update (USCDI v2) specific entries ");
 			
 			log.info(" Comparing Sexual Orientation ");
 			compareSexOrientation(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
