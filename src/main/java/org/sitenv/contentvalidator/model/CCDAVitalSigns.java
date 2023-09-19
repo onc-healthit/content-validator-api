@@ -42,7 +42,7 @@ public class CCDAVitalSigns {
 	}
 	
 	public void compareAuthor(CCDAVitalSigns subVitalSigns, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022, boolean svap2023) {
 		String elName = "Vital Signs Section";
 
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,

@@ -252,7 +252,7 @@ public class CCDANotesActivity {
 	// in the logic. The method which would call this, simply loops through, which is not going to be valid.
 	// It's just a proof of concept for now.
 	public void compareAuthor(CCDANotesActivity subNoteActivity, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022, boolean svap2023) {
 		log.info("Comparing Authors for current Note Activity");
 		ArrayList<CCDAAuthor> refAllNoteActivityAuths = new ArrayList<CCDAAuthor>(Arrays.asList(this.getAuthor()));
 		ArrayList<CCDAAuthor> subAllNoteActivityAuths = new ArrayList<CCDAAuthor>(Arrays.asList(

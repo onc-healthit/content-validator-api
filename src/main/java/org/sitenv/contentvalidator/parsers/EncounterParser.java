@@ -15,17 +15,17 @@ public class EncounterParser {
 	
 	private static Logger log = LoggerFactory.getLogger(EncounterParser.class.getName());
 	
-	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022, boolean svap2023)
 			throws XPathExpressionException {
     	
-    	model.setEncounter(retrieveEncounterDetails(doc, curesUpdate, svap2022));	
+    	model.setEncounter(retrieveEncounterDetails(doc, curesUpdate, svap2022, svap2023));	
     	
     	model.setAdmissionDiagnosis(retrieveAdmissionDiagnosisDetails(doc));
     	
     	model.setDischargeDiagnosis(retrieveDischargeDiagnosisDetails(doc));
 	}
     
-	public static CCDAEncounter retrieveEncounterDetails(Document doc, boolean curesUpdate, boolean svap2022)
+	public static CCDAEncounter retrieveEncounterDetails(Document doc, boolean curesUpdate, boolean svap2022, boolean svap2023)
 			throws XPathExpressionException {
 		Element sectionElement = (Element) CCDAConstants.ENCOUNTER_EXPRESSION.evaluate(doc, XPathConstants.NODE);
 		CCDAEncounter encounters = null;
@@ -45,7 +45,7 @@ public class EncounterParser {
 			
 			// Get Entries
 			encounters.setEncActivities(readEncounterActivity((NodeList) CCDAConstants.REL_ENC_ENTRY_EXP.
-					evaluate(sectionElement, XPathConstants.NODESET), curesUpdate, svap2022));
+					evaluate(sectionElement, XPathConstants.NODESET), curesUpdate, svap2022, svap2023));
 			
 			encounters.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(sectionElement, XPathConstants.NODE)));
@@ -58,7 +58,7 @@ public class EncounterParser {
 	}
     
 	public static ArrayList<CCDAEncounterActivity> readEncounterActivity(NodeList encounterActivityNodeList,
-			boolean curesUpdate, boolean svap2022) throws XPathExpressionException {
+			boolean curesUpdate, boolean svap2022, boolean svap2023) throws XPathExpressionException {
 		ArrayList<CCDAEncounterActivity> encounterActivityList = new ArrayList<>();
 		CCDAEncounterActivity encounterActivity;
 		for (int i = 0; i < encounterActivityNodeList.getLength(); i++) {

@@ -34,11 +34,11 @@ public class ContentValidatorService {
 	
 	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName,
 			String ccdaFile) {
-		return validate(validationObjective, referenceFileName, ccdaFile, false, false, SeverityLevel.INFO);
+		return validate(validationObjective, referenceFileName, ccdaFile, false, false, false, SeverityLevel.INFO);
 	}
 	
 	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName,
-			String ccdaFile, boolean curesUpdate, boolean svap2022, SeverityLevel severityLevel) {
+			String ccdaFile, boolean curesUpdate, boolean svap2022, boolean svap2023, SeverityLevel severityLevel) {
 		log.info(" ***** CAME INTO THE REFERENCE VALIDATOR *****");
 		
 		ArrayList<ContentValidationResult> results = new ArrayList<>();
@@ -48,7 +48,7 @@ public class ContentValidatorService {
 			log.info(" Val Obj " + validationObjective + " Ref File " + referenceFileName);
 
 			// Parse passed in File
-			CCDARefModel submittedCCDA = parser.parse(ccdaFile, severityLevel, curesUpdate, svap2022);
+			CCDARefModel submittedCCDA = parser.parse(ccdaFile, severityLevel, curesUpdate, svap2022, svap2023);
 
 			CCDARefModel ref = null;
 			if( (referenceFileName != null)
@@ -58,12 +58,13 @@ public class ContentValidatorService {
 			}
 
 			if((ref != null) && (submittedCCDA != null)) {
-				log.info("Comparing the Ref Model to the Submitted Model, parameters: referenceFile: {}, curesUpdate: {}, uscdiv2: {}", referenceFileName, curesUpdate, svap2022);
-				results = ref.compare(validationObjective, submittedCCDA, curesUpdate, svap2022);
+				log.info("Comparing the Ref Model to the Submitted Model, parameters: referenceFile: {}, curesUpdate: {}, uscdiv2: {}", 
+						referenceFileName, curesUpdate, svap2022, svap2023);
+				results = ref.compare(validationObjective, submittedCCDA, curesUpdate, svap2022, svap2023);
 			}
 			else {
-				log.error(" Submitted Model = " + ((submittedCCDA==null)?" Model is null":submittedCCDA.toString()));
-				log.error(" Reference Model = " + ((ref==null)?" Model is null":ref.toString()));
+				log.error(" Submitted Model = " + ((submittedCCDA == null) ? " Model is null" : submittedCCDA.toString()));
+				log.error(" Reference Model = " + ((ref == null) ? " Model is null" : ref.toString()));
 				log.error("Something is wrong, not able to find ref model for " + referenceFileName);
 			}
 		}

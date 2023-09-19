@@ -91,7 +91,7 @@ public class CCDAEncounter {
 	}
 	
 	public void compareAuthor(CCDAEncounter subEncounter, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022, boolean svap2023) {
 		final String encSec = "Encounters Section";
 		String elName = encSec;
 

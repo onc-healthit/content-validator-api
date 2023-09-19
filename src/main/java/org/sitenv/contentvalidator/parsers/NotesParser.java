@@ -18,7 +18,7 @@ public class NotesParser {
 
 private static Logger log = LoggerFactory.getLogger(NotesParser.class.getName());
 	
-	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022, boolean svap2023)
 			throws XPathExpressionException {    	
     	model.setNotes(retrieveNotesDetails(doc));
     	

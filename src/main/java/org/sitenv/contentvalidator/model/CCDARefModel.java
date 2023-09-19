@@ -136,29 +136,29 @@ public class CCDARefModel {
 	}
 	
 	public ArrayList<ContentValidationResult> compare(String validationObjective, CCDARefModel submittedCCDA,
-			boolean curesUpdate, boolean svap2022) {
+			boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		ArrayList<ContentValidationResult> results = new ArrayList<ContentValidationResult>();
 		
 		if(doesObjectiveRequireCCDS(validationObjective))
 		{
 			log.info(" Performing CCDS checks ");
-			compareCCDS(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			compareCCDS(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		}
 		else if(doesObjectiveRequireCIRI(validationObjective))
 		{
 			log.info(" Performing CIRI checks ");
-			performCIRIValidation(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			performCIRIValidation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		}
 		else if(doesObjectiveRequireCarePlan(validationObjective))
 		{
 			log.info(" Performing Care Plan checks ");
-			performCarePlanValidation(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			performCarePlanValidation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		}
 		else if(doesObjectiveRequireDS4P(validationObjective))
 		{
 			log.info(" Performing DS4P checks ");
-			performDS4PValidation(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			performDS4PValidation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		}
 		else 
 		{
@@ -166,16 +166,16 @@ public class CCDARefModel {
 		}
 		
 		log.info(" Compare non CCDS Structured Data ");
-		compareNonCCDSStructuredData(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+		compareNonCCDSStructuredData(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
-		validateDocElements(validationObjective,submittedCCDA, results, curesUpdate, svap2022);
+		validateDocElements(validationObjective,submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info(" Total Number of Content Validation Issues " + results.size());
 		return results;
 	}
 	
 	public void validateDocElements(String valObj, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) 
 	{
 		if(valObj.equalsIgnoreCase("170.315_b1_ToC_Amb") ||
 				valObj.equalsIgnoreCase("170.315_b4_CCDS_Amb") ) 
@@ -292,47 +292,47 @@ public class CCDARefModel {
 	}
 	
 	public void compareCCDS(String validationObjective, CCDARefModel submittedCCDA,
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
-		if(svap2022) {
+		if(svap2022 || svap2023) {
 			curesUpdate = true;
 		}
 		
 		log.info("Comparing Patient Data ");
-		comparePatients(submittedCCDA, results, curesUpdate, svap2022);
+		comparePatients(submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Social History Smoking Status ");
-		validateSmokingStatus(submittedCCDA, results, curesUpdate, svap2022);
+		validateSmokingStatus(submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Validating Social History Birth Sex ");
-		validateBirthSex(submittedCCDA, results, curesUpdate, svap2022);
+		validateBirthSex(submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Problems ");
-		compareProblems(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+		compareProblems(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Allergies ");
-		compareAllergies(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+		compareAllergies(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Medications ");
-		compareMedications(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+		compareMedications(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Lab Results "); 
-		compareLabResults(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+		compareLabResults(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Vital Signs ");
-		compareVitalObs(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+		compareVitalObs(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Procedures ");
-		compareProcedures(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+		compareProcedures(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Udis ");
-		compareUdis(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+		compareUdis(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Immunizations ");
-		compareImmunizations(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+		compareImmunizations(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		
-		if(curesUpdate) {
+		if (curesUpdate) {
 			
 			log.info(" Comparing data for Cures Update (USCDI v1) specific entries ");
 			
@@ -344,37 +344,44 @@ public class CCDARefModel {
 			
 			log.info(" Comparing Notes ");
 			compareNotesActivities(validationObjective, submittedCCDA, results, curesUpdate,
-					submittedAuthorsWithLinkedReferenceData, svap2022);
+					submittedAuthorsWithLinkedReferenceData, svap2022, svap2023);
 			
 			log.info(" Comparing Author ");
 			compareAuthorEntries(validationObjective, submittedCCDA, results, curesUpdate,
-					submittedAuthorsWithLinkedReferenceData, svap2022);
+					submittedAuthorsWithLinkedReferenceData, svap2022, svap2023);
 			
 			log.info(" Comparing Care Team ");
-			compareCareTeamMembers(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			compareCareTeamMembers(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		}
 		
-		if(svap2022) {
+		if (svap2022) {
 			
 			log.info(" Comparing data for Cures Update (USCDI v2) specific entries ");
 			
 			log.info(" Comparing Sexual Orientation ");
-			compareSexOrientation(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			compareSexOrientation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 			
 			log.info(" Comparing Gender Identity ");
-			compareGenderIdentity(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			compareGenderIdentity(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 			
 			log.info(" Comparing SDOH Data ");
-			compareSdohData(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			compareSdohData(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 			
 			log.info(" Comparing Goals Data ");
-			compareGoalsData(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			compareGoalsData(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 			
 			log.info(" Comparing HealthConcerns Data ");
-			compareHealthConcernsData(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			compareHealthConcernsData(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 			
 			log.info(" Comparing Plan of Treatment Data ");
-			comparePlanOfTreatmentData(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+			comparePlanOfTreatmentData(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+		}
+		
+		if (svap2023) {
+			log.info(" Comparing data for Cures Update (USCDI v3) specific entries ");
+			
+			// TODO: Dragon: Add USCDIv3-specific comparisons here
+			// If there is overlap of v2 and v3, can add an or condition prior to svap2022 and 2023 checks...
 		}
 		
 		log.info("Finished comparison, returning results");
@@ -382,11 +389,11 @@ public class CCDARefModel {
 	}
 	
 	private void compareProblems(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		if((this.getProblem() != null) && (submittedCCDA.getProblem() != null) ) {
 			log.info("Start Problem Comparison ");
-			this.problem.compare(submittedCCDA.getProblem(), results, svap2022);
+			this.problem.compare(submittedCCDA.getProblem(), results, svap2022, svap2023);
 		}
 		else if ( (this.getProblem() != null) && (submittedCCDA.getProblem() == null) ) 
 		{
@@ -409,7 +416,7 @@ public class CCDARefModel {
 	}
 	
 	private void compareAllergies(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		if((this.getAllergy() != null) && (submittedCCDA.getAllergy() != null) ) {
 			log.info("Start Allergy Comparison ");
@@ -481,7 +488,7 @@ public class CCDARefModel {
 	}
 	
 	public void compareMedications(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Medication Activities for comparison ");
 		HashMap<String, CCDAMedicationActivity> refActivities = this.getAllMedActivities();
@@ -515,7 +522,7 @@ public class CCDARefModel {
 	}
 	
 	public void compareImmunizations(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Immunization Activities for comparison ");
 		HashMap<String, CCDAImmunizationActivity> refActivities = this.getAllImmunizations();
@@ -550,7 +557,7 @@ public class CCDARefModel {
 	
 	
 	public void compareLabResults(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Lab Results for comparison ");
 		HashMap<String, CCDALabResultObs> refResults = this.getAllLabResultObs();
@@ -584,7 +591,7 @@ public class CCDARefModel {
 	}
 	
 	public void compareVitalObs(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Vital Observations for comparison ");
 		HashMap<String, CCDAVitalObs> refVitals = this.getAllVitalObs();
@@ -618,7 +625,7 @@ public class CCDARefModel {
 	}
 	
 	public void compareUdis(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Udis for comparison ");
 		ArrayList<CCDAUDI> refUdis = this.getAllUDIs();
@@ -652,7 +659,7 @@ public class CCDARefModel {
 	}
 	
 	public void compareProcedures(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Procedure Acts for comparison ");
 		HashMap<String, CCDAProcActProc> refProcs = this.getAllProcedures();
@@ -686,7 +693,7 @@ public class CCDARefModel {
 	}
 	
 	public void compareNotes(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Notes Section for comparison ");
 		HashMap<String, CCDANotes> refNotes = this.getAllNotes();
@@ -724,7 +731,7 @@ public class CCDARefModel {
 	}
 	
 	public void compareSexOrientation(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Sexual Orientation for comparison ");
 		HashMap<String, CCDASexualOrientation> refSexOrientation = this.getAllSexualOrientations();
@@ -760,7 +767,7 @@ public class CCDARefModel {
 	}
 	
 	public void compareGenderIdentity(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Gender Identities for comparison ");
 		HashMap<String, CCDAGenderIdentityObs> refGenders = this.getAllGenderIdentities();
@@ -796,7 +803,7 @@ public class CCDARefModel {
 	}
 	
 	public void compareSdohData(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving SDOH Data for comparison ");
 		HashMap<String, AssessmentScaleObservation> refSdohData = this.getAllSdohData();
@@ -833,7 +840,7 @@ public class CCDARefModel {
 	
 
 	private void compareGoalsData(String validationObjective, CCDARefModel submittedCCDA,
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Goal Observations for comparison ");
 		HashMap<String, GoalObservation> refGoals = this.getAllGoalObservations();
@@ -869,7 +876,7 @@ public class CCDARefModel {
 	}
 	
 	private void compareHealthConcernsData(String validationObjective, CCDARefModel submittedCCDA,
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Health Concern Acts  for comparison ");
 		HashMap<String, CCDAProblemObs> refHcActs = this.getAllHealthConcernActs();
@@ -879,7 +886,7 @@ public class CCDARefModel {
 			(subHcActs != null && subHcActs.size() > 0)  ) {
 			
 			log.info("Health Concern Acts present in both models ");
-			CCDAProblemObs.compareHcActs(refHcActs, subHcActs, results, svap2022);
+			CCDAProblemObs.compareHcActs(refHcActs, subHcActs, results, svap2022, svap2023);
 			
 		} 	
 		else if ( (refHcActs != null && refHcActs.size() > 0) && 
@@ -905,7 +912,7 @@ public class CCDARefModel {
 	}
 	
 	private void comparePlanOfTreatmentData(String validationObjective, CCDARefModel submittedCCDA,
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Planned Procedures for comparison ");
 		HashMap<String, PlannedProcedure> refProcs = this.getAllPlannedProcedures();
@@ -1020,7 +1027,7 @@ public class CCDARefModel {
 	
 	
 	public void compareCareTeamMembers(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Care Team Section for comparison ");
 		HashMap<String, CCDACareTeamMemberAct> refCtm = this.getAllCareTeamMembers();
@@ -1057,7 +1064,7 @@ public class CCDARefModel {
 	
 	public void compareNotesActivities(String validationObjective, CCDARefModel submittedCCDA,
 			ArrayList<ContentValidationResult> results, boolean curesUpdate,
-			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData, boolean svap2022) {
+			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Notes Section for comparison ");
 		
@@ -1145,7 +1152,7 @@ public class CCDARefModel {
 	
 	public void compareAuthorEntries(String validationObjective, CCDARefModel submittedCCDA,
 			ArrayList<ContentValidationResult> results, boolean curesUpdate,
-			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData, boolean svap2022) {		
+			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData, boolean svap2022, boolean svap2023) {		
 		ArrayList<CCDAAuthor> refAuths = this.getAuthorsFromHeader();
 		ArrayList<CCDAAuthor> subAuths = submittedCCDA.getAuthorsFromHeader();
 		
@@ -1177,25 +1184,25 @@ public class CCDARefModel {
 		// And, why CCDAAuthor.compareAuthors, is, since, more details are required for entry and below 
 		// to pass provenance requirements, such as repOrg name (and time, but no need for a link there).
 		compareSectionAndEntryLevelProvenance(validationObjective, submittedCCDA, results, curesUpdate,
-				submittedAuthorsWithLinkedReferenceData, svap2022);
+				submittedAuthorsWithLinkedReferenceData, svap2022, svap2023);
 		
 		// Note Activity can be in many places and can have authors which must meet provenance reqs
 		// Disabling for now as using old Note Activity specific (compare) impl to hanlde
 		// Note: This version is a work in progress and should not be used unless finished and removing old impl 
 //		compareNoteActivityProvenance(validationObjective, submittedCCDA, results, curesUpdate,
-//				submittedAuthorsWithLinkedReferenceData, svap2022);
+//				submittedAuthorsWithLinkedReferenceData, svap2022, svap2023);
 	}
 	
 	// WIP: The idea is for this to replace the current provenance org name checks specific to notes activities class
 	private void compareNoteActivityProvenance(String validationObjective, CCDARefModel submittedCCDA,
 			ArrayList<ContentValidationResult> results, boolean curesUpdate,
-			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData, boolean svap2022) {
+			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData, boolean svap2022, boolean svap2023) {
 		if (notesEntries != null) {
 			for (CCDANotesActivity noteActivity : notesEntries) {
 				if (submittedCCDA.getNotesEntries() != null) {
 					for (CCDANotesActivity subNoteActivity : submittedCCDA.getNotesEntries()) {
 						noteActivity.compareAuthor(subNoteActivity, results, curesUpdate,
-								submittedAuthorsWithLinkedReferenceData, svap2022);
+								submittedAuthorsWithLinkedReferenceData, svap2022, svap2023);
 					}
 				} else {
 					// error? some note activity is missing since there is at least one in ref...?
@@ -1206,31 +1213,31 @@ public class CCDARefModel {
 	
 	public void compareSectionAndEntryLevelProvenance(String validationObjective, CCDARefModel submittedCCDA,
 			ArrayList<ContentValidationResult> results, boolean curesUpdate,
-			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData, boolean svap2022) {				
+			ArrayList<CCDAAuthor> submittedAuthorsWithLinkedReferenceData, boolean svap2022, boolean svap2023) {				
 		if (allergy != null)
 			allergy.compareAuthor(submittedCCDA.getAllergy() != null ? submittedCCDA.getAllergy() : null, 
-					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022);
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022, svap2023);
 		if (problem != null)
 			problem.compareAuthor(submittedCCDA.getProblem() != null ? submittedCCDA.getProblem() : null, 
-					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022);
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022, svap2023);
 		if (procedure != null)
 			procedure.compareAuthor(submittedCCDA.getProcedure() != null ? submittedCCDA.getProcedure() : null, 
-					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022); // TODO-db: Finish if required: PAP/UDI, PAP/Notes, PAAct?, PAObs?
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022, svap2023); // TODO-db: Finish if required: PAP/UDI, PAP/Notes, PAAct?, PAObs?
 		if (medication != null)
 			medication.compareAuthor(submittedCCDA.getMedication() != null ? submittedCCDA.getMedication() : null,
-					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022); // TODO-db: Look at parser, may be more authors to collect
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022, svap2023); // TODO-db: Look at parser, may be more authors to collect
 		if (immunization != null)
 			immunization.compareAuthor(submittedCCDA.getImmunization() != null ? submittedCCDA.getImmunization() : null,
-					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022);
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022, svap2023);
 		if (labResults != null)
 			labResults.compareAuthor(submittedCCDA.getLabResults() != null ? submittedCCDA.getLabResults() : null,
-					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022);
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022, svap2023);
 		if (vitalSigns != null)
 			vitalSigns.compareAuthor(submittedCCDA.getVitalSigns() != null ? submittedCCDA.getVitalSigns() : null,
-					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022);
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022, svap2023);
 		if (encounter != null)
 			encounter.compareAuthor(submittedCCDA.getEncounter() != null ? submittedCCDA.getEncounter() : null, 
-					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022); // TODO-db: Consider adding remaining items in EncounterParser (multiple problem observations, see retrieveAdmissionDiagnosisDetails and below)
+					results, curesUpdate, submittedAuthorsWithLinkedReferenceData, svap2022, svap2023); // TODO-db: Consider adding remaining items in EncounterParser (multiple problem observations, see retrieveAdmissionDiagnosisDetails and below)
 	}
 	
 	private HashMap<String, CCDALabResultObs> getAllLabResultObs() 
@@ -1341,7 +1348,7 @@ public class CCDARefModel {
 	}
 	
 	private void validateBirthSex(CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, 
-			boolean curesUpdate, boolean svap2022) {
+			boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		if( (submittedCCDA.getSocialHistory() != null) &&
 			 (submittedCCDA.getSocialHistory().getBirthSex() != null)) {
@@ -1388,7 +1395,7 @@ public class CCDARefModel {
 	}
 	
 	private void validateSmokingStatus(CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, 
-			boolean curesUpdate, boolean svap2022) {
+			boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving Smoking Status for comparison ");
 		HashMap<String, CCDASmokingStatus> refStatus = this.getAllSmokingStatuses();
@@ -1513,7 +1520,8 @@ public class CCDARefModel {
 		return diagnoses;
 	}
 	
-	private void compareEncounterDiagnosis(String validationObjective, CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, boolean svap2022) {
+	private void compareEncounterDiagnosis(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean svap2022, boolean svap2023) {
 		
 		if(!validationObjective.equalsIgnoreCase("170.315_e1_VDT_Amb") &&
 		   !validationObjective.equalsIgnoreCase("170.315_e1_VDT_Inp") ) {
@@ -1528,7 +1536,7 @@ public class CCDARefModel {
 				
 				String context = "Enounter Diagnosis Entry ";
 				// Iterate and verify that all reference diagnosis is present in submitted diagnosis
-				CCDAProblemObs.compareProblemObservationData(refDiags, subDiags, results, context, svap2022);
+				CCDAProblemObs.compareProblemObservationData(refDiags, subDiags, results, context, svap2022, svap2023);
 	
 	
 			} else if ( (refDiags != null && refDiags.size() > 0) && 
@@ -1555,10 +1563,10 @@ public class CCDARefModel {
 	
 	
 	private void comparePatients(CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, 
-			boolean curesUpdate, boolean svap2022) {
+			boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		if((patient != null) && (submittedCCDA.getPatient() != null)) {
-			this.patient.compare(submittedCCDA.getPatient(), results, submittedCCDA, curesUpdate, svap2022);
+			this.patient.compare(submittedCCDA.getPatient(), results, submittedCCDA, curesUpdate, svap2022, svap2023);
 		}
 		else if( (patient == null) && (submittedCCDA.getPatient() != null) ) {
 			ContentValidationResult rs = new ContentValidationResult("The scenario does not require patient data, but submitted file does have patient data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
@@ -1997,29 +2005,29 @@ public class CCDARefModel {
 	}
 
 	public void performCIRIValidation(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) 
 	{
 		log.info("Comparing Patient Data ");
-		comparePatients(submittedCCDA, results, curesUpdate, svap2022);
+		comparePatients(submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Problems ");
-		compareProblems(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+		compareProblems(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Allergies ");
-		compareAllergies(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+		compareAllergies(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Medications ");
-		compareMedications(validationObjective, submittedCCDA, results, curesUpdate, svap2022);
+		compareMedications(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Finished comparison , returning results");
 		
 	}
 
 	public void performCarePlanValidation(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) 
 	{
 		log.info("Comparing Patient Data ");
-		comparePatients(submittedCCDA, results, curesUpdate, svap2022);
+		comparePatients(submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing CarePlan Sections");
 		compareCarePlanSections(submittedCCDA, results);
@@ -2029,17 +2037,17 @@ public class CCDARefModel {
 	}
 
 	public void performDS4PValidation(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022) 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) 
 	{
 		log.info("Comparing Patient Data ");
-		comparePatients(submittedCCDA, results, curesUpdate, svap2022);
+		comparePatients(submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Finished comparison , returning results");
 		
 	}
 	
 	public void compareNonCCDSStructuredData(String valObj, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022)
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023)
 	{
 		// validate encounter diagnosis.
 		if(valObj.equalsIgnoreCase("170.315_b1_ToC_Amb") || 
@@ -2050,7 +2058,7 @@ public class CCDARefModel {
 				valObj.equalsIgnoreCase("170.315_b6_DE_Inp") ) {
 			
 			log.info("Comparing Encounter Diagnosis for b1, b4, and b6 ");
-			compareEncounterDiagnosis(valObj, submittedCCDA, results, svap2022);	
+			compareEncounterDiagnosis(valObj, submittedCCDA, results, svap2022, svap2023);	
 		}
 	}
 

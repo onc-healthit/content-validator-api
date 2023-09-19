@@ -74,7 +74,7 @@ public class CCDAProcedure {
 	}
 	
 	public void compareAuthor(CCDAProcedure subProcedure, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022, boolean svap2023) {
 		String elName = "Procedures Section";
 
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,

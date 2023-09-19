@@ -35,7 +35,7 @@ public class CCDAImmunization {
 	}
 	
 	public void compareAuthor(CCDAImmunization subImmunization, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022, boolean svap2023) {
 		String elName = "Immunizations Section";
 
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,

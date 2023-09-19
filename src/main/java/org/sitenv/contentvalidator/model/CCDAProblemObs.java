@@ -25,7 +25,8 @@ public class CCDAProblemObs {
 	private CCDAAuthor author;
 	
 	public static void compareProblemObservationData(HashMap<String, CCDAProblemObs> refProblems, 
-			HashMap<String, CCDAProblemObs> subProblems, 	ArrayList<ContentValidationResult> results, String context, boolean svap2022) {
+			HashMap<String, CCDAProblemObs> subProblems, ArrayList<ContentValidationResult> results, String context, 
+			boolean svap2022, boolean svap2023) {
 
 		log.info(" Start Comparing Problem Observations for " + context);
 		
@@ -36,7 +37,7 @@ public class CCDAProblemObs {
 
 				log.info("Comparing Problem Observation ");
 				String compContext = "Problem Observation Entry associated with " + context + " for code " + ent.getKey();
-				ent.getValue().compare(subProblems.get(ent.getKey()), compContext, results, svap2022);
+				ent.getValue().compare(subProblems.get(ent.getKey()), compContext, results, svap2022, svap2023);
 
 
 			} 
@@ -61,7 +62,8 @@ public class CCDAProblemObs {
 		
 	}
 	
-	public void compare(CCDAProblemObs subObs, String probObsContext, ArrayList<ContentValidationResult> results, boolean svap2022) {
+	public void compare(CCDAProblemObs subObs, String probObsContext, ArrayList<ContentValidationResult> results, 
+			boolean svap2022, boolean svap2023) {
 		
 		log.info(" Comparing data for problem observation Value element/code attribute: " + probObsContext);
 
@@ -242,7 +244,7 @@ public class CCDAProblemObs {
 	}
 
 	public static void compareHcActs(HashMap<String, CCDAProblemObs> refHcActs,
-			HashMap<String, CCDAProblemObs> subHcActs, ArrayList<ContentValidationResult> results, boolean svap2022) {
+			HashMap<String, CCDAProblemObs> subHcActs, ArrayList<ContentValidationResult> results, boolean svap2022, boolean svap2023) {
 		
 		// Check only the reference ones
 		for(Map.Entry<String,CCDAProblemObs> entry: refHcActs.entrySet()) {
@@ -252,7 +254,7 @@ public class CCDAProblemObs {
 						// Since the observation was found, compare other data elements.
 						log.info(" Comparing Health Concern Act Problem Observation");
 						String compContext = " Comparing Health Concern Act Problem Observation for code " + entry.getKey();
-						entry.getValue().compare(subHcActs.get(entry.getKey()), compContext, results, svap2022);
+						entry.getValue().compare(subHcActs.get(entry.getKey()), compContext, results, svap2022, svap2023);
 						
 					}
 					else {
