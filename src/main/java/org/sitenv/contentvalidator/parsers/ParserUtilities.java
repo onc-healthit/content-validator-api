@@ -1107,7 +1107,7 @@ public class ParserUtilities {
 		AssessmentScaleObservation assessment;
 		for (int i = 0; i < obsList.getLength(); i++) {
 			
-			log.info("Adding Sexual Orientation");
+			log.info("Adding Assessment Scale Observations");
 			assessment = new AssessmentScaleObservation();
 			
 			Element assessmentObsElement = (Element) obsList.item(i);
