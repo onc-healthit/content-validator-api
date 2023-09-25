@@ -404,7 +404,7 @@ public class CCDARefModel {
 		}
 		else if ( (this.getProblem() == null) && (submittedCCDA.getProblem() != null) ){
 			
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's problems, but the submitted C-CDA does contain problem data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's problems, but the submitted C-CDA does contain problem data, please check if it is appropriate.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info("Model does not have problems for comparison ");
 		}
@@ -431,7 +431,7 @@ public class CCDARefModel {
 		}
 		else if ( (this.getAllergy() == null) && (submittedCCDA.getAllergy() != null) ){
 			
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's allergies, but the submitted C-CDA does contain allergy data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's allergies, but the submitted C-CDA does contain allergy data, please check if it is appropriate.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info("Model does not have allergies for comparison ");
 		}
@@ -511,7 +511,7 @@ public class CCDARefModel {
 		}else if ((refActivities == null || refActivities.size() == 0) && 
 				(subActivities != null && subActivities.size() > 0) ) {
 		
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's medications, but the submitted C-CDA does contain medication data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's medications, but the submitted C-CDA does contain medication data, please check if it is appropriate.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info("Model does not have medications for comparison ");
 			
@@ -545,7 +545,7 @@ public class CCDARefModel {
 		}else if ((refActivities == null || refActivities.size() == 0) && 
 				(subActivities != null && subActivities.size() > 0) ) {
 		
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's immunizations, but the submitted C-CDA does contain immunization data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's immunizations, but the submitted C-CDA does contain immunization data, please check if it is appropriate.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info("Model does not have immunization for comparison ");
 			
@@ -580,7 +580,7 @@ public class CCDARefModel {
 		}else if ((refResults == null || refResults.size() == 0) && 
 				(subResults != null && subResults.size() > 0) ) {
 		
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's lab results, but the submitted C-CDA does contain lab result data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's lab results, but the submitted C-CDA does contain lab result data, please check if it is appropriate.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info("Model does not have lab results for comparison ");
 			
@@ -614,7 +614,7 @@ public class CCDARefModel {
 		}else if ((refVitals == null || refVitals.size() == 0) && 
 				(subVitals != null && subVitals.size() > 0) ) {
 		
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Vital Signs, but the submitted C-CDA does contain Vital Sign data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Vital Signs, but the submitted C-CDA does contain Vital Sign data, please check if it is appropriate.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info("Model does not have Vital Signs for comparison ");
 			
@@ -648,7 +648,7 @@ public class CCDARefModel {
 		}else if ((refUdis == null || refUdis.size() == 0) && 
 				(subUdis != null && subUdis.size() > 0) ) {
 		
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Udis, but the submitted C-CDA does contain UDI data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Udis, but the submitted C-CDA does contain UDI data, please check if it is appropriate.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info("Model does not have UDIs for comparison ");
 			
@@ -682,7 +682,7 @@ public class CCDARefModel {
 		}else if ((refProcs == null || refProcs.size() == 0) && 
 				(subProcs != null && subProcs.size() > 0) ) {
 		
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Procedures, but the submitted C-CDA does contain Procedure data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Procedures, but the submitted C-CDA does contain Procedure data, please check if it is appropriate.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info("Model does not have Procedures for comparison ");
 			
@@ -720,7 +720,7 @@ public class CCDARefModel {
 			
 			// ref doesn't have notes but sub does also results in an error
 			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's Notes, "
-					+ "but the submitted C-CDA does contain Notes data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+					+ "but the submitted C-CDA does contain Notes data, please check if it is appropriate.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 			log.info("Model does not have Notes for comparison ");
 			
@@ -939,7 +939,7 @@ public class CCDARefModel {
 				(subProcs != null && subProcs.size() > 0) ) {
 			
 			
-			log.info("Model does not have Planned Procedure data for comparison, allow this to pass");
+			log.info("Model does not have Plan of Treatment data for comparison, allow this to pass");
 			
 		} else {
 			
