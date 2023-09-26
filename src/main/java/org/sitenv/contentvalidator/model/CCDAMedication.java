@@ -39,7 +39,7 @@ public class CCDAMedication {
 		HashMap<String, CCDAMedicationActivity> refActivities = getMedActivitiesMap();
 		HashMap<String, CCDAMedicationActivity> subActivities = subMedication.getMedActivitiesMap();
 	
-		CCDAMedicationActivity.compareMedicationActivityData(refActivities,subActivities,results);
+		CCDAMedicationActivity.compareMedicationActivityData(refActivities, subActivities, results);
 	}
 		
 	public HashMap<String, CCDAMedicationActivity> getMedActivitiesMap() {
@@ -60,7 +60,7 @@ public class CCDAMedication {
 	}
 	
 	public void compareAuthor(CCDAMedication subMedication, ArrayList<ContentValidationResult> results,
-			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022) {
+			boolean curesUpdate, ArrayList<CCDAAuthor> authorsWithLinkedReferenceData, boolean svap2022, boolean svap2023) {
 		String elName = "Medications Section";
 
 		CCDAAuthor.compareSectionLevelAuthor(elName, author,

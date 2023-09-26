@@ -16,7 +16,7 @@ public class AllergiesParser {
 	
 	private static Logger log = LoggerFactory.getLogger(AllergiesParser.class.getName());
 	
-	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022)
+	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022, boolean svap2023)
 			throws XPathExpressionException {
     	
     	log.info(" *** Parsing Allergies *** ");
