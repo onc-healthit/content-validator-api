@@ -106,8 +106,10 @@ public class CCDAProblemObs {
 			log.info(" Tempalte Id Ext [" + j + "] = " + templateId.get(j).getExtValue());
 		}
 		
+		if(assessmentScaleObservations != null) {
 		for(int k = 0; k < assessmentScaleObservations.size(); k++) {
 			assessmentScaleObservations.get(k).log();
+		}
 		}
 		
 		if(effTime != null)

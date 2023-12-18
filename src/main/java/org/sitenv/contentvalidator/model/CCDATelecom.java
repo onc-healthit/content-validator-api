@@ -12,13 +12,14 @@ public class CCDATelecom {
 	private String valueAttribute;
 
 	public void log() {
-		log(-1);
+		
 	}	
 	
 	public void log(int index) {
-		log.info("*** Logging Telecom" + (index != -1 ? " #" + index : "") + " ****");
+		
+	/*	log.info("*** Logging Telecom" + (index != -1 ? " #" + index : "") + " ****");
 		log.info("useAttribute value: " + (useAttribute != null ? useAttribute : "null"));
-		log.info("valueAttribute value: " + (valueAttribute != null ? valueAttribute : "null"));
+		log.info("valueAttribute value: " + (valueAttribute != null ? valueAttribute : "null")); */
 	}
 	
 	public String getUseAttribute() {

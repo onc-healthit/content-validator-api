@@ -204,8 +204,10 @@ public class CCDAEncounter {
 			encActivities.get(k).log();
 		}
 		
+		if(notesActivity != null) {
 		for(int l = 0; l < notesActivity.size(); l++) {
 			notesActivity.get(l).log();
+		}
 		}
 		
 		if(author != null)

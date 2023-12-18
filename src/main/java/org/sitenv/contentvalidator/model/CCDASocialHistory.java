@@ -18,6 +18,9 @@ public class CCDASocialHistory {
 	private ArrayList<CCDASexualOrientation>	sexualOrientations;
 	private ArrayList<CCDAGenderIdentityObs>		genderIdentities;
 	private ArrayList<CCDASocialHistoryObs>			socialHistoryObservations;
+	private ArrayList<CCDAPregnancyObservation>		pregnancyObservations;
+	private ArrayList<CCDATribalAffiliationObservation> tribalAffiliations;
+	private ArrayList<CCDABasicOccupation>			occupation;
 	
 	private CCDAAuthor author;
 	
@@ -30,6 +33,8 @@ public class CCDASocialHistory {
 	}
 
 	public void log() {
+		
+		log.info(" *** Social History Section ***");
 		
 		if(sectionCode != null)
 			log.info(" SocialHistory Section Code = " + sectionCode.getCode());
@@ -47,16 +52,35 @@ public class CCDASocialHistory {
 			tobaccoUse.get(l).log();
 		}
 		
+		if(sexualOrientations != null) {
 		for(int m = 0; m < sexualOrientations.size(); m++) {
 			sexualOrientations.get(m).log();
 		}
-		
+		}
+	
+		if(genderIdentities != null) {
 		for(int n = 0; n < genderIdentities.size(); n++) {
 			genderIdentities.get(n).log();
 		}
+		}
 		
+		
+		if(socialHistoryObservations != null) {
 		for(int p = 0; p < socialHistoryObservations.size(); p++) {
-			genderIdentities.get(p).log();
+			socialHistoryObservations.get(p).log();
+		}
+		}
+		
+		if(pregnancyObservations != null) {
+		for(int q = 0; q < pregnancyObservations.size(); q++) {
+			pregnancyObservations.get(q).log();
+		}
+		}
+		
+		if(tribalAffiliations != null) {
+		for(int r = 0; r < tribalAffiliations.size(); r++) {
+			tribalAffiliations.get(r).log();
+		}
 		}
 		
 		if(birthSex != null)
@@ -74,6 +98,8 @@ public class CCDASocialHistory {
 		sexualOrientations = new ArrayList<CCDASexualOrientation>();
 		genderIdentities = new ArrayList<>();
 		socialHistoryObservations = new ArrayList<>();
+		pregnancyObservations = new ArrayList<>();
+		tribalAffiliations = new ArrayList<>();
 	}
 
 	
@@ -223,6 +249,30 @@ public class CCDASocialHistory {
 			}
 		}		
 		return assessments;
+	}
+
+	public ArrayList<CCDAPregnancyObservation> getPregnancyObservations() {
+		return pregnancyObservations;
+	}
+
+	public void setPregnancyObservations(ArrayList<CCDAPregnancyObservation> pregnancyObservations) {
+		this.pregnancyObservations = pregnancyObservations;
+	}
+
+	public ArrayList<CCDATribalAffiliationObservation> getTribalAffiliations() {
+		return tribalAffiliations;
+	}
+
+	public void setTribalAffiliations(ArrayList<CCDATribalAffiliationObservation> tribalAffiliations) {
+		this.tribalAffiliations = tribalAffiliations;
+	}
+
+	public ArrayList<CCDABasicOccupation> getOccupation() {
+		return occupation;
+	}
+
+	public void setOccupation(ArrayList<CCDABasicOccupation> occupation) {
+		this.occupation = occupation;
 	}
 	
 	

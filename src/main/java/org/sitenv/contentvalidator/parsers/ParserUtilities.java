@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.model.*;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -1241,5 +1242,293 @@ public class ParserUtilities {
 		return assessmentObs;
 		
 	}
+
+	public static ArrayList<CCDAPerformer> readPerformers(Element nodeElement) throws XPathExpressionException {
+		
+		ArrayList<CCDAPerformer> performers = new ArrayList<>();
+		CCDAPerformer perf = null;
+		
+		NodeList perfNodeList = (NodeList) CCDAConstants.REL_PERFORMER_EXP.
+				evaluate(nodeElement, XPathConstants.NODESET);
+		
+		
+		if(perfNodeList != null && perfNodeList.getLength() > 0) {
+			
+			for(int i = 0; i < perfNodeList.getLength(); i++) {
+				
+				Element perfNodeElement = (Element) perfNodeList.item(i);
+				perf = new CCDAPerformer();
+				
+				perf.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+						evaluate(perfNodeElement, XPathConstants.NODESET)));
+
+				// Get Type code 
+				String typeCode = getAttribute(perfNodeElement, CCDAConstants.TYPECODE_EL_NAME);
+				
+				if(typeCode != null && !typeCode.isEmpty())
+					perf.setTypeCode(typeCode);
+				
+				// Add Assigned Entity
+				perf.setAssignedEntity(ParserUtilities.readAssignedEntity((Element) CCDAConstants.REL_ASSIGNED_ENTITY_EXP.
+						evaluate(perfNodeElement, XPathConstants.NODE)));
+				
+				
+				// Add performer
+				performers.add(perf);
+			}
+		}
+		
+		
+
+		return performers;
+	}
+	
+	private static CCDAAssignedEntity readAssignedEntity(Element node) throws XPathExpressionException {
+
+		if(node != null) {
+			
+			CCDAAssignedEntity ae = new CCDAAssignedEntity();
+			
+			ae.setAssignedEntityId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_ID_EXP.
+					evaluate(node, XPathConstants.NODESET)));
+			
+			ae.setAssignedEntityCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(node, XPathConstants.NODE)));
+			
+			ae.setAddresses(ParserUtilities.readAddressList((NodeList) CCDAConstants.REL_ADDR_EXP.
+					evaluate(node, XPathConstants.NODESET)));
+			
+			ae.setTelecom(ParserUtilities.readTelecomList((NodeList) CCDAConstants.REL_TELECOM_EXP.
+					evaluate(node, XPathConstants.NODESET)));
+			
+			ae.setOrganization(ParserUtilities.readRepresentedOrganization((Element) CCDAConstants.REL_REP_ORG_EXP.
+					evaluate(node, XPathConstants.NODE)));
+			
+			
+			return ae;
+		}
+		
+		return null;
+	}
+
+	private static CCDAOrganization readRepresentedOrganization(Element elem) throws XPathExpressionException {
+		
+		if(elem != null) {
+			
+			CCDAOrganization org = new CCDAOrganization();
+			
+			org.setNames(ParserUtilities.readDataElementList((NodeList) CCDAConstants.REL_NAME_EXP.
+					evaluate(elem, XPathConstants.NODESET)));
+			
+			org.setAddress(ParserUtilities.readAddressList((NodeList) CCDAConstants.REL_ADDR_EXP.
+					evaluate(elem, XPathConstants.NODESET)));
+			
+			org.setTelecom(ParserUtilities.readTelecomList((NodeList) CCDAConstants.REL_TELECOM_EXP.
+					evaluate(elem, XPathConstants.NODESET)));
+			
+			return org;
+		}
+		return null;
+	}
+
+	public static void readParticipantName(Element nameElement,CCDAParticipant participant) throws XPathExpressionException
+	{
+		if(nameElement != null)
+		{
+			NodeList giveNameNodeList = (NodeList) CCDAConstants.REL_GIVEN_NAME_EXP.
+					evaluate(nameElement, XPathConstants.NODESET);
+			
+			for (int i = 0; i < giveNameNodeList.getLength(); i++) {
+				Element givenNameElement = (Element) giveNameNodeList.item(i);
+				if(!ParserUtilities.isEmpty(givenNameElement.getAttribute("qualifier")))
+				{
+					participant.getAssignedEntity().setPreviousName(ParserUtilities.readTextContext(givenNameElement));
+				}else if (i == 0) {
+					participant.getAssignedEntity().setFirstName(ParserUtilities.readTextContext(givenNameElement));
+				}else {
+					participant.getAssignedEntity().setMiddleName(ParserUtilities.readTextContext(givenNameElement));
+				}
+			}
+			
+			participant.getAssignedEntity().setLastName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_FAMILY_NAME_EXP.
+					evaluate(nameElement, XPathConstants.NODE)));
+			participant.getAssignedEntity().setSuffix(ParserUtilities.readTextContext((Element) CCDAConstants.REL_SUFFIX_EXP.
+					evaluate(nameElement, XPathConstants.NODE)));
+		}
+	}
+	
+	public static String getAttribute(Element element, String attribute) {
+		
+		if (element.hasAttributes()) {
+	        Attr attr = (Attr) element.getAttributes().getNamedItem(attribute);
+	        if (attr != null) {
+	            return attr.getValue();
+	        }
+	    }
+		return null;
+	}
+
+	public static ArrayList<CCDAParticipant> readParticipant(Element policyActivityElement) throws XPathExpressionException {
+		
+
+		ArrayList<CCDAParticipant> participants = new ArrayList<>();
+		CCDAParticipant part = null;
+		
+		NodeList partNodeList = (NodeList) CCDAConstants.REL_PARTICIPANT_EXP_NO_TYPE_CODE.
+				evaluate(policyActivityElement, XPathConstants.NODESET);
+		
+		if(partNodeList != null && partNodeList.getLength() > 0) {
+			
+			for(int i = 0; i < partNodeList.getLength(); i++) {
+				
+				Element partNodeElement = (Element) partNodeList.item(i);
+				part = new CCDAParticipant();
+				
+				part.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+						evaluate(partNodeElement, XPathConstants.NODESET)));
+				
+				// Get Type code 
+				String typeCode = getAttribute(partNodeElement, CCDAConstants.TYPECODE_EL_NAME);
+				
+				if(typeCode != null && !typeCode.isEmpty())
+					part.setParticipantTypeCode(typeCode);
+				
+				part.setEffectiveTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_TIME_EXP.
+						evaluate(partNodeElement, XPathConstants.NODE)));
+				
+				setParticipantRoleDetails(part, partNodeElement);
+				
+				// Add performer
+				participants.add(part);
+			}
+		}
+		
+		
+
+		return participants;
+
+	}
+
+	private static void setParticipantRoleDetails(CCDAParticipant part, Element partNodeElement) throws XPathExpressionException {
+		
+		if(partNodeElement != null && part != null) {
+			
+			// Get the ParticipantRole 
+			Element partRoleElem = (Element) CCDAConstants.REL_PART_ROLE_EXP.
+					evaluate(partNodeElement, XPathConstants.NODE);
+			 
+			if(partRoleElem != null) {
+				
+				part.setParticipantRoleId(ParserUtilities.readTemplateID((Element)CCDAConstants.REL_ID_EXP.
+						evaluate(partRoleElem, XPathConstants.NODE)));
+				
+				part.setParticipantRoleCode(ParserUtilities.readCode((Element)CCDAConstants.REL_CODE_EXP.
+						evaluate(partRoleElem, XPathConstants.NODE)));
+				
+				part.setParticipantFunctionCode(ParserUtilities.readCode((Element)CCDAConstants.REL_FUNCTION_CODE.
+						evaluate(partRoleElem, XPathConstants.NODE)));
+				
+				part.setParticipantRoleAddress(ParserUtilities.readAddress((Element)CCDAConstants.REL_ADDR_EXP.
+						evaluate(partRoleElem, XPathConstants.NODE)));
+								
+				part.setPlayingEntity(ParserUtilities.readPlayingEntity(partRoleElem));
+			}
+				
+			
+			
+		}
+		
+	}
+
+	private static CCDAPlayingEntity readPlayingEntity(Element partRoleElem) throws XPathExpressionException {
+		
+		if(partRoleElem != null) {
+			
+			// Get the Playing Entity 
+			Element playingEntityElem = (Element) CCDAConstants.REL_PLAY_ENTITY_EXP.
+								evaluate(partRoleElem, XPathConstants.NODE);
+			
+			if(playingEntityElem != null) {
+				
+				Element nameElement = (Element) CCDAConstants.REL_NAME_EXP.
+						evaluate(partRoleElem, XPathConstants.NODE);
+				
+				if(nameElement != null) {
+					
+					CCDAPlayingEntity pe = new CCDAPlayingEntity();
+					NodeList giveNameNodeList = (NodeList) CCDAConstants.REL_GIVEN_NAME_EXP.
+							evaluate(nameElement, XPathConstants.NODESET);
+					
+					for (int i = 0; i < giveNameNodeList.getLength(); i++) {
+						Element givenNameElement = (Element) giveNameNodeList.item(i);
+						if(!ParserUtilities.isEmpty(givenNameElement.getAttribute("qualifier")))
+						{
+							pe.setPreviousName(ParserUtilities.readTextContext(givenNameElement));
+						}else if (i == 0) {
+							pe.setFirstName(ParserUtilities.readTextContext(givenNameElement));
+						}else {
+							pe.setMiddleName(ParserUtilities.readTextContext(givenNameElement));
+						}
+					}
+					
+					pe.setLastName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_FAMILY_NAME_EXP.
+							evaluate(nameElement, XPathConstants.NODE)));
+					pe.setSuffix(ParserUtilities.readTextContext((Element) CCDAConstants.REL_SUFFIX_EXP.
+							evaluate(nameElement, XPathConstants.NODE)));
+					
+					pe.setDob(ParserUtilities.readDataElement((Element) CCDAConstants.REL_SDTC_TIME_EXP.
+							evaluate(nameElement, XPathConstants.NODE)));
+					
+					return pe;
+					
+				}
+				
+			}
+			
+		}
+		
+		return null;
+	}
+
+	public static ArrayList<CCDAIndication> readIndications(NodeList indicationList) throws XPathExpressionException {
+		
+		if(indicationList != null) {
+			
+			ArrayList<CCDAIndication> indList = new ArrayList<>();
+			
+			for(int i = 0; i < indicationList.getLength(); i++) {
+				
+				log.info("Adding CCDA Indication Observation");
+				CCDAIndication ind = new CCDAIndication();
+				
+				Element indElement = (Element) indicationList.item(i);
+				
+				ind.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+						evaluate(indElement, XPathConstants.NODESET)));
+
+				ind.setIndicationCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+				evaluate(indElement, XPathConstants.NODE)));
+				
+				ind.setStatusCode(ParserUtilities.readCode((Element) CCDAConstants.REL_STATUS_CODE_EXP.
+				evaluate(indElement, XPathConstants.NODE)));
+				
+				ind.setIndicationType(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_WITH_NF_EXP.
+				evaluate(indElement, XPathConstants.NODE)));
+				
+				ind.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+				evaluate(indElement, XPathConstants.NODE)));
+
+				indList.add(ind);
+				
+			}
+			
+			return indList;
+			
+		}
+		
+		return null;
+		
+	}
+
 	
 }

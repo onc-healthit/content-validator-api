@@ -36,8 +36,10 @@ public class CCDASocialHistoryObs {
 			log.info(" Tempalte Id Ext [" + j + "] = " + templateIds.get(j).getExtValue());
 		}
 
+		if(assessmentScaleObservations != null) {
 		for(int k = 0; k < assessmentScaleObservations.size(); k++) {
 			assessmentScaleObservations.get(k).log();
+		}
 		}
 		
 		if(observationTime != null)

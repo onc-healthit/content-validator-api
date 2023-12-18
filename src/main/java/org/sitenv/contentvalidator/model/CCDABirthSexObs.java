@@ -21,6 +21,8 @@ public class CCDABirthSexObs {
 	}
 
 	public void log() {
+		
+		log.info(" *** Birth Sex Observation ***");
 
 		if(birthSexObsCode != null)
 			log.info(" Birth Sex Obs Code = " + birthSexObsCode.getCode());
