@@ -23,7 +23,8 @@ public class CCDALabResultObs {
 	private String 							resultString;
 	private CCDACode						interpretationCode;
 	private ArrayList<CCDAPQ>				referenceValue;
-	private ArrayList<CCDANotesActivity>		notesActivity;
+	private ArrayList<CCDANotesActivity>	notesActivity;
+	private CCDASpecimen					specimenType;
 	
 	private CCDAAuthor	author;
 	
@@ -165,6 +166,8 @@ public class CCDALabResultObs {
 	
 	public void log() {
 		
+		log.info(" *** Lab Result Observation ***");
+		
 		if(labCode != null)
 			log.info(" Lab Result  Code = " + labCode.getCode());
 		
@@ -192,12 +195,17 @@ public class CCDALabResultObs {
 			referenceValue.get(k).log();
 		}
 		
+		if(notesActivity != null) {
 		for(int l = 0; l < notesActivity.size();l++) {
 			notesActivity.get(l).log();
+		}
 		}
 		
 		if(author != null)
 			author.log();
+		
+		if(specimenType != null)
+			specimenType.log();
 	}
 
 	public ArrayList<CCDAII> getTemplateIds() {
@@ -294,6 +302,14 @@ public class CCDALabResultObs {
 
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
+	}
+
+	public CCDASpecimen getSpecimenType() {
+		return specimenType;
+	}
+
+	public void setSpecimenType(CCDASpecimen specimenType) {
+		this.specimenType = specimenType;
 	}
 	
 	

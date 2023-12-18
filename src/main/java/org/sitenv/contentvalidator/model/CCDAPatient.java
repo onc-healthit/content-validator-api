@@ -18,6 +18,7 @@ public class CCDAPatient {
 	private CCDAEffTime 	previousNamePeriod;
 	private CCDADataElement suffix;
 	private CCDADataElement dob;
+	private CCDADataElement deathDate;
 	private ArrayList<CCDAAddress> addresses;
 	private CCDAAddress     birthPlace;
 	private ArrayList<CCDACode> raceCodes;
@@ -29,6 +30,7 @@ public class CCDAPatient {
 	private CCDACode                   maritalStatus;
 	private CCDACode                   religiousAffiliation;
 	private ArrayList<CCDAPreferredLanguage>          languageCommunication;
+	private ArrayList<CCDARelatedPerson> 				relatedPersons;
 	
 	public void log() {
 		
@@ -89,6 +91,10 @@ public class CCDAPatient {
 		for(int m = 0; m < languageCommunication.size(); m++) {
 			log.info(" Language Communication [" + m + "] = " );
 			languageCommunication.get(m).log();
+		}
+		
+		for(int n = 0; n < relatedPersons.size(); n++) {
+			relatedPersons.get(n).log();
 		}
 	}
 	
@@ -249,6 +255,7 @@ public class CCDAPatient {
 		raceCodeExt = new ArrayList<CCDACode>();
 		telecom = new ArrayList<CCDATelecom>();
 		languageCommunication = new ArrayList<CCDAPreferredLanguage>();
+		relatedPersons = new ArrayList<>();
 	}
 
 	public ArrayList<CCDAPreferredLanguage> getLanguageCommunication() {
@@ -674,5 +681,22 @@ public class CCDAPatient {
 		}
 
 	}
+
+	public CCDADataElement getDeathDate() {
+		return deathDate;
+	}
+
+	public void setDeathDate(CCDADataElement deathDate) {
+		this.deathDate = deathDate;
+	}
+
+	public ArrayList<CCDARelatedPerson> getRelatedPersons() {
+		return relatedPersons;
+	}
+
+	public void setRelatedPersons(ArrayList<CCDARelatedPerson> relatedPersons) {
+		this.relatedPersons = relatedPersons;
+	}
+	
 	
 }

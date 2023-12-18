@@ -149,11 +149,52 @@ public class MedicationParser {
 			medicationActivity.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
 					evaluate(entryElement, XPathConstants.NODE)));
 			
+			NodeList indicationList = (NodeList) CCDAConstants.REL_INDICATION_EXPRESSION.
+					evaluate(entryElement, XPathConstants.NODESET);
+			
+			medicationActivity.setIndications(ParserUtilities.readIndications(indicationList));
+			
+			NodeList medDispenseList = (NodeList) CCDAConstants.REL_MEDICATION_DISPENSE_EXPRESSION.
+					evaluate(entryElement, XPathConstants.NODESET);
+			
+			medicationActivity.setMedicationDispenses(readDispenses(medDispenseList));
+			
 			medicationList.add(medicationActivity);
 		}
 		return medicationList;
 	}
 	
+	private static ArrayList<CCDAMedicationDispense> readDispenses(NodeList medDispenseList) throws XPathExpressionException {
+		
+		ArrayList<CCDAMedicationDispense> medDispenses = null;
+		
+		if(!ParserUtilities.isNodeListEmpty(medDispenseList))
+		{
+			medDispenses = new ArrayList<>();
+		}
+		
+		CCDAMedicationDispense medDispense;
+		
+		for (int i = 0; i < medDispenseList.getLength(); i++) {
+			
+			log.info("Adding CCDA Medication Dispense");
+			medDispense = new CCDAMedicationDispense();
+			
+			Element medDispenseElement = (Element) medDispenseList.item(i);
+			
+			medDispense.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+														evaluate(medDispenseElement, XPathConstants.NODESET)));
+			
+			
+			medDispense.setFillStatus(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(medDispenseElement, XPathConstants.NODE)));
+			
+		}
+		
+		
+		return medDispenses;
+	}
+
 	public static ArrayList<CCDAMedicationActivity> readDischargeMedication(NodeList entryNodeList) throws XPathExpressionException
 	{
 		ArrayList<CCDAMedicationActivity> medicationList = new ArrayList<>();

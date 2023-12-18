@@ -23,6 +23,8 @@ public class CCDAMedicationActivity {
 	private CCDAPQ								rateQuantity;
 	private CCDACode							adminUnitCode;
 	private CCDAConsumable						consumable;
+	private ArrayList<CCDAIndication>			indications;
+	private ArrayList<CCDAMedicationDispense>	medicationDispenses;
 	
 	private CCDAAuthor author;
 	
@@ -97,6 +99,7 @@ public class CCDAMedicationActivity {
 	
 	public void log() {
 		
+		log.info(" *** Medication Activity *** ");
 			
 		for(int j = 0; j < templateIds.size(); j++) {
 			log.info(" Tempalte Id [" + j + "] = " + templateIds.get(j).getRootValue());
@@ -134,6 +137,19 @@ public class CCDAMedicationActivity {
 		
 		if(author != null)
 			author.log();
+		
+		if(indications != null) {
+		for(int k = 0; k < indications.size(); k++) {
+			indications.get(k).log();
+		}
+		}
+		
+		if(medicationDispenses != null) {
+		for(int p = 0; p < medicationDispenses.size(); p++) {
+			medicationDispenses.get(p).log();
+		}
+		}
+		
 	}
 	
 	public ArrayList<CCDAII> getTemplateIds() {
@@ -223,6 +239,26 @@ public class CCDAMedicationActivity {
 
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
+	}
+
+
+	public ArrayList<CCDAIndication> getIndications() {
+		return indications;
+	}
+
+
+	public void setIndications(ArrayList<CCDAIndication> indications) {
+		this.indications = indications;
+	}
+
+
+	public ArrayList<CCDAMedicationDispense> getMedicationDispenses() {
+		return medicationDispenses;
+	}
+
+
+	public void setMedicationDispenses(ArrayList<CCDAMedicationDispense> medicationDispenses) {
+		this.medicationDispenses = medicationDispenses;
 	}
 	
 	

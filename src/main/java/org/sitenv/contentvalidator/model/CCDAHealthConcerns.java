@@ -78,8 +78,10 @@ public class CCDAHealthConcerns {
 			log.info(" Tempalte Id Ext [" + j + "] = " + templateIds.get(j).getExtValue());
 		}	
 		
-		for(int k = 0; k < templateIds.size(); k++) {
+		if(healthConcernActs != null) {
+		for(int k = 0; k < healthConcernActs.size(); k++) {
 			healthConcernActs.get(k).log();
+		}
 		}
 		
 		if(author != null)

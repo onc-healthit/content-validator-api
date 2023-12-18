@@ -16,7 +16,8 @@ public class CCDALabResultOrg {
 	private CCDACode						orgCode;
 	private CCDAEffTime						effTime;
 	private ArrayList<CCDALabResultObs>		resultObs;
-	private ArrayList<CCDANotesActivity>		notesActivity;
+	private ArrayList<CCDANotesActivity>	notesActivity;
+	private CCDASpecimen					specimenType;
 	
 	private CCDAAuthor	author;
 	
@@ -32,6 +33,8 @@ public class CCDALabResultOrg {
 	}
 	
 	public void log() {
+		
+		log.info(" *** Lab Result Organizer ***");
 		
 		if(orgCode != null)
 			log.info(" Organizer  Code = " + orgCode.getCode());
@@ -53,6 +56,9 @@ public class CCDALabResultOrg {
 		
 		if(author != null)
 			author.log();
+		
+		if(specimenType != null)
+			specimenType.log();
 	}
 	
 	public CCDALabResultOrg()
@@ -120,6 +126,14 @@ public class CCDALabResultOrg {
 
 	public void setNotesActivity(ArrayList<CCDANotesActivity> notesActivity) {
 		this.notesActivity = notesActivity;
+	}
+
+	public CCDASpecimen getSpecimenType() {
+		return specimenType;
+	}
+
+	public void setSpecimenType(CCDASpecimen specimenType) {
+		this.specimenType = specimenType;
 	}
 	
 	

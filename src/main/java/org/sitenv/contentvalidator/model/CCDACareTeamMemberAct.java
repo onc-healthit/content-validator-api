@@ -25,6 +25,8 @@ public class CCDACareTeamMemberAct {
 	
 	public void log() {
 		
+		log.info(" *** Care Team Member Act ***");
+		
 		if(memberActCode != null && memberActCode.getCode() != null) {		
 			log.info(" Member Act Code = " + memberActCode.getCode());
 		}
