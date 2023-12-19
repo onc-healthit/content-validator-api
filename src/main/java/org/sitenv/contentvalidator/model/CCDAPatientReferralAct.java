@@ -1,7 +1,12 @@
 package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,8 +99,49 @@ public class CCDAPatientReferralAct {
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
 	}
-	
-	
 
+	public static void compare(HashMap<String, CCDAPatientReferralAct> refModelActs,
+			HashMap<String, CCDAPatientReferralAct> subModelActs, ArrayList<ContentValidationResult> results) {
+		
+		String context = " Comparing Referral Data ";
+		// Check only the reference ones
+		for(Map.Entry<String,CCDAPatientReferralAct> entry: refModelActs.entrySet()) {
+			
+			if(subModelActs.containsKey(entry.getKey())) {
+				
+				// Since the act was found, compare other data elements.
+				log.info(" Comparing Referral Data");
+				String compContext = " Comparing Referral data for code " + entry.getKey();
+				entry.getValue().compare(subModelActs.get(entry.getKey()), compContext, results);
+				
+			}
+			else {
+				
+				String error = "The scenario contains Referral data with code " + entry.getKey() + 
+						" , however there is no matching data in the submitted CCDA.";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+			
+		}
+		
+	}
 	
+	private void compare(CCDAPatientReferralAct subReferral, String compContext,
+			ArrayList<ContentValidationResult> results) {
+		
+		String elementName = compContext + " , Template Id Comparison : ";
+
+		// Compare template Ids 
+		ParserUtilities.compareTemplateIds(templateIds, subReferral.getTemplateIds(), results, elementName);
+
+		// Compare Assessment  Codes 
+		String elementNameCode = compContext + " , Referral Code Element Comparison : ";
+		ParserUtilities.compareCode(referralCode, subReferral.getReferralCode(), results, elementNameCode);
+		 		 	 
+		// Compare Assessment  Codes 
+		String elementTime = compContext + " , Referral Time Comparison : ";
+		ParserUtilities.compareEffectiveTime(effectiveTime, subReferral.getEffectiveTime(), results, elementTime);
+		
+	}
 }
