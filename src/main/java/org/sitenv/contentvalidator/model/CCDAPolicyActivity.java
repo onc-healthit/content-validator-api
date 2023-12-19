@@ -1,9 +1,15 @@
 package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 public class CCDAPolicyActivity {
 	
@@ -128,5 +134,44 @@ private static Logger log = LoggerFactory.getLogger(CCDAAllergyObs.class.getName
 		this.holderOrSubscriberParticipant = holderOrSubscriberParticipant;
 	}
 
-	
+	public void compare(String refCode, HashMap<String, CCDAPolicyActivity> subPolicies,
+			ArrayList<ContentValidationResult> results, boolean svap2022, boolean svap2023) {
+		
+		Boolean found = false;
+		for(Map.Entry<String,CCDAPolicyActivity> ent : subPolicies.entrySet()) {
+			
+			if(ent.getValue().getCoverageType() != null && 
+					!StringUtils.isEmpty(ent.getValue().getCoverageType().getCode()) && 
+					ent.getValue().getCoverageType().getCode().contentEquals(refCode)) {
+				
+				this.comparePolicyActivities(ent.getKey(), ent.getValue(), results);
+				found = true;
+			}
+		}
+		
+		if(!found) {
+			
+			String msg = "The scenario requires data related to patient's coverage policy for type " + refCode + " , but the submitted C-CDA does not contain the Policy Activity entry data.";
+			
+			// handle the case where the coverage data does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult(msg, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		
+	}
+
+	private void comparePolicyActivities(String policyCode, CCDAPolicyActivity subValue, ArrayList<ContentValidationResult> results) {
+		
+		String msgContext = "Payers Section, Policy Activity Comparison for Coverage Type " + policyCode;
+		
+		// handle  code.
+		if(this.getCoverageParticipant() != null && 
+				subValue.getCoverageParticipant() != null) {
+			ParserUtilities.compareCode(
+				this.getCoverageParticipant().getParticipantRoleCode(), subValue.getCoverageParticipant().getParticipantRoleCode(), results, msgContext);
+		
+			// Other Attributes not as important, but will be added later.
+		
+		}
+	}
 }
