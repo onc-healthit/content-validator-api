@@ -408,9 +408,15 @@ public class CCDARefModel {
 	private void compareReasonForReferral(String validationObjective, CCDARefModel submittedCCDA,
 			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
-		HashMap<String, CCDAPatientReferralAct> refModelActs  = this.getReferrals().getAllReferrals();
+		HashMap<String, CCDAPatientReferralAct> refModelActs  = null;
 		
-		HashMap<String, CCDAPatientReferralAct> subModelActs = submittedCCDA.getReferrals().getAllReferrals();
+		if(this.getReferrals() != null)
+			refModelActs = this.getReferrals().getAllReferrals();
+		
+		HashMap<String, CCDAPatientReferralAct> subModelActs = null;
+		
+		if(submittedCCDA.getReferrals() != null)
+			subModelActs = submittedCCDA.getReferrals().getAllReferrals();
 		
 		if( (refModelActs != null && refModelActs.size() > 0) &&  
 			(subModelActs != null && subModelActs.size() > 0)  ) {
