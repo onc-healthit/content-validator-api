@@ -91,10 +91,10 @@ public class ContentValidatorSVAP2023Test extends ContentValidatorTester {
 	public void svap2023_basicContentValidationTest() {
 		printHeader("svap2023_basicContentValidationTest");
 		try {
-		/*	ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsSvap2023(
+			ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsSvap2023(
 					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_TEST_DELETE, SUBMITTED_CCDA[SUB_EF],
 					SeverityLevel.ERROR);
-			printResults(results); */
+			printResults(results);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
