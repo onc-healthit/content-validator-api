@@ -1,7 +1,6 @@
 package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,19 +104,6 @@ public class CCDAFunctionalStatus {
 		this.author = author;
 	}
 	
-	public HashMap<String, AssessmentScaleObservation> getAllAssessmentScaleObservations() {
-		
-		HashMap<String, AssessmentScaleObservation> assessments = new HashMap<>();
-		if(functionalAssessmentsObservations != null && !functionalAssessmentsObservations.isEmpty()) { 
-			
-			for(AssessmentScaleObservation obs : functionalAssessmentsObservations) {
-				if(obs.getAssessmentCode() != null && obs.getAssessmentCode().getCode() != null) {
-					assessments.put(obs.getAssessmentCode().getCode(), obs);
-				}
-			}
-		}
-		return assessments;
-	}
 	
 }
 

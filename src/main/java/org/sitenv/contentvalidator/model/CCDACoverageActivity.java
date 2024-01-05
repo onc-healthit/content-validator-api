@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 public class CCDACoverageActivity {
 	
@@ -119,23 +118,6 @@ public class CCDACoverageActivity {
 
 	public void setCoverageEffectiveTime(CCDAEffTime coverageEffectiveTime) {
 		this.coverageEffectiveTime = coverageEffectiveTime;
-	}
-
-	public void getPolicyActivities(HashMap<String, CCDAPolicyActivity> polActivities) {
-		
-		if(policyActivities != null) {
-			
-			for(CCDAPolicyActivity pa : policyActivities) {
-				
-				if(pa.getCoverageType() != null && !StringUtils.isEmpty(pa.getCoverageType().getCode())) {
-					
-					polActivities.put(pa.getCoverageType().getCode(), pa);
-				}
-				
-			}
-			
-		}
-		
 	}
 	
 	

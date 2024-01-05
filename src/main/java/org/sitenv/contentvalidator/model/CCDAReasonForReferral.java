@@ -1,7 +1,6 @@
 package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,18 +69,6 @@ private static Logger log = LoggerFactory.getLogger(CCDAReasonForReferral.class.
 		this.author = author;
 	}
 	
-	public HashMap<String, CCDAPatientReferralAct> getAllReferrals() {
-		
-		HashMap<String, CCDAPatientReferralAct> referrals = new HashMap<>();
-		if(referralActs != null && !referralActs.isEmpty()) { 
-			
-			for(CCDAPatientReferralAct act : referralActs) {
-				if(act.getReferralCode() != null && act.getReferralCode().getCode() != null) {
-					referrals.put(act.getReferralCode().getCode(), act);
-				}
-			}
-		}
-		return referrals;
-	}
+	
 
 }
