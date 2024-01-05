@@ -26,8 +26,6 @@ public class CCDAGenderIdentityObs {
 	}
 
 	public void log() {
-		
-		log.info(" *** Gender Identity Observation ***");
 
 		if(genderIdentityObsCode != null)
 			log.info(" Gender Identity Obs Code = " + genderIdentityObsCode.getCode());

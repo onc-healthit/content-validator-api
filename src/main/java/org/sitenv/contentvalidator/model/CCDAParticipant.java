@@ -1,7 +1,5 @@
 package org.sitenv.contentvalidator.model;
 
-import java.util.ArrayList;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,128 +7,76 @@ public class CCDAParticipant {
 	
 	private static Logger log = LoggerFactory.getLogger(CCDAParticipant.class.getName());
 	
-	private CCDAAssignedEntity assignedEntity;
-	private CCDACode		participantFunctionCode;
-	private CCDACode		participantRoleCode;
-	private CCDAII			participantRoleId;
-	private String			participantTypeCode;
-	private CCDAPlayingEntity participantRolePlayingEntity;
-	private CCDAAddress		  participantRoleAddress;
-	private ArrayList<CCDAII> templateId;
-	private CCDAEffTime		  effectiveTime;
+	private CCDADataElement firstName;
+	private CCDADataElement lastName;
+	private CCDADataElement middleName;
+	private CCDAAddress     address;
+	private CCDATelecom 	telecom;
 	
 	public void log()
 	{
-		log.info(" *** Participant ***");
+		log.info(" First Name = " + ((firstName==null)?"No Data":firstName.getValue()));
+		log.info(" Last Name = " + ((lastName==null)?"No Data":lastName.getValue()));
+		log.info(" Middle Name = " + ((middleName==null)?"No Data":middleName.getValue()));
 		
-		for(int j = 0; j < templateId.size(); j++) {
-			log.info(" Tempalte Id [" + j + "] = " + templateId.get(j).getRootValue());
-			log.info(" Tempalte Id Ext [" + j + "] = " + templateId.get(j).getExtValue());
-		}
-		
-		
-		if(assignedEntity != null)
-			assignedEntity.log();
-		if(participantRoleCode != null)
-			participantRoleCode.log();
-		if(participantRoleId != null)
-			participantRoleId.log();
-		if(participantFunctionCode != null)
-			participantFunctionCode.log();
-		if(participantRolePlayingEntity != null)
-			participantRolePlayingEntity.log();
-		if(effectiveTime != null) 
-			effectiveTime.log();
-		if(participantRoleAddress != null)
-			participantRoleAddress.log();
+		if(address != null)
+			address.log();
+		if(telecom != null)
+			telecom.log();
 	}
 	
 	public CCDAParticipant()
 	{
-		templateId = new ArrayList<>();
+		
 	}
 
-	public CCDAAssignedEntity getAssignedEntity() {
-		return assignedEntity;
+	public CCDADataElement getFirstName() {
+		return firstName;
 	}
 
-	public void setAssignedEntity(CCDAAssignedEntity assignedEntity) {
-		this.assignedEntity = assignedEntity;
+	public void setFirstName(CCDADataElement firstName) {
+		this.firstName = firstName;
 	}
 
-	public CCDACode getParticipantRoleCode() {
-		return participantRoleCode;
+	public CCDADataElement getLastName() {
+		return lastName;
 	}
 
-	public void setParticipantRoleCode(CCDACode participantRoleCode) {
-		this.participantRoleCode = participantRoleCode;
+	public void setLastName(CCDADataElement lastName) {
+		this.lastName = lastName;
 	}
 
-	public CCDAII getParticipantRoleId() {
-		return participantRoleId;
+	public CCDADataElement getMiddleName() {
+		return middleName;
 	}
 
-	public void setParticipantRoleId(CCDAII participantRoleId) {
-		this.participantRoleId = participantRoleId;
+	public void setMiddleName(CCDADataElement middleName) {
+		this.middleName = middleName;
 	}
 
-	public CCDACode getParticipantFunctionCode() {
-		return participantFunctionCode;
+	public CCDAAddress getAddress() {
+		return address;
 	}
 
-	public void setParticipantFunctionCode(CCDACode participantFunctionCode) {
-		this.participantFunctionCode = participantFunctionCode;
+	public void setAddress(CCDAAddress address) {
+		this.address = address;
 	}
 
-	public String getParticipantTypeCode() {
-		return participantTypeCode;
+	public CCDATelecom getTelecom() {
+		return telecom;
 	}
 
-	public void setParticipantTypeCode(String participantTypeCode) {
-		this.participantTypeCode = participantTypeCode;
+	public void setTelecom(CCDATelecom telecom) {
+		this.telecom = telecom;
 	}
 
-	public CCDAPlayingEntity getPlayingEntity() {
-		return participantRolePlayingEntity;
+	public void setPreviousName(CCDADataElement readTextContext) {
+		// No need for the data element.
+		
 	}
 
-	public void setPlayingEntity(CCDAPlayingEntity playingEntity) {
-		this.participantRolePlayingEntity = playingEntity;
+	public void setSuffix(CCDADataElement readTextContext) {
+		//No need for the data element.
+		
 	}
-
-	public ArrayList<CCDAII> getTemplateId() {
-		return templateId;
-	}
-
-	public void setTemplateId(ArrayList<CCDAII> templateId) {
-		this.templateId = templateId;
-	}
-
-	public CCDAEffTime getEffectiveTime() {
-		return effectiveTime;
-	}
-
-	public void setEffectiveTime(CCDAEffTime effectiveTime) {
-		this.effectiveTime = effectiveTime;
-	}
-
-	public CCDAPlayingEntity getParticipantRolePlayingEntity() {
-		return participantRolePlayingEntity;
-	}
-
-	public void setParticipantRolePlayingEntity(CCDAPlayingEntity participantRolePlayingEntity) {
-		this.participantRolePlayingEntity = participantRolePlayingEntity;
-	}
-
-	public CCDAAddress getParticipantRoleAddress() {
-		return participantRoleAddress;
-	}
-
-	public void setParticipantRoleAddress(CCDAAddress participantRoleAddress) {
-		this.participantRoleAddress = participantRoleAddress;
-	}
-	
-	
-	
-	
 }

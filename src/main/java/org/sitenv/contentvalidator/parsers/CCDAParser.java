@@ -77,7 +77,7 @@ public class CCDAParser {
 			CCDABodyParser.parseBody(doc, model, curesUpdate, svap2022, svap2023);
 		
 			log.info("Returning Parsed Model");
-			model.log();
+			// model.log();
 			
 			return model;
 		} catch (ParserConfigurationException e1) {

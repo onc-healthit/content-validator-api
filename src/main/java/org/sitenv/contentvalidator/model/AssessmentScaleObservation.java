@@ -34,8 +34,6 @@ public class AssessmentScaleObservation {
 	
 	public void log() {
 		
-		log.info(" *** Assessment Scale Observation ***");
-		
 		if(assessmentCode != null)
 			log.info(" Assessment Code = " + assessmentCode.getCode());
 		

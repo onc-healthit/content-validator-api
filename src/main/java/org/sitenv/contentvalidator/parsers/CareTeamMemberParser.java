@@ -2,7 +2,6 @@ package org.sitenv.contentvalidator.parsers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sitenv.contentvalidator.model.CCDAAssignedEntity;
 import org.sitenv.contentvalidator.model.CCDACareTeamMember;
 import org.sitenv.contentvalidator.model.CCDACareTeamMemberAct;
 import org.sitenv.contentvalidator.model.CCDAParticipant;
@@ -110,8 +109,7 @@ public class CareTeamMemberParser {
 				{
 					log.info(" Found Perfomer ");
 					CCDAParticipant pp = new CCDAParticipant();
-					pp.setAssignedEntity(new CCDAAssignedEntity());
-					ParserUtilities.readParticipantName((Element) CCDAConstants.REL_ASSN_ENTITY_PERSON_NAME.
+					readName((Element) CCDAConstants.REL_ASSN_ENTITY_PERSON_NAME.
 		    				evaluate(performerElement, XPathConstants.NODE), pp);
 					
 					mact.setPrimaryPerformer(pp);
@@ -125,8 +123,7 @@ public class CareTeamMemberParser {
 					{
 						log.info(" Found Participants ");
 						CCDAParticipant opp = new CCDAParticipant();
-						opp.setAssignedEntity(new CCDAAssignedEntity());
-						ParserUtilities.readParticipantName((Element) CCDAConstants.REL_ASSN_ENTITY_PERSON_NAME.
+						readName((Element) CCDAConstants.REL_ASSN_ENTITY_PERSON_NAME.
 			    				evaluate(performerElement, XPathConstants.NODE), opp);
 						
 						mact.addParticipant(opp);
@@ -149,16 +146,15 @@ public class CareTeamMemberParser {
 			
 			log.info("Creating PArticipant");
 			participant = new CCDAParticipant();
-			participant.setAssignedEntity(new CCDAAssignedEntity());
 			Element performerElement = (Element) performerNodeList.item(i);
 			
-			participant.getAssignedEntity().addAddress(ParserUtilities.readAddress((Element) CCDAConstants.REL_ASSN_ENTITY_ADDR.
+			participant.setAddress(ParserUtilities.readAddress((Element) CCDAConstants.REL_ASSN_ENTITY_ADDR.
 					evaluate(performerElement, XPathConstants.NODE)));
 			
-			ParserUtilities.readParticipantName((Element) CCDAConstants.REL_ASSN_ENTITY_PERSON_NAME.
+			readName((Element) CCDAConstants.REL_ASSN_ENTITY_PERSON_NAME.
 	    				evaluate(performerElement, XPathConstants.NODE), participant);
 			
-			participant.getAssignedEntity().addTelecom(ParserUtilities.readTelecom((Element) CCDAConstants.REL_ASSN_ENTITY_TEL_EXP.
+			participant.setTelecom(ParserUtilities.readTelecom((Element) CCDAConstants.REL_ASSN_ENTITY_TEL_EXP.
 					evaluate(performerElement, XPathConstants.NODE)));
 			participantList.add(participant);
 		}
@@ -167,4 +163,30 @@ public class CareTeamMemberParser {
 		return careTeamMember;
 	}
 	
+	public static void readName(Element nameElement,CCDAParticipant participant) throws XPathExpressionException
+	{
+		if(nameElement != null)
+		{
+			NodeList giveNameNodeList = (NodeList) CCDAConstants.REL_GIVEN_NAME_EXP.
+					evaluate(nameElement, XPathConstants.NODESET);
+			
+			for (int i = 0; i < giveNameNodeList.getLength(); i++) {
+				Element givenNameElement = (Element) giveNameNodeList.item(i);
+				if(!ParserUtilities.isEmpty(givenNameElement.getAttribute("qualifier")))
+				{
+					participant.setPreviousName(ParserUtilities.readTextContext(givenNameElement));
+				}else if (i == 0) {
+					participant.setFirstName(ParserUtilities.readTextContext(givenNameElement));
+				}else {
+					participant.setMiddleName(ParserUtilities.readTextContext(givenNameElement));
+				}
+			}
+			
+			participant.setLastName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_FAMILY_NAME_EXP.
+					evaluate(nameElement, XPathConstants.NODE)));
+			participant.setSuffix(ParserUtilities.readTextContext((Element) CCDAConstants.REL_SUFFIX_EXP.
+					evaluate(nameElement, XPathConstants.NODE)));
+		}
+	}
+
 }

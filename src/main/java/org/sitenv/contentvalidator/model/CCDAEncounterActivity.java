@@ -17,14 +17,13 @@ public class CCDAEncounterActivity {
 	private ArrayList<CCDAEncounterDiagnosis> diagnoses;
 	private ArrayList<CCDAServiceDeliveryLoc> sdLocs;
 	private ArrayList<CCDAProblemObs>         indications;
-	private ArrayList<CCDANotesActivity>	  notesActivity;
-	private CCDACode						  dischargeDisposition;
+	private ArrayList<CCDANotesActivity>		notesActivity;
 	
 	private CCDAAuthor	author;
 	
 	public void log() {
 		
-		log.info("*** Encounter Activity ***");
+		log.info("*** Encounter Activit ***");
 		
 		if(encounterTypeCode != null)
 			log.info("Encounter Activity Type Code = " + encounterTypeCode.getCode());
@@ -51,17 +50,12 @@ public class CCDAEncounterActivity {
 			indications.get(n).log();
 		}
 		
-		if(notesActivity != null) {
 		for(int p = 0; p < notesActivity.size(); p++) {
 			notesActivity.get(p).log();
-		}
 		}
 		
 		if(author != null)
 			author.log();
-		
-		if(dischargeDisposition != null)
-			dischargeDisposition.log();
 	}
 	
 	public void getAllNotesActivities(HashMap<String, CCDANotesActivity> results) {
@@ -149,14 +143,6 @@ public class CCDAEncounterActivity {
 
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
-	}
-
-	public CCDACode getDischargeDisposition() {
-		return dischargeDisposition;
-	}
-
-	public void setDischargeDisposition(CCDACode dischargeDisposition) {
-		this.dischargeDisposition = dischargeDisposition;
 	}
 	
 	

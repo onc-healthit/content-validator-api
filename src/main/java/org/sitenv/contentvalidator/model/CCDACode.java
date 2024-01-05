@@ -239,15 +239,4 @@ public class CCDACode extends CCDADataElement {
 		else
 			return false;
 	}
-
-
-	public void log() {
-		
-		if(nullFlavor != null && !nullFlavor.isEmpty())
-			log.info("Null Flavor Code : {}",nullFlavor);
-		else {
-			log.info(" Code:CodeSystem:CodeSystemName:DisplayName = {}:{}:{}:{}",code,codeSystem,codeSystemName,displayName);
-		}
-		
-	}
 }

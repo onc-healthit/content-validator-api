@@ -132,16 +132,12 @@ public class CCDAProcActProc {
 			udi.get(m).log();
 		}
 		
-		if(notesActivity != null) {
 		for(int n = 0; n < notesActivity.size(); n++) {
 			notesActivity.get(n).log();
 		}
-		}
 		
-		if(assessmentScaleObservations != null) {
 		for(int p = 0; p < assessmentScaleObservations.size(); p++) {
 			assessmentScaleObservations.get(p).log();
-		}
 		}
 		if(author != null)
 			author.log();

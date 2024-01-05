@@ -53,12 +53,6 @@ public class CCDARefModel {
 	private ArrayList<CCDANotes> notes;
 	private ArrayList<CCDANotesActivity> notesEntries;
 	
-	// USCDI v3
-	private CCDAPayers payers;
-	private CCDAReasonForReferral referrals;
-	private CCDAFunctionalStatus functionalStatus; 
-	private CCDAMentalStatus	 mentalStatus;
-	
 	
 	public ArrayList<CCDAAuthor> getAuthorsFromHeader() {
 		return authorsFromHeader;
@@ -1735,11 +1729,9 @@ public class CCDARefModel {
 			
 		}
 		
-		if(notes != null) {
 		for(int k = 0; k < notes.size(); k++) {
 			
 			notes.get(k).log();
-		}
 		}
 		
 		if(medEquipments != null)
@@ -2097,71 +2089,5 @@ public class CCDARefModel {
 	public String getSeverityLevelName() {
 		return severityLevel.name();
 	}
-
-	public CCDAPayers getPayers() {
-		return payers;
-	}
-
-	public void setPayers(CCDAPayers payers) {
-		this.payers = payers;
-	}
-
-	public ArrayList<CCDAII> getCcdTemplates() {
-		return ccdTemplates;
-	}
-
-	public void setCcdTemplates(ArrayList<CCDAII> ccdTemplates) {
-		this.ccdTemplates = ccdTemplates;
-	}
-
-	public ArrayList<CCDAII> getDsTemplates() {
-		return dsTemplates;
-	}
-
-	public void setDsTemplates(ArrayList<CCDAII> dsTemplates) {
-		this.dsTemplates = dsTemplates;
-	}
-
-	public ArrayList<CCDAII> getRnTemplates() {
-		return rnTemplates;
-	}
-
-	public void setRnTemplates(ArrayList<CCDAII> rnTemplates) {
-		this.rnTemplates = rnTemplates;
-	}
-
-	public ArrayList<CCDAII> getCpTemplates() {
-		return cpTemplates;
-	}
-
-	public void setCpTemplates(ArrayList<CCDAII> cpTemplates) {
-		this.cpTemplates = cpTemplates;
-	}
-
-	public CCDAReasonForReferral getReferrals() {
-		return referrals;
-	}
-
-	public void setReferrals(CCDAReasonForReferral referrals) {
-		this.referrals = referrals;
-	}
-
-	public CCDAFunctionalStatus getFunctionalStatus() {
-		return functionalStatus;
-	}
-
-	public void setFunctionalStatus(CCDAFunctionalStatus functionalStatus) {
-		this.functionalStatus = functionalStatus;
-	}
-
-	public CCDAMentalStatus getMentalStatus() {
-		return mentalStatus;
-	}
-
-	public void setMentalStatus(CCDAMentalStatus mentalStatus) {
-		this.mentalStatus = mentalStatus;
-	}
-	
-	
 	
 }

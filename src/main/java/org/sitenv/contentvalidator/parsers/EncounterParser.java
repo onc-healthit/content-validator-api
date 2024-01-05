@@ -80,10 +80,6 @@ public class EncounterParser {
 				encounterActivity.setEffectiveTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
 															evaluate(encounterActivityElement, XPathConstants.NODE)));
 				
-				// Add Discharge Disposition
-				encounterActivity.setDischargeDisposition(ParserUtilities.readCode((Element) CCDAConstants.SDTC_REL_DISCHARGE_DISPOSITION_EXP.
-										evaluate(encounterActivityElement, XPathConstants.NODE)));
-				
 				encounterActivity.setSdLocs(readServiceDeliveryLocators((NodeList) CCDAConstants.REL_PART_ROLE_EXP.
 																evaluate(encounterActivityElement, XPathConstants.NODESET)));
 				

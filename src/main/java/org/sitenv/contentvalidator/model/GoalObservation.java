@@ -30,8 +30,6 @@ private static Logger log = LoggerFactory.getLogger(GoalObservation.class.getNam
 	
 	public void log() {
 		
-		log.info(" *** Goal Observation ***");
-		
 		if(goalCode != null)
 			log.info(" Goal  Code = " + goalCode.getCode());
 		

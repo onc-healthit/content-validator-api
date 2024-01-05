@@ -76,24 +76,6 @@ public class CCDABodyParser {
 			log.info(" Parsing Plan of Treatment ");
 			PlanOfTreatmentParser.parse(doc, model, curesUpdate, svap2022, svap2023);
 			
-			if(svap2023) {
-				
-				log.info("Parsing Care Team Members from Care Team Section ");
-				CareTeamMemberParser.parseCareTeamSection(doc, model, curesUpdate, svap2022, svap2023);
-				
-				log.info("Parsing Payers Section ");
-				PayerParser.parse(doc, model, curesUpdate, svap2022, svap2023);
-				
-				log.info(" Functional Status Section ");
-				FunctionalStatusParser.parse(doc, model, curesUpdate, svap2022, svap2023);
-				
-				log.info(" Mental Status Section ");
-				MentalStatusParser.parse(doc, model, curesUpdate, svap2022, svap2023);
-				
-				log.info(" Reason for Referral Section");
-				ReasonForReferralParser.parse(doc, model, curesUpdate, svap2022, svap2023);
-			}
-			
 			if(svap2022 || svap2023) {
 				curesUpdate = true;
 			}

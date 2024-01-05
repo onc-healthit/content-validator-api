@@ -28,8 +28,6 @@ private static Logger log = LoggerFactory.getLogger(PlannedProcedure.class.getNa
 	
 	public void log() {
 		
-		log.info(" *** Planned Procedure ***");
-		
 		if(procedureCode != null)
 			log.info(" Procedure  Code = " + procedureCode.getCode());
 		
