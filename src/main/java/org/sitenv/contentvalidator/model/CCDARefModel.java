@@ -53,6 +53,12 @@ public class CCDARefModel {
 	private ArrayList<CCDANotes> notes;
 	private ArrayList<CCDANotesActivity> notesEntries;
 	
+	// USCDI v3
+	private CCDAPayers payers;
+	private CCDAReasonForReferral referrals;
+	private CCDAFunctionalStatus functionalStatus; 
+	private CCDAMentalStatus	 mentalStatus;
+	
 	
 	public ArrayList<CCDAAuthor> getAuthorsFromHeader() {
 		return authorsFromHeader;
@@ -380,11 +386,182 @@ public class CCDARefModel {
 		if (svap2023) {
 			log.info(" Comparing data for Cures Update (USCDI v3) specific entries ");
 			
-			// TODO: Dragon: Add USCDIv3-specific comparisons here
-			// If there is overlap of v2 and v3, can add an or condition prior to svap2022 and 2023 checks...
+			log.info(" Comparing Functional Status Data ");
+			compareFunctionalStatus(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			
+			log.info(" Comparing Mental Status Data ");
+			compareMentalStatus(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			
+			log.info(" Comparing Reason For Referral Status Data ");
+			compareReasonForReferral(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			
+			log.info(" Comparing Payers Data ");
+			comparePayers(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			
+			
 		}
 		
 		log.info("Finished comparison, returning results");
+		
+	}
+	
+	private void compareReasonForReferral(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+		
+		HashMap<String, CCDAPatientReferralAct> refModelActs  = null;
+		
+		if(this.getReferrals() != null)
+			refModelActs = this.getReferrals().getAllReferrals();
+		
+		HashMap<String, CCDAPatientReferralAct> subModelActs = null;
+		
+		if(submittedCCDA.getReferrals() != null)
+			subModelActs = submittedCCDA.getReferrals().getAllReferrals();
+		
+		if( (refModelActs != null && refModelActs.size() > 0) &&  
+			(subModelActs != null && subModelActs.size() > 0)  ) {
+			
+			log.info("Mental Status Assessments present in both models ");
+			CCDAPatientReferralAct.compare(refModelActs, subModelActs, results);
+			
+		} 	
+		else if ( (refModelActs != null && refModelActs.size() > 0) && 
+				(subModelActs == null || subModelActs.size() == 0) ) {
+			
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires Patient's Referral data "
+					+ "but the submitted C-CDA does not contain Referral data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Referral data, but submitted document does not contain Referral data");
+			
+		}else if ((refModelActs == null || refModelActs.size() == 0) && 
+				(subModelActs != null && subModelActs.size() > 0) ) {
+			
+			
+			log.info("Model does not have Referral Data for comparison, allow this to pass");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Referral data for comparison ");
+		}
+		
+		
+	}
+
+	private HashMap<String, AssessmentScaleObservation> getMentalStatusAssessments() {
+		
+		if(mentalStatus != null) {
+			
+			return this.getMentalStatus().getAllAssessmentScaleObservations();
+		}
+		
+		return null;
+	}
+	
+	private void compareMentalStatus(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+		
+		HashMap<String, AssessmentScaleObservation> refAssessments = this.getMentalStatusAssessments();
+		
+		HashMap<String, AssessmentScaleObservation> subAssessments = submittedCCDA.getMentalStatusAssessments();
+		
+		if( (refAssessments != null && refAssessments.size() > 0) &&  
+			(subAssessments != null && subAssessments.size() > 0)  ) {
+			
+			log.info("Mental Status Assessments present in both models ");
+			AssessmentScaleObservation.compare(refAssessments, subAssessments, results);
+			
+		} 	
+		else if ( (refAssessments != null && refAssessments.size() > 0) && 
+				(subAssessments == null || subAssessments.size() == 0) ) {
+			
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires Patient's Mental Status Asssessment data "
+					+ "but the submitted C-CDA does not contain Mental Status Asssessment data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Mental Status Assessment data, but submitted document does not contain Mental Status Assessment data");
+			
+		}else if ((refAssessments == null || refAssessments.size() == 0) && 
+				(subAssessments != null && subAssessments.size() > 0) ) {
+			
+			
+			log.info("Model does not have Assessment Data for comparison, allow this to pass");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Assessment data for comparison ");
+		}
+		
+	}
+
+	private HashMap<String, AssessmentScaleObservation> getFunctionalStatusAssessments() {
+		
+		if(functionalStatus != null) {
+			
+			return this.getFunctionalStatus().getAllAssessmentScaleObservations();
+		}
+		
+		return null;
+	}
+	
+	
+	private void compareFunctionalStatus(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+		
+		HashMap<String, AssessmentScaleObservation> refAssessments = this.getFunctionalStatusAssessments();
+		
+		HashMap<String, AssessmentScaleObservation> subAssessments = submittedCCDA.getFunctionalStatusAssessments();
+		
+		if( (refAssessments != null && refAssessments.size() > 0) &&  
+			(subAssessments != null && subAssessments.size() > 0)  ) {
+			
+			log.info("Functional Status Assessments present in both models ");
+			AssessmentScaleObservation.compare(refAssessments, subAssessments, results);
+			
+		} 	
+		else if ( (refAssessments != null && refAssessments.size() > 0) && 
+				(subAssessments == null || subAssessments.size() == 0) ) {
+			
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires Patient's Functional Status Asssessment data "
+					+ "but the submitted C-CDA does not contain Functional Status Asssessment data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Functional Status Assessment data, but submitted document does not contain Functional Status Assessment data");
+			
+		}else if ((refAssessments == null || refAssessments.size() == 0) && 
+				(subAssessments != null && subAssessments.size() > 0) ) {
+			
+			
+			log.info("Model does not have Assessment Data for comparison, allow this to pass");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Assessment data for comparison ");
+		}
+		
+	}
+
+	private void comparePayers(String validationObjective, CCDARefModel submittedCCDA, 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+		
+		if((this.getPayers() != null) && (submittedCCDA.getPayers() != null) ) {
+			log.info("Start Payers Comparison ");
+			this.payers.compare(submittedCCDA.getPayers(), results, svap2022, svap2023);
+		}
+		else if ( (this.getPayers() != null) && (submittedCCDA.getPayers() == null)) 
+		{
+			// handle the case where the payers section does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's health insurance, but the submitted C-CDA does not contain payer data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires health insurance data but submitted document does not contain health insurance (payers) section");
+		}
+		else if ( (this.getPayers() == null) && (submittedCCDA.getPayers() != null) ){
+			
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's health insurance, but the submitted C-CDA does contain payers (health insurance) data, please check if it is appropriate.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info("Model does not have payers for comparison ");
+		}
+		else {
+			
+			log.info("Model and Submitted CCDA do not have payers for comparison ");
+		}
 		
 	}
 	
@@ -1729,9 +1906,11 @@ public class CCDARefModel {
 			
 		}
 		
+		if(notes != null) {
 		for(int k = 0; k < notes.size(); k++) {
 			
 			notes.get(k).log();
+		}
 		}
 		
 		if(medEquipments != null)
@@ -2089,5 +2268,71 @@ public class CCDARefModel {
 	public String getSeverityLevelName() {
 		return severityLevel.name();
 	}
+
+	public CCDAPayers getPayers() {
+		return payers;
+	}
+
+	public void setPayers(CCDAPayers payers) {
+		this.payers = payers;
+	}
+
+	public ArrayList<CCDAII> getCcdTemplates() {
+		return ccdTemplates;
+	}
+
+	public void setCcdTemplates(ArrayList<CCDAII> ccdTemplates) {
+		this.ccdTemplates = ccdTemplates;
+	}
+
+	public ArrayList<CCDAII> getDsTemplates() {
+		return dsTemplates;
+	}
+
+	public void setDsTemplates(ArrayList<CCDAII> dsTemplates) {
+		this.dsTemplates = dsTemplates;
+	}
+
+	public ArrayList<CCDAII> getRnTemplates() {
+		return rnTemplates;
+	}
+
+	public void setRnTemplates(ArrayList<CCDAII> rnTemplates) {
+		this.rnTemplates = rnTemplates;
+	}
+
+	public ArrayList<CCDAII> getCpTemplates() {
+		return cpTemplates;
+	}
+
+	public void setCpTemplates(ArrayList<CCDAII> cpTemplates) {
+		this.cpTemplates = cpTemplates;
+	}
+
+	public CCDAReasonForReferral getReferrals() {
+		return referrals;
+	}
+
+	public void setReferrals(CCDAReasonForReferral referrals) {
+		this.referrals = referrals;
+	}
+
+	public CCDAFunctionalStatus getFunctionalStatus() {
+		return functionalStatus;
+	}
+
+	public void setFunctionalStatus(CCDAFunctionalStatus functionalStatus) {
+		this.functionalStatus = functionalStatus;
+	}
+
+	public CCDAMentalStatus getMentalStatus() {
+		return mentalStatus;
+	}
+
+	public void setMentalStatus(CCDAMentalStatus mentalStatus) {
+		this.mentalStatus = mentalStatus;
+	}
+	
+	
 	
 }

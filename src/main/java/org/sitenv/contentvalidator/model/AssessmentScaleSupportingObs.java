@@ -26,6 +26,8 @@ public class AssessmentScaleSupportingObs {
 	
 	public void log() {
 		
+		log.info(" *** Assessment Scale Supporting Observation ***");
+		
 		if(supportingObsCode != null)
 			log.info(" Supporting Obs Code = " + supportingObsCode.getCode());
 		

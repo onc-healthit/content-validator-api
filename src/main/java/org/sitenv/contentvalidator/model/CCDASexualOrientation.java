@@ -26,6 +26,8 @@ public class CCDASexualOrientation {
 	}
 
 	public void log() {
+		
+		log.info(" *** Sexual Orientation Observation ***");
 
 		if(sexualOrientationCode != null)
 			log.info(" Sexual Orientation Code = " + sexualOrientationCode.getCode());

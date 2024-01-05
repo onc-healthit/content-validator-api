@@ -70,6 +70,10 @@ public class CCDAHeaderParser {
 	        patient.setDob(ParserUtilities.readDataElement((Element) CCDAConstants.REL_PATIENT_BIRTHTIME_EXP.
 	    				evaluate(patientRoleElement, XPathConstants.NODE)));
 	            
+	        // Set Death Date of the patient 
+	        patient.setDeathDate(ParserUtilities.readDataElement((Element) CCDAConstants.REL_PATIENT_BIRTHTIME_EXP.
+	    				evaluate(patientRoleElement, XPathConstants.NODE)));
+	        
 	        //Get Marital status of the patient 
 	        patient.setMaritalStatus(ParserUtilities.readCode((Element) CCDAConstants.REL_PATIENT_MARITAL_EXP.
 	    				evaluate(patientRoleElement, XPathConstants.NODE)));

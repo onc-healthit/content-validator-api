@@ -21,6 +21,8 @@ public class CCDACareTeamMember {
 	
 	public void log() {
 		
+		log.info(" *** Care Team Member ***");
+		
 		for (int i = 0; i < members.size(); i++) {
 			members.get(i).log();
 		}
@@ -95,14 +97,18 @@ public class CCDACareTeamMember {
 					CCDAParticipant ppf = ctm.getPrimaryPerformer();
 					
 					String name = "";
-					if(ppf.getFirstName() != null)
-						name += ppf.getFirstName().getValue();
 					
-					if(ppf.getLastName() != null)
-						name += " " + ppf.getLastName().getValue();
-					
-					if(!members.containsKey(name))
-						members.put(name, ctm);
+					if(ppf.getAssignedEntity() != null) {
+						
+						if(ppf.getAssignedEntity().getFirstName() != null)
+							name += ppf.getAssignedEntity().getFirstName().getValue();
+						
+						if(ppf.getAssignedEntity().getLastName() != null)
+							name += " " + ppf.getAssignedEntity().getLastName().getValue();
+						
+						if(!members.containsKey(name))
+							members.put(name, ctm);
+					}
 					   
 				}
 				

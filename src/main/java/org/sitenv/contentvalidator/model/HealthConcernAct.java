@@ -26,6 +26,8 @@ private static Logger log = LoggerFactory.getLogger(HealthConcernAct.class.getNa
 	
 	public void log() {
 		
+		log.info(" *** Health Concern Act ***");
+		
 		if(healthConcernActCode != null)
 			log.info(" Health Concern Act  Code = " + healthConcernActCode.getCode());
 		
@@ -40,8 +42,10 @@ private static Logger log = LoggerFactory.getLogger(HealthConcernAct.class.getNa
 			log.info(" Tempalte Id Ext [" + j + "] = " + templateIds.get(j).getExtValue());
 		}
 		
-		for(int k = 0; k < templateIds.size(); k++) {
+		if(problemObservations != null) {
+		for(int k = 0; k < problemObservations.size(); k++) {
 			problemObservations.get(k).log();
+		}
 		}
 		
 		if(author != null)

@@ -18,10 +18,10 @@ public class SocialHistoryParser {
 	public static void parse(Document doc, CCDARefModel model, boolean curesUpdate, boolean svap2022, boolean svap2023)
 			throws XPathExpressionException {
     	log.info(" *** Parsing Social History *** ");
-    	model.setSmokingStatus(retrieveSmokingStatusDetails(doc));	
+    	model.setSmokingStatus(retrieveSocialHistoryDetails(doc));	
 	}
 	
-	public static CCDASocialHistory retrieveSmokingStatusDetails(Document doc) throws XPathExpressionException
+	public static CCDASocialHistory retrieveSocialHistoryDetails(Document doc) throws XPathExpressionException
 	{
 		CCDASocialHistory socialHistory = null;
 		Element sectionElement = (Element) CCDAConstants.SOCIAL_HISTORY_EXPRESSION.evaluate(doc, XPathConstants.NODE);
@@ -67,11 +67,175 @@ public class SocialHistoryParser {
 			NodeList socialHistoryObsList = (NodeList)CCDAConstants.REL_SOCIAL_HISTORY_OBS_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET);
 			socialHistory.setSocialHistoryObservations(retrieveSocialHistoryObs(socialHistoryObsList));
+			
+			// Add Tribal Affiliation
+			NodeList tribalAffList = (NodeList)CCDAConstants.REL_TRIBAL_AFFILIATION_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET);
+			socialHistory.setTribalAffiliations(retrieveTribalAffiliations(tribalAffList));
+			
+			// Add Pregnancy Observation
+			NodeList pregnancyObsList = (NodeList)CCDAConstants.REL_PREGNANCY_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET);
+			socialHistory.setPregnancyObservations(retrievePregnancyObserations(pregnancyObsList));
+			
+			// Add Occupation Observation
+			NodeList occupationObsList = (NodeList)CCDAConstants.REL_OCCUPATION_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET);
+			socialHistory.setOccupation(retrieveOccupationObservations(occupationObsList));
 		}
 		
 		return socialHistory;
 	}
 	
+	private static ArrayList<CCDABasicOccupation> retrieveOccupationObservations(
+			NodeList occupationObsList) throws XPathExpressionException {
+		
+		ArrayList<CCDABasicOccupation> occupationObservations = null;
+		
+		if(!ParserUtilities.isNodeListEmpty(occupationObsList))
+		{
+			occupationObservations = new ArrayList<>();
+		}
+		
+		CCDABasicOccupation occupationObseration;
+		
+		for (int i = 0; i < occupationObsList.getLength(); i++) {
+			
+			log.info("Adding CCDA Basic Occupation");
+			occupationObseration = new CCDABasicOccupation();
+			
+			Element occupationElement = (Element) occupationObsList.item(i);
+			
+			occupationObseration.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+														evaluate(occupationElement, XPathConstants.NODESET)));
+			
+			occupationObseration.setBasicOccupationCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(occupationElement, XPathConstants.NODE)));
+			
+			occupationObseration.setBasicOccupationValueCode(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_WITH_NF_EXP.
+					evaluate(occupationElement, XPathConstants.NODE)));
+			
+			occupationObseration.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(occupationElement, XPathConstants.NODE)));
+			
+			occupationObseration.setIndustry(readOccupationIndustry((Element)CCDAConstants.REL_OCCUPATION_INDUSTRY_EXP.
+					evaluate(occupationElement, XPathConstants.NODE)));
+			
+			occupationObservations.add(occupationObseration);
+		}
+		
+		
+		return occupationObservations;
+	}
+	
+	
+
+	private static CCDABasicOccupationIndustry readOccupationIndustry(Element industryElement) throws XPathExpressionException {
+		
+		if(industryElement != null) {
+			
+			CCDABasicOccupationIndustry industry = new CCDABasicOccupationIndustry();
+			
+			industry.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+					evaluate(industryElement, XPathConstants.NODESET)));
+
+			industry.setBasicOccupationIndustryCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+			evaluate(industryElement, XPathConstants.NODE)));
+			
+			industry.setBasicOccupationIndustryValueCode(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_WITH_NF_EXP.
+			evaluate(industryElement, XPathConstants.NODE)));
+			
+			industry.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+			evaluate(industryElement, XPathConstants.NODE)));
+			
+			return industry;
+		}
+		
+		return null;
+	}
+
+	private static ArrayList<CCDAPregnancyObservation> retrievePregnancyObserations(NodeList pregnancyObsList) throws XPathExpressionException {
+		
+		ArrayList<CCDAPregnancyObservation> pregnancyObservations = null;
+		
+		if(!ParserUtilities.isNodeListEmpty(pregnancyObsList))
+		{
+			pregnancyObservations = new ArrayList<>();
+		}
+		
+		CCDAPregnancyObservation pregnancyObservation;
+		
+		for (int i = 0; i < pregnancyObsList.getLength(); i++) {
+			
+			log.info("Adding CCDA Tribal Affiliation");
+			pregnancyObservation = new CCDAPregnancyObservation();
+			
+			Element pregnancyElement = (Element) pregnancyObsList.item(i);
+			
+			pregnancyObservation.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+														evaluate(pregnancyElement, XPathConstants.NODESET)));
+			
+			pregnancyObservation.setPregnancyCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(pregnancyElement, XPathConstants.NODE)));
+			
+			pregnancyObservation.setPregnancyValue(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_WITH_NF_EXP.
+					evaluate(pregnancyElement, XPathConstants.NODE)));
+			
+			pregnancyObservation.setEffTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+					evaluate(pregnancyElement, XPathConstants.NODE)));
+			
+			pregnancyObservation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(pregnancyElement, XPathConstants.NODE)));
+			
+			pregnancyObservations.add(pregnancyObservation);
+		}
+		
+		
+		return pregnancyObservations;
+		
+	}
+
+	private static ArrayList<CCDATribalAffiliationObservation> retrieveTribalAffiliations(NodeList tribalAffList) throws XPathExpressionException {
+		
+		ArrayList<CCDATribalAffiliationObservation> tribalAffiliations = null;
+		
+		if(!ParserUtilities.isNodeListEmpty(tribalAffList))
+		{
+			tribalAffiliations = new ArrayList<>();
+		}
+		
+		CCDATribalAffiliationObservation tribalAffiliation;
+		
+		for (int i = 0; i < tribalAffList.getLength(); i++) {
+			
+			log.info("Adding CCDA Tribal Affiliation");
+			tribalAffiliation = new CCDATribalAffiliationObservation();
+			
+			Element tribalAffiliationElement = (Element) tribalAffList.item(i);
+			
+			tribalAffiliation.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+														evaluate(tribalAffiliationElement, XPathConstants.NODESET)));
+			
+			tribalAffiliation.setTribalAffiliationCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(tribalAffiliationElement, XPathConstants.NODE)));
+			
+			tribalAffiliation.setTribalAffiliationValue(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_WITH_NF_EXP.
+					evaluate(tribalAffiliationElement, XPathConstants.NODE)));
+			
+			tribalAffiliation.setObservationTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+					evaluate(tribalAffiliationElement, XPathConstants.NODE)));
+			
+			tribalAffiliation.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(tribalAffiliationElement, XPathConstants.NODE)));
+			
+			tribalAffiliations.add(tribalAffiliation);
+		}
+		
+		
+		return tribalAffiliations;
+		
+	}
+
 	public static ArrayList<CCDASocialHistoryObs> retrieveSocialHistoryObs(NodeList socHisList) throws XPathExpressionException {
 		
 		ArrayList<CCDASocialHistoryObs> socObs = null;
