@@ -2,6 +2,8 @@ package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
 
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,6 +83,23 @@ public class CCDABasicOccupationIndustry {
 		this.author = author;
 	}
 
-	
+	public void compare(CCDABasicOccupationIndustry refIndustry, ArrayList<ContentValidationResult> results,
+			String context) {
+		
+		log.info("Comparing Basic Occupation Industry Observation ");
+		
+		// Handle Template Ids
+		ParserUtilities.compareTemplateIds(refIndustry.getTemplateIds(), templateIds, results, context);
+		
+		// Compare Sex Codes 
+		String elementNameVal = "Basic Occupation Observation code element for " + context;
+		ParserUtilities.compareCode(refIndustry.getBasicOccupationIndustryCode(), basicOccupationIndustryCode, results, elementNameVal);
+		
+		// Compare Sex Value 
+		String valElementContext = "Basic Occupation Observation value element for " + context;
+		ParserUtilities.compareCode(refIndustry.getBasicOccupationIndustryValueCode(), basicOccupationIndustryValueCode, results, valElementContext);
+		
+		
+	}	
 
 }

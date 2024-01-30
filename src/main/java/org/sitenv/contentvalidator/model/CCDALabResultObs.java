@@ -2,6 +2,7 @@ package org.sitenv.contentvalidator.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
@@ -24,7 +25,7 @@ public class CCDALabResultObs {
 	private CCDACode						interpretationCode;
 	private ArrayList<CCDAPQ>				referenceValue;
 	private ArrayList<CCDANotesActivity>	notesActivity;
-	private CCDASpecimen					specimenType;
+	private ArrayList<CCDASpecimen>			specimenType;
 	
 	private CCDAAuthor	author;
 	
@@ -162,6 +163,7 @@ public class CCDALabResultObs {
 		templateIds = new ArrayList<CCDAII>();
 		referenceValue = new ArrayList<CCDAPQ>();
 		notesActivity = new ArrayList<CCDANotesActivity>();
+		specimenType = new ArrayList<>();
 	}
 	
 	public void log() {
@@ -204,8 +206,9 @@ public class CCDALabResultObs {
 		if(author != null)
 			author.log();
 		
-		if(specimenType != null)
-			specimenType.log();
+		for(int m = 0; m < specimenType.size(); m++) {
+			specimenType.get(m).log();
+		}
 	}
 
 	public ArrayList<CCDAII> getTemplateIds() {
@@ -304,15 +307,29 @@ public class CCDALabResultObs {
 		this.author = author;
 	}
 
-	public CCDASpecimen getSpecimenType() {
+	public ArrayList<CCDASpecimen> getSpecimenType() {
 		return specimenType;
 	}
 
-	public void setSpecimenType(CCDASpecimen specimenType) {
+	public void setSpecimenType(ArrayList<CCDASpecimen> specimenType) {
 		this.specimenType = specimenType;
 	}
-	
-	
+
+	public void getAllSpecimens(HashMap<String, CCDASpecimen> specs) {
+		
+		if(specimenType != null) {
+			
+			for(CCDASpecimen s: specimenType) {
+				
+				if(s.getSpecimenType() != null 
+						&& !StringUtils.isEmpty(s.getSpecimenType().getCode())) {
+					specs.put(s.getSpecimenType().getCode(), s);
+				}
+				
+			}
+		}
+		
+	}
 	
 }
 

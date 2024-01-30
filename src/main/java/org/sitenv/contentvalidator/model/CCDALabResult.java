@@ -196,6 +196,19 @@ public class CCDALabResult {
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
 	}
+
+	public HashMap<String, CCDASpecimen> getAllSpecimens() {
+		
+		HashMap<String, CCDASpecimen> specs = new HashMap<>();
+		if(resultOrg != null) {
+			
+			for(int i = 0; i < resultOrg.size(); i++) {				
+				resultOrg.get(i).getAllSpecimens(specs);
+			}
+		}
+		
+		return specs;
+	}
 	
 	
 }

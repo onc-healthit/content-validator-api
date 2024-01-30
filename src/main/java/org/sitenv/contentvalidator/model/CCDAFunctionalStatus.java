@@ -119,5 +119,39 @@ public class CCDAFunctionalStatus {
 		return assessments;
 	}
 	
+	public HashMap<String, CCDADisabilityStatusObservation> getAllDisabilityStatuses() {
+		
+		HashMap<String, CCDADisabilityStatusObservation> disabilityObs = new HashMap<>();
+		if(disabilityStatusObservation != null) {
+			for(int i = 0; i < disabilityStatusObservation.size(); i++) {
+				
+				if(disabilityStatusObservation.get(i).getDisabilityStatusValue() != null && 
+						disabilityStatusObservation.get(i).getDisabilityStatusValue().getCode() != null) {
+					
+					disabilityObs.put(disabilityStatusObservation.get(i).getDisabilityStatusValue().getCode(),
+							disabilityStatusObservation.get(i));
+				}
+			}
+		}		
+		return disabilityObs;
+	}
+	
+	public HashMap<String, CCDAFunctionalStatusObservation> getAllFunctionalStatuses() {
+		
+		HashMap<String, CCDAFunctionalStatusObservation> functionalStatusObs = new HashMap<>();
+		if(functionalStatusObservation != null) {
+			for(int i = 0; i < disabilityStatusObservation.size(); i++) {
+				
+				if(functionalStatusObservation.get(i).getFunctionalStatusCode() != null && 
+						functionalStatusObservation.get(i).getFunctionalStatusCode().getCode() != null) {
+					
+					functionalStatusObs.put(functionalStatusObservation.get(i).getFunctionalStatusCode().getCode(),
+							functionalStatusObservation.get(i));
+				}
+			}
+		}		
+		return functionalStatusObs;
+	}
+	
 }
 

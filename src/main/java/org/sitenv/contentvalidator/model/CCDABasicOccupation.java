@@ -2,6 +2,9 @@ package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
 
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,6 +94,36 @@ public class CCDABasicOccupation {
 
 	public void setIndustry(CCDABasicOccupationIndustry industry) {
 		this.industry = industry;
+	}
+
+	public void compare(CCDABasicOccupation refOcc, ArrayList<ContentValidationResult> results, String context) {
+		
+		log.info("Comparing Basic Occupation Observation ");
+		
+		// Handle Template Ids
+		ParserUtilities.compareTemplateIds(refOcc.getTemplateIds(), templateIds, results, context);
+		
+		// Compare Sex Codes 
+		String elementNameVal = "Basic Occupation Observation code element for " + context;
+		ParserUtilities.compareCode(refOcc.getBasicOccupationCode(), basicOccupationCode, results, elementNameVal);
+		
+		// Compare Sex Value 
+		String valElementContext = "Basic Occupation Observation value element for " + context;
+		ParserUtilities.compareCode(refOcc.getBasicOccupationValueCode(), basicOccupationValueCode, results, valElementContext);
+		
+		if(industry != null) {
+			String industryContext = "Basic Occupation Industry Observation comparison for " + context;
+			industry.compare(refOcc.getIndustry(), results, industryContext);
+		}
+		else if(refOcc.getIndustry() != null) {
+			
+			// Error
+			String error = "The scenario does not require Basic Occupation Industry Observation data " + 
+								" , however there is no Basic Occupation Industry Observation in the submitted CCDA. ";
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+						results.add(rs);
+		}
+		
 	}
 	
 	

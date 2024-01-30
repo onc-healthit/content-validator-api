@@ -74,6 +74,7 @@ public class CCDAParser {
 			
 			model.setPatient(CCDAHeaderParser.getPatient(doc, curesUpdate, svap2022, svap2023));
 			model.setHeader(CCDAHeaderParser.getHeaderElements(doc, curesUpdate, svap2022, svap2023));
+			model.setRelatedPersons(CCDARelatedPersonParser.getRelatedPersons(doc,curesUpdate,svap2022,svap2023));
 			CCDABodyParser.parseBody(doc, model, curesUpdate, svap2022, svap2023);
 		
 			log.info("Returning Parsed Model");
