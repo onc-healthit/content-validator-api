@@ -2,10 +2,12 @@ package org.sitenv.contentvalidator.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.sitenv.contentvalidator.parsers.ParserUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CCDALabResultOrg {
 
@@ -17,7 +19,7 @@ public class CCDALabResultOrg {
 	private CCDAEffTime						effTime;
 	private ArrayList<CCDALabResultObs>		resultObs;
 	private ArrayList<CCDANotesActivity>	notesActivity;
-	private CCDASpecimen					specimenType;
+	private ArrayList<CCDASpecimen>			specimenType;
 	
 	private CCDAAuthor	author;
 	
@@ -57,8 +59,9 @@ public class CCDALabResultOrg {
 		if(author != null)
 			author.log();
 		
-		if(specimenType != null)
-			specimenType.log();
+		for(int l = 0; l < specimenType.size(); l++) {
+			specimenType.get(l).log();
+		}
 	}
 	
 	public CCDALabResultOrg()
@@ -66,6 +69,7 @@ public class CCDALabResultOrg {
 		templateIds = new ArrayList<CCDAII>();
 		resultObs = new ArrayList<CCDALabResultObs>();
 		notesActivity = new ArrayList<CCDANotesActivity>();
+		specimenType = new ArrayList<>();
 	}
 
 	public ArrayList<CCDAII> getTemplateIds() {
@@ -128,14 +132,34 @@ public class CCDALabResultOrg {
 		this.notesActivity = notesActivity;
 	}
 
-	public CCDASpecimen getSpecimenType() {
+	public ArrayList<CCDASpecimen> getSpecimenType() {
 		return specimenType;
 	}
 
-	public void setSpecimenType(CCDASpecimen specimenType) {
+	public void setSpecimenType(ArrayList<CCDASpecimen> specimenType) {
 		this.specimenType = specimenType;
 	}
-	
-	
+
+	public void getAllSpecimens(HashMap<String, CCDASpecimen> specs) {
+		
+		if(specimenType != null) {
+			
+			for(CCDASpecimen s: specimenType) {
+				
+				if(s.getSpecimenType() != null 
+						&& !StringUtils.isEmpty(s.getSpecimenType().getCode())) {
+					specs.put(s.getSpecimenType().getCode(), s);
+				}
+				
+			}
+			
+			for(CCDALabResultObs obs: resultObs) {
+				obs.getAllSpecimens(specs);
+			}
+			
+		}
+		
+	}
+
 	
 }

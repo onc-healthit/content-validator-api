@@ -1,10 +1,13 @@
 package org.sitenv.contentvalidator.model;
 
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CCDASocialHistory {
 
@@ -21,6 +24,7 @@ public class CCDASocialHistory {
 	private ArrayList<CCDAPregnancyObservation>		pregnancyObservations;
 	private ArrayList<CCDATribalAffiliationObservation> tribalAffiliations;
 	private ArrayList<CCDABasicOccupation>			occupation;
+	private ArrayList<CCDASexObservation>		    sexObservations;
 	
 	private CCDAAuthor author;
 	
@@ -83,6 +87,12 @@ public class CCDASocialHistory {
 		}
 		}
 		
+		if(sexObservations != null) {
+			for(int s = 0; s < sexObservations.size(); s++) {
+				sexObservations.get(s).log();
+			}
+		}
+		
 		if(birthSex != null)
 			birthSex.log();
 		
@@ -100,6 +110,7 @@ public class CCDASocialHistory {
 		socialHistoryObservations = new ArrayList<>();
 		pregnancyObservations = new ArrayList<>();
 		tribalAffiliations = new ArrayList<>();
+		sexObservations = new ArrayList<>();
 	}
 
 	
@@ -198,6 +209,81 @@ public class CCDASocialHistory {
 		return orientations;
 	}
 	
+	public HashMap<String, CCDASexObservation> getAllSexObservations() {
+		
+		HashMap<String, CCDASexObservation> sexObs = new HashMap<>();
+		if(sexObservations != null) {
+			for(int i = 0; i < sexObservations.size(); i++) {
+				
+				if(sexObservations.get(i).getSexValue() != null && 
+						sexObservations.get(i).getSexValue().getCode() != null) {
+					
+					sexObs.put(sexObservations.get(i).getSexValue().getCode(),
+							sexObservations.get(i));
+				}
+				else if (sexObservations.get(i).getSexValue() != null && 
+						sexObservations.get(i).getSexValue().getNullFlavor() != null) {
+					
+					sexObs.put(sexObservations.get(i).getSexValue().getNullFlavor(),
+							sexObservations.get(i));
+				}
+				
+			}
+		}		
+		return sexObs;
+	}
+	
+	public HashMap<String, CCDATribalAffiliationObservation> getAllTribalAffiliations() {
+		
+		HashMap<String, CCDATribalAffiliationObservation> tribalObs = new HashMap<>();
+		if(tribalAffiliations != null) {
+			for(int i = 0; i < tribalAffiliations.size(); i++) {
+				
+				if(tribalAffiliations.get(i).getTribalAffiliationValue() != null && 
+						tribalAffiliations.get(i).getTribalAffiliationValue().getCode() != null) {
+					
+					tribalObs.put(tribalAffiliations.get(i).getTribalAffiliationValue().getCode(),
+							tribalAffiliations.get(i));
+				}
+			}
+		}		
+		return tribalObs;
+	}
+	
+	public HashMap<String, CCDABasicOccupation> getAllBasicOccupations() {
+		
+		HashMap<String, CCDABasicOccupation> basicObs = new HashMap<>();
+		if(occupation != null) {
+			for(int i = 0; i < occupation.size(); i++) {
+				
+				if(occupation.get(i).getBasicOccupationValueCode() != null && 
+						occupation.get(i).getBasicOccupationValueCode().getCode() != null) {
+					
+					basicObs.put(occupation.get(i).getBasicOccupationValueCode().getCode(),
+							occupation.get(i));
+				}
+			}
+		}		
+		return basicObs;
+	}
+	
+	public HashMap<String, CCDAPregnancyObservation> getAllPregnancyObservations() {
+		
+		HashMap<String, CCDAPregnancyObservation> pregnancyObs = new HashMap<>();
+		if(pregnancyObservations != null) {
+			for(int i = 0; i < pregnancyObservations.size(); i++) {
+				
+				if(pregnancyObservations.get(i).getPregnancyValue() != null && 
+						pregnancyObservations.get(i).getPregnancyValue().getCode() != null) {
+					
+					pregnancyObs.put(pregnancyObservations.get(i).getPregnancyValue().getCode(),
+							pregnancyObservations.get(i));
+				}
+			}
+		}		
+		return pregnancyObs;
+	}
+	
 	public HashMap<String, CCDAGenderIdentityObs> getAllGenderIdentities() {
 		
 		HashMap<String, CCDAGenderIdentityObs> identities = new HashMap<>();
@@ -274,6 +360,191 @@ public class CCDASocialHistory {
 	public void setOccupation(ArrayList<CCDABasicOccupation> occupation) {
 		this.occupation = occupation;
 	}
+
+	public ArrayList<CCDASexObservation> getSexObservations() {
+		return sexObservations;
+	}
+
+	public void setSexObservations(ArrayList<CCDASexObservation> sexObservations) {
+		this.sexObservations = sexObservations;
+	}
+
+	public void compare(String validationObjective, CCDASocialHistory subSocialHistory, boolean curesUpdate,
+			boolean svap2022, boolean svap2023, ArrayList<ContentValidationResult> results) {
+		
+		// Get Submitted observations
+		HashMap<String, CCDASexObservation> subSexObs = null;
+		HashMap<String, CCDABasicOccupation> subOccObs = null;
+		HashMap<String, CCDATribalAffiliationObservation> subTribalAffiliationObs = null;
+		HashMap<String, CCDAPregnancyObservation> subPregnancyObs = null;
+		
+		if(subSocialHistory != null) {
+			subSexObs = subSocialHistory.getAllSexObservations();
+			subOccObs = subSocialHistory.getAllBasicOccupations();
+			subTribalAffiliationObs = subSocialHistory.getAllTribalAffiliations();
+			subPregnancyObs = subSocialHistory.getAllPregnancyObservations();
+		}
+		
+		// Compare Sex Observations
+		compareSexObservations(this.getAllSexObservations(), subSexObs,
+							results);
+					
+		// Compare Occupation Observation
+		compareOccObservations(this.getAllBasicOccupations(), subOccObs,
+							results);
+					
+		// Compare Tribal Affiliation Observations
+		compareTribalAffiliations(this.getAllTribalAffiliations(), subTribalAffiliationObs,
+							results);
+					
+		// Compare Pregnancy Observations
+		comparePregnancyObservations(this.getAllPregnancyObservations(), subPregnancyObs,
+							results);		
+	}
+
+	public static void comparePregnancyObservations(HashMap<String, CCDAPregnancyObservation> refPregnancyObservations,
+			HashMap<String, CCDAPregnancyObservation> subPregnancyObs, ArrayList<ContentValidationResult> results) {
+		
+		log.info(" Start Comparing Pregnancy Observations ");
+		// For each sex observation  in the Ref Model, check if it is present in the subCCDA Model.
+		for(Map.Entry<String, CCDAPregnancyObservation> ent: refPregnancyObservations.entrySet()) {
+
+			if(subPregnancyObs != null && subPregnancyObs.containsKey(ent.getKey())) {
+
+				log.info("Comparing Pregnancy Observation ");
+				String context = "Pregnancy Observation Entry corresponding to the code " + ent.getKey();
+				subPregnancyObs.get(ent.getKey()).compare(ent.getValue(), results, context);
+
+
+			} else {
+				// Error
+				String error = "The scenario contains Pregnancy Observations with code " + ent.getKey() +
+						" , however there is no matching data in the submitted CCDA. ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+		}
+
+		// Handle the case where the Occupation data is not present in the reference, 
+		if( (refPregnancyObservations == null || refPregnancyObservations.size() == 0) && (subPregnancyObs != null && subPregnancyObs.size() > 0) ) {
+
+			// Error
+			String error = "The scenario does not require Pregnancy Observation data " + 
+					" , however there is Pregnancy Observation in the submitted CCDA, check if this is appropriate manually. ";
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		
+	}
+
+	public static void compareTribalAffiliations(HashMap<String, CCDATribalAffiliationObservation> refTribalAffiliations,
+			HashMap<String, CCDATribalAffiliationObservation> subTribalAffiliationObs,
+			ArrayList<ContentValidationResult> results) {
+		
+		log.info(" Start Comparing Tribal Affiliation Observations ");
+		// For each sex observation  in the Ref Model, check if it is present in the subCCDA Model.
+		for(Map.Entry<String, CCDATribalAffiliationObservation> ent: refTribalAffiliations.entrySet()) {
+
+			if(subTribalAffiliationObs != null && subTribalAffiliationObs.containsKey(ent.getKey())) {
+
+				log.info("Comparing Tribal Affiliation Observation ");
+				String context = "Tribal Affiliation Observation Entry corresponding to the code " + ent.getKey();
+				subTribalAffiliationObs.get(ent.getKey()).compare(ent.getValue(), results, context);
+
+
+			} else {
+				// Error
+				String error = "The scenario contains Tribal Affiliation data with code " + ent.getKey() +
+						" , however there is no matching data in the submitted CCDA. ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+		}
+
+		// Handle the case where the Occupation data is not present in the reference, 
+		if( (refTribalAffiliations == null || refTribalAffiliations.size() == 0) && (subTribalAffiliationObs != null && subTribalAffiliationObs.size() > 0) ) {
+
+			// Error
+			String error = "The scenario does not require Tribal Affiliation data " + 
+					" , however there is Tribal Affiliation data in the submitted CCDA, check if this is appropriate manually. ";
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		
+	}
+
+	public static void compareOccObservations(HashMap<String, CCDABasicOccupation> refOccObs,
+			HashMap<String, CCDABasicOccupation> subOccObs, ArrayList<ContentValidationResult> results) {
+		
+		log.info(" Start Comparing Occupation Observations ");
+		// For each sex observation  in the Ref Model, check if it is present in the subCCDA Model.
+		for(Map.Entry<String, CCDABasicOccupation> ent: refOccObs.entrySet()) {
+
+			if(subOccObs != null && subOccObs.containsKey(ent.getKey())) {
+
+				log.info("Comparing Basic Occupation Observation ");
+				String context = "Basic Occupation Observation Entry corresponding to the code " + ent.getKey();
+				subOccObs.get(ent.getKey()).compare(ent.getValue(), results, context);
+
+
+			} else {
+				// Error
+				String error = "The scenario contains Basic Occupation Observation data with code " + ent.getKey() +
+						" , however there is no matching data in the submitted CCDA. ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+		}
+
+		// Handle the case where the Occupation data is not present in the reference, 
+		if( (refOccObs == null || refOccObs.size() == 0) && (subOccObs != null && subOccObs.size() > 0) ) {
+
+			// Error
+			String error = "The scenario does not require Basic Occupation Observation data " + 
+					" , however there is Occupation Observation in the submitted CCDA, check if this is appropriate manually. ";
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		
+		
+	}
+
+	public static void compareSexObservations(HashMap<String, CCDASexObservation> refSexObservations,
+			HashMap<String, CCDASexObservation> subSexObs, ArrayList<ContentValidationResult> results) {
+		
+		log.info(" Start Comparing Sex Observations ");
+		// For each sex obseration  in the Ref Model, check if it is present in the subCCDA Model.
+		for(Map.Entry<String, CCDASexObservation> ent: refSexObservations.entrySet()) {
+
+			if(subSexObs != null && subSexObs.containsKey(ent.getKey())) {
+
+				log.info("Comparing Sex Observation ");
+				String context = "Sex Observation Entry corresponding to the code " + ent.getKey();
+				subSexObs.get(ent.getKey()).compare(ent.getValue(), results, context);
+
+
+			} else {
+				// Error
+				String error = "The scenario contains Sex Observation data with code " + ent.getKey() +
+						" , however there is no matching data in the submitted CCDA. ";
+				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+			}
+		}
+
+		// Handle the case where the Sex Observation data is not present in the reference, 
+		if( (refSexObservations == null || refSexObservations.size() == 0) && (subSexObs != null && subSexObs.size() > 0) ) {
+
+			// Error
+			String error = "The scenario does not require Sex Observation data " + 
+					" , however there is Sex Observation in the submitted CCDA, check if this is appropriate manually. ";
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		
+	}
+
+	
 	
 	
 	

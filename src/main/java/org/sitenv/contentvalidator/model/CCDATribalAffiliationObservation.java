@@ -2,6 +2,8 @@ package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
 
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,6 +81,23 @@ public class CCDATribalAffiliationObservation {
 
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
+	}
+
+	public void compare(CCDATribalAffiliationObservation refValue, ArrayList<ContentValidationResult> results, String context) {
+		
+		log.info("Comparing Tribal Affiliation Observation ");
+		
+		// Handle Template Ids
+		ParserUtilities.compareTemplateIds(refValue.getTemplateIds(), templateIds, results, context);
+		
+		// Compare Sex Codes 
+		String elementNameVal = "Tribal Affiliation code element for " + context;
+		ParserUtilities.compareCode(refValue.getTribalAffiliationCode(), tribalAffiliationCode, results, elementNameVal);
+		
+		// Compare Sex Value 
+		String valElementContext = "Tribal Affiliation value element for " + context;
+		ParserUtilities.compareCode(refValue.getTribalAffiliationValue(), tribalAffiliationValue, results, valElementContext);
+		
 	}
 	
 	

@@ -76,6 +76,10 @@ public class LabResultParser {
 			labResultOrg.setEffTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
 					evaluate(labResultOrgElement, XPathConstants.NODE)));
 			
+			// Read Specimen Observation
+			labResultOrg.setSpecimenType(readSpecimen((NodeList)CCDAConstants.REL_SPECIMEN_EXP.
+					evaluate(labResultOrgElement,XPathConstants.NODESET)));
+			
 			labResultOrg.setResultObs(readResultObservation((NodeList) CCDAConstants.REL_COMP_OBS_EXP.
 					evaluate(labResultOrgElement, XPathConstants.NODESET)));
 			
@@ -91,6 +95,29 @@ public class LabResultParser {
 		return labResultOrgList;
 	}
 	
+	private static ArrayList<CCDASpecimen> readSpecimen(NodeList specimenNodeList) throws XPathExpressionException {
+		ArrayList<CCDASpecimen> specimenList = new ArrayList<>();
+
+		if(specimenNodeList != null) {
+			
+			for(int i = 0; i < specimenNodeList.getLength(); i++) {
+				
+				Element node = (Element)specimenNodeList.item(i);
+				CCDACode cd = ParserUtilities.readCode((Element) CCDAConstants.REL_SPECIMEN_CODE_EXP.
+						evaluate(node, XPathConstants.NODE));
+				
+				if(cd != null) {
+					CCDASpecimen spec = new CCDASpecimen();
+					spec.setSpecimenType(cd);
+					specimenList.add(spec);
+				}
+			}
+			
+		}
+		
+		return specimenList;
+	}
+
 	public static ArrayList<CCDALabResultObs> readResultObservation(NodeList resultObservationNodeList) throws XPathExpressionException
 	{
 		
@@ -116,6 +143,10 @@ public class LabResultParser {
 			
 			resultObservation.setInterpretationCode(ParserUtilities.readCode((Element) CCDAConstants.REL_INT_CODE_EXP.
 					evaluate(resultObservationElement, XPathConstants.NODE)));
+			
+			// Read Specimen Observation
+			resultObservation.setSpecimenType(readSpecimen((NodeList)CCDAConstants.REL_SPECIMEN_EXP.
+								evaluate(resultObservationElement,XPathConstants.NODESET)));
 			
 			// Add Notes Activity if present in Lab Result Observtaion entryRelationship
 			resultObservation.setNotesActivity(

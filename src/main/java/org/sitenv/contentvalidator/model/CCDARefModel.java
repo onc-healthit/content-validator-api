@@ -58,6 +58,7 @@ public class CCDARefModel {
 	private CCDAReasonForReferral referrals;
 	private CCDAFunctionalStatus functionalStatus; 
 	private CCDAMentalStatus	 mentalStatus;
+	private ArrayList<CCDAParticipant> relatedPersons;
 	
 	
 	public ArrayList<CCDAAuthor> getAuthorsFromHeader() {
@@ -123,6 +124,7 @@ public class CCDARefModel {
 		notesEntries = new ArrayList<CCDANotesActivity>();
 		authorsFromHeader = new ArrayList<CCDAAuthor>();
 		authorsWithLinkedReferenceData = new ArrayList<CCDAAuthor>();
+		relatedPersons = new ArrayList<>();
 		
 		ccdTemplates = new ArrayList<CCDAII>();
 		ccdTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
@@ -310,8 +312,10 @@ public class CCDARefModel {
 		log.info("Comparing Social History Smoking Status ");
 		validateSmokingStatus(submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
-		log.info("Validating Social History Birth Sex ");
-		validateBirthSex(submittedCCDA, results, curesUpdate, svap2022, svap2023);
+		if(!svap2023) {
+			log.info("Validating Social History Birth Sex ");
+			validateBirthSex(submittedCCDA, results, curesUpdate, svap2022, svap2023);
+		}
 		
 		log.info("Comparing Problems ");
 		compareProblems(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
@@ -360,7 +364,7 @@ public class CCDARefModel {
 			compareCareTeamMembers(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		}
 		
-		if (svap2022) {
+		if (svap2022 || svap2023 ) {
 			
 			log.info(" Comparing data for Cures Update (USCDI v2) specific entries ");
 			
@@ -398,6 +402,13 @@ public class CCDARefModel {
 			log.info(" Comparing Payers Data ");
 			comparePayers(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 			
+			log.info(" Comparing Social History Observations ");
+			compareSocialHistoryObservations(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			
+			log.info(" Comparing Social History Observations ");
+			compareRelatedPersons(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			
+			
 			
 		}
 		
@@ -405,6 +416,53 @@ public class CCDARefModel {
 		
 	}
 	
+	private void compareSocialHistoryObservations(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+		
+		log.info("Comparing Social History Observations");
+		if(this.socialHistory != null) {
+			this.socialHistory.compare(validationObjective, submittedCCDA.getSocialHistory(), curesUpdate, svap2022, svap2023, results);
+		}
+		else {
+			log.info(" Nothing to do ");
+		}
+	}
+
+	private void compareRelatedPersons(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+		
+		log.info("Retrieving Related Persons for comparison ");
+		ArrayList<CCDAParticipant> refParts = this.getAllRelatedPersons();
+		ArrayList<CCDAParticipant> subParts = submittedCCDA.getAllRelatedPersons();
+		
+		if( (refParts != null && refParts.size() > 0) &&  
+				(subParts != null && subParts.size() > 0)  ) {
+				
+				log.info("Specimens present in both models ");
+				CCDAParticipant.compareRelatedPersons(refParts, subParts, results);
+				
+			} else if ( (refParts != null && refParts.size() > 0) && 
+					(subParts == null || subParts.size() == 0) ) {
+				
+				// handle the case where the RelatedPerson does not exist in the submitted CCDA
+				ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to RelatedPerson, but the submitted C-CDA does not contain RelatedPerson data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+				log.info(" Scenario requires ReleatedPerson data but submitted document does not contain RelatedPerson data");
+				
+			}else if ((refParts == null || refParts.size() == 0) && 
+					(subParts != null && subParts.size() > 0) ) {
+			
+				ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to RelatedPerson, but the submitted C-CDA does contain RelatedPerson data, please check if it is appropriate.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
+				results.add(rs);
+				log.info("Model does not have RelatedPerson for comparison ");
+				
+			} else {
+				
+				log.info("Model and Submitted CCDA do not have Related Persons for comparison ");
+			}
+		
+	}
+
 	private void compareReasonForReferral(String validationObjective, CCDARefModel submittedCCDA,
 			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
@@ -765,6 +823,43 @@ public class CCDARefModel {
 			
 			log.info("Model and Submitted CCDA do not have lab results for comparison ");
 		}
+		
+		compareSpecimens(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+	}
+	
+	public void compareSpecimens(String validationObjective, CCDARefModel submittedCCDA, 
+	ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+		
+		log.info("Retrieving Specimens for comparison ");
+		HashMap<String, CCDASpecimen> refSpecs = this.getAllSpecimens();
+		HashMap<String, CCDASpecimen> subSpecs = submittedCCDA.getAllSpecimens();
+		
+		if( (refSpecs != null && refSpecs.size() > 0) &&  
+				(subSpecs != null && subSpecs.size() > 0)  ) {
+				
+				log.info("Specimens present in both models ");
+				CCDASpecimen.compareSpecimens(refSpecs, subSpecs, results);
+				
+			} else if ( (refSpecs != null && refSpecs.size() > 0) && 
+					(subSpecs == null || subSpecs.size() == 0) ) {
+				
+				// handle the case where the Vitals Section does not exist in the submitted CCDA
+				ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to Specimen, but the submitted C-CDA does not contain Specimen data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+				log.info(" Scenario requires Specimen data but submitted document does not contain Specimen data");
+				
+			}else if ((refSpecs == null || refSpecs.size() == 0) && 
+					(subSpecs != null && subSpecs.size() > 0) ) {
+			
+				ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to Specimen, but the submitted C-CDA does contain Specimen data, please check if it is appropriate.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
+				results.add(rs);
+				log.info("Model does not have Specimen for comparison ");
+				
+			} else {
+				
+				log.info("Model and Submitted CCDA do not have Specimens for comparison ");
+			}
+		
 	}
 	
 	public void compareVitalObs(String validationObjective, CCDARefModel submittedCCDA, 
@@ -1307,6 +1402,25 @@ public class CCDARefModel {
 		}
 		
 		return null;
+	}
+	
+	private HashMap<String, CCDASpecimen> getAllSpecimens() {
+	
+		if(labResults != null) {
+			
+			return labResults.getAllSpecimens();	
+		}
+		
+		return null;
+	}
+	
+	private ArrayList<CCDAParticipant> getAllRelatedPersons() {
+		
+		if(relatedPersons != null)
+			return relatedPersons;
+		else 
+			return null;
+		
 	}
 	
 	private void logSubmittedAuthorsWithLinkedReferenceData(ArrayList<CCDAAuthor> authorsWithLinkedReferenceData) {
@@ -2331,6 +2445,14 @@ public class CCDARefModel {
 
 	public void setMentalStatus(CCDAMentalStatus mentalStatus) {
 		this.mentalStatus = mentalStatus;
+	}
+
+	public ArrayList<CCDAParticipant> getRelatedPersons() {
+		return relatedPersons;
+	}
+
+	public void setRelatedPersons(ArrayList<CCDAParticipant> relatedPersons) {
+		this.relatedPersons = relatedPersons;
 	}
 	
 	

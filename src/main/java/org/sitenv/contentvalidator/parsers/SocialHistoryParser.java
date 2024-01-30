@@ -82,11 +82,53 @@ public class SocialHistoryParser {
 			NodeList occupationObsList = (NodeList)CCDAConstants.REL_OCCUPATION_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET);
 			socialHistory.setOccupation(retrieveOccupationObservations(occupationObsList));
+			
+			// Add Pregnancy Observation
+			NodeList sexObsList = (NodeList)CCDAConstants.REL_SEX_EXP.
+								evaluate(sectionElement, XPathConstants.NODESET);
+			socialHistory.setSexObservations(retrieveSexObserations(sexObsList));
 		}
 		
 		return socialHistory;
 	}
 	
+	private static ArrayList<CCDASexObservation> retrieveSexObserations(NodeList sexObsList) throws XPathExpressionException {
+		
+		ArrayList<CCDASexObservation> sexObservations = null;
+		
+		if(!ParserUtilities.isNodeListEmpty(sexObsList))
+		{
+			sexObservations = new ArrayList<>();
+		}
+		
+		CCDASexObservation sexObs;
+		
+		for (int i = 0; i < sexObsList.getLength(); i++) {
+			
+			log.info("Adding CCDA Sex Observation");
+			sexObs = new CCDASexObservation();
+			
+			Element occupationElement = (Element) sexObsList.item(i);
+			
+			sexObs.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+														evaluate(occupationElement, XPathConstants.NODESET)));
+			
+			sexObs.setSexCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(occupationElement, XPathConstants.NODE)));
+			
+			sexObs.setSexValue(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_WITH_NF_EXP.
+					evaluate(occupationElement, XPathConstants.NODE)));
+			
+			sexObs.setAuthor(ParserUtilities.readAuthor((Element) CCDAConstants.REL_AUTHOR_EXP.
+					evaluate(occupationElement, XPathConstants.NODE)));
+			
+			sexObservations.add(sexObs);
+		}
+		
+		
+		return sexObservations;
+	}
+
 	private static ArrayList<CCDABasicOccupation> retrieveOccupationObservations(
 			NodeList occupationObsList) throws XPathExpressionException {
 		
@@ -172,7 +214,7 @@ public class SocialHistoryParser {
 			
 			Element pregnancyElement = (Element) pregnancyObsList.item(i);
 			
-			pregnancyObservation.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+			pregnancyObservation.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 														evaluate(pregnancyElement, XPathConstants.NODESET)));
 			
 			pregnancyObservation.setPregnancyCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
