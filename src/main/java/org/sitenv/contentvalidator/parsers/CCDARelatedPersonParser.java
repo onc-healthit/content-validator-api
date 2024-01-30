@@ -56,7 +56,7 @@ public class CCDARelatedPersonParser {
 					
 					Node namend = namenodes.item(0);
 					
-					part.getAssociatedEntity().setFirstName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_GIVEN_NAME_EXP.
+					part.getAssociatedEntity().setLastName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_FAMILY_NAME_EXP.
 							evaluate(namend, XPathConstants.NODE)));
 					
 					part.getAssociatedEntity().setFirstName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_GIVEN_NAME_EXP.

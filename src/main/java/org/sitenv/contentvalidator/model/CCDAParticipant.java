@@ -183,8 +183,8 @@ public class CCDAParticipant {
 				
 				// Error
 				String error = "The scenario contains RelatedPerson data with Relationship:, lastName: , firstName: " + 
-						relationship +
-						fname + 
+						relationship + ", " + 
+						fname + ", " +
 						lname + 
 						" , however there is no matching data in the submitted CCDA. ";
 				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
