@@ -9,6 +9,7 @@ public class CCDAAssociatedEntity {
 	
 	private static Logger log = LoggerFactory.getLogger(CCDAAssociatedEntity.class.getName());
 
+	private CCDADataElement name;
 	private CCDADataElement firstName;
 	private CCDADataElement lastName;
 	private CCDADataElement middleName;
@@ -32,6 +33,14 @@ public class CCDAAssociatedEntity {
 			log.info(" Associated Entity Person First Name : {}",middleName);
 		if(associatedEntityCode != null) 
 			log.info(" Associated Entity Code : {}", associatedEntityCode.getCode());
+	}
+
+	public CCDADataElement getName() {
+		return name;
+	}
+
+	public void setName(CCDADataElement name) {
+		this.name = name;
 	}
 
 	public CCDADataElement getFirstName() {

@@ -4,13 +4,14 @@ import java.util.ArrayList;
 
 import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CCDAParticipant {
 	
 	private static Logger log = LoggerFactory.getLogger(CCDAParticipant.class.getName());
-	
+
 	private CCDAAssignedEntity assignedEntity;
 	private CCDACode		participantFunctionCode;
 	private CCDACode		participantRoleCode;
@@ -211,7 +212,16 @@ public class CCDAParticipant {
 				ref.getLastName().getValue() != null &&
 				this.getAssociatedEntity().getLastName() != null &&
 				this.getAssociatedEntity().getLastName().getValue() != null &&
-				ref.getLastName().getValue().equalsIgnoreCase(this.getAssociatedEntity().getLastName().getValue())) {
+				ref.getLastName().getValue().equalsIgnoreCase(this.getAssociatedEntity().getLastName().getValue()) &&
+				
+				(
+				this.getAssociatedEntity().getName() != null &&
+				this.getAssociatedEntity().getName().getValue() != null &&
+				(this.getAssociatedEntity().getName().getValue().contains(ref.getFirstName().getValue()) ||
+						this.getAssociatedEntity().getName().getValue().contains(ref.getLastName().getValue())
+				)
+			))
+		{
 			return true;
 		}
 		return false;
