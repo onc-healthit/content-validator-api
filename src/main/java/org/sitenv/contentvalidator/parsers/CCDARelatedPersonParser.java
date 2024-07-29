@@ -45,7 +45,10 @@ public class CCDARelatedPersonParser {
 				
 				CCDAParticipant part = new CCDAParticipant();
 				part.setAssociatedEntity(new CCDAAssociatedEntity());
-				
+
+				//set template id
+				part.setTemplateId(ParserUtilities.readTemplateIdList((NodeList)CCDAConstants.REL_TEMPLATE_ID_EXP.evaluate(nd,XPathConstants.NODESET)));
+
 				part.getAssociatedEntity().setAssociatedEntityCode(ParserUtilities.readCode((Element) CCDAConstants.REL_ASSOCIATED_CODE_EXP.
 		    				evaluate(nd, XPathConstants.NODE)));
 				
@@ -55,7 +58,9 @@ public class CCDARelatedPersonParser {
 				if(namenodes != null && namenodes.getLength() > 0) {
 					
 					Node namend = namenodes.item(0);
-					
+					// set the name
+					part.getAssociatedEntity().setName(ParserUtilities.readTextContext((Element)namend));
+
 					part.getAssociatedEntity().setLastName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_FAMILY_NAME_EXP.
 							evaluate(namend, XPathConstants.NODE)));
 					
