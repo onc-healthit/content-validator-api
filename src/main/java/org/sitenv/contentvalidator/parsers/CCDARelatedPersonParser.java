@@ -47,7 +47,7 @@ public class CCDARelatedPersonParser {
 				part.setAssociatedEntity(new CCDAAssociatedEntity());
 
 				//set template id
-				part.setTemplateId(ParserUtilities.readTemplateIdList((NodeList)CCDAConstants.REL_TEMPLATE_ID_EXP.evaluate(nd,XPathConstants.NODESET)));
+				part.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList)CCDAConstants.REL_TEMPLATE_ID_EXP.evaluate(nd,XPathConstants.NODESET)));
 
 				part.getAssociatedEntity().setAssociatedEntityCode(ParserUtilities.readCode((Element) CCDAConstants.REL_ASSOCIATED_CODE_EXP.
 		    				evaluate(nd, XPathConstants.NODE)));

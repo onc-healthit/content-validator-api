@@ -1384,7 +1384,7 @@ public class ParserUtilities {
 				Element partNodeElement = (Element) partNodeList.item(i);
 				part = new CCDAParticipant();
 				
-				part.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+				part.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 						evaluate(partNodeElement, XPathConstants.NODESET)));
 				
 				// Get Type code 

@@ -19,7 +19,7 @@ public class CCDAParticipant {
 	private String			participantTypeCode;
 	private CCDAPlayingEntity participantRolePlayingEntity;
 	private CCDAAddress		  participantRoleAddress;
-	private ArrayList<CCDAII> templateId;
+	private ArrayList<CCDAII>    templateIds;
 	private CCDAEffTime		  effectiveTime;
 	private CCDAAssociatedEntity associatedEntity;
 	
@@ -27,9 +27,9 @@ public class CCDAParticipant {
 	{
 		log.info(" *** Participant ***");
 		
-		for(int j = 0; j < templateId.size(); j++) {
-			log.info(" Tempalte Id [" + j + "] = " + templateId.get(j).getRootValue());
-			log.info(" Tempalte Id Ext [" + j + "] = " + templateId.get(j).getExtValue());
+		for(int j = 0; j < templateIds.size(); j++) {
+			log.info(" Tempalte Id [" + j + "] = " + templateIds.get(j).getRootValue());
+			log.info(" Tempalte Id Ext [" + j + "] = " + templateIds.get(j).getExtValue());
 		}
 		
 		
@@ -53,7 +53,7 @@ public class CCDAParticipant {
 	
 	public CCDAParticipant()
 	{
-		templateId = new ArrayList<>();
+		templateIds = new ArrayList<>();
 	}
 
 	public CCDAAssignedEntity getAssignedEntity() {
@@ -104,12 +104,12 @@ public class CCDAParticipant {
 		this.participantRolePlayingEntity = playingEntity;
 	}
 
-	public ArrayList<CCDAII> getTemplateId() {
-		return templateId;
+	public ArrayList<CCDAII> getTemplateIds() {
+		return templateIds;
 	}
 
-	public void setTemplateId(ArrayList<CCDAII> templateId) {
-		this.templateId = templateId;
+	public void setTemplateIds(ArrayList<CCDAII> templateIds) {
+		this.templateIds = templateIds;
 	}
 
 	public CCDAEffTime getEffectiveTime() {
@@ -161,6 +161,7 @@ public class CCDAParticipant {
 			
 			for(CCDAParticipant sub : subParts) {
 				if(sub.checkForAssociatedEntity(ref.getAssociatedEntity())) {
+					ParserUtilities.compareTemplateIds(ref.getTemplateIds(), sub.getTemplateIds(), results, "Related Person TemplateId Comparison");
 					found = true;
 					break;
 				}
@@ -181,7 +182,6 @@ public class CCDAParticipant {
 				if(ref.getAssociatedEntity().getLastName() != null)
 					lname = ref.getAssociatedEntity().getLastName().getValue();
 				
-				
 				// Error
 				String error = "The scenario contains RelatedPerson data with Relationship:, lastName: , firstName: " + 
 						relationship + ", " + 
@@ -198,36 +198,33 @@ public class CCDAParticipant {
 	private boolean checkForAssociatedEntity(CCDAAssociatedEntity ref) {
 		
 		if(ref.getAssociatedEntityCode() != null && 
-				ref.getAssociatedEntityCode().getCode() != null &&
-				this.getAssociatedEntity() != null &&
-				this.getAssociatedEntity().getAssociatedEntityCode() != null &&
-				this.getAssociatedEntity().getAssociatedEntityCode().getCode() != null &&
-				ref.getAssociatedEntityCode().getCode().equalsIgnoreCase(this.getAssociatedEntity().getAssociatedEntityCode().getCode()) &&
-				ref.getFirstName() != null &&
-				ref.getFirstName().getValue() != null &&
-				this.getAssociatedEntity().getFirstName() != null &&
-				this.getAssociatedEntity().getFirstName().getValue() != null &&
-				ref.getFirstName().getValue().equalsIgnoreCase(this.getAssociatedEntity().getFirstName().getValue()) &&
-				ref.getLastName() != null &&
-				ref.getLastName().getValue() != null &&
-				this.getAssociatedEntity().getLastName() != null &&
-				this.getAssociatedEntity().getLastName().getValue() != null &&
-				ref.getLastName().getValue().equalsIgnoreCase(this.getAssociatedEntity().getLastName().getValue()) &&
-				
-				(
+			ref.getAssociatedEntityCode().getCode() != null &&
+			this.getAssociatedEntity() != null &&
+			this.getAssociatedEntity().getAssociatedEntityCode() != null &&
+			this.getAssociatedEntity().getAssociatedEntityCode().getCode() != null &&
+			ref.getAssociatedEntityCode().getCode().equalsIgnoreCase(this.getAssociatedEntity().getAssociatedEntityCode().getCode()) &&
+			ref.getFirstName() != null &&
+			ref.getFirstName().getValue() != null &&
+			this.getAssociatedEntity().getFirstName() != null &&
+			this.getAssociatedEntity().getFirstName().getValue() != null &&
+			ref.getFirstName().getValue().equalsIgnoreCase(this.getAssociatedEntity().getFirstName().getValue()) &&
+			ref.getLastName() != null &&
+			ref.getLastName().getValue() != null &&
+			this.getAssociatedEntity().getLastName() != null &&
+			this.getAssociatedEntity().getLastName().getValue() != null &&
+			ref.getLastName().getValue().equalsIgnoreCase(this.getAssociatedEntity().getLastName().getValue()) ||
+			(
 				this.getAssociatedEntity().getName() != null &&
 				this.getAssociatedEntity().getName().getValue() != null &&
-				(this.getAssociatedEntity().getName().getValue().contains(ref.getFirstName().getValue()) ||
-						this.getAssociatedEntity().getName().getValue().contains(ref.getLastName().getValue())
+				(
+					this.getAssociatedEntity().getName().getValue().contains(ref.getFirstName().getValue()) &&
+					this.getAssociatedEntity().getName().getValue().contains(ref.getLastName().getValue())
 				)
-			))
+			)
+		)
 		{
 			return true;
 		}
 		return false;
 	}
-	
-	
-	
-	
 }
