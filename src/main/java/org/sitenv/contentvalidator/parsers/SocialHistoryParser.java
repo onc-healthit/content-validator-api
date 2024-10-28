@@ -1,15 +1,28 @@
 package org.sitenv.contentvalidator.parsers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.sitenv.contentvalidator.model.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import java.util.ArrayList;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
-import java.util.ArrayList;
+
+import org.sitenv.contentvalidator.model.CCDABasicOccupation;
+import org.sitenv.contentvalidator.model.CCDABasicOccupationIndustry;
+import org.sitenv.contentvalidator.model.CCDABirthSexObs;
+import org.sitenv.contentvalidator.model.CCDAGenderIdentityObs;
+import org.sitenv.contentvalidator.model.CCDAPregnancyObservation;
+import org.sitenv.contentvalidator.model.CCDARefModel;
+import org.sitenv.contentvalidator.model.CCDASexObservation;
+import org.sitenv.contentvalidator.model.CCDASexualOrientation;
+import org.sitenv.contentvalidator.model.CCDASmokingStatus;
+import org.sitenv.contentvalidator.model.CCDASocialHistory;
+import org.sitenv.contentvalidator.model.CCDASocialHistoryObs;
+import org.sitenv.contentvalidator.model.CCDATobaccoUse;
+import org.sitenv.contentvalidator.model.CCDATribalAffiliationObservation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 public class SocialHistoryParser {
 	
@@ -20,7 +33,7 @@ public class SocialHistoryParser {
     	log.info(" *** Parsing Social History *** ");
     	model.setSmokingStatus(retrieveSocialHistoryDetails(doc));	
 	}
-	
+		
 	public static CCDASocialHistory retrieveSocialHistoryDetails(Document doc) throws XPathExpressionException
 	{
 		CCDASocialHistory socialHistory = null;
@@ -67,6 +80,11 @@ public class SocialHistoryParser {
 			NodeList socialHistoryObsList = (NodeList)CCDAConstants.REL_SOCIAL_HISTORY_OBS_EXP.
 					evaluate(sectionElement, XPathConstants.NODESET);
 			socialHistory.setSocialHistoryObservations(retrieveSocialHistoryObs(socialHistoryObsList));
+
+			NodeList assessmentScaleObsList = (NodeList)CCDAConstants.REL_ASSESSMENT_SCALE_ENTRY_OBS_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET);
+			socialHistory.setAssessmentScaleObservations(ParserUtilities.retrieveAssessmentScaleObservations(assessmentScaleObsList));
+
 			
 			// Add Tribal Affiliation
 			NodeList tribalAffList = (NodeList)CCDAConstants.REL_TRIBAL_AFFILIATION_EXP.
