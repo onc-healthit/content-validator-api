@@ -9,11 +9,13 @@ import org.sitenv.contentvalidator.parsers.CCDAParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+
+import javax.annotation.Resource;
 
 @Component
 public class ContentValidatorService {		

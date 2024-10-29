@@ -21,6 +21,9 @@ public class CCDASocialHistory {
 	private ArrayList<CCDASexualOrientation>	sexualOrientations;
 	private ArrayList<CCDAGenderIdentityObs>		genderIdentities;
 	private ArrayList<CCDASocialHistoryObs>			socialHistoryObservations;
+	private ArrayList<AssessmentScaleObservation>	assessmentScaleObservations;	
+	
+
 	private ArrayList<CCDAPregnancyObservation>		pregnancyObservations;
 	private ArrayList<CCDATribalAffiliationObservation> tribalAffiliations;
 	private ArrayList<CCDABasicOccupation>			occupation;
@@ -183,6 +186,14 @@ public class CCDASocialHistory {
 
 	public void setSocialHistoryObservations(ArrayList<CCDASocialHistoryObs> socialHistoryObservations) {
 		this.socialHistoryObservations = socialHistoryObservations;
+	}
+	
+	public ArrayList<AssessmentScaleObservation> getAssessmentScaleObservations() {
+		return assessmentScaleObservations;
+	}
+
+	public void setAssessmentScaleObservations(ArrayList<AssessmentScaleObservation> assessmentScaleObservations) {
+		this.assessmentScaleObservations = assessmentScaleObservations;
 	}
 
 	public HashMap<String, CCDASexualOrientation> getAllSexualOrientations() {
