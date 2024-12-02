@@ -234,7 +234,7 @@ public class ContentValidatorCuresTest extends ContentValidatorTester {
 	
 	private ArrayList<ContentValidationResult> validateDocumentAndReturnResultsCures(String validationObjective, 
 			String referenceFileName, String ccdaFileAsString, SeverityLevel severityLevel) {
-		return validator.validate(validationObjective, referenceFileName, ccdaFileAsString, true, false, false, severityLevel);
+		return validator.validate(validationObjective, referenceFileName, ccdaFileAsString, true, false, false, false, severityLevel);
 	}
 
 	private ArrayList<ContentValidationResult> validateDocumentAndReturnResultsCures(String referenceFileName, URI ccdaFileURI) {

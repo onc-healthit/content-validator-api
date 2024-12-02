@@ -62,6 +62,8 @@ public class ScenarioLoader implements InitializingBean {
                     final String svap2022Match = "uscdiv2";
                     boolean svap2023 = false;
                     final String svap2023Match = "uscdiv3";
+                    final String svap2024Match = "uscdiv4";
+                    boolean uscdiv4 = false;
                     
                     String fileName = file.getName();
                     if (fileName.contains(svap2022Match)) {
@@ -70,7 +72,12 @@ public class ScenarioLoader implements InitializingBean {
                     } else if (fileName.contains(svap2023Match)) {
                     	svap2023 = true;
                     	svap2022 = false;
-                    } else {
+                    } else if (fileName.contains(svap2024Match)) {
+                    	uscdiv4 = true;
+                    	svap2023 = false;
+                    	svap2022 = false;
+                    } 
+                    else {
                     	curesUpdate = true;
                     }
                     
@@ -78,7 +85,7 @@ public class ScenarioLoader implements InitializingBean {
                     // But, if we had to rebuild as is, we would need to hard code curesUpdate and svap2022 to false here...or finish the impl to handle that. 
                     // Right now though, the file names are identical, so we'd either have to change names, or use a different loading system (like directory, etc.)
                     String modelName = FilenameUtils.getBaseName(fileName);
-                    CCDARefModel m = ccdaParser.parse(new String(encoded, "UTF-8"), curesUpdate, svap2022, svap2023);
+                    CCDARefModel m = ccdaParser.parse(new String(encoded, "UTF-8"), curesUpdate, svap2022, svap2023, uscdiv4);
                     refModelHashMap.put(modelName, m);
                 }
             }

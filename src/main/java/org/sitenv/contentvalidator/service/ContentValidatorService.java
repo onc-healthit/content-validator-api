@@ -34,11 +34,11 @@ public class ContentValidatorService {
 	
 	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName,
 			String ccdaFile) {
-		return validate(validationObjective, referenceFileName, ccdaFile, false, false, false, SeverityLevel.INFO);
+		return validate(validationObjective, referenceFileName, ccdaFile, false, false, false, false, SeverityLevel.INFO);
 	}
 	
 	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName,
-			String ccdaFile, boolean curesUpdate, boolean svap2022, boolean svap2023, SeverityLevel severityLevel) {
+			String ccdaFile, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean uscdiv4, SeverityLevel severityLevel) {
 		log.info(" ***** CAME INTO THE REFERENCE VALIDATOR *****");
 		
 		ArrayList<ContentValidationResult> results = new ArrayList<>();
@@ -48,7 +48,7 @@ public class ContentValidatorService {
 			log.info(" Val Obj " + validationObjective + " Ref File " + referenceFileName);
 
 			// Parse passed in File
-			CCDARefModel submittedCCDA = parser.parse(ccdaFile, severityLevel, curesUpdate, svap2022, svap2023);
+			CCDARefModel submittedCCDA = parser.parse(ccdaFile, severityLevel, curesUpdate, svap2022, svap2023, uscdiv4);
 
 			CCDARefModel ref = null;
 			if( (referenceFileName != null)

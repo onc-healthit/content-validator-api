@@ -10,6 +10,7 @@ public class CCDAServiceDeliveryLoc {
 	private static Logger log = LoggerFactory.getLogger(CCDAServiceDeliveryLoc.class.getName());
 
 	private ArrayList<CCDAII>           templateId;
+	private ArrayList<CCDAII>			facilityIdentifiers;
 	private CCDACode                    locationCode;
 	private ArrayList<CCDAAddress>      address;
 	private ArrayList<CCDATelecom>  telecom;
@@ -91,5 +92,16 @@ public class CCDAServiceDeliveryLoc {
 		templateId = new ArrayList<CCDAII>();
 		telecom = new ArrayList<CCDATelecom>();
 		address = new ArrayList<CCDAAddress>();
+		facilityIdentifiers = new ArrayList<CCDAII>();
 	}
+
+	public ArrayList<CCDAII> getFacilityIdentifiers() {
+		return facilityIdentifiers;
+	}
+
+	public void setFacilityIdentifiers(ArrayList<CCDAII> facilityIdentifiers) {
+		this.facilityIdentifiers = facilityIdentifiers;
+	}
+	
+	
 }

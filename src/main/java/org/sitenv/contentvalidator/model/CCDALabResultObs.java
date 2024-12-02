@@ -23,7 +23,8 @@ public class CCDALabResultObs {
 	private CCDACode						resultCode;
 	private String 							resultString;
 	private CCDACode						interpretationCode;
-	private ArrayList<CCDAPQ>				referenceValue;
+	private ArrayList<CCDAPQ>				referenceRangeValue;
+	private String 							referenceRangeString;
 	private ArrayList<CCDANotesActivity>	notesActivity;
 	private ArrayList<CCDASpecimen>			specimenType;
 	
@@ -161,7 +162,7 @@ public class CCDALabResultObs {
 	public CCDALabResultObs()
 	{
 		templateIds = new ArrayList<CCDAII>();
-		referenceValue = new ArrayList<CCDAPQ>();
+		referenceRangeValue = new ArrayList<CCDAPQ>();
 		notesActivity = new ArrayList<CCDANotesActivity>();
 		specimenType = new ArrayList<>();
 	}
@@ -193,8 +194,8 @@ public class CCDALabResultObs {
 			log.info(" Tempalte Id Ext [" + j + "] = " + templateIds.get(j).getExtValue());
 		}
 		
-		for(int k = 0; k < referenceValue.size(); k++) {
-			referenceValue.get(k).log();
+		for(int k = 0; k < referenceRangeValue.size(); k++) {
+			referenceRangeValue.get(k).log();
 		}
 		
 		if(notesActivity != null) {
@@ -270,13 +271,13 @@ public class CCDALabResultObs {
 	}
 
 	public ArrayList<CCDAPQ> getReferenceValue() {
-		return referenceValue;
+		return referenceRangeValue;
 	}
 
 	public void setReferenceRange(ArrayList<CCDAPQ> rvl) {
 		
 		if(rvl != null)
-			this.referenceValue = rvl;
+			this.referenceRangeValue = rvl;
 	}
 
 	public String getResultString() {
@@ -288,7 +289,7 @@ public class CCDALabResultObs {
 	}
 
 	public void setReferenceValue(ArrayList<CCDAPQ> referenceValue) {
-		this.referenceValue = referenceValue;
+		this.referenceRangeValue = referenceValue;
 	}
 
 	public ArrayList<CCDANotesActivity> getNotesActivity() {
@@ -313,6 +314,22 @@ public class CCDALabResultObs {
 
 	public void setSpecimenType(ArrayList<CCDASpecimen> specimenType) {
 		this.specimenType = specimenType;
+	}
+
+	public ArrayList<CCDAPQ> getReferenceRangeValue() {
+		return referenceRangeValue;
+	}
+
+	public void setReferenceRangeValue(ArrayList<CCDAPQ> referenceRangeValue) {
+		this.referenceRangeValue = referenceRangeValue;
+	}
+
+	public String getReferenceRangeString() {
+		return referenceRangeString;
+	}
+
+	public void setReferenceRangeString(String referenceRangeString) {
+		this.referenceRangeString = referenceRangeString;
 	}
 
 	public void getAllSpecimens(HashMap<String, CCDASpecimen> specs) {
