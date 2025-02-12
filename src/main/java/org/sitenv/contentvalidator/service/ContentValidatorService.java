@@ -1,19 +1,20 @@
 package org.sitenv.contentvalidator.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.sitenv.contentvalidator.dto.ContentValidationResult;
-import org.sitenv.contentvalidator.dto.enums.SeverityLevel;
-import org.sitenv.contentvalidator.model.CCDARefModel;
-import org.sitenv.contentvalidator.parsers.CCDAParser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+
+import javax.annotation.Resource;
+
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.CcdaType;
+import org.sitenv.contentvalidator.dto.enums.SeverityLevel;
+import org.sitenv.contentvalidator.model.CCDARefModel;
+import org.sitenv.contentvalidator.parsers.CCDAParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ContentValidatorService {		
@@ -34,11 +35,11 @@ public class ContentValidatorService {
 	
 	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName,
 			String ccdaFile) {
-		return validate(validationObjective, referenceFileName, ccdaFile, false, false, false, false, SeverityLevel.INFO);
+		return validate(validationObjective, referenceFileName, ccdaFile, "", SeverityLevel.INFO);
 	}
 	
 	public ArrayList<ContentValidationResult> validate(String validationObjective, String referenceFileName,
-			String ccdaFile, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean uscdiv4, SeverityLevel severityLevel) {
+			String ccdaFile, String ccdaType, SeverityLevel severityLevel) {
 		log.info(" ***** CAME INTO THE REFERENCE VALIDATOR *****");
 		
 		ArrayList<ContentValidationResult> results = new ArrayList<>();
@@ -46,6 +47,33 @@ public class ContentValidatorService {
 			log.warn("Content Validation not performed for objective " + validationObjective);
 		} else {
 			log.info(" Val Obj " + validationObjective + " Ref File " + referenceFileName);
+			boolean curesUpdate = false;
+			boolean svap2022 = false;
+			boolean svap2023 = false;
+			boolean uscdiv4 = false;
+			
+			log.info("Ccda Type "+ccdaType);
+			
+			// check ccdatype when it is not null 
+			if (ccdaType !=null && ccdaType.length() > 0) {
+				CcdaType ccdaTypeRef = findCcdaTypeByName(ccdaType);
+				if (ccdaTypeRef != null) {
+					if (CcdaType.CURES.equals(ccdaTypeRef) ) {
+						curesUpdate = true;
+					}
+					if (CcdaType.SVAP.equals(ccdaTypeRef) ) {
+						svap2022 = true;
+					}
+					if (CcdaType.USCDIV3.equals(ccdaTypeRef) ) {
+						svap2023 = true;
+					}
+					if (CcdaType.USCDIV4.equals(ccdaTypeRef) ) {
+						uscdiv4 = true;
+					}					
+				}else {
+					log.warn("Invalid ccda type " + ccdaType);
+				}
+			}
 
 			// Parse passed in File
 			CCDARefModel submittedCCDA = parser.parse(ccdaFile, severityLevel, curesUpdate, svap2022, svap2023, uscdiv4);
@@ -107,6 +135,18 @@ public class ContentValidatorService {
 		}
 		
 		return null;
+	}
+	
+	
+	public CcdaType findCcdaTypeByName(String name) {
+		CcdaType result = null;
+	    for (CcdaType ccdaType : CcdaType.values()) {
+	        if (ccdaType.name().equalsIgnoreCase(name)) {
+	            result = ccdaType;
+	            break;
+	        }
+	    }
+	    return result;
 	}
 
 }
