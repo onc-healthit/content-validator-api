@@ -1078,8 +1078,8 @@ public class CCDARefModel {
 			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 		
 		log.info("Retrieving SDOH Data for comparison ");
-		HashMap<String, AssessmentScaleObservation> refSdohData = this.getAllSdohData();
-		HashMap<String, AssessmentScaleObservation> subSdohData = submittedCCDA.getAllSdohData();
+		HashMap<String, AssessmentScaleObservation> refSdohData = this.getAssessmentScaleObservations();
+		HashMap<String, AssessmentScaleObservation> subSdohData = submittedCCDA.getAssessmentScaleObservations();
 		
 		if( (refSdohData != null && refSdohData.size() > 0) &&  
 			(subSdohData != null && subSdohData.size() > 0)  ) {
@@ -1266,7 +1266,7 @@ public class CCDARefModel {
 			return null;
 	}
 	
-	public HashMap<String, AssessmentScaleObservation> getAllSdohData() {
+	public HashMap<String, AssessmentScaleObservation> getAssessmentScaleObservations() {
 		
 		HashMap<String, AssessmentScaleObservation> assessments = new HashMap<>();
 		if(this.getSocialHistory() != null) {
@@ -1275,6 +1275,15 @@ public class CCDARefModel {
 			if(socAssessments != null && socAssessments.size() > 0) {
 				assessments.putAll(socAssessments);
 			}
+			if(this.getSocialHistory().getAssessmentScaleObservations() != null && !this.getSocialHistory().getAssessmentScaleObservations().isEmpty()) { 
+				
+				for(AssessmentScaleObservation obs : this.getSocialHistory().getAssessmentScaleObservations()) {
+					if(obs.getAssessmentCode() != null && obs.getAssessmentCode().getCode() != null) {
+						assessments.put(obs.getAssessmentCode().getCode(), obs);
+					}
+				}
+			}
+			
 		}
 		
 		if(this.getProblem() != null) {

@@ -16,7 +16,9 @@ import java.util.HashMap;
 import java.util.Set;
 
 import javax.annotation.Resource;
+
 import org.sitenv.contentvalidator.dto.enums.CcdaType;
+
 
 @Component
 public class ContentValidatorService {		

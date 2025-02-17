@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="CDA.xsl"?>
+<!-- Title: Continuity of Care Document (CCD) $LastChangedDate: 2015-8-11 11:25:09 -0400 (Wed, 11 Aug 2015) $ 2015-10 AM and DB: -Altered to be error free (not considering MU rules), 
+    general updates per recommendations, and added US Realm Header Template ID. 2015-10 DB: -Created 'master doc' MANY modifications, additions, and reorganizations were made to accommodate 
+    the requirements. In addition, removed Advance Directives, Family History components, and others as not required by test data. -Updated to match 170.315_b1_toc_inp_sample1.docx test 
+    data. ******************************************************** Disclaimer: This sample file contains representative data elements to represent a Continuity of Care Document (CCD). The 
+    file depicts a fictional character's health data. Any resemblance to a real person is coincidental. To illustrate as many data elements as possible, the clinical scenario may not be 
+    plausible. The data in this sample file is not intended to represent real patients, people or clinical events. This sample is designed to be used in conjunction with the C-CDA Clinical 
+    Notes Implementation Guide. ******************************************************** -->
+<ClinicalDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:hl7-org:v3" xmlns:voc="urn:hl7-org:v3/voc" xmlns:sdtc="urn:hl7-org:sdtc">
+    <!-- ******************************************************** CDA Body ******************************************************** -->
+    <component>
+        <structuredBody>
+            <!-- ******************* SOCIAL HISTORY ********************* -->
+            <!-- edited as per test doc - most of this data is directly relevant -db -->
+            <component>
+                <section>
+                    <!-- ** Social History Section (V3) ** -->
+                    <templateId root="2.16.840.1.113883.10.20.22.2.17" extension="2015-08-01" />
+                    <templateId root="2.16.840.1.113883.10.20.22.2.17" />
+                    <code code="29762-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Social History" />
+                    <title>SOCIAL HISTORY</title>
+                    <text>
+                        <table border="1" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Social History Observation</th>
+                                    <th>Description</th>
+                                    <th>Dates Observed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Smoking Status</td>
+                                    <td>Heavy tobacco smoker, ??-??/day</td>
+                                    <td>May 1, 2005 - February 27, 2011</td>
+                                </tr>
+                                <tr>
+                                    <td>Current Smoking Status</td>
+                                    <td>Current every day</td>
+                                    <td>June 22, 2015</td>
+                                </tr>
+                                <tr>
+                                    <td>Gender Identity</td>
+                                    <td>Asked but Unknown</td>
+                                    <td>Unknown</td>
+                                </tr>
+                                <tr>
+                                    <td>Sexual Orientation</td>
+                                    <td>Unknown</td>
+                                    <td>Unknown</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </text>
+                    <!-- Smoking Status - May 1, 2005 - February 27, 2011 -db -->
+                    <entry typeCode="DRIV">
+                        <observation classCode="OBS" moodCode="EVN">
+                            <!-- ** Tobacco use (V2) ** -->
+                            <templateId root="2.16.840.1.113883.10.20.22.4.85" extension="2014-06-09" />
+                            <templateId root="2.16.840.1.113883.10.20.22.4.85" />
+                            <id root="45efb604-7049-4a2e-ad33-d38556c9636c" />
+                            <!-- code SHALL be 11367-0 for Tobacco use (V2) -db -->
+                            <code code="11367-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="History of tobacco use" />
+                            <statusCode code="completed" />
+                            <effectiveTime>
+                                <!-- The low value reflects the start date of the observation/value -->
+                                <low value="20050501" />
+                                <!-- The high value reflects the end date of the observation/value -->
+                                <high value="20110227" />
+                            </effectiveTime>
+                            <!-- Consol Tobacco Use SHALL contain exactly one [1..1] value with @xsi:type="CD" (CONF:16562, R2.0=CONF:1098-16562), which SHALL be selected from ValueSet 
+                                Tobacco Use 2.16.840.1.113883.11.20.9.41 DYNAMIC (CONF:16563, R2.0=CONF:1098-16563) -db -->
+                            <value xsi:type="CD" code="428071000124103" displayName="Heavy tobacco smoker" codeSystem="2.16.840.1.113883.6.96" />
+                        </observation>
+                    </entry>
+                    <!-- TODO: If required due to value 428071000124103 not being in Tobacco Use 2.16.840.1.113883.11.20.9.41 valueSet, replace above entry with a Smoking Status - Meaningful 
+                        Use (V2) version instead of Tobacco use (V2) An alternate option is changing the test data as maybe it is a mistake to require the code and it should have been a different code from 
+                        which is from the Tobacco Use set and allows use of the Tobacco use (V2) entry -db -->
+                    <!-- Current Smoking Status - June 22, 2015 -db -->
+                    <entry typeCode="DRIV">
+                        <observation classCode="OBS" moodCode="EVN">
+                            <!-- ** Smoking Status - Meaningful Use (V2) ** -->
+                            <templateId root="2.16.840.1.113883.10.20.22.4.78" extension="2014-06-09" />
+                            <templateId root="2.16.840.1.113883.10.20.22.4.78" />
+                            <id extension="123456789" root="2.16.840.1.113883.19" />
+                            <!-- code SHALL be 72166-2 for Smoking Status - Meaningful Use (V2) -db -->
+                            <code code="72166-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Tobacco smoking status NHIS" />
+                            <statusCode code="completed" />
+                            <!-- The effectiveTime reflects when the current smoking status was observed. -->
+                            <effectiveTime value="20150622" />
+                            <!-- The value represents the patient's smoking status currently observed. -->
+                            <!-- Consol Smoking Status Meaningful Use2 SHALL contain exactly one [1..1] value (CONF:1098-14810), which SHALL be selected from ValueSet Current Smoking 
+                                Status 2.16.840.1.113883.11.20.9.38 STATIC 2014-09-01 (CONF:1098-14817) -db -->
+                            <value xsi:type="CD" code="449868002" displayName="Current every day smoker" codeSystem="2.16.840.1.113883.6.96" />
+                        </observation>
+                    </entry>
+                    <!-- Gender Identity> -->
+                    <entry typeCode="DRIV">
+                        <observation classCode="OBS" moodCode="EVN">
+                            <!-- ** Gender Identity** -->
+                            <templateId root="2.16.840.1.113883.10.20.34.3.45" extension="2022-06-01" />
+                            <id root="45efb604-7049-4a2e-ad33-d38556c7636c" />
+                            <code code="76691-5" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Gender Identity" />
+                            <statusCode code="completed" />
+                            <effectiveTime nullFlavor="NI">
+                            </effectiveTime>
+                            <value xsi:type="CD" nullFlavor="ASKU" />
+                        </observation>
+                    </entry>
+                    <entry typeCode="DRIV">
+                        <observation classCode="OBS" moodCode="EVN">
+                            <!-- ** Sexual Orientation ** -->
+                            <templateId root="2.16.840.1.113883.10.20.22.4.501" extension="2022-06-01" />
+                            <id root="45efb604-7049-4a2e-ad33-d38557c7636c" />
+                            <!-- code SHALL be 11367-0 for Tobacco use (V2) -db -->
+                            <code code="76690-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Sexual Orientation" />
+                            <statusCode code="completed" />
+                            <effectiveTime nullFlavor="NI">
+                            </effectiveTime>
+                            <value xsi:type="CD" nullFlavor="UNK" />
+                        </observation>
+                    </entry>
+                    <!-- SDOH Assessment -->
+                    <entry typeCode="DRIV">
+                        <observation classCode="OBS" moodCode="EVN">
+                            <templateId root="2.16.840.1.113883.10.20.22.4.38" />
+                            <templateId root="2.16.840.1.113883.10.20.22.4.38" extension="2022-06-01" />
+                            <id root="45efb604-7049-4a2e-ad33-d38556c7636c" />
+                            <code code="160476009" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMEDCT"
+                                displayName="Social / personal history observable (observable entity)"
+                            >
+                                <translation code="8689-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="History of Social function" />
+                            </code>
+                            <statusCode code="completed" />
+                            <effectiveTime value="20150622" />
+                            <entryRelationship typeCode="SPRT">
+                                <observation classCode="OBS" moodCode="EVN">
+                                    <templateId root="2.16.840.1.113883.10.20.22.4.69" extension="2022-06-01" />
+                                    <id root="c6b5a04b-2bf4-49d1-8336-636a3813df0b" />
+                                    <code code="88121-9" displayName="Hunger Vital Signs" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" />
+                                    <derivationExpr>Text description of the calculation</derivationExpr>
+                                    <statusCode code="completed" />
+                                    <effectiveTime value="20150622" />
+                                    <!-- Summed score of the component values -->
+                                    <value xsi:type="INT" value="2" />
+                                    <entryRelationship typeCode="COMP">
+                                        <observation classCode="OBS" moodCode="EVN">
+                                            <templateId root="2.16.840.1.113883.10.20.22.4.86" />
+                                            <id root="f4dce790-8328-11db-9fe1-0800200c9a44" />
+                                            <code code="88122-7"
+                                                displayName="(I/We) worried whether (my/our) food
+                                            would run out before (I/we) got money to buy more"
+                                                codeSystem="2.16.840.1.113883.6.1" codeSystemName="SNOMED" />
+                                            <statusCode code="completed" />
+                                            <effectiveTime value="20150622" />
+                                            <value xsi:type="CD" code="LA28397-0" displayName="Often true" codeSystem="2.16.840.1.113883.6.1">
+                                            </value>
+                                        </observation>
+                                    </entryRelationship>
+                                    <entryRelationship typeCode="COMP">
+                                        <observation classCode="OBS" moodCode="EVN">
+                                            <templateId root="2.16.840.1.113883.10.20.22.4.86" />
+                                            <id root="f4dce790-8328-11db-9fe1-0800200c9a44" />
+                                            <code code="88123-5"
+                                                displayName="Within the past 12Mo the food we bought
+                                            just didn't last and we didn't have money to get more"
+                                                codeSystem="2.16.840.1.113883.6.1" codeSystemName="SNOMED" />
+                                            <statusCode code="completed" />
+                                            <effectiveTime value="20150622" />
+                                            <value xsi:type="CD" code="LA28397-0" displayName="Often true" codeSystem="2.16.840.1.113883.6.1">
+                                            </value>
+                                        </observation>
+                                    </entryRelationship>
+                                </observation>
+                            </entryRelationship>
+                        </observation>
+                    </entry>
+                </section>
+            </component>
+        </structuredBody>
+    </component>
+</ClinicalDocument>
