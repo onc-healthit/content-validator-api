@@ -14,6 +14,7 @@ public class CCDAVitalSigns {
 	private ArrayList<CCDAII>			templateIds;
 	private CCDACode					sectionCode;
 	private ArrayList<CCDAVitalOrg>		vitalsOrg;
+	private ArrayList<CCDAAverageBPOrg>		averageBpOrgs;
 	
 	private CCDAAuthor author;
 	
@@ -105,6 +106,10 @@ public class CCDAVitalSigns {
 			vitalsOrg.get(k).log();
 		}
 		
+		for(int l = 0; l < averageBpOrgs.size(); l++) {
+			averageBpOrgs.get(l).log();
+		}
+		
 		if(author != null)
 			author.log();
 	}
@@ -136,8 +141,6 @@ public class CCDAVitalSigns {
 		if(vos != null)
 			this.vitalsOrg = vos;
 	}
-	
-	
 
 	public CCDAAuthor getAuthor() {
 		return author;
@@ -151,5 +154,6 @@ public class CCDAVitalSigns {
 	{
 		templateIds = new ArrayList<CCDAII>();
 		vitalsOrg = new ArrayList<CCDAVitalOrg>();
+		averageBpOrgs = new ArrayList<>();
 	}
 }

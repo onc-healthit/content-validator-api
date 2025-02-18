@@ -47,8 +47,8 @@ public class CCDAParser {
 	/*
 	 * Called by scenario loader on application start, parses scenarios themselves
 	 */
-	public CCDARefModel parse(String ccdaFile, boolean curesUpdate, boolean svap2022, boolean svap2023) {
-		return parse(ccdaFile, SeverityLevel.INFO, curesUpdate, svap2022, svap2023);
+	public CCDARefModel parse(String ccdaFile, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean uscdiv4) {
+		return parse(ccdaFile, SeverityLevel.INFO, curesUpdate, svap2022, svap2023, uscdiv4);
 	}
 	
 	/*
@@ -62,7 +62,7 @@ public class CCDAParser {
 	 * Called by each validation, on the users file
 	 */	
 	public CCDARefModel parse(String ccdaFile, SeverityLevel severityLevel, 
-			boolean curesUpdate, boolean svap2022, boolean svap2023) {
+			boolean curesUpdate, boolean svap2022, boolean svap2023, boolean uscdiv4) {
 		
 		try {
 			//log.info(" Parsing File " + ccdaFile);

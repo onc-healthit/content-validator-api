@@ -21,6 +21,8 @@ public class CCDAAssignedEntity {
 	
 	private CCDADataElement previousName;
 	
+	private CCDAII			idReference;
+	
 	public void addAddress(CCDAAddress addr) {
 		addresses.add(addr);
 	}
@@ -143,6 +145,14 @@ public class CCDAAssignedEntity {
 
 	public void setSuffix(CCDADataElement suffix) {
 		this.suffix = suffix;
+	}
+
+	public CCDAII getIdReference() {
+		return idReference;
+	}
+
+	public void setIdReference(CCDAII idReference) {
+		this.idReference = idReference;
 	}
 	
 	

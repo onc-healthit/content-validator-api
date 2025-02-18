@@ -19,6 +19,7 @@ public class CCDAProcActProc {
 	private CCDACode						procStatus;
 	private CCDACode						targetSiteCode;
 	private ArrayList<CCDAAssignedEntity>  	performer;
+	private CCDAEffTime						performanceTime;
 	private ArrayList<CCDAServiceDeliveryLoc>  	sdLocs;
 	private CCDAII								piTemplateId;
 	private ArrayList<CCDAUDI>					udi;
@@ -184,6 +185,14 @@ public class CCDAProcActProc {
 
 	public CCDACode getTargetSiteCode() {
 		return targetSiteCode;
+	}
+
+	public CCDAEffTime getPerformanceTime() {
+		return performanceTime;
+	}
+
+	public void setPerformanceTime(CCDAEffTime performanceTime) {
+		this.performanceTime = performanceTime;
 	}
 
 	public void setTargetSiteCode(CCDACode targetSiteCode) {

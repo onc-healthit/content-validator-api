@@ -25,6 +25,8 @@ public class CCDAMedicationActivity {
 	private CCDAConsumable						consumable;
 	private ArrayList<CCDAIndication>			indications;
 	private ArrayList<CCDAMedicationDispense>	medicationDispenses;
+	private ArrayList<CCDAMedicationFreeSigText> medicationFreeSigTexts;
+	private ArrayList<CCDAMedicationAdherence>   medicationAdherences; 
 	
 	private CCDAAuthor author;
 	
@@ -229,6 +231,10 @@ public class CCDAMedicationActivity {
 	public CCDAMedicationActivity()
 	{
 		templateIds = new ArrayList<CCDAII>();
+		indications = new ArrayList<>();
+		medicationDispenses = new ArrayList<>();
+		medicationFreeSigTexts = new ArrayList<>();
+		medicationAdherences = new ArrayList<>();
 	}
 
 
@@ -260,6 +266,27 @@ public class CCDAMedicationActivity {
 	public void setMedicationDispenses(ArrayList<CCDAMedicationDispense> medicationDispenses) {
 		this.medicationDispenses = medicationDispenses;
 	}
+
+
+	public ArrayList<CCDAMedicationFreeSigText> getMedicationFreeSigTexts() {
+		return medicationFreeSigTexts;
+	}
+
+
+	public void setMedicationFreeSigTexts(ArrayList<CCDAMedicationFreeSigText> medicationFreeSigTexts) {
+		this.medicationFreeSigTexts = medicationFreeSigTexts;
+	}
+
+
+	public ArrayList<CCDAMedicationAdherence> getMedicationAdherences() {
+		return medicationAdherences;
+	}
+
+
+	public void setMedicationAdherences(ArrayList<CCDAMedicationAdherence> medicationAdherences) {
+		this.medicationAdherences = medicationAdherences;
+	}
+	
 	
 	
 }

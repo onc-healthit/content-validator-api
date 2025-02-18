@@ -13,10 +13,11 @@ public class CCDASpecimen {
 
 	private static Logger log = LoggerFactory.getLogger(CCDASpecimen.class.getName());
 	
+	private ArrayList<CCDAII>				specimenIdentifiers;
 	private CCDACode						specimenType;
 	
 	public CCDASpecimen() {
-		
+		specimenIdentifiers = new ArrayList<>();
 	}
 	
 	public void log() {
@@ -56,6 +57,16 @@ public class CCDASpecimen {
 		}
 		
 	}
+
+	public ArrayList<CCDAII> getSpecimenIdentifiers() {
+		return specimenIdentifiers;
+	}
+
+	public void setSpecimenIdentifiers(ArrayList<CCDAII> specimenIdentifiers) {
+		this.specimenIdentifiers = specimenIdentifiers;
+	}
+	
+	
 	
 	
 }

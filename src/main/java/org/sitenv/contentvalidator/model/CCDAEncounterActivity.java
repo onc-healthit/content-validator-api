@@ -12,6 +12,7 @@ public class CCDAEncounterActivity {
 	private static Logger log = LoggerFactory.getLogger(CCDAEncounterActivity.class.getName());
 	
 	private ArrayList<CCDAII>                 templateId;
+	private ArrayList<CCDAII>	              encounterIdentifier;
 	private CCDACode                          encounterTypeCode;
 	private CCDAEffTime                       effectiveTime;
 	private ArrayList<CCDAEncounterDiagnosis> diagnoses;
@@ -157,6 +158,14 @@ public class CCDAEncounterActivity {
 
 	public void setDischargeDisposition(CCDACode dischargeDisposition) {
 		this.dischargeDisposition = dischargeDisposition;
+	}
+
+	public ArrayList<CCDAII> getEncounterIdentifier() {
+		return encounterIdentifier;
+	}
+
+	public void setEncounterIdentifier(ArrayList<CCDAII> encounterIdentifier) {
+		this.encounterIdentifier = encounterIdentifier;
 	}
 	
 	
