@@ -65,7 +65,7 @@ public class ContentValidatorSite3819 extends ContentValidatorTester {
 
 	private ArrayList<ContentValidationResult> validateDocumentAndReturnResultsSvap2022(String validationObjective,
 			String referenceFileName, String ccdaFileAsString, SeverityLevel severityLevel) {
-		return validator.validate(validationObjective, referenceFileName, ccdaFileAsString, false, true, false, severityLevel);
+		return validator.validate(validationObjective, referenceFileName, ccdaFileAsString, "uscdiv4", severityLevel);
 	}
 
 	private ArrayList<ContentValidationResult> validateDocumentAndReturnResultsSvap2022(String referenceFileName,
