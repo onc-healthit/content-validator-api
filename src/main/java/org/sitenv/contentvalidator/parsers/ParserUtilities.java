@@ -6,10 +6,12 @@ import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.model.*;
 import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
 import java.util.ArrayList;
@@ -1527,6 +1529,39 @@ public class ParserUtilities {
 		}
 		
 		return null;
+		
+	}
+
+	public static boolean isLinkPresentInDocument(Document doc, String refLink) throws XPathExpressionException {
+		
+		boolean retVal = false;
+		
+		if(refLink != null && !refLink.isEmpty()) {
+		
+			String ref = refLink.substring(1);
+		    // Search Content Nodes with ID
+			String refPathXPath = "//content[@ID=" + "'" + ref + "']";
+			XPathExpression refPath = CCDAConstants.CCDAXPATH.compile(refPathXPath);
+			NodeList nl = (NodeList)refPath.evaluate(doc,XPathConstants.NODESET);
+			
+			if(nl != null && nl.getLength() > 0) {
+				log.info(" Found the node with reference on Content nodes");
+				retVal = true;
+			}
+		
+		    // Search td Nodes with ID
+			refPathXPath = "//td[@ID=" + "'" + ref + "']";
+			refPath = CCDAConstants.CCDAXPATH.compile(refPathXPath);
+			nl = (NodeList)refPath.evaluate(doc,XPathConstants.NODESET);
+			
+			if(nl != null && nl.getLength() > 0) {
+				log.info(" Found the node with reference on td nodes");
+				retVal = true;
+			}
+		
+		}
+		
+		return retVal;
 		
 	}
 

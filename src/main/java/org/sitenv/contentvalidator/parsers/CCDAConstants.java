@@ -155,6 +155,8 @@ public class CCDAConstants {
 	static public XPathExpression REL_GOAL_OBSERVATION_EXP;
 	static public XPathExpression REL_HEALTH_CONCERN_ACT_EXP;
 	static public XPathExpression REL_PLANNED_PROCEDURE_EXP;
+	static public XPathExpression TREATMENT_PREFERENCE_EXPRESSION;
+	static public XPathExpression CARE_PREFERENCE_EXPRESSION;
 	
 	// Participants and Performers for Care Team / Coverage etc.
 	static public XPathExpression CARE_TEAM_EXPRESSION;
@@ -446,6 +448,10 @@ public class CCDAConstants {
 			REL_NOTES_ACTIVITY_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.202']]");
 			REL_ENTRY_REL_NOTES_ACTIVITY_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entryRelationship/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.202']]");
 			NOTES_ACTIVITY_EXPRESSION = CCDAConstants.CCDAXPATH.compile("//act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.202']]");
+			
+			// Treatment Preference
+			TREATMENT_PREFERENCE_EXPRESSION = CCDAConstants.CCDAXPATH.compile("//observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.510']]");
+			CARE_PREFERENCE_EXPRESSION = CCDAConstants.CCDAXPATH.compile("//observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.509']]");
 			
 
 		} catch (XPathExpressionException e) {

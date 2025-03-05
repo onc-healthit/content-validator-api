@@ -12,6 +12,7 @@ public class CCDACareExperiencePreference {
 	private ArrayList<CCDAII>					templateIds;
 	private CCDACode                            careExperiencePreferenceCode;
 	private String								careExperiencePreference;
+	private boolean 							careExperiencePreferenceLinkPresent;
 	private CCDAAuthor							author;
 	
 	public CCDACareExperiencePreference() {
@@ -69,6 +70,14 @@ public class CCDACareExperiencePreference {
 
 	public void setCareExperiencePreference(String careExperiencePreference) {
 		this.careExperiencePreference = careExperiencePreference;
+	}
+
+	public boolean isCareExperiencePreferenceLinkPresent() {
+		return careExperiencePreferenceLinkPresent;
+	}
+
+	public void setCareExperiencePreferenceLinkPresent(boolean careExperiencePreferenceLinkPresent) {
+		this.careExperiencePreferenceLinkPresent = careExperiencePreferenceLinkPresent;
 	}
 
 	

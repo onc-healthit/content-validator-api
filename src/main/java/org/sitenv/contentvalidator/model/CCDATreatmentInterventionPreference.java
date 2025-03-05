@@ -11,6 +11,7 @@ public class CCDATreatmentInterventionPreference {
 
 	private ArrayList<CCDAII>					templateIds;
 	private CCDACode                            treatmentPreferenceCode;
+	private Boolean								treatmentLinkPresent;
 	private String								treatmentPreference;
 	private CCDAAuthor							author;
 	
@@ -71,6 +72,12 @@ public class CCDATreatmentInterventionPreference {
 		this.treatmentPreference = treatmentPreference;
 	}
 
-	
+	public Boolean getTreatmentLinkPresent() {
+		return treatmentLinkPresent;
+	}
+
+	public void setTreatmentLinkPresent(Boolean treatmentLinkPresent) {
+		this.treatmentLinkPresent = treatmentLinkPresent;
+	}
 	
 }

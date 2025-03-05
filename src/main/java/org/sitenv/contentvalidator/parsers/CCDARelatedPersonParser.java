@@ -19,7 +19,8 @@ public class CCDARelatedPersonParser {
 
 	private static Logger log = LoggerFactory.getLogger(CCDARelatedPersonParser.class.getName());
 
-	static public ArrayList<CCDAParticipant> getRelatedPersons(Document doc, boolean curesUpdate, boolean svap2022, boolean svap2023)
+	static public ArrayList<CCDAParticipant> getRelatedPersons(Document doc, boolean curesUpdate, boolean svap2022, boolean svap2023,
+			boolean uscdiv4)
 			throws XPathExpressionException {
 		
 		ArrayList<CCDAParticipant> rps = new ArrayList<>();

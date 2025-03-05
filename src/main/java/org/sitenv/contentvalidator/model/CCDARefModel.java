@@ -60,6 +60,9 @@ public class CCDARefModel {
 	private CCDAMentalStatus	 mentalStatus;
 	private ArrayList<CCDAParticipant> relatedPersons;
 	
+	// USCDI v4 changes
+	private ArrayList<CCDATreatmentInterventionPreference>  treatmentPreferences;
+	private ArrayList<CCDACareExperiencePreference>			carePreferences;
 	
 	public ArrayList<CCDAAuthor> getAuthorsFromHeader() {
 		return authorsFromHeader;
@@ -125,6 +128,8 @@ public class CCDARefModel {
 		authorsFromHeader = new ArrayList<CCDAAuthor>();
 		authorsWithLinkedReferenceData = new ArrayList<CCDAAuthor>();
 		relatedPersons = new ArrayList<>();
+		treatmentPreferences = new ArrayList<>();
+		carePreferences = new ArrayList<>();
 		
 		ccdTemplates = new ArrayList<CCDAII>();
 		ccdTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2015_AUG_EXT));
@@ -2453,6 +2458,22 @@ public class CCDARefModel {
 
 	public void setRelatedPersons(ArrayList<CCDAParticipant> relatedPersons) {
 		this.relatedPersons = relatedPersons;
+	}
+
+	public ArrayList<CCDATreatmentInterventionPreference> getTreatmentPreferences() {
+		return treatmentPreferences;
+	}
+
+	public void setTreatmentPreferences(ArrayList<CCDATreatmentInterventionPreference> treatmentPreferences) {
+		this.treatmentPreferences = treatmentPreferences;
+	}
+
+	public ArrayList<CCDACareExperiencePreference> getCarePreferences() {
+		return carePreferences;
+	}
+
+	public void setCarePreferences(ArrayList<CCDACareExperiencePreference> carePreferences) {
+		this.carePreferences = carePreferences;
 	}
 	
 	

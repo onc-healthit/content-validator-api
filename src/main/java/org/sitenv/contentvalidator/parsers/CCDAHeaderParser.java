@@ -20,7 +20,8 @@ public class CCDAHeaderParser {
 	
 	private static Logger log = LoggerFactory.getLogger(CCDAHeaderParser.class.getName());
 
-	static public CCDAHeaderElements getHeaderElements(Document doc, boolean curesUpdate, boolean svap2022, boolean svap2023)
+	static public CCDAHeaderElements getHeaderElements(Document doc, boolean curesUpdate, boolean svap2022, boolean svap2023, 
+			boolean uscdiv4)
 			throws XPathExpressionException {	
 		CCDAHeaderElements header = new CCDAHeaderElements();
 		
@@ -32,7 +33,7 @@ public class CCDAHeaderParser {
 		return header;
 	}
 	
-	static public CCDAPatient getPatient(Document doc, boolean curesUpdate, boolean svap2022, boolean svap2023)
+	static public CCDAPatient getPatient(Document doc, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean uscdiv4)
 			throws XPathExpressionException {		
 		CCDAPatient patient = null;
 		
