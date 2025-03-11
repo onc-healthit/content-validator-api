@@ -191,6 +191,7 @@ public class CCDAConstants {
 	static public XPathExpression REL_GENDER_IDENTITY_EXP;
 	static public XPathExpression REL_SOCIAL_HISTORY_OBS_EXP;
 	static public XPathExpression REL_ASSESSMENT_SCALE_OBS_EXP;
+	static public XPathExpression REL_ENTRY_ASSESSMENT_SCALE_OBS_EXP;
 	static public XPathExpression REL_ASSESSMENT_SCALE_SUP_OBS_EXP;
 	
 	// Care Plan
@@ -351,6 +352,7 @@ public class CCDAConstants {
 		    REL_GENDER_IDENTITY_EXP = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.34.3.45']]");
 		    REL_SOCIAL_HISTORY_OBS_EXP = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.38']]");
 		    REL_ASSESSMENT_SCALE_OBS_EXP = CCDAConstants.CCDAXPATH.compile("./entryRelationship/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.69']]");
+		    REL_ENTRY_ASSESSMENT_SCALE_OBS_EXP = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.69']]");
 		    REL_ASSESSMENT_SCALE_SUP_OBS_EXP = CCDAConstants.CCDAXPATH.compile("./entryRelationship/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.86']]");
 		    
 		    RESULTS_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='30954-2']]");

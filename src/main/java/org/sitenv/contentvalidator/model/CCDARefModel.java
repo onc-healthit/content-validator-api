@@ -149,29 +149,29 @@ public class CCDARefModel {
 	}
 	
 	public ArrayList<ContentValidationResult> compare(String validationObjective, CCDARefModel submittedCCDA,
-			boolean curesUpdate, boolean svap2022, boolean svap2023) {
+			boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) {
 		
 		ArrayList<ContentValidationResult> results = new ArrayList<ContentValidationResult>();
 		
 		if(doesObjectiveRequireCCDS(validationObjective))
 		{
 			log.info(" Performing CCDS checks ");
-			compareCCDS(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			compareCCDS(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 		}
 		else if(doesObjectiveRequireCIRI(validationObjective))
 		{
 			log.info(" Performing CIRI checks ");
-			performCIRIValidation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			performCIRIValidation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 		}
 		else if(doesObjectiveRequireCarePlan(validationObjective))
 		{
 			log.info(" Performing Care Plan checks ");
-			performCarePlanValidation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			performCarePlanValidation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 		}
 		else if(doesObjectiveRequireDS4P(validationObjective))
 		{
 			log.info(" Performing DS4P checks ");
-			performDS4PValidation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			performDS4PValidation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 		}
 		else 
 		{
@@ -179,16 +179,16 @@ public class CCDARefModel {
 		}
 		
 		log.info(" Compare non CCDS Structured Data ");
-		compareNonCCDSStructuredData(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+		compareNonCCDSStructuredData(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 		
-		validateDocElements(validationObjective,submittedCCDA, results, curesUpdate, svap2022, svap2023);
+		validateDocElements(validationObjective,submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 		
 		log.info(" Total Number of Content Validation Issues " + results.size());
 		return results;
 	}
 	
 	public void validateDocElements(String valObj, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) 
 	{
 		if(valObj.equalsIgnoreCase("170.315_b1_ToC_Amb") ||
 				valObj.equalsIgnoreCase("170.315_b4_CCDS_Amb") ) 
@@ -305,19 +305,19 @@ public class CCDARefModel {
 	}
 	
 	public void compareCCDS(String validationObjective, CCDARefModel submittedCCDA,
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) {
 		
-		if(svap2022 || svap2023) {
+		if(svap2022 || svap2023 || svap2024) {
 			curesUpdate = true;
 		}
 		
 		log.info("Comparing Patient Data ");
-		comparePatients(submittedCCDA, results, curesUpdate, svap2022, svap2023);
+		comparePatients(submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 		
 		log.info("Comparing Social History Smoking Status ");
 		validateSmokingStatus(submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
-		if(!svap2023) {
+		if(!svap2023 && !svap2024) {
 			log.info("Validating Social History Birth Sex ");
 			validateBirthSex(submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		}
@@ -332,7 +332,7 @@ public class CCDARefModel {
 		compareMedications(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Lab Results "); 
-		compareLabResults(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+		compareLabResults(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 		
 		log.info("Comparing Vital Signs ");
 		compareVitalObs(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
@@ -369,7 +369,7 @@ public class CCDARefModel {
 			compareCareTeamMembers(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		}
 		
-		if (svap2022 || svap2023 ) {
+		if (svap2022 || svap2023 || svap2024 ) {
 			
 			log.info(" Comparing data for Cures Update (USCDI v2) specific entries ");
 			
@@ -392,7 +392,7 @@ public class CCDARefModel {
 			comparePlanOfTreatmentData(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		}
 		
-		if (svap2023) {
+		if (svap2023 || svap2024) {
 			log.info(" Comparing data for Cures Update (USCDI v3) specific entries ");
 			
 			log.info(" Comparing Functional Status Data ");
@@ -408,25 +408,39 @@ public class CCDARefModel {
 			comparePayers(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 			
 			log.info(" Comparing Social History Observations ");
-			compareSocialHistoryObservations(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			compareSocialHistoryObservations(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 			
 			log.info(" Comparing Social History Observations ");
 			compareRelatedPersons(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+						
+		}
+		
+		if(svap2024) 
+		{
+			log.info(" Comparing data for Cures Update (USCDI v3) specific entries ");
+			log.info("Comparing Encounters ");
+			compareEncounters(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 			
+			log.info(" Comparing Treatment Preferences ");
+			compareTreatmentPreferences(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 			
-			
+			log.info(" Comparing Care Experience Preferences ");
+			compareCareExperiencePreferences(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
+
 		}
 		
 		log.info("Finished comparison, returning results");
 		
 	}
 	
+	
+	
 	private void compareSocialHistoryObservations(String validationObjective, CCDARefModel submittedCCDA,
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) {
 		
 		log.info("Comparing Social History Observations");
 		if(this.socialHistory != null) {
-			this.socialHistory.compare(validationObjective, submittedCCDA.getSocialHistory(), curesUpdate, svap2022, svap2023, results);
+			this.socialHistory.compare(validationObjective, submittedCCDA.getSocialHistory(), curesUpdate, svap2022, svap2023, svap2024, results);
 		}
 		else {
 			log.info(" Nothing to do ");
@@ -797,7 +811,7 @@ public class CCDARefModel {
 	
 	
 	public void compareLabResults(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) {
 		
 		log.info("Retrieving Lab Results for comparison ");
 		HashMap<String, CCDALabResultObs> refResults = this.getAllLabResultObs();
@@ -807,7 +821,7 @@ public class CCDARefModel {
 			(subResults != null && subResults.size() > 0)  ) {
 			
 			log.info("Lab Results present in both models ");
-			CCDALabResultObs.compareLabResultData(refResults, subResults, results);
+			CCDALabResultObs.compareLabResultData(refResults, subResults, results, svap2024);
 			
 		} else if ( (refResults != null && refResults.size() > 0) && 
 				(subResults == null || subResults.size() == 0) ) {
@@ -1069,8 +1083,7 @@ public class CCDARefModel {
 			
 		}else if ((refGenders == null || refGenders.size() == 0) && 
 				(subGenders != null && subGenders.size() > 0) ) {
-			
-			
+						
 			log.info("Model does not have Gender Identity data for comparison, allow this to pass");
 			
 		} else {
@@ -1222,6 +1235,162 @@ public class CCDARefModel {
 			
 			log.info("Model and Submitted CCDA do not have Planned Procedure data for comparison ");
 		}
+	}
+	
+	private void compareEncounters(String validationObjective, CCDARefModel submittedCCDA, 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) {
+		
+		if(!svap2024)
+		{
+			return;
+		}
+		
+		log.info("Retrieving EncounterActivities for comparison ");
+		HashMap<String, CCDAEncounterActivity> refEncounters = this.getAllEncounterActivities();
+		HashMap<String, CCDAEncounterActivity> subEncounters = submittedCCDA.getAllEncounterActivities();
+		
+		if( (refEncounters != null && refEncounters.size() > 0) &&  
+			(subEncounters != null && subEncounters.size() > 0)  ) {
+			
+			log.info("EncounterActivities present in both models ");
+			CCDAEncounterActivity.compareEncounterActivity(refEncounters, subEncounters, results);
+			
+		} else if ( (refEncounters != null && refEncounters.size() > 0) && 
+				(subEncounters == null || subEncounters.size() == 0) ) {
+			
+			// handle the case where the Encounters does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's EncounterActivity, but the submitted C-CDA does not contain EncounterActivity data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires EncounterActivity data but submitted document does not contain EncounterActivity data");
+			
+		}else if ((refEncounters == null || refEncounters.size() == 0) && 
+				(subEncounters != null && subEncounters.size() > 0) ) {
+		
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require data related to patient's EncounterActivity, but the submitted C-CDA does contain EncounterActivity data, please check if it is appropriate.", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info("Model does not have EncounterActivity for comparison ");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have EncounterActivity for comparison ");
+		}
+		
+	}
+	
+	public void compareTreatmentPreferences(String validationObjective, CCDARefModel submittedCCDA, 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) {
+		
+		log.info("Retrieving Treatment Preferences for comparison ");
+		HashMap<String, CCDATreatmentInterventionPreference> refTreatments = this.getAllTreatmentInterventionPreferences();
+		HashMap<String, CCDATreatmentInterventionPreference> subTreatments = submittedCCDA.getAllTreatmentInterventionPreferences();
+		
+		if( (refTreatments != null && refTreatments.size() > 0) &&  
+			(subTreatments != null && subTreatments.size() > 0)  ) {
+			
+			log.info("Treatment Intervention Preference present in both models ");
+			CCDATreatmentInterventionPreference.compare(refTreatments, subTreatments, results);
+			
+		} 	
+		else if ( (refTreatments != null && refTreatments.size() > 0) && 
+				(subTreatments == null || subTreatments.size() == 0) ) {
+			
+			// handle the case where the Treatment Preferences does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to the patient's Treatment Intervention Preferences"
+					+ "but the submitted C-CDA does not contain Treatment Intervention Preference data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Treatment Intervention Preference data, but submitted document does not contain Treatment Intervention Preference data");
+			
+		}else if ((refTreatments == null || refTreatments.size() == 0) && 
+				(subTreatments != null && subTreatments.size() > 0) ) {
+			
+			
+			log.info("Model does not have Treatment Intervention Preference data for comparison, allow this to pass");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Treatment Intervention Preference for comparison ");
+		}
+	}
+	
+	public void compareCareExperiencePreferences(String validationObjective, CCDARefModel submittedCCDA, 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) {
+		
+		log.info("Retrieving Care Experience Preferences for comparison ");
+		HashMap<String, CCDACareExperiencePreference> refExperiences = this.getAllCareExperiencePreferences();
+		HashMap<String, CCDACareExperiencePreference> subExperiences = submittedCCDA.getAllCareExperiencePreferences();
+		
+		if( (refExperiences != null && refExperiences.size() > 0) &&  
+			(subExperiences != null && subExperiences.size() > 0)  ) {
+			
+			log.info("Care Experience Preference present in both models ");
+			CCDACareExperiencePreference.compare(refExperiences, subExperiences, results);
+			
+		} 	
+		else if ( (refExperiences != null && refExperiences.size() > 0) && 
+				(subExperiences == null || subExperiences.size() == 0) ) {
+			
+			// handle the case where the Treatment Preferences does not exist in the submitted CCDA
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to the patient's Care Experience Preferences"
+					+ "but the submitted C-CDA does not contain Care Experience Preference data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Care Experience Preference data, but submitted document does not contain Care Experience Preference data");
+			
+		}else if ((refExperiences == null || refExperiences.size() == 0) && 
+				(subExperiences != null && subExperiences.size() > 0) ) {
+			
+			
+			log.info("Model does not have Care Experience Preference data for comparison, allow this to pass");
+			
+		} else {
+			
+			log.info("Model and Submitted CCDA do not have Care Experience Preference for comparison ");
+		}
+	}
+	
+	private HashMap<String, CCDATreatmentInterventionPreference> getAllTreatmentInterventionPreferences() {
+		
+		HashMap<String, CCDATreatmentInterventionPreference> treatments = new HashMap<>();
+		if(treatmentPreferences != null && treatmentPreferences.size() > 0) {
+			
+			for(CCDATreatmentInterventionPreference pref : treatmentPreferences) {
+				
+				if(pref.getTreatmentPreferenceCode() != null && 
+						pref.getTreatmentPreferenceCode().getCode() != null && 
+						!pref.getTreatmentPreferenceCode().getCode().isEmpty()) {
+					treatments.put(pref.getTreatmentPreferenceCode().getCode(), pref);
+				}
+			}
+		}
+		
+		return treatments;
+	}
+	
+	private HashMap<String, CCDACareExperiencePreference> getAllCareExperiencePreferences() {
+		
+		HashMap<String, CCDACareExperiencePreference> carePrefs = new HashMap<>();
+		if(carePreferences != null && carePreferences.size() > 0) {
+			
+			for(CCDACareExperiencePreference pref : carePreferences) {
+				
+				if(pref.getCareExperiencePreferenceCode() != null && 
+						pref.getCareExperiencePreferenceCode().getCode() != null && 
+						!pref.getCareExperiencePreferenceCode().getCode().isEmpty()) {
+					carePrefs.put(pref.getCareExperiencePreferenceCode().getCode(), pref);
+				}
+			}
+		}
+		
+		return carePrefs;
+	}
+
+	public HashMap<String, CCDAEncounterActivity> getAllEncounterActivities() {
+		
+		if(encounter != null) {
+			return encounter.getAllEncounterActivities();
+		}
+		
+		return null;
+		
 	}
 	
 	public HashMap<String, PlannedProcedure> getAllPlannedProcedures() {
@@ -1859,10 +2028,10 @@ public class CCDARefModel {
 	
 	
 	private void comparePatients(CCDARefModel submittedCCDA, ArrayList<ContentValidationResult> results, 
-			boolean curesUpdate, boolean svap2022, boolean svap2023) {
+			boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) {
 		
 		if((patient != null) && (submittedCCDA.getPatient() != null)) {
-			this.patient.compare(submittedCCDA.getPatient(), results, submittedCCDA, curesUpdate, svap2022, svap2023);
+			this.patient.compare(submittedCCDA.getPatient(), results, submittedCCDA, curesUpdate, svap2022, svap2023, svap2024);
 		}
 		else if( (patient == null) && (submittedCCDA.getPatient() != null) ) {
 			ContentValidationResult rs = new ContentValidationResult("The scenario does not require patient data, but submitted file does have patient data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
@@ -2303,10 +2472,10 @@ public class CCDARefModel {
 	}
 
 	public void performCIRIValidation(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) 
 	{
 		log.info("Comparing Patient Data ");
-		comparePatients(submittedCCDA, results, curesUpdate, svap2022, svap2023);
+		comparePatients(submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 		
 		log.info("Comparing Problems ");
 		compareProblems(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
@@ -2322,10 +2491,10 @@ public class CCDARefModel {
 	}
 
 	public void performCarePlanValidation(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) 
 	{
 		log.info("Comparing Patient Data ");
-		comparePatients(submittedCCDA, results, curesUpdate, svap2022, svap2023);
+		comparePatients(submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 		
 		log.info("Comparing CarePlan Sections");
 		compareCarePlanSections(submittedCCDA, results);
@@ -2335,17 +2504,17 @@ public class CCDARefModel {
 	}
 
 	public void performDS4PValidation(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) 
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) 
 	{
 		log.info("Comparing Patient Data ");
-		comparePatients(submittedCCDA, results, curesUpdate, svap2022, svap2023);
+		comparePatients(submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 		
 		log.info("Finished comparison , returning results");
 		
 	}
 	
 	public void compareNonCCDSStructuredData(String valObj, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023)
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024)
 	{
 		// validate encounter diagnosis.
 		if(valObj.equalsIgnoreCase("170.315_b1_ToC_Amb") || 

@@ -87,6 +87,13 @@ public class SocialHistoryParser {
 			NodeList sexObsList = (NodeList)CCDAConstants.REL_SEX_EXP.
 								evaluate(sectionElement, XPathConstants.NODESET);
 			socialHistory.setSexObservations(retrieveSexObserations(sexObsList));
+			
+			// Grab all assessments
+			NodeList assessmentScaleObservationList = (NodeList) CCDAConstants.REL_ENTRY_ASSESSMENT_SCALE_OBS_EXP.
+					evaluate(sectionElement, XPathConstants.NODESET);
+			
+			socialHistory.setAssessments(ParserUtilities.retrieveAssessmentScaleObservations(assessmentScaleObservationList));	
+
 		}
 		
 		return socialHistory;

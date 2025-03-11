@@ -86,9 +86,9 @@ public class ContentValidatorService {
 			}
 
 			if((ref != null) && (submittedCCDA != null)) {
-				log.info("Comparing the Ref Model to the Submitted Model, parameters: referenceFile: {}, curesUpdate: {}, uscdiv2: {}", 
-						referenceFileName, curesUpdate, svap2022, svap2023);
-				results = ref.compare(validationObjective, submittedCCDA, curesUpdate, svap2022, svap2023);
+				log.info("Comparing the Ref Model to the Submitted Model, parameters: referenceFile: {}, curesUpdate: {}, uscdiv2: {},  uscdiv3 {}, uscdiv4",
+						referenceFileName, curesUpdate, svap2022, svap2023, uscdiv4);
+				results = ref.compare(validationObjective, submittedCCDA, curesUpdate, svap2022, svap2023, uscdiv4);
 			}
 			else {
 				log.error(" Submitted Model = " + ((submittedCCDA == null) ? " Model is null" : submittedCCDA.toString()));
