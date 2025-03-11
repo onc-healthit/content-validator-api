@@ -103,10 +103,10 @@ public class ContentValidatorSVAP2024Test extends ContentValidatorTester {
 			printResults(results); 
 			 
 			results.clear();
-			/* results = validateDocumentAndReturnResultsSvap2024(
+			results = validateDocumentAndReturnResultsSvap2024(
 					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_TEST_DELETE, SUBMITTED_CCDA_1[SUB_EF],
 					SeverityLevel.ERROR);
-			printResults(results); */
+			printResults(results);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
