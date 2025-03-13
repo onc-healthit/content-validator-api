@@ -41,37 +41,24 @@ public class CCDAUDI {
 			}
 		}
 	}
-	
+
 	public static Boolean isPresent(CCDAUDI refUdi, ArrayList<CCDAUDI> subUdis, ArrayList<ContentValidationResult> results) {
-		
-		for(int i = 0; i < subUdis.size();i++) {
-			
-			CCDAUDI subUdi = subUdis.get(i);
-			
-			if(subUdi.contains(refUdi, results)) {
-				log.info(" Ref Udi is present in the Sub Udis ");
-				return true;
+
+		ArrayList<CCDAII> refUdiVals = refUdi.getUDIValue();
+
+		for (int i = 0; i < refUdiVals.size(); i++) {
+			CCDAII refii = refUdiVals.get(i);
+			boolean found = false;
+			for (int x = 0; x < subUdis.size(); x++) {
+				ArrayList<CCDAII> subUdiVals = subUdis.get(x).getUDIValue();
+
+				if (subUdiVals != null && refii.isPartOf(subUdiVals)) {
+					found = true;
+					log.info(" Found one of the Udis in the list " + refii.getRootValue() + refii.getExtValue());
+				}
 			}
-		}
-			
-		return false;
-	}
-	
-	public Boolean contains(CCDAUDI refUdi, ArrayList<ContentValidationResult> results) {
-		
-		ArrayList<CCDAII> udiVals = refUdi.getUDIValue();
-		
-		Boolean found = false;
-		for(int i = 0; i < udiVals.size(); i++) {
-			
-			CCDAII refii = udiVals.get(i);
-			if(this.getUDIValue() != null && 
-				refii.isPartOf(this.getUDIValue())) {
-				
-				log.info(" Found one of the Udis in the list " + refii.getRootValue() + refii.getExtValue());
-				found = true; // Make it true as long as we keep hitting this condition.
-			}
-			else {
+
+			if (!found) {
 				log.info(" Did not find the UDI " + refii.getRootValue() + " : " + refii.getExtValue());
 				ContentValidationResult rs = new ContentValidationResult("The scenario requires data related to patient's UDI: Root = " + refii.getRootValue() + " Extension = " + refii.getExtValue() + ", but the submitted C-CDA does not contain UDI data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 				results.add(rs);
@@ -79,12 +66,11 @@ public class CCDAUDI {
 			}
 			
 		}
-		
-		return found;
+		return false;
 	}
-	
-	public void log() { 
-		
+
+	public void log() {
+
 		log.info(" *** UDI *** ");
 		
 		for(int j = 0; j < templateIds.size(); j++) {

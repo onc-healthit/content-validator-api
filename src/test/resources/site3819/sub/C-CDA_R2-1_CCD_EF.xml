@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="CDA.xsl"?>
+<!--Title:        Continuity of Care Document (CCD)
+
+Originally created by ONC/NIST; edited and updated by Chart Lux Consulting
+
+********************************************************
+Disclaimer: This sample file contains representative data elements to represent a Continuity of Care Document (CCD). 
+The file depicts a fictional character's health data. Any resemblance to a real person is coincidental. 
+To illustrate as many data elements as possible, the clinical scenario may not be plausible. 
+The data in this sample file is not intended to represent real patients, people or clinical events. 
+This sample is designed to be used n conjunction with the C-CDA Clinical Notes Implementation Guide.
+********************************************************
+-->
+<ClinicalDocument
+    xmlns = "urn:hl7-org:v3"
+    xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:voc = "urn:hl7-org:v3/voc"
+    xmlns:sdtc = "urn:hl7-org:sdtc">
+    <!--******************************************************** CDA Body ******************************************************** -->
+    <component>
+        <structuredBody>
+            <!--******************* SOCIAL HISTORY ********************* -->
+            <component>
+                <section>
+                    <templateId root = "2.16.840.1.113883.10.20.22.2.17" extension = "2015-08-01"/>
+                    <templateId root = "2.16.840.1.113883.10.20.22.2.17"/>
+                    <code
+                        code = "29762-2"
+                        codeSystem = "2.16.840.1.113883.6.1"
+                        codeSystemName = "LOINC"
+                        displayName = "Social History"/>
+                    <title>SOCIAL HISTORY</title>
+                    <text>
+                        <table border = "1" width = "100%">
+                            <thead>
+                                <tr>
+                                    <th>Social History Observation</th>
+                                    <th>Description</th>
+                                    <th>Dates Observed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ID = "smokingStatus1">
+                                    <td>Historical Smoking Status</td>
+                                    <td>Heavy tobacco smoker</td>
+                                    <td>May 1, 2005 - February 27, 2011</td>
+                                </tr>
+                                <tr ID = "smokingStatus2">
+                                    <td>Current Smoking Status</td>
+                                    <td>Current every day</td>
+                                    <td>June 22, 2015</td>
+                                </tr>
+                                <tr ID = "birthSex">
+                                    <td>Birth Sex</td>
+                                    <td>Female</td>
+                                    <td>May 01, 1970</td>
+                                </tr>
+                                <tr>
+                                    <td>Gender Identity</td>
+                                    <td>Female</td>
+                                    <td>May 01, 1970</td>
+                                    <td/>
+                                </tr>
+                                <tr>
+                                    <td>Sexual Orientation</td>
+                                    <td>Straight or heterosexual</td>
+                                    <td>May 01, 1970</td>
+                                    <td/>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </text>
+                    <entry typeCode = "DRIV">
+                        <observation classCode = "OBS" moodCode = "EVN">
+                            <templateId root = "2.16.840.1.113883.10.20.22.4.85" extension = "2014-06-09"/>
+                            <templateId root = "2.16.840.1.113883.10.20.22.4.85"/>
+                            <id root = "45efb604-7049-4a2e-ad33-d38556c9636c"/>
+                            <code
+                                code = "11367-0"
+                                codeSystem = "2.16.840.1.113883.6.1"
+                                codeSystemName = "LOINC"
+                                displayName = "History of tobacco use"/>
+                            <text>
+                                <reference value = "#smokingStatus1"/>
+                            </text>
+                            <statusCode code = "completed"/>
+                            <effectiveTime>
+                                <low value = "20050501"/>
+                                <high value = "20110227"/>
+                            </effectiveTime>
+                            <value
+                                xsi:type = "CD"
+                                code = "428071000124103"
+                                displayName = "Heavy tobacco smoker"
+                                codeSystem = "2.16.840.1.113883.6.96"/>
+                        </observation>
+                    </entry>
+                    <entry typeCode = "DRIV">
+                        <observation classCode = "OBS" moodCode = "EVN">
+                            <templateId root = "2.16.840.1.113883.10.20.22.4.78" extension = "2014-06-09"/>
+                            <templateId root = "2.16.840.1.113883.10.20.22.4.78"/>
+                            <id extension = "123456789" root = "2.16.840.1.113883.19"/>
+                            <code
+                                code = "72166-2"
+                                codeSystem = "2.16.840.1.113883.6.1"
+                                codeSystemName = "LOINC"
+                                displayName = "Tobacco smoking status NHIS"/>
+                            <text>
+                                <reference value = "#smokingStatus2"/>
+                            </text>
+                            <statusCode code = "completed"/>
+                            <effectiveTime value = "20150622"/>
+                            <value
+                                xsi:type = "CD"
+                                code = "449868002"
+                                displayName = "Current every day smoker"
+                                codeSystem = "2.16.840.1.113883.6.96"
+                                codeSystemName = "SNOMED"/>
+                        </observation>
+                    </entry>
+                    <entry typeCode = "DRIV">
+                        <observation classCode = "OBS" moodCode = "EVN">
+                            <templateId root = "2.16.840.1.113883.10.20.22.4.200" extension = "2016-06-01"/>
+                            <templateId root = "2.16.840.1.113883.10.20.22.4.200"/>
+                            <id extension = "123456789" root = "2.16.840.1.113883.19"/>
+                            <code
+                                code = "76689-9"
+                                codeSystem = "2.16.840.1.113883.6.1"
+                                codeSystemName = "LOINC"
+                                displayName = "Birth Sex"/>
+                            <text>
+                                <reference value = "#birthSex"/>
+                            </text>
+                            <statusCode code = "completed"/>
+                            <effectiveTime value = "19700501"/>
+                            <value
+                                xsi:type = "CD"
+                                code = "F"
+                                displayName = "Female"
+                                codeSystem = "2.16.840.1.113883.5.1"/>
+                        </observation>
+                    </entry>
+                    <!--USCDI v2 - Gender Identity -->
+                    <entry>
+                        <observation classCode = "OBS" moodCode = "EVN">
+                            <templateId extension = "2015-08-01" root = "2.16.840.1.113883.10.20.22.4.38"/>
+                            <templateId root = "2.16.840.1.113883.10.20.22.4.38"/>
+                            <templateId root = "2.16.840.1.113883.10.20.34.3.45" extension = "2022-06-01"/>
+                            <id extension = "56621730750833786920465202710329480739" root = "2.16.840.1.113883.3.7220"/>
+                            <code
+                                code = "76691-5"
+                                codeSystem = "2.16.840.1.113883.6.1"
+                                codeSystemName = "LOINC"
+                                displayName = "Gender Identity"/>
+                            <statusCode code = "completed"/>
+                            <effectiveTime>
+                                <low value = "20231109"/>
+                            </effectiveTime>
+                            <value
+                                codeSystem = "2.16.840.1.113883.6.96"
+                                codeSystemName = "SNOMED-CT"
+                                displayName = "Choose not to disclose"
+                                nullFlavor = "ASKU"
+                                xsi:type = "CD"/>
+                        </observation>
+                    </entry>
+                    <!--USCDI v2 - Sexual Orientation -->
+                    <entry>
+                        <observation classCode = "OBS" moodCode = "EVN">
+                            <templateId extension = "2015-08-01" root = "2.16.840.1.113883.10.20.22.4.38"/>
+                            <templateId root = "2.16.840.1.113883.10.20.22.4.38"/>
+                            <templateId root = "2.16.840.1.113883.10.20.22.4.501" extension = "2022-06-01"/>
+                            <id extension = "56621730750833786920465202710329480739" root = "2.16.840.1.113883.3.7220"/>
+                            <code
+                                code = "76690-7"
+                                codeSystem = "2.16.840.1.113883.6.1"
+                                codeSystemName = "LOINC"
+                                displayName = "Sexual orientation"/>
+                            <statusCode code = "completed"/>
+                            <effectiveTime value = "20231109"/>
+                            <value
+                                codeSystem = "2.16.840.1.113883.6.96"
+                                codeSystemName = "SNOMED-CT"
+                                displayName = "Dont know"
+                                nullFlavor = "UNK"
+                                xsi:type = "CD"/>
+                        </observation>
+                    </entry>
+                    <entry>
+                        <observation classCode = "OBS" moodCode = "EVN">
+                            <templateId root = "2.16.840.1.113883.10.20.22.4.69" extension = "2022-06-01"/>
+                            <id root = "c6b5a04b-2bf4-49d1-8336-636a3813df0b"/>
+                            <code
+                                code = "88121-9"
+                                displayName = "Hunger Vital Signs"
+                                codeSystem = "2.16.840.1.113883.6.1"
+                                codeSystemName = "LOINC"/>
+                            <derivationExpr>Text description of the calculation</derivationExpr>
+                            <statusCode code = "completed"/>
+                            <effectiveTime value = "20220622"/>
+                            <!--Summed score of the component values -->
+                            <value xsi:type = "INT" value = "2"/>
+                            <entryRelationship typeCode = "COMP">
+                                <observation classCode = "OBS" moodCode = "EVN">
+                                    <templateId root = "2.16.840.1.113883.10.20.22.4.86"/>
+                                    <id root = "f4dce790-8328-11db-9fe1-0800200c9a44"/>
+                                    <code
+                                        code = "88122-7"
+                                        displayName = "(I/We) worried whether (my/our) foodwould run out before (I/we) got money to buy more"
+                                        codeSystem = "2.16.840.1.113883.6.1"
+                                        codeSystemName = "LOINC"/>
+                                    <statusCode code = "completed"/>
+                                    <value
+                                        xsi:type = "CD"
+                                        code = "LA28397-0"
+                                        displayName = "Often true"
+                                        codeSystem = "2.16.840.1.113883.6.1">
+                                        <translation
+                                            code = "1"
+                                            codeSystem = "2.16.840.1.113883.6.1"
+                                            codeSystemName = "LOINC"/>
+                                    </value>
+                                </observation>
+                            </entryRelationship>
+                            <entryRelationship typeCode = "COMP">
+                                <observation classCode = "OBS" moodCode = "EVN">
+                                    <templateId root = "2.16.840.1.113883.10.20.22.4.86"/>
+                                    <id root = "f4dce790-8328-11db-9fe1-0800200c9a44"/>
+                                    <code
+                                        code = "88123-5"
+                                        displayName = "Within the past 12Mo the food we boughtjust didn't last and we didn't have money to get more"
+                                        codeSystem = "2.16.840.1.113883.6.1"
+                                        codeSystemName = "LOINC"/>
+                                    <statusCode code = "completed"/>
+                                    <value
+                                        xsi:type = "CD"
+                                        code = "LA28397-0"
+                                        displayName = "Often true"
+                                        codeSystem = "2.16.840.1.113883.6.1">
+                                        <translation
+                                            code = "1"
+                                            codeSystem = "2.16.840.1.113883.6.1"
+                                            codeSystemName = "LOINC"/>
+                                    </value>
+                                </observation>
+                            </entryRelationship>
+                            <entryRelationship typeCode = "COMP">
+                                <observation classCode = "OBS" moodCode = "EVN">
+                                    <templateId root = "2.16.840.1.113883.10.20.22.4.86"/>
+                                    <id root = "f4dce790-8328-11db-9fe1-0800200c9a44"/>
+                                    <code
+                                        code = "88124-3"
+                                        displayName = "Food insecurity risk [HVS]"
+                                        codeSystem = "2.16.840.1.113883.6.1"
+                                        codeSystemName = "LOINC"/>
+                                    <statusCode code = "completed"/>
+                                    <value
+                                        xsi:type = "CD"
+                                        code = "LA19952-3"
+                                        displayName = "At risk"
+                                        codeSystem = "2.16.840.1.113883.6.1"/>
+                                </observation>
+                            </entryRelationship>
+                        </observation>
+                    </entry>
+                </section>
+            </component>
+        </structuredBody>
+    </component>
+</ClinicalDocument>
