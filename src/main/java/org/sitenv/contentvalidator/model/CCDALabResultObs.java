@@ -40,7 +40,8 @@ public class CCDALabResultObs {
 	}
 	
 	public static void compareLabResultData(HashMap<String, CCDALabResultObs> refResults, 
-			HashMap<String, CCDALabResultObs> subResults, 	ArrayList<ContentValidationResult> results) {
+			HashMap<String, CCDALabResultObs> subResults, 	ArrayList<ContentValidationResult> results,
+			boolean svap2024) {
 
 		log.info(" Start Comparing Lab Result Observations ");
 		// For each lab result in the Ref Model, check if it is present in the subCCDA Model.
@@ -50,7 +51,7 @@ public class CCDALabResultObs {
 
 				log.info("Comparing Lab Result Observation ");
 				String context = "Lab Result Observation Entry corresponding to the code " + ent.getKey();
-				subResults.get(ent.getKey()).compare(ent.getValue(), results, context);
+				subResults.get(ent.getKey()).compare(ent.getValue(), results, context, svap2024);
 
 
 			} else {
@@ -74,7 +75,8 @@ public class CCDALabResultObs {
 		
 	}
 	
-	public void compare(CCDALabResultObs refResult, ArrayList<ContentValidationResult> results , String context) {
+	public void compare(CCDALabResultObs refResult, ArrayList<ContentValidationResult> results , String context,
+			boolean svap2024) {
 		
 		log.info("Comparing Lab Result ");
 		
@@ -154,6 +156,17 @@ public class CCDALabResultObs {
 		if(!refCode.equalsIgnoreCase("") && !subCode.equalsIgnoreCase("")) {
 			log.info("Comparing strings with codes ");
 			ParserUtilities.compareString(refCode, subCode, results, valString);
+		}
+		
+		if(svap2024) 
+		{
+			// Compare Lab Interpretation Codes 
+			String interpretCodeVal = "Lab Result Interpretation code element for " + context;
+			ParserUtilities.compareCode(refResult.getInterpretationCode(), interpretationCode, results, interpretCodeVal);
+					
+			// Compare Reference Range
+			String refRangeVal = "Lab Result Reference Range element for " + context;
+			ParserUtilities.checkQuantities(refResult.getReferenceRangeValue(), referenceRangeValue, results, refRangeVal);
 		}
 	}
 

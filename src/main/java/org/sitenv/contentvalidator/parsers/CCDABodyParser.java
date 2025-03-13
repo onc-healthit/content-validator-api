@@ -12,7 +12,7 @@ public class CCDABodyParser {
 	private static Logger log = LoggerFactory.getLogger(CCDABodyParser.class.getName());
 	
 	static public void parseBody(Document doc, CCDARefModel model, 
-			boolean curesUpdate, boolean svap2022, boolean svap2023)
+			boolean curesUpdate, boolean svap2022, boolean svap2023, boolean uscdiv4)
 			throws XPathExpressionException {
 	
 		log.info(" Parsing Encounters ");
@@ -54,7 +54,7 @@ public class CCDABodyParser {
 		log.info("Parsing Medical Equipments");
 		MedicalEquipmentParser.parse(doc, model, curesUpdate, svap2022, svap2023);
 		
-		logUscdiTypesStatus(curesUpdate, svap2022, svap2023);
+		logUscdiTypesStatus(curesUpdate, svap2022, svap2023, uscdiv4);
 	
 			log.info(" Parsing Notes Section ");
 			NotesParser.parse(doc, model, curesUpdate, svap2022, svap2023);
@@ -76,7 +76,7 @@ public class CCDABodyParser {
 			log.info(" Parsing Plan of Treatment ");
 			PlanOfTreatmentParser.parse(doc, model, curesUpdate, svap2022, svap2023);
 			
-			if(svap2023) {
+			if(svap2023 || uscdiv4) {
 				
 				log.info("Parsing Care Team Members from Care Team Section ");
 				CareTeamMemberParser.parseCareTeamSection(doc, model, curesUpdate, svap2022, svap2023);
@@ -94,16 +94,27 @@ public class CCDABodyParser {
 				ReasonForReferralParser.parse(doc, model, curesUpdate, svap2022, svap2023);
 			}
 			
-			if(svap2022 || svap2023) {
+			if(uscdiv4) {
+				
+				log.info(" Parsing Treatment Intervention Preferences ");
+				TreatmentInterventionPreferenceParser.parse(doc, model, curesUpdate, svap2022, svap2023, uscdiv4);
+				
+				log.info(" Parsing Care Experience Preferences ");
+				CareExperiencePreferenceParser.parse(doc, model, curesUpdate, svap2022, svap2023, uscdiv4);
+				
+			}
+			
+			if(svap2022 || svap2023 || uscdiv4) {
 				curesUpdate = true;
 			}
 			
 	}
 	
-	private static void logUscdiTypesStatus(boolean curesUpdate, boolean svap2022, boolean svap2023) {
+	private static void logUscdiTypesStatus(boolean curesUpdate, boolean svap2022, boolean svap2023, boolean uscdiv4) {
 		log.info("logUscdiTypesStatus()");
 		log.info("curesUpdate: " + curesUpdate);
 		log.info("svap2022: " + svap2022);
 		log.info("svap2023: " + svap2023);
+		log.info("uscdiv4: " + uscdiv4);
 	}
 }

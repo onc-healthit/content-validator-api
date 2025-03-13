@@ -400,12 +400,12 @@ public class CCDAPatient {
 	}	
 
 	public void compare(CCDAPatient patient, ArrayList<ContentValidationResult> results, CCDARefModel submittedCCDA, 
-			boolean curesUpdate, boolean svap2022, boolean svap2023) {
+			boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) {
 	
 		compareNames(patient, results, submittedCCDA);
 		compareMiscellaneous(patient, results);
 		compareRaceAndEthnicity(patient, results);
-		compareTelecoms(patient, results, submittedCCDA, curesUpdate, svap2022, svap2023);
+		compareTelecoms(patient, results, submittedCCDA, curesUpdate, svap2022, svap2023, svap2024);
 	}
 	
 	private void compareRaceAndEthnicity(CCDAPatient patient, ArrayList<ContentValidationResult> results) {
@@ -488,9 +488,6 @@ public class CCDAPatient {
 		else {
 			log.info("Both submitted and reference models have a null dob ");
 		}
-		
-		// Add Address
-		// Add Telecom
 		
 		log.info("Comparing Patient's Preferred Language ");
 			
@@ -652,7 +649,7 @@ public class CCDAPatient {
 	}
 	
 	private void compareTelecoms(CCDAPatient patient, ArrayList<ContentValidationResult> results,
-			CCDARefModel submittedCCDA, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+			CCDARefModel submittedCCDA, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) {
 
 		log.info("Comparing Patient's telecom/@use and telecom/@value");
 		for (CCDATelecom tel : telecom) {

@@ -101,7 +101,7 @@ public class GoalParser {
 					}
 					else
 					{
-						log.info("Unknown Lab Value");
+						log.info("Unknown Goal Value");
 					}
 				}
 			}

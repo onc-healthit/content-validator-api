@@ -272,6 +272,25 @@ public class CCDAEncounter {
 	public void setAuthor(CCDAAuthor author) {
 		this.author = author;
 	}
+
+	public HashMap<String, CCDAEncounterActivity> getAllEncounterActivities() {
+		
+		HashMap<String, CCDAEncounterActivity> activities = new HashMap<>();
+		if(encActivities != null) {
+			
+			for(CCDAEncounterActivity encAct : encActivities) {
+				
+				String diag = encAct.getEncounterDiagnosisCode();
+				
+				if(diag != null && !activities.containsKey(diag)) {
+					activities.put(diag, encAct);
+				}
+				
+			}
+		}
+		return activities;
+		
+	}
 	
 	
 }

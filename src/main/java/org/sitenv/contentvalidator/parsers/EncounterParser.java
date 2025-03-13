@@ -59,6 +59,7 @@ public class EncounterParser {
     
 	public static ArrayList<CCDAEncounterActivity> readEncounterActivity(NodeList encounterActivityNodeList,
 			boolean curesUpdate, boolean svap2022, boolean svap2023) throws XPathExpressionException {
+		
 		ArrayList<CCDAEncounterActivity> encounterActivityList = new ArrayList<>();
 		CCDAEncounterActivity encounterActivity;
 		for (int i = 0; i < encounterActivityNodeList.getLength(); i++) {
@@ -74,6 +75,10 @@ public class EncounterParser {
 				encounterActivity.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 						evaluate(encounterActivityElement, XPathConstants.NODESET)));
 
+				// Add Encounter Identifiers
+				encounterActivity.setEncounterIdentifier(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_ID_EXP.
+						evaluate(encounterActivityElement, XPathConstants.NODESET)));
+				
 				encounterActivity.setEncounterTypeCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
 										evaluate(encounterActivityElement, XPathConstants.NODE)));
 				
@@ -84,6 +89,7 @@ public class EncounterParser {
 				encounterActivity.setDischargeDisposition(ParserUtilities.readCode((Element) CCDAConstants.SDTC_REL_DISCHARGE_DISPOSITION_EXP.
 										evaluate(encounterActivityElement, XPathConstants.NODE)));
 				
+				// Facility Information
 				encounterActivity.setSdLocs(readServiceDeliveryLocators((NodeList) CCDAConstants.REL_PART_ROLE_EXP.
 																evaluate(encounterActivityElement, XPathConstants.NODESET)));
 				
@@ -303,9 +309,15 @@ public class EncounterParser {
 			serviceDeliveryLoc.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 											evaluate(serviceDeliveryLocElement, XPathConstants.NODESET)));
 			
+			// Facility identifiers
+			serviceDeliveryLoc.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_ID_EXP.
+					evaluate(serviceDeliveryLocElement, XPathConstants.NODESET)));
+
+			// Facility Code
 			serviceDeliveryLoc.setLocationCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
 											evaluate(serviceDeliveryLocElement, XPathConstants.NODE)));
 			
+			// Facility Name
 			serviceDeliveryLoc.setName(ParserUtilities.readTextContext((Element) CCDAConstants.REL_PLAY_ENTITY_NAME_EXP.
 					evaluate(serviceDeliveryLocElement, XPathConstants.NODE)));
 			

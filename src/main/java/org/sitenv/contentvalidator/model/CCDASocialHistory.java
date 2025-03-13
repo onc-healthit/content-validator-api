@@ -28,6 +28,7 @@ public class CCDASocialHistory {
 	private ArrayList<CCDATribalAffiliationObservation> tribalAffiliations;
 	private ArrayList<CCDABasicOccupation>			occupation;
 	private ArrayList<CCDASexObservation>		    sexObservations;
+	private ArrayList<AssessmentScaleObservation>   assessments;
 	
 	private CCDAAuthor author;
 	
@@ -114,9 +115,17 @@ public class CCDASocialHistory {
 		pregnancyObservations = new ArrayList<>();
 		tribalAffiliations = new ArrayList<>();
 		sexObservations = new ArrayList<>();
+		assessments = new ArrayList<>();
+	}
+	
+	public ArrayList<AssessmentScaleObservation> getAssessments() {
+		return assessments;
 	}
 
-	
+	public void setAssessments(ArrayList<AssessmentScaleObservation> assessments) {
+		this.assessments = assessments;
+	}
+
 	public CCDAAuthor getAuthor() {
 		return author;
 	}
@@ -188,13 +197,27 @@ public class CCDASocialHistory {
 		this.socialHistoryObservations = socialHistoryObservations;
 	}
 	
+	public HashMap<String, AssessmentScaleObservation> getAllAssessments() {		
+		HashMap<String, AssessmentScaleObservation> assessment= new HashMap<>();
+		if(assessments != null && !assessments.isEmpty()) { 
+			
+			for(AssessmentScaleObservation obs : assessments) {
+				if(obs.getAssessmentCode() != null && obs.getAssessmentCode().getCode() != null) {
+					assessment.put(obs.getAssessmentCode().getCode(), obs);
+				}
+			}
+      
+		}
+		return assessment;
+  }
+
 	public ArrayList<AssessmentScaleObservation> getAssessmentScaleObservations() {
 		return assessmentScaleObservations;
 	}
 
 	public void setAssessmentScaleObservations(ArrayList<AssessmentScaleObservation> assessmentScaleObservations) {
 		this.assessmentScaleObservations = assessmentScaleObservations;
-	}
+  }	
 
 	public HashMap<String, CCDASexualOrientation> getAllSexualOrientations() {
 		
@@ -381,19 +404,22 @@ public class CCDASocialHistory {
 	}
 
 	public void compare(String validationObjective, CCDASocialHistory subSocialHistory, boolean curesUpdate,
-			boolean svap2022, boolean svap2023, ArrayList<ContentValidationResult> results) {
+			boolean svap2022, boolean svap2023, boolean svap2024, ArrayList<ContentValidationResult> results) {
 		
 		// Get Submitted observations
 		HashMap<String, CCDASexObservation> subSexObs = null;
 		HashMap<String, CCDABasicOccupation> subOccObs = null;
 		HashMap<String, CCDATribalAffiliationObservation> subTribalAffiliationObs = null;
 		HashMap<String, CCDAPregnancyObservation> subPregnancyObs = null;
+		HashMap<String, AssessmentScaleObservation> subAssessments = null;
 		
 		if(subSocialHistory != null) {
 			subSexObs = subSocialHistory.getAllSexObservations();
 			subOccObs = subSocialHistory.getAllBasicOccupations();
 			subTribalAffiliationObs = subSocialHistory.getAllTribalAffiliations();
 			subPregnancyObs = subSocialHistory.getAllPregnancyObservations();
+			subAssessments = subSocialHistory.getAllAssessments();
+			
 		}
 		
 		// Compare Sex Observations
@@ -411,6 +437,40 @@ public class CCDASocialHistory {
 		// Compare Pregnancy Observations
 		comparePregnancyObservations(this.getAllPregnancyObservations(), subPregnancyObs,
 							results);		
+		
+		if(svap2024)
+			compareAssessments(this.getAllAssessments(), subAssessments, results);
+	}
+
+	private void compareAssessments(HashMap<String, AssessmentScaleObservation> refAssessments,
+			HashMap<String, AssessmentScaleObservation> subAssessments, ArrayList<ContentValidationResult> results) {
+		
+		if( (refAssessments != null && refAssessments.size() > 0) &&  
+				(subAssessments != null && subAssessments.size() > 0)  ) {
+				
+				log.info("Assessments present in both models ");
+				AssessmentScaleObservation.compare(refAssessments, subAssessments, results);
+				
+			} 	
+			else if ( (refAssessments != null && refAssessments.size() > 0) && 
+					(subAssessments == null || subAssessments.size() == 0) ) {
+				
+				ContentValidationResult rs = new ContentValidationResult("The scenario requires Patient's Asssessment data for one of [Alcohol|Substance|PhysicalActivity] "
+						+ "but the submitted C-CDA does not contain Asssessment data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+				results.add(rs);
+				log.info(" Scenario requires Asssessment data for one of [Alcohol|Substance|PhysicalActivity], but submitted document does not contain Assessment data");
+				
+			}else if ((refAssessments == null || refAssessments.size() == 0) && 
+					(subAssessments != null && subAssessments.size() > 0) ) {
+				
+				
+				log.info("Model does not have Assessment Data for comparison, allow this to pass");
+				
+			} else {
+				
+				log.info("Model and Submitted CCDA do not have Assessment data for comparison ");
+			}
+		
 	}
 
 	public static void comparePregnancyObservations(HashMap<String, CCDAPregnancyObservation> refPregnancyObservations,

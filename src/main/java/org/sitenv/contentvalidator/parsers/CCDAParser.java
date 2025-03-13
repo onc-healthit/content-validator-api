@@ -72,10 +72,10 @@ public class CCDAParser {
 			log.info("Creating Model");
 			CCDARefModel model = new CCDARefModel(severityLevel);
 			
-			model.setPatient(CCDAHeaderParser.getPatient(doc, curesUpdate, svap2022, svap2023));
-			model.setHeader(CCDAHeaderParser.getHeaderElements(doc, curesUpdate, svap2022, svap2023));
-			model.setRelatedPersons(CCDARelatedPersonParser.getRelatedPersons(doc,curesUpdate,svap2022,svap2023));
-			CCDABodyParser.parseBody(doc, model, curesUpdate, svap2022, svap2023);
+			model.setPatient(CCDAHeaderParser.getPatient(doc, curesUpdate, svap2022, svap2023, uscdiv4));
+			model.setHeader(CCDAHeaderParser.getHeaderElements(doc, curesUpdate, svap2022, svap2023, uscdiv4));
+			model.setRelatedPersons(CCDARelatedPersonParser.getRelatedPersons(doc,curesUpdate,svap2022,svap2023, uscdiv4));
+			CCDABodyParser.parseBody(doc, model, curesUpdate, svap2022, svap2023, uscdiv4);
 		
 			log.info("Returning Parsed Model");
 			model.log();
