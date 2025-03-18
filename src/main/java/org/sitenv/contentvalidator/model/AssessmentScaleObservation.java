@@ -167,7 +167,7 @@ public class AssessmentScaleObservation {
 			}
 			else {
 				
-				String error = "The scenario contains SDOH data with code " + entry.getKey() + 
+				String error = "The scenario contains Assessment data with code " + entry.getKey() + 
 						" , however there is no matching data in the submitted CCDA.";
 				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 				results.add(rs);

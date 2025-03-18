@@ -47,8 +47,8 @@ public class CCDAParser {
 	/*
 	 * Called by scenario loader on application start, parses scenarios themselves
 	 */
-	public CCDARefModel parse(String ccdaFile, boolean curesUpdate, boolean svap2022, boolean svap2023) {
-		return parse(ccdaFile, SeverityLevel.INFO, curesUpdate, svap2022, svap2023);
+	public CCDARefModel parse(String ccdaFile, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean uscdiv4) {
+		return parse(ccdaFile, SeverityLevel.INFO, curesUpdate, svap2022, svap2023, uscdiv4);
 	}
 	
 	/*
@@ -62,7 +62,7 @@ public class CCDAParser {
 	 * Called by each validation, on the users file
 	 */	
 	public CCDARefModel parse(String ccdaFile, SeverityLevel severityLevel, 
-			boolean curesUpdate, boolean svap2022, boolean svap2023) {
+			boolean curesUpdate, boolean svap2022, boolean svap2023, boolean uscdiv4) {
 		
 		try {
 			//log.info(" Parsing File " + ccdaFile);
@@ -72,10 +72,10 @@ public class CCDAParser {
 			log.info("Creating Model");
 			CCDARefModel model = new CCDARefModel(severityLevel);
 			
-			model.setPatient(CCDAHeaderParser.getPatient(doc, curesUpdate, svap2022, svap2023));
-			model.setHeader(CCDAHeaderParser.getHeaderElements(doc, curesUpdate, svap2022, svap2023));
-			model.setRelatedPersons(CCDARelatedPersonParser.getRelatedPersons(doc,curesUpdate,svap2022,svap2023));
-			CCDABodyParser.parseBody(doc, model, curesUpdate, svap2022, svap2023);
+			model.setPatient(CCDAHeaderParser.getPatient(doc, curesUpdate, svap2022, svap2023, uscdiv4));
+			model.setHeader(CCDAHeaderParser.getHeaderElements(doc, curesUpdate, svap2022, svap2023, uscdiv4));
+			model.setRelatedPersons(CCDARelatedPersonParser.getRelatedPersons(doc,curesUpdate,svap2022,svap2023, uscdiv4));
+			CCDABodyParser.parseBody(doc, model, curesUpdate, svap2022, svap2023, uscdiv4);
 		
 			log.info("Returning Parsed Model");
 			model.log();

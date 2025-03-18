@@ -20,6 +20,7 @@ public class CCDALabResultOrg {
 	private ArrayList<CCDALabResultObs>		resultObs;
 	private ArrayList<CCDANotesActivity>	notesActivity;
 	private ArrayList<CCDASpecimen>			specimenType;
+	private ArrayList<CCDASpecimenCollectionProcedure> specimenCollectionProcedures;
 	
 	private CCDAAuthor	author;
 	
@@ -62,6 +63,10 @@ public class CCDALabResultOrg {
 		for(int l = 0; l < specimenType.size(); l++) {
 			specimenType.get(l).log();
 		}
+		
+		for(int m = 0; m < specimenCollectionProcedures.size(); m++) {
+			specimenCollectionProcedures.get(m).log();
+		}
 	}
 	
 	public CCDALabResultOrg()
@@ -70,6 +75,7 @@ public class CCDALabResultOrg {
 		resultObs = new ArrayList<CCDALabResultObs>();
 		notesActivity = new ArrayList<CCDANotesActivity>();
 		specimenType = new ArrayList<>();
+		specimenCollectionProcedures = new ArrayList<>();
 	}
 
 	public ArrayList<CCDAII> getTemplateIds() {

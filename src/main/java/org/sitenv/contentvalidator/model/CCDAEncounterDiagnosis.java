@@ -81,4 +81,18 @@ public class CCDAEncounterDiagnosis {
 		problemObs = new ArrayList<CCDAProblemObs>();
 		templateId = new ArrayList<CCDAII>();
 	}
+
+	public String getEncounterDiagnosisCode() {
+		
+		if(problemObs != null) {
+			for(CCDAProblemObs prob: problemObs) {
+				
+				if(prob.getProblemCode() != null && prob.getProblemCode().getCode() != null) {
+					return prob.getProblemCode().getCode();
+				}
+				
+			}
+		}
+		return null;
+	}
 }

@@ -65,7 +65,7 @@ public class ContentValidatorSVAP2023Test extends ContentValidatorTester {
 
 	private ArrayList<ContentValidationResult> validateDocumentAndReturnResultsSvap2023(String validationObjective,
 			String referenceFileName, String ccdaFileAsString, SeverityLevel severityLevel) {
-		return validator.validate(validationObjective, referenceFileName, ccdaFileAsString, false, false, true, severityLevel);
+		return validator.validate(validationObjective, referenceFileName, ccdaFileAsString, "uscdiv3", severityLevel);
 	}
 
 	private ArrayList<ContentValidationResult> validateDocumentAndReturnResultsSvap2023(String referenceFileName,

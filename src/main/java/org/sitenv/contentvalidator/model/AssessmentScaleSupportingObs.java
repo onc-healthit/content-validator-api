@@ -119,14 +119,24 @@ public class AssessmentScaleSupportingObs {
 		// Compare Assessment  Codes 
 		String elementNameCode = compContext + " , Supporting Assessment Code Element Comparison : ";
 		ParserUtilities.compareCode(supportingObsCode, submittedObs.getSupportingObsCode(), results, elementNameCode);
-		 
-		// Compare Assessment  Codes 
-		String elementStatus = compContext + " , Supporting Assessment Status Element Comparison : ";
-		// ParserUtilities.compareCode(statusCode, submittedObs.getStatusCode(), results, elementStatus);
-				 	 
+		 	 	 
 		// Compare Assessment Value 
-		String elementVal = compContext + " , Supporting Assessment Value Comparison : ";
-		ParserUtilities.compareString(resultString, submittedObs.getResultString(), results, elementVal);
+		if(resultString != null && !resultString.isEmpty()) {
+			String elementVal = compContext + " , Supporting Assessment Value Comparison : ";
+			ParserUtilities.compareString(resultString, submittedObs.getResultString(), results, elementVal);
+		}
+		
+		// Compare Assessment Value 
+		if(resultCode != null && resultCode.getCode() != null) {
+					String elementVal = compContext + " , Supporting Assessment Value Comparison : ";
+					ParserUtilities.compareCode(resultCode, submittedObs.getResultCode(), results, elementVal);
+		}
+				
+		// Compare Assessment Value 
+		if(resultString != null && !resultString.isEmpty()) {
+					String elementVal = compContext + " , Supporting Assessment Value Comparison : ";
+					ParserUtilities.compareQuantity(resultQuantity, submittedObs.getResultQuantity(), results, elementVal);
+		}
 		
 	}
 	

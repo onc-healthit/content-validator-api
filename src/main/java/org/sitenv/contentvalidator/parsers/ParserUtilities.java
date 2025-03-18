@@ -6,10 +6,12 @@ import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
 import org.sitenv.contentvalidator.model.*;
 import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
 import java.util.ArrayList;
@@ -396,7 +398,7 @@ public class ParserUtilities {
 	public static void compareQuantity(CCDAPQ refQuantity, CCDAPQ subQuantity,
 			   ArrayList<ContentValidationResult> results, String elementName) {
 
-		// handle section code.
+		// handle value.
 		if((refQuantity != null) && (subQuantity != null) ) {
 
 			if(refQuantity.compare(subQuantity, results, elementName)) {
@@ -457,7 +459,16 @@ public class ParserUtilities {
 				
 			if(quantity.getValue().equalsIgnoreCase(val)) {
 				// Do nothing since it is all good.
-				log.info("Everything is equal and good");
+				log.info("Everything is equal and good, but no units are present.");
+				
+				if(quantity.getUnits() != null && !quantity.getUnits().isEmpty())
+				{
+					String error = "The " + elementName + " : Value PQ - value = " + ((quantity.getValue() != null)?quantity.getValue():"None Specified")
+						+ " has units of " + ((quantity.getUnits() != null)?quantity.getUnits():"None Specified") + ", does not match the test data submitted as a String : ST - value = " + val ;
+					ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+					results.add(rs);
+				}
+				
 			}
 			else {
 				
@@ -1527,6 +1538,93 @@ public class ParserUtilities {
 		}
 		
 		return null;
+		
+	}
+
+	public static boolean isLinkPresentInDocument(Document doc, String refLink) throws XPathExpressionException {
+		
+		boolean retVal = false;
+		
+		if(refLink != null && !refLink.isEmpty()) {
+		
+			String ref = refLink.substring(1);
+		    // Search Content Nodes with ID
+			String refPathXPath = "//content[@ID=" + "'" + ref + "']";
+			XPathExpression refPath = CCDAConstants.CCDAXPATH.compile(refPathXPath);
+			NodeList nl = (NodeList)refPath.evaluate(doc,XPathConstants.NODESET);
+			
+			if(nl != null && nl.getLength() > 0) {
+				log.info(" Found the node with reference on Content nodes");
+				retVal = true;
+			}
+		
+		    // Search td Nodes with ID
+			refPathXPath = "//td[@ID=" + "'" + ref + "']";
+			refPath = CCDAConstants.CCDAXPATH.compile(refPathXPath);
+			nl = (NodeList)refPath.evaluate(doc,XPathConstants.NODESET);
+			
+			if(nl != null && nl.getLength() > 0) {
+				log.info(" Found the node with reference on td nodes");
+				retVal = true;
+			}
+		
+		}
+		
+		return retVal;
+		
+	}
+
+	public static void checkQuantities(ArrayList<CCDAPQ> refRangeValues, ArrayList<CCDAPQ> subRangeValues,
+			ArrayList<ContentValidationResult> results, String refRangeVal) {
+		
+		// handle value.
+		if((refRangeValues != null && refRangeValues.size() > 0) && (subRangeValues != null && subRangeValues.size() > 0) ) {
+
+			for(CCDAPQ refPq : refRangeValues) {
+				
+				if(!ParserUtilities.isPQPresentAndSame(refPq, subRangeValues)) {
+					
+					ContentValidationResult rs = new ContentValidationResult("The scenario requires " + refRangeVal + " data for " + refPq.getValue() + " , but submitted file does not contain " + refRangeVal + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+					results.add(rs);
+				}
+				
+			}
+
+		}
+		else if ((refRangeValues == null) && (subRangeValues != null)) {
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + refRangeVal + " data, but submitted file does have " + refRangeVal + " data", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		else if((refRangeValues != null && refRangeValues.size() > 0 ) && 
+				(subRangeValues == null || subRangeValues.size() == 0)){
+					ContentValidationResult rs = new ContentValidationResult("The scenario requires " + refRangeVal + " data, but submitted file does not contain " + refRangeVal + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+					results.add(rs);
+		} 
+		else {
+					// do nothing since both are null.
+					log.info(" Both Submitted and Ref ranges are null for " + refRangeVal);
+		}
+		
+	}
+	
+	public static boolean isPQPresentAndSame(CCDAPQ pq, ArrayList<CCDAPQ> values) {
+		
+		boolean retVal = false;
+		
+		ArrayList<ContentValidationResult> results = new ArrayList<>();
+		String context = "";
+		for(CCDAPQ val : values) {
+			
+			if(val.compare(pq, results, context))
+			{
+				retVal = true;
+				break;
+			}
+			
+		}
+		
+		return retVal;
+		
 		
 	}
 

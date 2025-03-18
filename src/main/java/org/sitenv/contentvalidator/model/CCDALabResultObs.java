@@ -23,7 +23,8 @@ public class CCDALabResultObs {
 	private CCDACode						resultCode;
 	private String 							resultString;
 	private CCDACode						interpretationCode;
-	private ArrayList<CCDAPQ>				referenceValue;
+	private ArrayList<CCDAPQ>				referenceRangeValue;
+	private String 							referenceRangeString;
 	private ArrayList<CCDANotesActivity>	notesActivity;
 	private ArrayList<CCDASpecimen>			specimenType;
 	
@@ -39,7 +40,8 @@ public class CCDALabResultObs {
 	}
 	
 	public static void compareLabResultData(HashMap<String, CCDALabResultObs> refResults, 
-			HashMap<String, CCDALabResultObs> subResults, 	ArrayList<ContentValidationResult> results) {
+			HashMap<String, CCDALabResultObs> subResults, 	ArrayList<ContentValidationResult> results,
+			boolean svap2024) {
 
 		log.info(" Start Comparing Lab Result Observations ");
 		// For each lab result in the Ref Model, check if it is present in the subCCDA Model.
@@ -49,7 +51,7 @@ public class CCDALabResultObs {
 
 				log.info("Comparing Lab Result Observation ");
 				String context = "Lab Result Observation Entry corresponding to the code " + ent.getKey();
-				subResults.get(ent.getKey()).compare(ent.getValue(), results, context);
+				subResults.get(ent.getKey()).compare(ent.getValue(), results, context, svap2024);
 
 
 			} else {
@@ -73,7 +75,8 @@ public class CCDALabResultObs {
 		
 	}
 	
-	public void compare(CCDALabResultObs refResult, ArrayList<ContentValidationResult> results , String context) {
+	public void compare(CCDALabResultObs refResult, ArrayList<ContentValidationResult> results , String context,
+			boolean svap2024) {
 		
 		log.info("Comparing Lab Result ");
 		
@@ -154,6 +157,17 @@ public class CCDALabResultObs {
 			log.info("Comparing strings with codes ");
 			ParserUtilities.compareString(refCode, subCode, results, valString);
 		}
+		
+		if(svap2024) 
+		{
+			// Compare Lab Interpretation Codes 
+			String interpretCodeVal = "Lab Result Interpretation code element for " + context;
+			ParserUtilities.compareCode(refResult.getInterpretationCode(), interpretationCode, results, interpretCodeVal);
+					
+			// Compare Reference Range
+			String refRangeVal = "Lab Result Reference Range element for " + context;
+			ParserUtilities.checkQuantities(refResult.getReferenceRangeValue(), referenceRangeValue, results, refRangeVal);
+		}
 	}
 
 	
@@ -161,7 +175,7 @@ public class CCDALabResultObs {
 	public CCDALabResultObs()
 	{
 		templateIds = new ArrayList<CCDAII>();
-		referenceValue = new ArrayList<CCDAPQ>();
+		referenceRangeValue = new ArrayList<CCDAPQ>();
 		notesActivity = new ArrayList<CCDANotesActivity>();
 		specimenType = new ArrayList<>();
 	}
@@ -193,8 +207,8 @@ public class CCDALabResultObs {
 			log.info(" Tempalte Id Ext [" + j + "] = " + templateIds.get(j).getExtValue());
 		}
 		
-		for(int k = 0; k < referenceValue.size(); k++) {
-			referenceValue.get(k).log();
+		for(int k = 0; k < referenceRangeValue.size(); k++) {
+			referenceRangeValue.get(k).log();
 		}
 		
 		if(notesActivity != null) {
@@ -270,13 +284,13 @@ public class CCDALabResultObs {
 	}
 
 	public ArrayList<CCDAPQ> getReferenceValue() {
-		return referenceValue;
+		return referenceRangeValue;
 	}
 
 	public void setReferenceRange(ArrayList<CCDAPQ> rvl) {
 		
 		if(rvl != null)
-			this.referenceValue = rvl;
+			this.referenceRangeValue = rvl;
 	}
 
 	public String getResultString() {
@@ -288,7 +302,7 @@ public class CCDALabResultObs {
 	}
 
 	public void setReferenceValue(ArrayList<CCDAPQ> referenceValue) {
-		this.referenceValue = referenceValue;
+		this.referenceRangeValue = referenceValue;
 	}
 
 	public ArrayList<CCDANotesActivity> getNotesActivity() {
@@ -313,6 +327,22 @@ public class CCDALabResultObs {
 
 	public void setSpecimenType(ArrayList<CCDASpecimen> specimenType) {
 		this.specimenType = specimenType;
+	}
+
+	public ArrayList<CCDAPQ> getReferenceRangeValue() {
+		return referenceRangeValue;
+	}
+
+	public void setReferenceRangeValue(ArrayList<CCDAPQ> referenceRangeValue) {
+		this.referenceRangeValue = referenceRangeValue;
+	}
+
+	public String getReferenceRangeString() {
+		return referenceRangeString;
+	}
+
+	public void setReferenceRangeString(String referenceRangeString) {
+		this.referenceRangeString = referenceRangeString;
 	}
 
 	public void getAllSpecimens(HashMap<String, CCDASpecimen> specs) {
