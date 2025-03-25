@@ -95,6 +95,44 @@ public class MedicationParser {
 		return medications;
 	}
 	
+	private static ArrayList<CCDAMedicationAdherence> readMedAdherence(NodeList medAherencelist) throws XPathExpressionException {
+		
+		ArrayList<CCDAMedicationAdherence> medAdherences = null;
+		
+		if(!ParserUtilities.isNodeListEmpty(medAherencelist))
+		{
+			medAdherences = new ArrayList<>();
+		}
+		
+		CCDAMedicationAdherence medAherenceEntry;
+		
+		for (int i = 0; i < medAherencelist.getLength(); i++) {
+			
+			log.info("Adding CCDA Medication Adherence Entry");
+			medAherenceEntry = new CCDAMedicationAdherence();
+			
+			Element medAdherenceElement = (Element) medAherencelist.item(i);
+			
+			medAherenceEntry.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+														evaluate(medAdherenceElement, XPathConstants.NODESET)));
+			
+			medAherenceEntry.setAdherenceCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(medAdherenceElement, XPathConstants.NODE)));
+			
+			medAherenceEntry.setText(ParserUtilities.readTextContext((Element) CCDAConstants.REL_TEXT_EXP.
+					evaluate(medAdherenceElement, XPathConstants.NODE)));
+			
+			medAherenceEntry.setAdherenceValue(ParserUtilities.readCode((Element) CCDAConstants.REL_VAL_EXP.
+					evaluate(medAdherenceElement, XPathConstants.NODE)));
+			
+			medAdherences.add(medAherenceEntry);
+			
+			
+		}
+		
+		return medAdherences;
+	}
+	
 	public static ArrayList<CCDAMedicationActivity> readMedication(NodeList entryNodeList) throws XPathExpressionException
 	{
 		ArrayList<CCDAMedicationActivity> medicationList = new ArrayList<>();
@@ -159,9 +197,55 @@ public class MedicationParser {
 			
 			medicationActivity.setMedicationDispenses(readDispenses(medDispenseList));
 			
+			// Add Medication Free Text Sig
+			NodeList medFreeSigList = (NodeList) CCDAConstants.REL_MEDICATION_FREE_SIG_ENTRY.
+					evaluate(entryElement, XPathConstants.NODESET);
+			
+			medicationActivity.setMedicationFreeSigTexts(readMedFreeSig(medFreeSigList));
+			
+			// Add Medication Free Text Sig
+			NodeList medAdherencesList = (NodeList) CCDAConstants.REL_MEDICATION_ADHERENCE_ENTRY.
+								evaluate(entryElement, XPathConstants.NODESET);
+						
+			medicationActivity.setMedicationAdherences(readMedAdherence(medAdherencesList));
+			
 			medicationList.add(medicationActivity);
 		}
 		return medicationList;
+	}
+	
+	private static ArrayList<CCDAMedicationFreeSigText> readMedFreeSig(NodeList freeSigTextsList) throws XPathExpressionException {
+		
+		ArrayList<CCDAMedicationFreeSigText> freeSigs = null;
+		
+		if(!ParserUtilities.isNodeListEmpty(freeSigTextsList))
+		{
+			freeSigs = new ArrayList<>();
+		}
+		
+		CCDAMedicationFreeSigText freeSigEntry;
+		
+		for (int i = 0; i < freeSigTextsList.getLength(); i++) {
+			
+			log.info("Adding CCDA Medication Free Sig Text");
+			freeSigEntry = new CCDAMedicationFreeSigText();
+			
+			Element freeSigElement = (Element) freeSigTextsList.item(i);
+			
+			freeSigEntry.setTemplateIds(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
+														evaluate(freeSigElement, XPathConstants.NODESET)));
+			
+			freeSigEntry.setMedicationFreeSigTextCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+					evaluate(freeSigElement, XPathConstants.NODE)));
+			
+			freeSigEntry.setFreeSigText(ParserUtilities.readTextContext((Element) CCDAConstants.REL_TEXT_EXP.
+					evaluate(freeSigElement, XPathConstants.NODE)));
+			
+			freeSigs.add(freeSigEntry);
+			
+		}
+		
+		return freeSigs;
 	}
 	
 	private static ArrayList<CCDAMedicationDispense> readDispenses(NodeList medDispenseList) throws XPathExpressionException {

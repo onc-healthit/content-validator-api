@@ -20,27 +20,6 @@ public class CCDAMedication {
 	private ArrayList<CCDAMedicationActivity>  	medActivities;
 	
 	private CCDAAuthor author;
-	
-	public void compare(CCDAMedication subMedication, ArrayList<ContentValidationResult> results ) {
-		
-		// handle section code.
-		ParserUtilities.compareCode(sectionCode, subMedication.getSectionCode(), results, "Medication Section");
-				
-		// Handle Section Template Ids
-		ParserUtilities.compareTemplateIds(templateIds, subMedication.getTemplateIds(), results, "Medication Section");
-				
-		//Compare details
-		compareMedicationData(subMedication, results);
-	
-	}
-	
-	private void compareMedicationData(CCDAMedication subMedication, ArrayList<ContentValidationResult> results) {
-		
-		HashMap<String, CCDAMedicationActivity> refActivities = getMedActivitiesMap();
-		HashMap<String, CCDAMedicationActivity> subActivities = subMedication.getMedActivitiesMap();
-	
-		CCDAMedicationActivity.compareMedicationActivityData(refActivities, subActivities, results);
-	}
 		
 	public HashMap<String, CCDAMedicationActivity> getMedActivitiesMap() {
 	

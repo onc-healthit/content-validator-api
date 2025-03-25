@@ -440,7 +440,7 @@ public class CCDASocialHistory {
 		
 		if(svap2024)
 			compareAssessments(this.getAllAssessments(), subAssessments, results);
-	}
+		}
 
 	private void compareAssessments(HashMap<String, AssessmentScaleObservation> refAssessments,
 			HashMap<String, AssessmentScaleObservation> subAssessments, ArrayList<ContentValidationResult> results) {

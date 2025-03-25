@@ -20,7 +20,7 @@ public class CCDADischargeMedication {
 	
 	private CCDAAuthor	author;
 		
-	public void compare(CCDADischargeMedication subMedication, ArrayList<ContentValidationResult> results ) {
+	public void compare(CCDADischargeMedication subMedication, ArrayList<ContentValidationResult> results, boolean svap2024 ) {
 			
 		// handle section code.
 		ParserUtilities.compareCode(sectionCode, subMedication.getSectionCode(), results, "Discharge Medication Section");
@@ -29,16 +29,16 @@ public class CCDADischargeMedication {
 		ParserUtilities.compareTemplateIds(templateIds, subMedication.getTemplateIds(), results, "Discharge Medication Section");
 
 		//Compare details
-		compareMedicationData(subMedication, results);
+		compareMedicationData(subMedication, results, svap2024);
 
 	}
 
-	private void compareMedicationData(CCDADischargeMedication subMedication, ArrayList<ContentValidationResult> results) {
+	private void compareMedicationData(CCDADischargeMedication subMedication, ArrayList<ContentValidationResult> results, boolean svap2024) {
 
 		HashMap<String, CCDAMedicationActivity> refActivities = getMedActivitiesMap();
 		HashMap<String, CCDAMedicationActivity> subActivities = subMedication.getMedActivitiesMap();
 		
-		CCDAMedicationActivity.compareMedicationActivityData(refActivities,subActivities,results);
+		CCDAMedicationActivity.compareMedicationActivityData(refActivities,subActivities,results, svap2024);
 	}
 	
 	public HashMap<String, CCDAMedicationActivity> getMedActivitiesMap() {

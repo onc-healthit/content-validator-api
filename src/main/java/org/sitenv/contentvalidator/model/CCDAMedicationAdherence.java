@@ -2,6 +2,7 @@ package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
 
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +12,7 @@ public class CCDAMedicationAdherence {
 
 	private ArrayList<CCDAII>					templateIds;
 	private CCDACode                            adherenceCode;
+	private CCDADataElement						text;
 	private CCDACode 							statusCode;
 	private CCDAEffTime          				effTime;
 	private CCDACode							adherenceValue;
@@ -91,6 +93,21 @@ public class CCDAMedicationAdherence {
 
 	public void setInformants(ArrayList<CCDAAssignedEntity> informants) {
 		this.informants = informants;
+	}
+
+	public CCDADataElement getText() {
+		return text;
+	}
+
+	public void setText(CCDADataElement text) {
+		this.text = text;
+	}
+
+	public void compare(ArrayList<CCDAMedicationAdherence> subAdherences, String medAdherenceContext,
+			ArrayList<ContentValidationResult> results) {
+		
+		
+		
 	}
 
 	

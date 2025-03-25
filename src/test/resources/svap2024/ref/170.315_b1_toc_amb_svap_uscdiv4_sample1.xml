@@ -749,6 +749,8 @@
 									<th>Medication</th>
 									<th>Directions</th>
 									<th>Start Date</th>
+									<th>Medication Instructions</th>
+									<th>Medication Adherence</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -756,11 +758,21 @@
 									<td>Ceftriaxone 100MG/ML</td>
 									<td>BID</td>
 									<td>June 22, 2015</td>
+									<td>
+									 <content ID1="Instructions1">Do Not take on empty stomach</content>
+									</td>
+									<td>
+										<content ID="adherence1">Complies with Drug Therapy</content>
+									</td>
 								</tr>
 								<tr>
 									<td>Tylenol 500mg</td>
 									<td>For 10 days As needed</td>
 									<td>June 22, 2015</td>
+									<td>
+									 <content ID2="Instructions2">Do Not take on empty stomach</content>
+									</td>
+									<td>Complies with Drug Therapy</td>
 								</tr>
 							</tbody>
 						</table>
@@ -795,6 +807,42 @@
 									</manufacturedMaterial>
 								</manufacturedProduct>
 							</consumable>
+							<entryRelationship typeCode="COMP">
+				                <!-- Medication Free Text SIG -->
+				                <substanceAdministration classCode="SBADM" moodCode="EVN">
+				                    <templateId root="2.16.840.1.113883.10.20.22.4.147"/>
+				                    <code code="76662-6" codeSystem="2.16.840.1.113883.6.1"/>
+				                    <text>
+				                        <reference value="#Instructions1"/>
+				                    </text>
+				                    <consumable>
+				                        <manufacturedProduct>
+				                            <manufacturedLabeledDrug nullFlavor="NA"/>
+				                        </manufacturedProduct>
+				                    </consumable>
+				                </substanceAdministration>
+            				</entryRelationship>
+            				<entryRelationship typeCode="COMP">
+				                <!-- Medication Adherence-->
+				                <observation classCode="OBS" moodCode="EVN" xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  									<templateId root="2.16.840.1.113883.10.20.22.4.508" extension="2023-05-01"/>
+								    <id root="c6b5a04b-2bf4-49d1-8336-636a3813df0b"/>
+								    <code code="71799-1" 
+								             displayName="Adherence to prescribed medication instructions [Reported]"
+								             codeSystem="2.16.840.1.113883.6.1" 
+								             codeSystemName="LOINC"/>
+								    <text><reference value="#adherence1"/></text>
+								    <statusCode code="completed"/>
+								    <effectiveTime value="20150622"/>
+								    <value xsi:type="CD" code="1156699004" codeSystem="2.16.840.1.113883.6.96" displayName="Complies with drug therapy (finding)"/>
+								    <informant typeCode="INF" contextControlCode="OP">
+								      <assignedEntity>
+								        <id root="20cf14fb-b65c-4c8c-a54d-b0cca834c18c" />
+											<code code="116154003" codeSystem="2.16.840.1.113883.6.96" displayName="Patient (person)"/>
+								      </assignedEntity>
+								   </informant>
+								</observation>
+            				</entryRelationship>
 							<entryRelationship typeCode="RSON" inversionInd="true">
 								<observation classCode="OBS" moodCode="EVN">
 								<templateId root="2.16.840.1.113883.10.20.22.4.19"/>
@@ -860,6 +908,21 @@
 									</manufacturedMaterial>
 								</manufacturedProduct>
 							</consumable>
+							<entryRelationship typeCode="COMP">
+				                <!-- Medication Free Text SIG -->
+				                <substanceAdministration classCode="SBADM" moodCode="EVN">
+				                    <templateId root="2.16.840.1.113883.10.20.22.4.147"/>
+				                    <code code="76662-6" codeSystem="2.16.840.1.113883.6.1"/>
+				                    <text>
+				                        <reference value="#Instructions2"/>
+				                    </text>
+				                    <consumable>
+				                        <manufacturedProduct>
+				                            <manufacturedLabeledDrug nullFlavor="NA"/>
+				                        </manufacturedProduct>
+				                    </consumable>
+				                </substanceAdministration>
+            				</entryRelationship>
 							<entryRelationship typeCode="RSON" inversionInd="true">
 								<observation classCode="OBS" moodCode="EVN">
 								<templateId root="2.16.840.1.113883.10.20.22.4.19"/>

@@ -651,6 +651,7 @@
 									<th>Medication</th>
 									<th>Directions</th>
 									<th>Start Date</th>
+									<th>Medication Instructions</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -658,6 +659,9 @@
 									<td>Ceftriaxone 100MG/ML</td>
 									<td>BID</td>
 									<td>June 22, 2015</td>
+									<td>
+									 <content ID1="Instructions1">Do Not take on empty stomach</content>
+									</td>
 								</tr>
 								<tr>
 									<td>Tylenol 500mg</td>
@@ -697,6 +701,21 @@
 									</manufacturedMaterial>
 								</manufacturedProduct>
 							</consumable>
+							<entryRelationship typeCode="COMP">
+				                <!-- Medication Free Text SIG -->
+				                <substanceAdministration classCode="SBADM" moodCode="EVN">
+				                    <templateId root="2.16.840.1.113883.10.20.22.4.147"/>
+				                    <code code="76662-6" codeSystem="2.16.840.1.113883.6.1"/>
+				                    <text>
+				                        <reference value="#Instructions1"/>
+				                    </text>
+				                    <consumable>
+				                        <manufacturedProduct>
+				                            <manufacturedLabeledDrug nullFlavor="NA"/>
+				                        </manufacturedProduct>
+				                    </consumable>
+				                </substanceAdministration>
+            				</entryRelationship>
 							<entryRelationship typeCode="RSON" inversionInd="true">
 								<observation classCode="OBS" moodCode="EVN">
 								<templateId root="2.16.840.1.113883.10.20.22.4.19"/>
@@ -762,6 +781,19 @@
 									</manufacturedMaterial>
 								</manufacturedProduct>
 							</consumable>
+							<entryRelationship typeCode="COMP">
+				                <!-- Medication Free Text SIG -->
+				                <substanceAdministration classCode="SBADM" moodCode="EVN">
+				                    <templateId root="2.16.840.1.113883.10.20.22.4.147"/>
+				                    <code code="76664-6" codeSystem="2.16.840.1.113883.6.1"/>
+				                 
+				                    <consumable>
+				                        <manufacturedProduct>
+				                            <manufacturedLabeledDrug nullFlavor="NA"/>
+				                        </manufacturedProduct>
+				                    </consumable>
+				                </substanceAdministration>
+            				</entryRelationship>
 							<entryRelationship typeCode="RSON" inversionInd="true">
 								<observation classCode="OBS" moodCode="EVN">
 								<templateId root="2.16.840.1.113883.10.20.22.4.19"/>
