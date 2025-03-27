@@ -374,10 +374,10 @@ public class CCDARefModel {
 			log.info(" Comparing data for Cures Update (USCDI v2, USCDIv3, USCDIv4) specific entries ");
 			
 			log.info(" Comparing Sexual Orientation ");
-			compareSexOrientation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			// compareSexOrientation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 			
 			log.info(" Comparing Gender Identity ");
-			compareGenderIdentity(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			// compareGenderIdentity(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 			
 			log.info(" Comparing SDOH Data ");
 			compareSdohData(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
