@@ -1562,7 +1562,50 @@
 								</observation>
 							</component>									
 						</organizer>
-					</entry>					
+					</entry>	
+					<entry typeCode="DRIV">
+						<organizer classCode="CLUSTER" moodCode="EVN">
+							<!-- ** Vital signs organizer (V3) ** -->
+							<templateId root="2.16.840.1.113883.10.20.22.4.26" extension="2015-08-01"/>
+							<templateId root="2.16.840.1.113883.10.20.22.4.26"/>
+							<id root="31b73bd0-cffc-4599-902e-dbe54bc56cb4"/>
+							<code code="46680005" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="Vital signs">
+								<!-- A vitals organizer conformant to both C-CDA 1.1 and C-CDA 2.1 would contain the SNOMED code (46680005) from R1.1 in the root code and a LOINC code in the translation -->
+								<translation code="96607-7" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Average Blood Pressure"/>
+							</code>
+							<statusCode code="completed"/>
+							<effectiveTime>
+								<low value="20150622"/>
+								<high value="20150622"/>
+							</effectiveTime>	
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="1c2748b7-e440-41ba-bc01-dde97d84a036"/>
+									<code code="96609-3" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="BP Diastolic Mean"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221008-0500"/>
+									<value xsi:type="PQ" value="82" unit="mm[Hg]"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+								</observation>
+							</component>							
+							<component>
+								<observation classCode="OBS" moodCode="EVN">
+									<!-- ** Vital sign observation ** -->
+									<templateId root="2.16.840.1.113883.10.20.22.4.27" extension="2014-06-09"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.27"/>
+									<id root="a0e39c70-9674-4b2a-9837-cdf74200d8d5"/>
+									<code code="96608-5" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="BP Systolic Mean"/>
+									<statusCode code="completed"/>
+									<effectiveTime value="201506221008-0500"/>
+									<value xsi:type="PQ" value="143" unit="mm[Hg]"/>
+									<interpretationCode code="N" codeSystem="2.16.840.1.113883.5.83"/>
+								</observation>
+							</component>
+						</organizer>
+					</entry>				
 				</section>
 			</component>
 			
