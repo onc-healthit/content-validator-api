@@ -11,7 +11,7 @@ public class CCDAMedicationFreeSigText {
 
 	private ArrayList<CCDAII>					templateIds;
 	private CCDACode                            medicationFreeSigTextCode;
-	private String								freeSigText;
+	private CCDADataElement						freeSigText;
 	
 	public CCDAMedicationFreeSigText() {
 		templateIds = new ArrayList<>();
@@ -50,11 +50,11 @@ public class CCDAMedicationFreeSigText {
 		this.medicationFreeSigTextCode = medicationFreeSigTextCode;
 	}
 
-	public String getFreeSigText() {
+	public CCDADataElement getFreeSigText() {
 		return freeSigText;
 	}
 
-	public void setFreeSigText(String freeSigText) {
+	public void setFreeSigText(CCDADataElement freeSigText) {
 		this.freeSigText = freeSigText;
 	}
 

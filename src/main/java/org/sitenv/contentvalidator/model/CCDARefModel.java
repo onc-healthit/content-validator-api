@@ -329,7 +329,7 @@ public class CCDARefModel {
 		compareAllergies(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Medications ");
-		compareMedications(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+		compareMedications(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 		
 		log.info("Comparing Lab Results "); 
 		compareLabResults(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
@@ -371,13 +371,13 @@ public class CCDARefModel {
 		
 		if (svap2022 || svap2023 || svap2024 ) {
 			
-			log.info(" Comparing data for Cures Update (USCDI v2) specific entries ");
+			log.info(" Comparing data for Cures Update (USCDI v2, USCDIv3, USCDIv4) specific entries ");
 			
 			log.info(" Comparing Sexual Orientation ");
-			compareSexOrientation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			// compareSexOrientation(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 			
 			log.info(" Comparing Gender Identity ");
-			compareGenderIdentity(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			// compareGenderIdentity(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 			
 			log.info(" Comparing SDOH Data ");
 			compareSdohData(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
@@ -393,7 +393,7 @@ public class CCDARefModel {
 		}
 		
 		if (svap2023 || svap2024) {
-			log.info(" Comparing data for Cures Update (USCDI v3) specific entries ");
+			log.info(" Comparing data for Cures Update (USCDI v3, USCDIv4) specific entries ");
 			
 			log.info(" Comparing Functional Status Data ");
 			compareFunctionalStatus(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
@@ -417,7 +417,7 @@ public class CCDARefModel {
 		
 		if(svap2024) 
 		{
-			log.info(" Comparing data for Cures Update (USCDI v3) specific entries ");
+			log.info(" Comparing data for Cures Update (USCDI v4) specific entries ");
 			log.info("Comparing Encounters ");
 			compareEncounters(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 			
@@ -742,7 +742,7 @@ public class CCDARefModel {
 	}
 	
 	public void compareMedications(String validationObjective, CCDARefModel submittedCCDA, 
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) {
 		
 		log.info("Retrieving Medication Activities for comparison ");
 		HashMap<String, CCDAMedicationActivity> refActivities = this.getAllMedActivities();
@@ -752,7 +752,7 @@ public class CCDARefModel {
 			(subActivities != null && subActivities.size() > 0)  ) {
 			
 			log.info("Medication Activities in both models ");
-			CCDAMedicationActivity.compareMedicationActivityData(refActivities, subActivities, results);
+			CCDAMedicationActivity.compareMedicationActivityData(refActivities, subActivities, results, svap2024);
 			
 		} else if ( (refActivities != null && refActivities.size() > 0) && 
 				(subActivities == null || subActivities.size() == 0) ) {
@@ -2493,7 +2493,7 @@ public class CCDARefModel {
 		compareAllergies(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 		
 		log.info("Comparing Medications ");
-		compareMedications(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+		compareMedications(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 		
 		log.info("Finished comparison , returning results");
 		

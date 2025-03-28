@@ -31,7 +31,7 @@ public class CCDAMedicationActivity {
 	private CCDAAuthor author;
 	
 	public static void compareMedicationActivityData(HashMap<String, CCDAMedicationActivity> refActivities, 
-			HashMap<String, CCDAMedicationActivity> subActivities, 	ArrayList<ContentValidationResult> results) {
+			HashMap<String, CCDAMedicationActivity> subActivities, 	ArrayList<ContentValidationResult> results, boolean svap2024) {
 
 		log.info(" Start Comparing Medication Activities ");
 		// For each medication Activity in the Ref Model, check if it is present in the subCCDA Med.
@@ -41,7 +41,7 @@ public class CCDAMedicationActivity {
 
 				log.info("Comparing Medication Activities ");
 				String context = "Medication Activity Entry corresponding to the code " + ent.getKey();
-				subActivities.get(ent.getKey()).compare(ent.getValue(), results, context);
+				subActivities.get(ent.getKey()).compare(ent.getValue(), results, context, svap2024);
 
 
 			} else {
@@ -66,7 +66,7 @@ public class CCDAMedicationActivity {
 	}
 	
 	
-	public void compare(CCDAMedicationActivity refMedActivity, ArrayList<ContentValidationResult> results , String context) {
+	public void compare(CCDAMedicationActivity refMedActivity, ArrayList<ContentValidationResult> results , String context, boolean svap2024) {
 		
 		log.info("Comparing Medication Activity ");
 		
@@ -85,8 +85,125 @@ public class CCDAMedicationActivity {
 		// Compare Med Codes 
 		String elementNameVal = "Consumable code element: " + context;
 		ParserUtilities.compareCode(refMedActivity.getConsumable().getMedcode(), consumable.getMedcode(), results, elementNameVal);
+		
+		//Compare Medication Sigs
+		if(svap2024) {
+			String freeTextSig = " Free Text Sigs for " + context;
+			if(refMedActivity.getMedicationFreeSigTexts() != null) {
+				compareFreeTextSigs(refMedActivity.getMedicationFreeSigTexts(), this.medicationFreeSigTexts, freeTextSig, results);
+			}
+			
+			String medAdherence = " Medication Adherence for " + context;
+			if(refMedActivity.getMedicationAdherences() != null) {
+				compareMedicationAdherences(refMedActivity.getMedicationAdherences(), this.medicationAdherences, medAdherence, results);
+			}
+		}
 	}
 	
+	
+	
+	private void compareMedicationAdherences(ArrayList<CCDAMedicationAdherence> refAdherences,
+			ArrayList<CCDAMedicationAdherence> subAdherences, String medAdherenceContext,
+			ArrayList<ContentValidationResult> results) {
+		
+		if(refAdherences != null && subAdherences != null 
+				&& refAdherences.size() == subAdherences.size()) {
+			
+			// Compare Codes 
+			for(CCDAMedicationAdherence refAd : refAdherences) {
+				
+				refAd.compare(subAdherences, medAdherenceContext, results);
+				
+			}
+		}
+		else if(refAdherences != null && refAdherences.size() > 0 && 
+				(subAdherences == null || subAdherences.size() < refAdherences.size())) {
+			// Error
+			String error = "The scenario contains a total of " + refAdherences.size() + medAdherenceContext + 
+					" , however the data in the submitted CCDA does not match.";
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		
+	}
+
+
+	private void compareFreeTextSigs(ArrayList<CCDAMedicationFreeSigText> refFreeTextSigs,
+			ArrayList<CCDAMedicationFreeSigText> subFreeTextSigs, String freeTextSig,
+			ArrayList<ContentValidationResult> results) {
+		
+		if(refFreeTextSigs != null && subFreeTextSigs != null 
+				&& refFreeTextSigs.size() == subFreeTextSigs.size()) {
+			
+			// Compare Codes 
+			for(CCDAMedicationFreeSigText refText : refFreeTextSigs) {
+				
+				if(!isCodePresent(refText.getMedicationFreeSigTextCode(), subFreeTextSigs)) {
+				
+					String error = "The scenario contains code of " + (refText.getMedicationFreeSigTextCode() != null?refText.getMedicationFreeSigTextCode().getCode():"Unknown") + " in " + freeTextSig + 
+							" , however there is no data in the submitted CCDA that matches the free text sig code.";
+					ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+					results.add(rs);
+				}
+				
+				if(!isTextPresent(subFreeTextSigs)) {					
+					String error = "The scenario contains text in " + freeTextSig + 
+							" , however there is no data in the submitted CCDA that has the free text sig instructions.";
+					ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+					results.add(rs);
+				}
+			}
+		}
+		else if(refFreeTextSigs != null && refFreeTextSigs.size() > 0 && 
+				(subFreeTextSigs == null || subFreeTextSigs.size() < refFreeTextSigs.size())) {
+			// Error
+			String error = "The scenario contains a total of " + refFreeTextSigs.size() + freeTextSig + 
+					" , however the data in the submitted CCDA does not match.";
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		
+		
+	}
+	
+	
+
+
+	private Boolean isTextPresent(ArrayList<CCDAMedicationFreeSigText> subFreeTextSigs) {
+		
+		if(subFreeTextSigs != null) {
+			for(CCDAMedicationFreeSigText subText : subFreeTextSigs) {
+				
+				if(subText.getFreeSigText() == null || 
+						subText.getFreeSigText().getValue() == null || 
+						subText.getFreeSigText().getValue().isEmpty()) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+
+
+	private Boolean isCodePresent(CCDACode medicationFreeSigTextCode, ArrayList<CCDAMedicationFreeSigText> subFreeTextSigs) {
+		
+		if(subFreeTextSigs != null) {
+			for(CCDAMedicationFreeSigText subText : subFreeTextSigs) {
+				
+				if(subText.getMedicationFreeSigTextCode() != null && 
+						subText.getMedicationFreeSigTextCode().getCode() != null && 
+						subText.getMedicationFreeSigTextCode().getCode().contentEquals(medicationFreeSigTextCode.getCode())) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+		
+	}
+
+
 	public Boolean hasSameMedication(CCDAConsumable refConsumable) {
 		
 		if(consumable != null &&

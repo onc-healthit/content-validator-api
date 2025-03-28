@@ -82,6 +82,9 @@ public class ProcedureParser {
 			procedure.setProcStatus(ParserUtilities.readCode((Element) CCDAConstants.REL_STATUS_CODE_EXP.
 					evaluate(procedureElement, XPathConstants.NODE)));
 			
+			procedure.setPerformanceTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
+					evaluate(procedureElement, XPathConstants.NODE)));
+			
 			procedure.setTargetSiteCode(ParserUtilities.readCode((Element) CCDAConstants.REL_TARGET_SITE_CODE_EXP.
 					evaluate(procedureElement, XPathConstants.NODE)));
 			
