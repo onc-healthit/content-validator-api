@@ -179,6 +179,8 @@ public class CCDAConstants {
 	static public XPathExpression REL_DISABILITY_STATUS_OBSERVATION_EXPRESSION;
 	static public XPathExpression REL_INDICATION_EXPRESSION;
 	static public XPathExpression REL_MEDICATION_DISPENSE_EXPRESSION;
+	static public XPathExpression REL_MEDICATION_FREE_SIG_ENTRY;
+	static public XPathExpression REL_MEDICATION_ADHERENCE_ENTRY;
 	static public XPathExpression REL_SMOKING_STATUS_EXP;
 	static public XPathExpression REL_TOBACCO_USE_EXP;
 	static public XPathExpression REL_BIRTHSEX_OBS_EXP;
@@ -341,7 +343,8 @@ public class CCDAConstants {
 		    REL_PATIENT_REFERRAL_ACT_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.140']]");
 		    REL_INDICATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entryRelationship/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.19']]");
 		    REL_MEDICATION_DISPENSE_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entryRelationship/supply[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.18']]");
-		    
+		    REL_MEDICATION_FREE_SIG_ENTRY = CCDAConstants.CCDAXPATH.compile("./entryRelationship/substanceAdministration[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.147']]");
+		    REL_MEDICATION_ADHERENCE_ENTRY = CCDAConstants.CCDAXPATH.compile("./entryRelationship/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.508']]");
 		    
 		    REL_SMOKING_STATUS_EXP = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.78']]");
 		    REL_TOBACCO_USE_EXP = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.85']]");

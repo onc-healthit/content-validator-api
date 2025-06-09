@@ -101,7 +101,7 @@ public class SocialHistoryParser {
 					evaluate(sectionElement, XPathConstants.NODESET);
 			socialHistory.setOccupation(retrieveOccupationObservations(occupationObsList));
 			
-			// Add Pregnancy Observation
+			// Add Sex Observation
 			NodeList sexObsList = (NodeList)CCDAConstants.REL_SEX_EXP.
 								evaluate(sectionElement, XPathConstants.NODESET);
 			socialHistory.setSexObservations(retrieveSexObserations(sexObsList));

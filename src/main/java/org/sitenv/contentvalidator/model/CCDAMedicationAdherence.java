@@ -2,6 +2,9 @@ package org.sitenv.contentvalidator.model;
 
 import java.util.ArrayList;
 
+import org.sitenv.contentvalidator.dto.ContentValidationResult;
+import org.sitenv.contentvalidator.dto.enums.ContentValidationResultLevel;
+import org.sitenv.contentvalidator.parsers.ParserUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +14,7 @@ public class CCDAMedicationAdherence {
 
 	private ArrayList<CCDAII>					templateIds;
 	private CCDACode                            adherenceCode;
+	private CCDADataElement						text;
 	private CCDACode 							statusCode;
 	private CCDAEffTime          				effTime;
 	private CCDACode							adherenceValue;
@@ -93,5 +97,49 @@ public class CCDAMedicationAdherence {
 		this.informants = informants;
 	}
 
+	public CCDADataElement getText() {
+		return text;
+	}
+
+	public void setText(CCDADataElement text) {
+		this.text = text;
+	}
+
+	public void compare(ArrayList<CCDAMedicationAdherence> subAdherences, String medAdherenceContext,
+			ArrayList<ContentValidationResult> results) {
+		
+		boolean foundCode = false;
+		boolean foundValue = false;
+		// Compare Codes 	
+		for(CCDAMedicationAdherence subMed : subAdherences) {			
+			
+			if(!foundCode && ParserUtilities.compareCodesAndTranlations(this.adherenceCode, subMed.getAdherenceCode())) {
+				foundCode = true;
+			}
+			
+			if(!foundValue && ParserUtilities.compareCodesAndTranlations(this.adherenceValue, subMed.getAdherenceValue())) {
+				foundValue = true;
+			}
+				
+			
+		}
+		
+		if(!foundCode) {
+			String error =  "Expected code element of: " + this.adherenceCode.getCode() + "for " + medAdherenceContext +
+					" , however the data in the submitted CCDA does not match.";
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		
+		if(!foundValue) {
+			String error =  "Expected value element of: " + this.adherenceValue.getCode() + "for " + medAdherenceContext +
+					" , however the data in the submitted CCDA does not match.";
+			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+		}
+		
+	}
+	
+	
 	
 }

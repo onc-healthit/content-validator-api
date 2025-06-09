@@ -98,7 +98,7 @@ private static Logger log = LoggerFactory.getLogger(PayerParser.class.getName())
 		
 		for (int i = 0; i < policyActivities.getLength(); i++) {
 			
-			log.info("Adding Allergy Observation ");
+			log.info("Adding Policy Activity ");
 			policyActivity = new CCDAPolicyActivity();
 			Element policyActivityElement = (Element) policyActivities.item(i);
 			policyActivity.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
