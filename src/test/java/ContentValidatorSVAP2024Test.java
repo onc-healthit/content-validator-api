@@ -36,6 +36,9 @@ public class ContentValidatorSVAP2024Test extends ContentValidatorTester {
 
 	private static final int SUB_EF = 0;
 
+	private static final int SITE_4567 = 0;
+	private static final int SITE_4555 = 1;
+
 	private static URI[] SUBMITTED_CCDA = new URI[0];
 	private static URI[] SUBMITTED_CCDA_1 = new URI[0];
 	private static URI[] ISSUES = new URI[0];
@@ -49,7 +52,8 @@ public class ContentValidatorSVAP2024Test extends ContentValidatorTester {
 					ContentValidatorSVAP2024Test.class.getResource(S + "170.315_b1_toc_amb_svap_uscdiv4_sample1_submitted_1.xml").toURI(), // 0
 			};
 			ISSUES  = new URI[] {
-					ContentValidatorSVAP2024Test.class.getResource(S + "SITE_4567.xml").toURI(), // 0
+					ContentValidatorSVAP2024Test.class.getResource(S + "SITE_4567.xml").toURI(),
+					ContentValidatorSVAP2024Test.class.getResource(S + "SITE_4555.xml").toURI(),// 0
 			};
 		} catch (URISyntaxException e) {
 			if (LOG_RESULTS_TO_CONSOLE)
@@ -102,7 +106,7 @@ public class ContentValidatorSVAP2024Test extends ContentValidatorTester {
 	        final List<ContentValidationResult> results = validateDocumentAndReturnResultsSvap2024(
 	            B1_TOC_AMB_VALIDATION_OBJECTIVE,
 	            REF_TEST_DELETE,
-	            ISSUES[SUB_EF],
+	            ISSUES[SITE_4567],
 	            SeverityLevel.ERROR
 	        );
 
@@ -113,6 +117,35 @@ public class ContentValidatorSVAP2024Test extends ContentValidatorTester {
 	            )
 	        );
 
+	        assertTrue(pass);
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        fail(e.getMessage());
+	    }
+	}
+
+	@Test
+	public void svap2024_SITE4555_ValidationTest() {
+	    printHeader("svap2024_SITE4555_ValidationTest");
+
+	    try {
+
+	        final List<ContentValidationResult> results = validateDocumentAndReturnResultsSvap2024(
+	            B1_TOC_AMB_VALIDATION_OBJECTIVE,
+	            REF_TEST_DELETE,
+	            ISSUES[SITE_4555],
+	            SeverityLevel.ERROR
+	        );
+
+	        // Assert
+	        boolean pass = results.stream().noneMatch(result ->
+	            result.getMessage().startsWith(
+	                "The scenario requires Planned Procedure data but the submitted C-CDA does not contain Planned Procedure data."
+	            )
+	        );
+
+	    	printResults(results);
 	        assertTrue(pass);
 
 	    } catch (Exception e) {
