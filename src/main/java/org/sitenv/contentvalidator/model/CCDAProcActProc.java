@@ -82,8 +82,8 @@ public class CCDAProcActProc {
 		// ParserUtilities.compareTemplateIds(refProc.getSectionTemplateId(), sectionTemplateId, results, context);
 		
 		// Compare Effective Times
-		String elementNameTime = "Effective Time element for " + context;
-		ParserUtilities.compareEffectiveTimeValue(refProc.getPerformanceTime(), performanceTime, results, elementNameTime);
+		// String elementNameTime = "Effective Time element for " + context;
+		// ParserUtilities.compareEffectiveTimeValue(refProc.getPerformanceTime(), performanceTime, results, elementNameTime);
 		
 		// Compare Procedure Codes 
 		String elementNameVal = "Procedure Act Procedure code element for " + context;
