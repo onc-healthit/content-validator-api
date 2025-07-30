@@ -164,14 +164,20 @@ private static Logger log = LoggerFactory.getLogger(CCDAAllergyObs.class.getName
 		
 		String msgContext = "Payers Section, Policy Activity Comparison for Coverage Type " + policyCode;
 		
-		// handle  code.
+		log.info(" Comparing Coverage Code");
 		if(this.getCoverageParticipant() != null && 
 				subValue.getCoverageParticipant() != null) {
 			ParserUtilities.compareCode(
 				this.getCoverageParticipant().getParticipantRoleCode(), subValue.getCoverageParticipant().getParticipantRoleCode(), results, msgContext);
 		
-			// Other Attributes not as important, but will be added later.
-		
 		}
+		
+		log.info(" Compare Member Identifier ");
+		
+		log.info(" Comapring Subscriber Identifier ");
+		
+		log.info(" Comparing Group Identifier ");
+		
+		log.info(" Comparing Payer Identifier ");
 	}
 }

@@ -65,12 +65,6 @@ public class CCDAEffTime {
 			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
-		/* Removed for ticket SITE-3611: else if(!lowPresent && subTime.getLowPresent()) {
-
-			String error = "The " + elementName + " (low time value) is not required, but submitted CCDA contains the (low time value) for " + elementName;
-			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-			results.add(rs);
-		} */
 		else {
 			log.info("Low value absent in both refernce and submitted models ");
 		}
@@ -104,12 +98,6 @@ public class CCDAEffTime {
 			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
-		/* Removed for ticket SITE-3611: else if(!highPresent && subTime.getHighPresent()) {
-
-			String error = "The " + elementName + " (high time value) is not required, but submitted CCDA contains the (high time value) for " + elementName;
-			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-			results.add(rs);
-		} */
 		else {
 			log.info("High value absent in both refernce and submitted models ");
 		}
@@ -202,67 +190,9 @@ public class CCDAEffTime {
 			    ));
 				}
 			}
-
-
-//			if ((subTime.getLowPresent() && subTime.getHighPresent())
-//					|| (!subTime.getLowPresent() && subTime.getHighPresent())) {
-//
-//				if (value.getValue().length() >= 8)
-//					refTime = value.getValue().substring(0, 8);
-//				else
-//					refTime = value.getValue();
-//
-//				if (subTime.getLowPresent()) {
-//					if (subTime.getLow().getValue().length() >= 8)
-//						submittedtime = subTime.getValue().getValue().substring(0, 8);
-//					else
-//						submittedtime = subTime.getValue().getValue();
-//
-//					if (!submittedtime.startsWith(refTime)) {
-//						String error = "The " + elementName + " ( Time Value ) is : " + value.getValue()
-//								+ " , but submitted CCDA ( Time Low Value ) is not in range : "
-//								+ subTime.getLow().getValue() + " which does not match ";
-//						ContentValidationResult rs = new ContentValidationResult(error,
-//								ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
-//						results.add(rs);
-//
-//					}
-//				}
-//
-//				if (subTime.getHighPresent()) {
-//					if (subTime.getHigh().getValue().length() >= 8)
-//						submittedtime = subTime.getHigh().getValue().substring(0, 8);
-//					else
-//						submittedtime = subTime.getHigh().getValue();
-//
-//					if (!submittedtime.startsWith(refTime)) {
-//						String error = "The " + elementName + " ( Time Value ) is : " + value.getValue()
-//								+ " , but submitted CCDA ( Time High Value ) is not in range : "
-//								+ subTime.getLow().getValue() + " which does not match ";
-//						ContentValidationResult rs = new ContentValidationResult(error,
-//								ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0");
-//						results.add(rs);
-//
-//					}
-//				}
-//
-//			} else {
-//
-//				String error = "The " + elementName
-//						+ " (value time element ) is required, but submitted CCDA does not contain the (value time element) for "
-//						+ elementName;
-//				ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR,
-//						"/ClinicalDocument", "0");
-//				results.add(rs);
-//			}
 		}
 		else if(!valuePresent && subTime.getValuePresent()) {
-
-			String error = "The " + elementName
-					+ " (value time element) is not required, but submitted CCDA contains the (value time element) for "
-					+ elementName;
-			ContentValidationResult rs = new ContentValidationResult(error, ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
-			results.add(rs);
+			log.info(" Value Time not present in Reference but present in submitted document ");
 		}
 		else {
 			log.info("Value Time elements absent in both refernce and submitted models ");

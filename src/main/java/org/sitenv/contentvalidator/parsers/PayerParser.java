@@ -76,9 +76,6 @@ private static Logger log = LoggerFactory.getLogger(PayerParser.class.getName())
 			coverageActivity.setCoverageEffectiveTime(ParserUtilities.readEffectiveTime((Element) CCDAConstants.REL_EFF_TIME_EXP.
 					evaluate(coverageElement, XPathConstants.NODE)));
 			
-			NodeList policyActivityList = (NodeList) CCDAConstants.REL_ENTRY_RELSHIP_OBS_EXP.
-								evaluate(coverageElement, XPathConstants.NODESET);
-			
 			coverageActivity.setPolicyActivities(readPolicyActivities((NodeList) CCDAConstants.REL_ENTRY_RELSHIP_ACT_EXP.
 					evaluate(coverageElement, XPathConstants.NODESET)));
 			
@@ -107,10 +104,12 @@ private static Logger log = LoggerFactory.getLogger(PayerParser.class.getName())
 			ArrayList<CCDAII> idlist = ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_ID_EXP.
 					evaluate(policyActivityElement, XPathConstants.NODESET));
 			
+			// Policy Activity Id = Group Identifer.
 			if(idlist != null && idlist.size() > 0) {
 				policyActivity.setGroupIdentifier(idlist.get(0));
 			}
 			
+			// Policy Activity Code = Coverage Type
 			policyActivity.setCoverageType(ParserUtilities.readCodeWithTranslation((Element) CCDAConstants.REL_CODE_EXP.
 					evaluate(policyActivityElement, XPathConstants.NODE)));
 			
