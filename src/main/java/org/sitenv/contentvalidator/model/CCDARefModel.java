@@ -397,6 +397,7 @@ public class CCDARefModel {
 
 		if (svap2023 || svap2024) {
 			log.info(" Comparing data for Cures Update (USCDI v3, USCDIv4) specific entries ");
+			svap2023 = true;
 
 			log.info(" Comparing Functional Status Data ");
 			compareFunctionalStatus(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
@@ -405,7 +406,7 @@ public class CCDARefModel {
 			compareMentalStatus(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 
 			log.info(" Comparing Reason For Referral Status Data ");
-			compareReasonForReferral(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			compareReasonForReferral(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023, svap2024);
 
 			log.info(" Comparing Payers Data ");
 			comparePayers(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
@@ -486,8 +487,10 @@ public class CCDARefModel {
 	}
 
 	private void compareReasonForReferral(String validationObjective, CCDARefModel submittedCCDA,
-			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023, boolean svap2024) {
 
+		CCDADataElement sectionText = null;
+		if(svap2024) {
 		HashMap<String, CCDAPatientReferralAct> refModelActs  = null;
 
 		if(this.getReferrals() != null)
@@ -495,8 +498,11 @@ public class CCDARefModel {
 
 		HashMap<String, CCDAPatientReferralAct> subModelActs = null;
 
-		if(submittedCCDA.getReferrals() != null)
+		
+		if(submittedCCDA.getReferrals() != null) {			
+			sectionText = submittedCCDA.getReferrals().getSectionText();
 			subModelActs = submittedCCDA.getReferrals().getAllReferrals();
+		}
 
 		if( (refModelActs != null && refModelActs.size() > 0) &&
 			(subModelActs != null && subModelActs.size() > 0)  ) {
@@ -523,7 +529,20 @@ public class CCDARefModel {
 
 			log.info("Model and Submitted CCDA do not have Referral data for comparison ");
 		}
+		
+		}//svap2024
+		
+		// Check presence of narrative text
+	/*	if(sectionText == null || 
+				sectionText.getValue() == null ||
+				sectionText.getValue().isEmpty()) {
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires Patient's Referral data in the section narrative text element"
+					+ "but the submitted C-CDA does not contain Referral data in the section narrative text element.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Referral Text data element , but submitted document does not contain Referral Text data element");
 
+			
+		}*/
 
 	}
 

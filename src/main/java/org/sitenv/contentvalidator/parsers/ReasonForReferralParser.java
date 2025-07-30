@@ -42,8 +42,11 @@ public class ReasonForReferralParser {
 			referral.setSectionCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
 					evaluate(sectionElement, XPathConstants.NODE)));
 			
+			referral.setSectionText(ParserUtilities.readTextContext((Element) CCDAConstants.REL_TEXT_EXP.
+					evaluate(sectionElement, XPathConstants.NODE)));
+			
 			NodeList patientReferralActList = (NodeList) CCDAConstants.REL_PATIENT_REFERRAL_ACT_EXPRESSION.
-				evaluate(sectionElement, XPathConstants.NODESET);
+				evaluate(sectionElement, XPathConstants.NODESET);			
 		
 			referral.setReferralActs(readPatientReferrals(patientReferralActList));
 		

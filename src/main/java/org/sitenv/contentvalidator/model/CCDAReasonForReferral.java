@@ -14,6 +14,7 @@ private static Logger log = LoggerFactory.getLogger(CCDAReasonForReferral.class.
 	private CCDACode							sectionCode;
 	private ArrayList<CCDAPatientReferralAct>	referralActs;
 	private CCDAAuthor							author;
+	private CCDADataElement						sectionText;
 	
 	public CCDAReasonForReferral() {
 		sectionTemplateIds = new ArrayList<>();
@@ -70,6 +71,14 @@ private static Logger log = LoggerFactory.getLogger(CCDAReasonForReferral.class.
 		this.author = author;
 	}
 	
+	public CCDADataElement getSectionText() {
+		return sectionText;
+	}
+
+	public void setSectionText(CCDADataElement sectionText) {
+		this.sectionText = sectionText;
+	}
+
 	public HashMap<String, CCDAPatientReferralAct> getAllReferrals() {
 		
 		HashMap<String, CCDAPatientReferralAct> referrals = new HashMap<>();
