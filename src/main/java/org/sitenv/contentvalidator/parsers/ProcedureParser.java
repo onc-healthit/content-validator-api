@@ -76,7 +76,7 @@ public class ProcedureParser {
 			procedure.setSectionTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_TEMPLATE_ID_EXP.
 										evaluate(procedureElement, XPathConstants.NODESET)));
 			
-			procedure.setProcCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
+			procedure.setProcCode(ParserUtilities.readCodeWithTranslation((Element) CCDAConstants.REL_CODE_EXP.
 					evaluate(procedureElement, XPathConstants.NODE)));
 			
 			procedure.setProcStatus(ParserUtilities.readCode((Element) CCDAConstants.REL_STATUS_CODE_EXP.

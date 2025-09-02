@@ -430,7 +430,7 @@ public class CCDAPatient {
 			{
 				String errorMessage = "Patient Granular Race Code = " + c.getCode() 
 						+ " expected in sdtc:raceCode extension but, submitted file does not contain the expected granular race code";
-				ContentValidationResult rs = new ContentValidationResult(errorMessage, ContentValidationResultLevel.ERROR, 
+				ContentValidationResult rs = new ContentValidationResult(errorMessage, ContentValidationResultLevel.WARNING, 
 						"/ClinicalDocument", "0");
 				results.add(rs);
 			}

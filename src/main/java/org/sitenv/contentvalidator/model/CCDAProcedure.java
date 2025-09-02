@@ -67,6 +67,23 @@ public class CCDAProcedure {
 				String code = procActsProcs.get(k).getProcCode().getCode();
 				log.info("Adding procedure code = " + code);
 				results.put(code, procActsProcs.get(k));
+				
+				if(procActsProcs.get(k).getProcCode().getTranslations() != null) {
+					
+					ArrayList<CCDACode> translations = procActsProcs.get(k).getProcCode().getTranslations();
+					
+					for(int j = 0; j < translations.size(); j++) {
+						
+						CCDACode trans = translations.get(j);
+						
+						if(trans.getCode() != null) {
+							log.info("Adding translation code = " + code);
+							results.put(trans.getCode(), procActsProcs.get(k));
+						}
+						
+					}
+					
+				}
 			}	
 		}// for
 		

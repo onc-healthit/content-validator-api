@@ -202,6 +202,11 @@ public class CCDARefModel {
 			ArrayList<ContentValidationResult> ccdResults = new ArrayList<ContentValidationResult>();
 			ArrayList<ContentValidationResult> rnResults = new ArrayList<ContentValidationResult>();
 
+			if(svap2023 || svap2024) {
+				ccdTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2023_MAY_EXT));
+				rnTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2023_MAY_EXT));
+			}
+			
 			ParserUtilities.compareTemplateIds(ccdTemplates, submittedCCDA.getHeader().getDocTemplates(), ccdResults, elementName);
 			ParserUtilities.compareTemplateIds(rnTemplates, submittedCCDA.getHeader().getDocTemplates(), rnResults, elementName);
 
@@ -227,7 +232,14 @@ public class CCDARefModel {
 			ArrayList<ContentValidationResult> ccdResults = new ArrayList<ContentValidationResult>();
 			ArrayList<ContentValidationResult> rnResults = new ArrayList<ContentValidationResult>();
 			ArrayList<ContentValidationResult> dsResults = new ArrayList<ContentValidationResult>();
+			
+			if(svap2023 || svap2024) {
+				ccdTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2023_MAY_EXT));
+				rnTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2023_MAY_EXT));
+				dsTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2023_MAY_EXT));
 
+			}
+			
 			ParserUtilities.compareTemplateIds(ccdTemplates, submittedCCDA.getHeader().getDocTemplates(), ccdResults, elementName);
 			ParserUtilities.compareTemplateIds(rnTemplates, submittedCCDA.getHeader().getDocTemplates(), rnResults, elementName);
 			ParserUtilities.compareTemplateIds(dsTemplates, submittedCCDA.getHeader().getDocTemplates(), dsResults, elementName);
@@ -251,19 +263,17 @@ public class CCDARefModel {
 				valObj.equalsIgnoreCase("170.315_b2_CIRI_Inp") ||
 				valObj.equalsIgnoreCase("170.315_b6_DE_Amb") ||
 				valObj.equalsIgnoreCase("170.315_b6_DE_Inp") ||
-			//	valObj.equalsIgnoreCase("170.315_b7_DS4P_Amb") ||
-			//	valObj.equalsIgnoreCase("170.315_b7_DS4P_Inp") ||
-			//	valObj.equalsIgnoreCase("170.315_b8_DS4P_Amb") ||
-			//	valObj.equalsIgnoreCase("170.315_b8_DS4P_Inp") ||
 				valObj.equalsIgnoreCase("170.315_e1_VDT_Amb") ||
 				valObj.equalsIgnoreCase("170.315_e1_VDT_Inp") )
-			//	valObj.equalsIgnoreCase("170.315_g9_APIAccess_Amb") ||
-			//	valObj.equalsIgnoreCase("170.315_g9_APIAccess_Inp") )
 		{
 			// Validate for CCD
 			String elementName = "Clinical Document Header ";
 			ArrayList<ContentValidationResult> ccdResults = new ArrayList<ContentValidationResult>();
 
+			if(svap2023 || svap2024) {
+				ccdTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2023_MAY_EXT));
+			}
+			
 			ParserUtilities.compareTemplateIds(ccdTemplates, submittedCCDA.getHeader().getDocTemplates(), ccdResults, elementName);
 
 			if( (ccdResults.size() == 0))
@@ -286,6 +296,10 @@ public class CCDARefModel {
 			String elementName = "Clinical Document Header ";
 			ArrayList<ContentValidationResult> cpResults = new ArrayList<ContentValidationResult>();
 
+			if(svap2023 || svap2024) {
+				cpTemplates.add(new CCDAII(CCDAConstants.US_REALM_TEMPLATE, CCDAConstants.CCDA_2023_MAY_EXT));
+			}
+			
 			ParserUtilities.compareTemplateIds(cpTemplates, submittedCCDA.getHeader().getDocTemplates(), cpResults, elementName);
 
 			if( (cpResults.size() == 0))
@@ -400,7 +414,7 @@ public class CCDARefModel {
 			svap2023 = true;
 
 			log.info(" Comparing Functional Status Data ");
-			compareFunctionalStatus(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+			compareAllFunctionalStatus(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
 
 			log.info(" Comparing Mental Status Data ");
 			compareMentalStatus(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
@@ -600,9 +614,80 @@ public class CCDARefModel {
 
 		return null;
 	}
+	
+	private HashMap<String, CCDAFunctionalStatusObservation> getFunctionalStatusObservations() {
+
+		if(functionalStatus != null) {
+
+			return this.getFunctionalStatus().getAllFunctionalStatusObservations();
+		}
+
+		return null;
+	}
+	
+	private HashMap<String, CCDADisabilityStatusObservation> getDisabilityStatusObservations() {
+
+		if(functionalStatus != null) {
+
+			return this.getFunctionalStatus().getAllDisabilityStatuses();
+		}
+
+		return null;
+	}
+	
+	private void compareAllFunctionalStatus(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+	
+		// Compare Functional Status - Assessments
+		compareFunctionalStatusAssessments(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+		
+		// Compare Disabilities Status Observations
+		compareDisabilityStatusObservations(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+
+		// Compare Functional Status Observations
+		compareFunctionalStatusObservations(validationObjective, submittedCCDA, results, curesUpdate, svap2022, svap2023);
+				
+	}
 
 
-	private void compareFunctionalStatus(String validationObjective, CCDARefModel submittedCCDA,
+	private void compareFunctionalStatusObservations(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+		
+		HashMap<String, CCDAFunctionalStatusObservation> refObservations = this.getFunctionalStatusObservations();
+
+		HashMap<String, CCDAFunctionalStatusObservation> subObservations = submittedCCDA.getFunctionalStatusObservations();
+
+		if( (refObservations != null && refObservations.size() > 0) &&
+			(subObservations != null && subObservations.size() > 0)  ) {
+
+			log.info("Functional Status Observations present in both models ");
+			CCDAFunctionalStatusObservation.compare(refObservations, subObservations, results);
+
+		}
+		else if ( (refObservations != null && refObservations.size() > 0) &&
+				(subObservations == null || subObservations.size() == 0) ) {
+
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires Patient's Functional Status Observation data "
+					+ "but the submitted C-CDA does not contain Functional Status Observation data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Functional Status Observation data, but submitted document does not contain Functional Status Observation data");
+
+		}else if ((refObservations == null || refObservations.size() == 0) &&
+				(subObservations != null && subObservations.size() > 0) ) {
+
+
+			log.info("Model does not have Functional Status Observation Data for comparison, allow this to pass");
+
+		} else {
+
+			log.info("Model and Submitted CCDA do not have Functional Status Observation data for comparison ");
+		}
+
+		
+		
+	}
+
+	private void compareFunctionalStatusAssessments(String validationObjective, CCDARefModel submittedCCDA,
 			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
 
 		HashMap<String, AssessmentScaleObservation> refAssessments = this.getFunctionalStatusAssessments();
@@ -628,11 +713,46 @@ public class CCDARefModel {
 				(subAssessments != null && subAssessments.size() > 0) ) {
 
 
-			log.info("Model does not have Assessment Data for comparison, allow this to pass");
+			log.info("Model does not have Functional Status Assessment Data for comparison, allow this to pass");
 
 		} else {
 
-			log.info("Model and Submitted CCDA do not have Assessment data for comparison ");
+			log.info("Model and Submitted CCDA do not have Functional Status Assessment data for comparison ");
+		}
+
+	}
+	
+	private void compareDisabilityStatusObservations(String validationObjective, CCDARefModel submittedCCDA,
+			ArrayList<ContentValidationResult> results, boolean curesUpdate, boolean svap2022, boolean svap2023) {
+
+		HashMap<String, CCDADisabilityStatusObservation> refDisabilities = this.getDisabilityStatusObservations();
+
+		HashMap<String, CCDADisabilityStatusObservation> subDisabilities = submittedCCDA.getDisabilityStatusObservations();
+
+		if( (refDisabilities != null && refDisabilities.size() > 0) &&
+			(subDisabilities != null && subDisabilities.size() > 0)  ) {
+
+			log.info("Functional Status - Disability data present in both models ");
+			CCDADisabilityStatusObservation.compare(refDisabilities, subDisabilities, results);
+
+		}
+		else if ( (refDisabilities != null && refDisabilities.size() > 0) &&
+				(subDisabilities == null || subDisabilities.size() == 0) ) {
+
+			ContentValidationResult rs = new ContentValidationResult("The scenario requires Patient's Disability Status Observation data "
+					+ "but the submitted C-CDA does not contain Disability Status Observation data.", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			results.add(rs);
+			log.info(" Scenario requires Disability Status Observation data, but submitted document does not contain Disability Status Observation data");
+
+		}else if ((refDisabilities == null || refDisabilities.size() == 0) &&
+				(subDisabilities != null && subDisabilities.size() > 0) ) {
+
+
+			log.info("Model does not have Disability Data for comparison, allow this to pass");
+
+		} else {
+
+			log.info("Model and Submitted CCDA do not have Disability data for comparison ");
 		}
 
 	}

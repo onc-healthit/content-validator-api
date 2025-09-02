@@ -29,12 +29,16 @@ public class CCDAMentalStatus {
 			log.info(" Tempalte Id Ext [" + j + "] = " + sectionTemplateId.get(j).getExtValue());
 		}
 		
-		for(int l = 0; l < mentalStatusObservations.size(); l++) {
-			mentalStatusObservations.get(l).log();
+		if(mentalStatusObservations != null) {
+			for(int l = 0; l < mentalStatusObservations.size(); l++) {
+				mentalStatusObservations.get(l).log();
+			}
 		}
 		
-		for(int k = 0; k < fullMentalStatusAssessments.size(); k++) {
-			fullMentalStatusAssessments.get(k).log();
+		if(fullMentalStatusAssessments != null) {
+			for(int k = 0; k < fullMentalStatusAssessments.size(); k++) {
+				fullMentalStatusAssessments.get(k).log();
+			}
 		}
 		
 		if(author != null)
@@ -44,6 +48,8 @@ public class CCDAMentalStatus {
 	
 	public CCDAMentalStatus() {		
 		sectionTemplateId = new ArrayList<>(); 
+		mentalStatusObservations = new ArrayList<>();
+		fullMentalStatusAssessments = new ArrayList<>();
 	}
 
 	public ArrayList<CCDAII> getSectionTemplateId() {

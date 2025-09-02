@@ -181,7 +181,7 @@ public class ParserUtilities {
 
 		}
 		else if ((refTime == null) && (submittedTime != null && submittedTime.hasValidData()) ) {
-			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.ERROR, "/ClinicalDocument", "0" );
+			ContentValidationResult rs = new ContentValidationResult("The scenario does not require " + elementName + " data, but submitted file does have " + elementName + " data", ContentValidationResultLevel.WARNING, "/ClinicalDocument", "0" );
 			results.add(rs);
 		}
 		else if((refTime != null && refTime.hasValidData()) && (submittedTime == null)){
@@ -346,10 +346,14 @@ public class ParserUtilities {
 	public static void compareCode(CCDACode refCode, CCDACode submittedCode,
 								   ArrayList<ContentValidationResult> results, String elementName) {
 		
-		// handle section code.
+		// handle code.
 		if((refCode != null) && (submittedCode != null) ) {
 
-			if(refCode.matches(submittedCode, results, elementName)) {
+			if(submittedCode.isCodePresent(refCode)) { // check if submitted code has refcode in translations
+				// do nothing since submitted code has the refCode match.
+				log.info(" Both Submitted and Ref codes match for " + elementName);
+			}
+			else if(refCode.matches(submittedCode, results, elementName)) { // This is done to populate the error...
 				// do nothing since both match.
 				log.info(" Both Submitted and Ref codes match for " + elementName);
 			}

@@ -1076,10 +1076,11 @@
 				</section>
 			</component>
 			<!-- ***************** FUNCTIONAL STATUS *********************** -->
-			<component>
-				<!-- Functional Status Section (V2)-->
+			<component>				
 				<section>
+					<!-- Functional Status Section (V2)-->
 					<templateId root="2.16.840.1.113883.10.20.22.2.14" extension="2014-06-09"/>
+					<!-- Functional Status Section -->
 					<templateId root="2.16.840.1.113883.10.20.22.2.14"/>
 					<code code="47420-5" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Functional Status"/>
 					<title>FUNCTIONAL STATUS</title>
@@ -1089,19 +1090,12 @@
 								<tr>
 									<th>Functional Category</th>
 									<th>Effective Dates</th>
-									<th>Results of Evaluation</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<td ID="FUNC1">Functional Assessment</td>
-									<td>March 11, 2013</td>
-									<td>Independent Walking</td>
-								</tr>
-								<tr>
-									<td>ADL/IADL: Bathing</td>
-									<td>March 11,2013</td>
-									<td>Independent</td>
+									<td ID="FUNC1">Dependence on Cane</td>
+									<td>May 01, 2005</td>
 								</tr>
 							</tbody>
 						</table>
@@ -1110,22 +1104,17 @@
 						<organizer classCode="CLUSTER" moodCode="EVN">
 							<!-- Functional Status Organizer (V2) -->
 							<templateId root="2.16.840.1.113883.10.20.22.4.66" extension="2014-06-09"/>
+							<!-- Functional Status Result Organizer -->
 							<templateId root="2.16.840.1.113883.10.20.22.4.66"/>
 							<id root="a7bc1062-8649-42a0-833d-eed65bd017c9"/>
 							<code code="d5" displayName="Self-Care" codeSystem="2.16.840.1.113883.6.254" codeSystemName="ICF"/>
 							<statusCode code="completed"/>
-							<author typeCode="AUT">
-								<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-								<time value="201307061145-0800"/>
-								<assignedAuthor>
-									<id extension="555555555" root="2.16.840.1.113883.4.6"/>
-									<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
-								</assignedAuthor>
-							</author>
 							<component>
+								<!-- cane -->
 								<observation classCode="OBS" moodCode="EVN">
 									<!-- Functional Status Observation (V2)-->
 									<templateId root="2.16.840.1.113883.10.20.22.4.67" extension="2014-06-09"/>
+									<!-- Functional Status Result Observation -->
 									<templateId root="2.16.840.1.113883.10.20.22.4.67"/>
 									<id root="b63a8636-cfff-4461-b018-40ba58ba8b32"/>
 									<code code="54522-8" displayName="Functional status" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
@@ -1133,65 +1122,38 @@
 										<reference value="#FUNC1"/>
 									</text>
 									<statusCode code="completed"/>
-									<effectiveTime value="20130311"/>
-									<value xsi:type="CD" code="165245003" displayName=" Independent walking" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT"/>
-									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-										<time value="201307061145-0800"/>
-										<assignedAuthor>
-											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
-											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
-										</assignedAuthor>
-									</author>
-									<entryRelationship typeCode="COMP">
-										<!-- Non-Medicinal Supply Activity (V2) -->
-										<supply classCode="SPLY" moodCode="EVN">
-											<templateId root="2.16.840.1.113883.10.20.22.4.50" extension="2014-06-09"/>
-											<templateId root="2.16.840.1.113883.10.20.22.4.50"/>
-											<id root="2413773c-2372-4299-bbe6-5b0f60664446"/>
-											<statusCode code="completed"/>
-											<effectiveTime xsi:type="IVL_TS">
-												<high value="20130311"/>
-											</effectiveTime>
-											<quantity value="2"/>
-											<participant typeCode="PRD">
-												<participantRole classCode="MANU">
-													<templateId root="2.16.840.1.113883.10.20.22.4.37"/>
-													<!-- Product instance template -->
-													<id root="742aee30-21c5-11e1-bfc2-0800200c9a66"/>
-													<playingDevice>
-														<code code="87405001" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT" displayName="cane, device (physical object)"/>
-													</playingDevice>
-													<scopingEntity>
-														<id root="eb936010-7b17-11db-9fe1-0800200c9b65"/>
-													</scopingEntity>
-												</participantRole>
-											</participant>
-										</supply>
-									</entryRelationship>
+									<effectiveTime value="20050501"/>
+									<value xsi:type="CD" code="105504002" displayName="Dependence on Cane" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT"/>
 								</observation>
-							</component>
-							<component>
-								<observation classCode="OBS" moodCode="EVN">
-									<!-- Self-Care Activities (ADL and IADL) -->
-									<templateId root="2.16.840.1.113883.10.20.22.4.128"/>
-									<id root="c6b5a04b-2bf4-49d1-8336-636a3813df0a"/>
-									<code code="46008-9 " displayName="Bathing" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
-									<statusCode code="completed"/>
-									<effectiveTime value="200130311"/>
-									<value xsi:type="CD" code="371153006" displayName="Independent" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED CT"/>
-									<author typeCode="AUT">
-										<templateId root="2.16.840.1.113883.10.20.22.4.119"/>
-										<time value="201307061148-0800"/>
-										<assignedAuthor>
-											<id extension="555555555" root="2.16.840.1.113883.4.6"/>
-											<code code="207QA0505X" displayName="Adult Medicine" codeSystem="2.16.840.1.113883.6.101" codeSystemName="Healthcare Provider Taxonomy (HIPAA)"/>
-										</assignedAuthor>
-									</author>
-								</observation>
-							</component>
+							</component>						
 						</organizer>
 					</entry>
+				<!--	<entry>
+						<observation classCode="OBS" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.22.4.505"/>
+							<templateId root="2.16.840.1.113883.10.20.22.4.505"
+							extension="2023-05-01"/>
+							<code code="89571-4" displayName="Disability Status [CUBS]"
+							codeSystem="2.16.840.1.113883.6.1"/>
+							<statusCode code="completed"/>
+							<effectiveTime value="20220615"/> 
+							 From LOINC Answer Set associated with Disability Status [CUBS] -->
+					<!--		<value xsi:type="CD" code="LA29243-5"
+							displayName="I'm Vulnerable - I sometimes or periodically have acute or chronic symptoms affecting housing, employment, social interactions, etc."
+							codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
+							 May contain an Assessment Scale template With Assessment Scale observation containing the disability related questions -->
+					<!--		<entryRelationship typeCode="COMP">
+								<observation classCode="OBS" moodCode="EVN">
+									<templateId root="2.16.840.1.113883.10.20.22.4.69"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.69" extension="2022-06-01"/>
+									<id root="c6b5a04b-2bf4-49d1-8336-636a3813df0b"/>
+									<code nullFlavor="NA" />
+									<statusCode code="completed"/>
+									<effectiveTime value="20120214"/>
+								</observation>
+							</entryRelationship>
+						</observation>
+					</entry> -->
 				</section>
 			</component>
 			<!-- ******************** IMMUNIZATIONS ********************* -->
