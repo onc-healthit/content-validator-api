@@ -62,9 +62,11 @@ public class AssessmentScaleObservation {
 			log.info(" Tempalte Id Ext [" + j + "] = " + templateIds.get(j).getExtValue());
 		}
 		
-		for(int k = 0; k < supportingObservations.size(); k++) {
-			supportingObservations.get(k).log();
-		}		
+		if(supportingObservations != null) {
+			for(int k = 0; k < supportingObservations.size(); k++) {
+				supportingObservations.get(k).log();
+			}		
+		}
 		
 		if(author != null)
 			author.log();

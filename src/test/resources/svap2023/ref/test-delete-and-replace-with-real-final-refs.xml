@@ -1902,6 +1902,10 @@
 									<td ID="FUNC1">Dependence on Cane</td>
 									<td>May 01, 2005</td>
 								</tr>
+								<tr>
+									<td ID="FUNC2">Do you have serious difficulty walking or climbing stairs - Yes</td>
+									<td>June 22, 2015</td>
+								</tr>
 							</tbody>
 						</table>
 					</text>
@@ -1941,8 +1945,34 @@
 									<effectiveTime value="20050501"/>
 									<value xsi:type="CD" code="371153006" displayName="Independent" codeSystem="2.16.840.1.113883.6.96" codeSystemName="SNOMED-CT"/>
 								</observation>
-							</component>							
+							</component>						
 						</organizer>
+					</entry>
+					<entry>
+						<observation classCode="OBS" moodCode="EVN">
+							<templateId root="2.16.840.1.113883.10.20.22.4.505"/>
+							<templateId root="2.16.840.1.113883.10.20.22.4.505"
+							extension="2023-05-01"/>
+							<code code="89571-4" displayName="Disability Status [CUBS]"
+							codeSystem="2.16.840.1.113883.6.1"/>
+							<statusCode code="completed"/>
+							<effectiveTime value="20220615"/>
+							<!-- From LOINC Answer Set associated with Disability Status [CUBS] -->
+							<value xsi:type="CD" code="LA29243-5"
+							displayName="I'm Vulnerable - I sometimes or periodically have acute or chronic symptoms affecting housing, employment, social interactions, etc."
+							codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC"/>
+							<!-- May contain an Assessment Scale template With Assessment Scale observation containing the disability related questions -->
+							<entryRelationship typeCode="COMP">
+								<observation classCode="OBS" moodCode="EVN">
+									<templateId root="2.16.840.1.113883.10.20.22.4.69"/>
+									<templateId root="2.16.840.1.113883.10.20.22.4.69" extension="2022-06-01"/>
+									<id root="c6b5a04b-2bf4-49d1-8336-636a3813df0b"/>
+									<code nullFlavor="NA" />
+									<statusCode code="completed"/>
+									<effectiveTime value="20120214"/>
+								</observation>
+							</entryRelationship>
+						</observation>
 					</entry>
 				</section>
 			</component>

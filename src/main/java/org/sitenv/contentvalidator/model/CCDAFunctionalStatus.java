@@ -152,6 +152,22 @@ public class CCDAFunctionalStatus {
 		}		
 		return functionalStatusObs;
 	}
+
+	public HashMap<String, CCDAFunctionalStatusObservation> getAllFunctionalStatusObservations() {
+		HashMap<String, CCDAFunctionalStatusObservation> funcObs = new HashMap<>();
+		if(functionalStatusObservation != null) {
+			for(int i = 0; i < functionalStatusObservation.size(); i++) {
+				
+				if(functionalStatusObservation.get(i).getFunctionalStatusValueCode() != null && 
+						functionalStatusObservation.get(i).getFunctionalStatusValueCode().getCode() != null) {
+					
+					funcObs.put(functionalStatusObservation.get(i).getFunctionalStatusValueCode().getCode(),
+							functionalStatusObservation.get(i));
+				}
+			}
+		}		
+		return funcObs;
+	}
 	
 }
 

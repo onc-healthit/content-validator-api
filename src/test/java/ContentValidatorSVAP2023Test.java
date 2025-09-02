@@ -43,7 +43,7 @@ public class ContentValidatorSVAP2023Test extends ContentValidatorTester {
 	static {
 		try {
 			SUBMITTED_CCDA = new URI[] {
-					ContentValidatorSVAP2023Test.class.getResource(S + "C-CDA_R2-1_CCD_EF.xml").toURI(), // 0
+					ContentValidatorSVAP2023Test.class.getResource(S + "C-CDA_R2-1_CCD_EF.xml").toURI(),
 			};
 		} catch (URISyntaxException e) {
 			if (LOG_RESULTS_TO_CONSOLE)
@@ -91,10 +91,10 @@ public class ContentValidatorSVAP2023Test extends ContentValidatorTester {
 	public void svap2023_basicContentValidationTest() {
 		printHeader("svap2023_basicContentValidationTest");
 		try {
-		/*	ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsSvap2023(
+			ArrayList<ContentValidationResult> results = validateDocumentAndReturnResultsSvap2023(
 					B1_TOC_AMB_VALIDATION_OBJECTIVE, REF_TEST_DELETE, SUBMITTED_CCDA[SUB_EF],
 					SeverityLevel.ERROR);
-			printResults(results); */
+			printResults(results); 
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

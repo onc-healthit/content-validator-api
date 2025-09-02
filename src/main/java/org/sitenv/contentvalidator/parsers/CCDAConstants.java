@@ -230,6 +230,7 @@ public class CCDAConstants {
 
 	public static final String US_REALM_TEMPLATE = "2.16.840.1.113883.10.20.22.1.1";
 	public static final String CCDA_2015_AUG_EXT = "2015-08-01";
+	public static final String CCDA_2023_MAY_EXT = "2023-05-01";
 	public static final String CCD_TEMPLATE = "2.16.840.1.113883.10.20.22.1.2";
 	public static final String CCD_CODE = "34133-9";
 	public static final String DS_TEMPLATE = "2.16.840.1.113883.10.20.22.1.8";
@@ -338,8 +339,9 @@ public class CCDAConstants {
 		    FUNCTIONAL_STATUS_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='47420-5']]");
 		    MENTAL_STATUS_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='10190-7']]");
 		    REASON_FOR_REFERRAL_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='42349-1']]");
-		    REL_FUNCTIONAL_STATUS_OBSERVATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.67']]");
+		    REL_FUNCTIONAL_STATUS_OBSERVATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/organizer/component/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.67']]");
 		    REL_DISABILITY_STATUS_OBSERVATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.505']]");
+		    // REL_DISABILITY_STATUS_OBSERVATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.505']]");
 		    REL_MENTAL_STATUS_OBSERVATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.74']]");
 		    REL_PATIENT_REFERRAL_ACT_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.140']]");
 		    REL_INDICATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entryRelationship/act[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.19']]");
@@ -369,7 +371,7 @@ public class CCDAConstants {
 		    REL_LAB_TEST_ORG_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/organizer[not(@nullFlavor) and statusCode[@code='active']]");
 		    REL_COMP_OBS_EXP = CCDAConstants.CCDAXPATH.compile("./component/observation[not(@nullFlavor)]");
 		    REL_SPECIMEN_EXP = CCDAConstants.CCDAXPATH.compile("./specimen[not(@nullFlavor)]");
-		    REL_SPECIMEN_CODE_EXP = CCDAConstants.CCDAXPATH.compile("./specimenRole/specimenPlayingEntity/code[@nullFlavor]");
+		    REL_SPECIMEN_CODE_EXP = CCDAConstants.CCDAXPATH.compile("./specimenRole/specimenPlayingEntity/code[not(@nullFlavor)]");
 		    IMMUNIZATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='11369-6']]");
 		    VITALSIGNS_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='8716-3']]");
 		    REL_VITAL_ORG_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/organizer[not(@nullFlavor)]");

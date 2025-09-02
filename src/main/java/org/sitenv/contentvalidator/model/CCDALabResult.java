@@ -209,6 +209,24 @@ public class CCDALabResult {
 		
 		return specs;
 	}
+
+	public HashMap<String, CCDALabResultOrg> getLabResultOrganizers() {
+		
+		HashMap<String, CCDALabResultOrg> orgs = new HashMap<>();
+		if(resultOrg != null) {
+			
+			for(CCDALabResultOrg org : resultOrg) {				
+				
+				if(org.getOrgCode() != null && org.getOrgCode().getCode() != null 
+						&& !org.getOrgCode().getCode().isEmpty())
+				
+				orgs.put(org.getOrgCode().getCode(), org);
+			}
+		}
+		
+		return orgs;
+		
+	}
 	
 	
 }
