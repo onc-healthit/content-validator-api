@@ -42,10 +42,26 @@ public class FunctionalStatusParser {
 			functionalStatus.setSectionCode(ParserUtilities.readCode((Element) CCDAConstants.REL_CODE_EXP.
 					evaluate(sectionElement, XPathConstants.NODE)));
 			
-			NodeList functionalStatusObservationList = (NodeList) CCDAConstants.REL_FUNCTIONAL_STATUS_OBSERVATION_EXPRESSION.
+			NodeList orgFunctionalStatusObservationList = (NodeList) CCDAConstants.REL_FUNCTIONAL_STATUS_OBSERVATION_EXPRESSION.
 				evaluate(sectionElement, XPathConstants.NODESET);
 		
-			functionalStatus.setFunctionalStatusObservation(readFunctionalStatusObservations(functionalStatusObservationList));
+			ArrayList<CCDAFunctionalStatusObservation> orgObs = readFunctionalStatusObservations(orgFunctionalStatusObservationList);
+			
+			NodeList functionalStatusObservationList = (NodeList) CCDAConstants.REL_ALT_FUNCTIONAL_STATUS_OBSERVATION_EXPRESSION.
+					evaluate(sectionElement, XPathConstants.NODESET);
+			
+			ArrayList<CCDAFunctionalStatusObservation> funcObs = readFunctionalStatusObservations(functionalStatusObservationList);
+			
+			if(orgObs != null) {
+				
+				if(funcObs != null) {
+					orgObs.addAll(funcObs);
+				}
+				functionalStatus.setFunctionalStatusObservation(orgObs);
+			}
+			else  {
+				functionalStatus.setFunctionalStatusObservation(funcObs);
+			}
 		
 			NodeList disabilityObservationList = (NodeList) CCDAConstants.REL_DISABILITY_STATUS_OBSERVATION_EXPRESSION.
 				evaluate(sectionElement, XPathConstants.NODESET);
