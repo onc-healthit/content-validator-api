@@ -70,8 +70,10 @@ public class CCDANotes {
 			log.info(" Tempalte Id Ext [" + j + "] = " + sectionTemplateId.get(j).getExtValue());
 		}
 		
-		for(int k = 0; k < notesActivity.size(); k++) {
-			notesActivity.get(k).log();
+		if(notesActivity != null) {
+			for(int k = 0; k < notesActivity.size(); k++) {
+				notesActivity.get(k).log();
+			}
 		}
 		
 		if(author != null)

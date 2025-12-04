@@ -175,6 +175,7 @@ public class CCDAConstants {
 	static public XPathExpression MENTAL_STATUS_EXPRESSION;
 	static public XPathExpression REASON_FOR_REFERRAL_EXPRESSION;
 	static public XPathExpression REL_FUNCTIONAL_STATUS_OBSERVATION_EXPRESSION;
+	static public XPathExpression REL_ALT_FUNCTIONAL_STATUS_OBSERVATION_EXPRESSION;
 	static public XPathExpression REL_PATIENT_REFERRAL_ACT_EXPRESSION;
 	static public XPathExpression REL_MENTAL_STATUS_OBSERVATION_EXPRESSION;
 	static public XPathExpression REL_DISABILITY_STATUS_OBSERVATION_EXPRESSION;
@@ -340,6 +341,7 @@ public class CCDAConstants {
 		    MENTAL_STATUS_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='10190-7']]");
 		    REASON_FOR_REFERRAL_EXPRESSION = CCDAConstants.CCDAXPATH.compile("/ClinicalDocument/component/structuredBody/component/section[not(@nullFlavor) and code[@code='42349-1']]");
 		    REL_FUNCTIONAL_STATUS_OBSERVATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/organizer/component/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.67']]");
+		    REL_ALT_FUNCTIONAL_STATUS_OBSERVATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.67']]");
 		    REL_DISABILITY_STATUS_OBSERVATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.505']]");
 		    // REL_DISABILITY_STATUS_OBSERVATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.505']]");
 		    REL_MENTAL_STATUS_OBSERVATION_EXPRESSION = CCDAConstants.CCDAXPATH.compile("./entry/observation[not(@nullFlavor) and templateId[@root='2.16.840.1.113883.10.20.22.4.74']]");
