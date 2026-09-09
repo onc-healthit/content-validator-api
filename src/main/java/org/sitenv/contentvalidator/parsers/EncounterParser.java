@@ -310,7 +310,7 @@ public class EncounterParser {
 											evaluate(serviceDeliveryLocElement, XPathConstants.NODESET)));
 			
 			// Facility identifiers
-			serviceDeliveryLoc.setFacilityIdentifiers(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_ID_EXP.
+			serviceDeliveryLoc.setTemplateId(ParserUtilities.readTemplateIdList((NodeList) CCDAConstants.REL_ID_EXP.
 					evaluate(serviceDeliveryLocElement, XPathConstants.NODESET)));
 
 			// Facility Code
